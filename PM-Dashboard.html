@@ -1,0 +1,1179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medical Device Development Control Tower | 医疗器械开发控制塔</title>
+    <script type="module">(function(){let e=document.createElement(`link`).relList;if(e&&e.supports&&e.supports(`modulepreload`))return;for(let e of document.querySelectorAll(`link[rel="modulepreload"]`))n(e);new MutationObserver(e=>{for(let t of e)if(t.type===`childList`)for(let e of t.addedNodes)e.tagName===`LINK`&&e.rel===`modulepreload`&&n(e)}).observe(document,{childList:!0,subtree:!0});function t(e){let t={};return e.integrity&&(t.integrity=e.integrity),e.referrerPolicy&&(t.referrerPolicy=e.referrerPolicy),e.crossOrigin===`use-credentials`?t.credentials=`include`:e.crossOrigin===`anonymous`?t.credentials=`omit`:t.credentials=`same-origin`,t}function n(e){if(e.ep)return;e.ep=!0;let n=t(e);fetch(e.href,n)}})();var e={name:{en:`ICU Respiratory Digital Twin System`,cn:`ICU呼吸监护数字孪生系统`},subtitle:{en:`sEMG Neural Drive + EIT Ventilation/Perfusion Monitoring Platform`,cn:`sEMG神经驱动 + EIT通气/灌注监测平台`},submissionType:`510(k) Modular Approval (pathway pending Pre-Sub confirmation)`,applicant:{en:`Company B USA (Global IP Holder)`,cn:`B公司美国（全球知识产权持有方）`},manufacturer:{en:`Silan Technology (Chengdu) Co., Ltd.`,cn:`思澜科技（成都）有限公司`},preparedDate:`March 2026`,currentMonth:0},t={technical:{label:{en:`Technical Track`,cn:`技术路径`},icon:`🔬`,milestones:[{id:`T1`,month:0,title:{en:`Prototype Finalization — sEMG Module`,cn:`原型定型 — sEMG模块`},description:{en:`4–8 surface EMG electrode array, 24-bit ADC, 2000 Hz sampling, BT wireless isolation per IEC 60601-1-2`,cn:`4-8表面EMG电极阵列, 24位ADC, 2000Hz采样, 蓝牙无线隔离符合IEC 60601-1-2`},detail:{en:`The sEMG Module (Module A) is the first hardware product in the ICU Respiratory Digital Twin platform. This milestone locks the production-intent design:
+
+- Electrode Array: 4–8 surface electrodes placed on the chest and intercostal muscles to capture neural respiratory drive (NRD) — the brain's command to breathe.
+- 24-bit ADC: High-resolution analog-to-digital conversion ensures micro-volt level EMG signals are captured without quantization noise.
+- 2000 Hz Sampling: Nyquist-compliant rate for EMG bandwidth (10–500 Hz), with headroom for the proprietary ECG-gating filter.
+- BT Wireless Isolation: Bluetooth Low Energy link provides galvanic isolation between patient-contact electrodes and the bedside display, satisfying IEC 60601-1-2 EMC requirements.
+- FDA Product Code: IKN (Electromyograph, diagnostic). Primary predicate: Maquet NAVA Edi catheter (K082437). Pathway: standard 510(k).
+
+Completion of T1 means the PCB layout, enclosure, and firmware are frozen for verification testing (T3).`,cn:`sEMG模块（A模块）是ICU呼吸数字孪生平台的首个硬件产品。此里程碑锁定生产级设计：
+
+- 电极阵列：4-8个表面电极布置于胸壁和肋间肌，捕获神经呼吸驱动（NRD）— 大脑的呼吸指令。
+- 24位ADC：高分辨率模数转换确保微伏级EMG信号无量化噪声捕获。
+- 2000Hz采样：符合EMG带宽（10-500Hz）的奈奎斯特率，为专有ECG门控滤波预留空间。
+- 蓝牙无线隔离：低功耗蓝牙链路在患者接触电极与床旁显示器之间提供电气隔离，满足IEC 60601-1-2 EMC要求。
+- FDA产品代码：IKN（诊断用肌电描记器）。标准510(k)前置器械途径。
+
+完成T1意味着PCB布局、外壳和固件已冻结，可进入验证测试（T3）。`},status:`complete`,owner:`tech`,category:`prototype`},{id:`T2`,month:1,title:{en:`ECG-Gating Algorithm Validation`,cn:`ECG门控算法验证`},description:{en:`Proprietary adaptive filtering: SNR improvement >20 dB, ECG artifact suppression >98%`,cn:`专有自适应滤波: 信噪比改善>20dB, ECG伪影抑制>98%`},detail:{en:`Surface EMG electrodes on the chest inevitably pick up the heart's QRS complex, which can be 10–100× larger than the diaphragm EMG signal. The ECG-gating algorithm is the core IP that makes bedside NRD monitoring viable:
+
+- Adaptive Filtering: A real-time filter detects each R-wave peak and subtracts a template of the cardiac artifact, preserving the underlying EMG waveform.
+- SNR >20 dB: After gating, the respiratory EMG signal stands ≥20 dB above residual noise — enough for reliable NRD amplitude and timing extraction.
+- Suppression >98%: The QRS artifact energy is reduced by at least 98%, validated against simultaneous esophageal catheter EMG (gold standard).
+- Latency: Processing pipeline adds &lt;5 ms end-to-end, ensuring real-time breath-by-breath display.
+
+This milestone is validated by running the algorithm on a dataset of ≥30 ICU patients and comparing surface NRD indices against esophageal EMG reference values.`,cn:`胸壁表面EMG电极不可避免地会拾取心脏QRS波群，其幅值是膈肌EMG信号的10-100倍。ECG门控算法是使床旁NRD监测实现的核心知识产权：
+
+- 自适应滤波：实时滤波器检测每个R波峰值，减去心脏伪影模板，保留底层EMG波形。
+- 信噪比>20dB：门控后呼吸EMG信号高出残余噪声≥20dB，足以可靠提取NRD幅值和时序。
+- 抑制>98%：QRS伪影能量降低至少98%，通过同步食管导管EMG（金标准）验证。
+- 延迟：处理管道端到端增加&lt;5ms，确保实时逐次呼吸显示。
+
+此里程碑通过在≥30名ICU患者数据集上运行算法并将表面NRD指标与食管EMG参考值进行比较来验证。`},status:`in-progress`,owner:`tech`,category:`validation`},{id:`T3`,month:3,title:{en:`Bench & Performance Testing — sEMG`,cn:`台架和性能测试 — sEMG`},description:{en:`IEC 60601-1 electrical safety, EMC testing, usability study (IEC 62366), algorithm validation vs. esophageal reference (n≥30)`,cn:`IEC 60601-1电气安全, EMC测试, 可用性研究(IEC 62366), 算法验证对比食管参考(n≥30)`},detail:{en:`Bench and performance testing is the most comprehensive verification milestone for the sEMG module. It generates the data package that will form the backbone of the 510(k) submission:
+
+- IEC 60601-1 Electrical Safety: Leakage current, dielectric strength, protective earth, creepage/clearance distance measurements performed at an accredited NRTL (e.g., Intertek, TÜV).
+- EMC Testing (IEC 60601-1-2): Radiated emissions, conducted emissions, ESD immunity, radiated immunity, and surge immunity. The BT radio module must coexist with ICU infusion pumps and ventilators.
+- Usability Study (IEC 62366): Formative usability evaluation with ≥15 clinicians — electrode placement, display interpretation, alarm response. Task success rate, use errors, and hazardous use scenarios documented.
+- Algorithm Validation: Head-to-head comparison of surface sEMG NRD vs. esophageal catheter EMG in ≥30 mechanically ventilated patients. Statistical analysis (Bland-Altman, ICC) for sensitivity ≥92% and specificity ≥88%.
+
+All test reports feed into the Design History File (DHF) and are cross-referenced in the 510(k) summary.`,cn:`台架和性能测试是sEMG模块最全面的验证里程碑，生成的数据包将构成510(k)提交的骨干：
+
+- IEC 60601-1电气安全：漏电流、介电强度、保护接地、爬电/间隙距离测量，由认可的NRTL（如Intertek、TÜV）执行。
+- EMC测试（IEC 60601-1-2）：辐射发射、传导发射、ESD抗扰度、辐射抗扰度和浪涌抗扰度。蓝牙射频模块必须与ICU输液泵和呼吸机共存。
+- 可用性研究（IEC 62366）：与≥15名临床医生进行形成性可用性评估——电极放置、显示解读、报警响应。记录任务成功率、使用错误和危险使用场景。
+- 算法验证：在≥30名机械通气患者中进行表面sEMG NRD与食管导管EMG的头对头比较。统计分析（Bland-Altman、ICC）确认灵敏度≥92%、特异性≥88%。
+
+所有测试报告纳入设计历史文件（DHF），并在510(k)摘要中交叉引用。`},status:`not-started`,owner:`tech`,category:`testing`},{id:`T4`,month:6,title:{en:`sEMG Sensitivity/Specificity Targets`,cn:`sEMG灵敏度/特异性目标`},description:{en:`NRD detection sensitivity ≥92%, asynchrony specificity ≥88%, signal latency &lt;50ms`,cn:`NRD检测灵敏度≥92%, 异步特异性≥88%, 信号延迟&lt;50ms`},detail:{en:`This milestone confirms the sEMG module meets its three key performance acceptance criteria — the numbers that will appear in the 510(k) Performance Testing section:
+
+- NRD Detection Sensitivity ≥92%: Of all true neural inspiratory efforts (confirmed by esophageal EMG), the surface device correctly identifies ≥92%. Missed breaths below this threshold would pose a clinical safety risk for weaning assessment.
+- Asynchrony Specificity ≥88%: When the system flags a patient-ventilator asynchrony event (trigger delay, double-trigger, ineffective effort), it is correct ≥88% of the time. False alarms waste clinician attention; false negatives miss dangerous dyssynchrony.
+- Signal Latency &lt;50 ms: From electrode pickup to on-screen NRD waveform, total pipeline delay is under 50 ms — enabling real-time overlay with the ventilator pressure/flow waveform.
+
+These targets were derived from the clinical literature on esophageal EMG monitoring and from FDA reviewer expectations documented in similar device clearances (e.g., Maquet NAVA K082437, product code IKN).`,cn:`此里程碑确认sEMG模块满足三个关键性能验收标准——这些数字将出现在510(k)性能测试部分：
+
+- NRD检测灵敏度≥92%：在所有真实神经吸气努力中（由食管EMG确认），表面设备正确识别≥92%。低于此阈值的漏检在脱机评估中构成临床安全风险。
+- 异步特异性≥88%：当系统标记患者-呼吸机异步事件（触发延迟、双触发、无效努力）时，≥88%的情况是正确的。误报浪费临床医生注意力；漏报错过危险的不同步。
+- 信号延迟&lt;50ms：从电极拾取到屏幕NRD波形，总管道延迟低于50ms——可与呼吸机压力/流量波形实时叠加。
+
+这些目标源自食管EMG监测临床文献和类似设备清许（如Maquet NAVA K082437, 产品代码IKN）中记录的FDA审评员期望。`},status:`not-started`,owner:`tech`,category:`validation`},{id:`T5`,month:8,title:{en:`EIT Prototype — 32-Electrode Belt`,cn:`EIT原型 — 32电极带`},description:{en:`32-electrode thoracic belt, 50 kHz AC injection, 50 Hz frame rate, 32×32 pixel cross-section reconstruction`,cn:`32电极胸带, 50kHz交流注入, 50Hz帧率, 32×32像素截面重建`},detail:{en:`The EIT module (Module B) is the second cornerstone of the Digital Twin. Electrical Impedance Tomography creates real-time cross-sectional images of the lungs without radiation:
+
+- 32-Electrode Belt: A flexible silicone belt wraps around the thorax at the 5th–6th intercostal space. 32 equispaced Ag/AgCl electrodes inject tiny AC currents and measure resulting boundary voltages.
+- 50 kHz AC Injection: A safe, sub-milliamp alternating current at 50 kHz. At this frequency, impedance contrasts between air-filled lung, collapsed lung, fluid, and blood are maximized.
+- 50 Hz Frame Rate: 50 complete impedance images per second — fast enough to track ventilation and cardiac-related perfusion in real time, breath-by-breath.
+- 32×32 Reconstruction: A regularized inverse solver converts 32-electrode boundary voltages into a 32×32 pixel conductivity map of the chest cross-section. Regional ventilation and perfusion are quantified per pixel.
+
+The prototype uses the Timpel Enlight 2100 (K250464) as the predicate device (FDA product code DQS). T5 freezes the hardware for biocompatibility testing (T7) and V/Q algorithm validation (T6).`,cn:`EIT模块（B模块）是数字孪生的第二个基石。电阻抗断层成像可在无辐射情况下实时创建肺部横截面图像：
+
+- 32电极带：柔性硅胶带环绕胸廓第5-6肋间隙。32个等距Ag/AgCl电极注入微小交流电流并测量边界电压。
+- 50kHz交流注入：安全的亚毫安级50kHz交流电流。在此频率下，充气肺、塌陷肺、液体和血液之间的阻抗对比最大化。
+- 50Hz帧率：每秒50幅完整阻抗图像——足以实时逐次呼吸追踪通气和心脏相关灌注。
+- 32×32重建：正则化逆求解器将32电极边界电压转换为胸部横截面的32×32像素电导率图。按像素量化区域通气和灌注。
+
+原型以Timpel Enlight作为前置设备（FDA产品代码DQS）。T5冻结硬件以进行生物相容性测试（T7）和V/Q算法验证（T6）。`},status:`not-started`,owner:`tech`,category:`prototype`},{id:`T6`,month:12,title:{en:`V/Q Algorithm Validation (vs. DCE-CT)`,cn:`V/Q算法验证（对比DCE-CT）`},description:{en:`V/Q separation accuracy >85% vs. DCE-CT reference, ventilation sensitivity ≥90%, perfusion SNR >15 dB`,cn:`V/Q分离准确度>85%对比DCE-CT参考, 通气灵敏度≥90%, 灌注信噪比>15dB`},detail:{en:`The V/Q (ventilation/perfusion) algorithm is the software innovation that differentiates our EIT system from basic impedance imaging. It separates the impedance signal into two physiological components:
+
+- Ventilation Map: Impedance changes synchronized with breathing (tidal variation). Shows regional air distribution — where the lung is being ventilated and where it is not.
+- Perfusion Map: Impedance changes synchronized with the cardiac cycle (pulsatile blood flow). Shows regional blood flow distribution — critical for detecting V/Q mismatch.
+- Accuracy >85% vs. DCE-CT: Dynamic contrast-enhanced CT is the clinical gold standard for V/Q imaging. Our algorithm must achieve >85% spatial agreement (Dice coefficient) with DCE-CT maps across ≥20 patients.
+- Ventilation Sensitivity ≥90%: In regions confirmed as ventilated by CT, the EIT algorithm correctly classifies ≥90% of them.
+- Perfusion SNR >15 dB: The cardiac-related impedance pulsation (perfusion signal) must stand ≥15 dB above noise floor after cardiac-gated averaging.
+
+This validation is the 510(k) performance data centerpiece for the EIT submission — it establishes substantial equivalence to the Timpel Enlight predicate.`,cn:`V/Q（通气/灌注）算法是使我们EIT系统区别于基础阻抗成像的软件创新。它将阻抗信号分离为两个生理成分：
+
+- 通气图：与呼吸同步的阻抗变化（潮气变化）。显示区域空气分布——哪里被通气，哪里没有。
+- 灌注图：与心脏周期同步的阻抗变化（搏动性血流）。显示区域血流分布——对检测V/Q失配至关重要。
+- 准确度>85%对比DCE-CT：动态增强CT是V/Q成像的临床金标准。我们的算法必须在≥20名患者中实现>85%的空间一致性（Dice系数）。
+- 通气灵敏度≥90%：在CT确认通气的区域中，EIT算法正确分类≥90%。
+- 灌注信噪比>15dB：心脏相关阻抗搏动（灌注信号）经心脏门控平均后必须高出噪声基底≥15dB。
+
+此验证是EIT提交510(k)性能数据的核心——它建立与Timpel Enlight前置设备的实质等效性。`},status:`not-started`,owner:`tech`,category:`validation`},{id:`T7`,month:14,title:{en:`EIT Biocompatibility Testing`,cn:`EIT生物相容性测试`},description:{en:`ISO 10993-5 cytotoxicity, ISO 10993-10 sensitization/irritation for belt & electrode materials`,cn:`ISO 10993-5细胞毒性, ISO 10993-10致敏/刺激测试（带和电极材料）`},detail:{en:`Any device component that contacts the patient's skin requires biocompatibility evaluation per ISO 10993. For the EIT belt and electrodes:
+
+- ISO 10993-5 Cytotoxicity: In-vitro test exposing mammalian cell cultures to belt/electrode material extracts. Verifies the silicone belt, Ag/AgCl electrodes, and conductive gel do not release toxic leachables that kill or damage cells.
+- ISO 10993-10 Sensitization: Guinea pig maximization test (GPMT) or local lymph node assay (LLNA) to confirm electrode materials do not trigger delayed-type allergic reactions after repeated skin contact (24-hour wear cycles in ICU).
+- ISO 10993-10 Irritation: Dermal irritation study verifying no erythema, edema, or skin breakdown from prolonged belt wear (up to 72 hours continuous, typical ICU monitoring duration).
+
+Biocompatibility testing is outsourced to an ISO 17025-accredited lab (e.g., Nelson Labs, NAMSA). Results are included in the EIT 510(k) submission (R6) and filed in the DHF. Test samples are taken from production-equivalent materials, not lab prototypes.`,cn:`任何接触患者皮肤的设备组件都需要按ISO 10993进行生物相容性评估。对于EIT带和电极：
+
+- ISO 10993-5细胞毒性：体外测试，将哺乳动物细胞培养物暴露于带/电极材料提取物。验证硅胶带、Ag/AgCl电极和导电凝胶不释放杀死或损伤细胞的有毒可浸出物。
+- ISO 10993-10致敏：豚鼠最大化试验（GPMT）或局部淋巴结试验（LLNA），确认电极材料在反复皮肤接触后不触发迟发型过敏反应（ICU中24小时佩戴周期）。
+- ISO 10993-10刺激：皮肤刺激研究，验证长时间佩戴带不出现红斑、水肿或皮肤破损（最长72小时连续佩戴，典型ICU监测时长）。
+
+生物相容性测试外包给ISO 17025认可实验室（如Nelson Labs、NAMSA）。结果纳入EIT 510(k)提交（R6）并归入DHF。测试样品取自生产等效材料，非实验室原型。`},status:`not-started`,owner:`tech`,category:`testing`},{id:`T8`,month:2,title:{en:`MyoBus Protocol Integration`,cn:`MyoBus协议集成`},description:{en:`&lt;1ms timestamp alignment between sEMG and EIT. AES-256 encryption, RBAC, HL7 FHIR output`,cn:`&lt;1ms时间戳对齐sEMG和EIT。AES-256加密, RBAC, HL7 FHIR输出`},detail:{en:`MyoBus is the proprietary middleware protocol that fuses the two hardware modules into a single Digital Twin data stream. It solves four critical integration challenges:
+
+- Timestamp Synchronization (&lt;1 ms): sEMG and EIT sample at different rates (2000 Hz vs. 50 Hz). MyoBus uses a shared PTP (Precision Time Protocol) clock to align every sample pair to within 1 ms, so clinicians see a unified respiratory picture — muscle effort and lung image in perfect register.
+- AES-256 Encryption: All data in transit between modules and the bedside display is encrypted with AES-256-GCM. PHI never travels in the clear, satisfying HIPAA technical safeguards (§164.312(e)(1)).
+- Role-Based Access Control (RBAC): MyoBus enforces user roles — attending physician (full access), respiratory therapist (waveform + alerts), nurse (alerts only), biomedical engineer (configuration). Mapped to the hospital's Active Directory / LDAP.
+- HL7 FHIR Output: The fused data stream is also published as HL7 FHIR Observation resources, enabling integration with the hospital's EHR (Epic, Cerner) and third-party clinical decision support systems.
+
+MyoBus is classified as Software in a Medical Device (SiMD) by the FDA. Its software architecture, cybersecurity risk assessment, and SBOM are documented per FDA's 2023 cybersecurity guidance.`,cn:`MyoBus是将两个硬件模块融合为单一数字孪生数据流的专有中间件协议。它解决四个关键集成挑战：
+
+- 时间戳同步（&lt;1ms）：sEMG和EIT以不同速率采样（2000Hz vs 50Hz）。MyoBus使用共享PTP（精密时间协议）时钟将每对样本对齐到1ms以内，使临床医生看到统一的呼吸图景——肌肉努力和肺部图像完美配准。
+- AES-256加密：模块间及床旁显示器之间所有传输数据均用AES-256-GCM加密。PHI从不以明文传输，满足HIPAA技术保障要求（§164.312(e)(1)）。
+- 基于角色的访问控制（RBAC）：MyoBus强制执行用户角色——主治医生（完全访问）、呼吸治疗师（波形+警报）、护士（仅警报）、生物医学工程师（配置）。映射到医院的Active Directory/LDAP。
+- HL7 FHIR输出：融合数据流同时发布为HL7 FHIR Observation资源，实现与医院EHR（Epic、Cerner）和第三方临床决策支持系统的集成。
+
+MyoBus被FDA归类为医疗器械中的软件（SiMD）。其软件架构、网络安全风险评估和SBOM按FDA 2023年网络安全指南编制。`},status:`in-progress`,owner:`tech`,category:`integration`}]},regulatory:{label:{en:`Regulatory Track`,cn:`法规路径`},icon:`📋`,milestones:[{id:`R1`,month:0,title:{en:`Pre-Sub Q-Meeting Request Filed`,cn:`预提交Q会议申请已提交`},description:{en:`Q-Sub to FDA (CDRH) for sEMG module: predicate selection, testing protocol, SiMD classification`,cn:`向FDA(CDRH)提交sEMG模块Q-Sub: 前置器械选择, 测试方案, SiMD分类`},detail:{en:`A Pre-Submission (Pre-Sub) is a formal mechanism under 21 CFR for requesting FDA feedback before filing a 510(k). The Q-Meeting (Question-based) format is the most common type:
+
+- Purpose: Present our proposed regulatory strategy to the FDA's Center for Devices and Radiological Health (CDRH) and get written feedback before committing resources to testing.
+- Key Questions Filed:
+  1. Predicate Selection — Is the Maquet NAVA Edi catheter (K082437, product code IKN) an appropriate predicate for our surface sEMG NRD monitor? Are there other predicates FDA recommends?
+  2. Testing Protocol — Does FDA agree our proposed bench and clinical validation protocol (n≥30 patients, esophageal EMG reference) is sufficient for substantial equivalence?
+  3. SiMD Classification — Should the MyoBus software and NRD algorithms be classified as Software in a Medical Device (SiMD) or Software as a Medical Device (SaMD)? This affects the software documentation requirements.
+- Format: We submit a Pre-Sub package (device description, proposed testing, specific questions) and receive written feedback within 75 days, typically followed by a teleconference.
+
+Filing R1 at M+0 enables us to get FDA alignment early, avoiding costly rework later in the testing phase.`,cn:`预提交（Pre-Sub）是21 CFR下在提交510(k)之前请求FDA反馈的正式机制。基于问题的Q会议格式最为常见：
+
+- 目的：向FDA器械和放射健康中心（CDRH）展示我们提议的监管策略，在投入测试资源前获得书面反馈。
+- 提交的关键问题：
+  1. 前置器械选择 — Maquet NAVA Edi导管（K082437, 产品代码IKN）是否适合作为我们表面sEMG NRD监测器的前置器械？FDA是否推荐其他前置器械？
+  2. 测试方案 — FDA是否同意我们提议的台架和临床验证方案（n≥30名患者，食管EMG参考）足以证明实质等效？
+  3. SiMD分类 — MyoBus软件和NRD算法应归类为医疗器械中的软件（SiMD）还是作为医疗器械的软件（SaMD）？这影响软件文档要求。
+- 格式：提交Pre-Sub包（设备描述、拟议测试、具体问题），75天内收到书面反馈，通常随后进行电话会议。
+
+在M+0提交R1使我们能尽早获得FDA一致意见，避免测试阶段后期的高成本返工。`},status:`complete`,owner:`regulatory`,category:`submission`},{id:`R2`,month:2,title:{en:`Pre-Submission Meeting (FDA)`,cn:`预提交会议（FDA）`},description:{en:`FDA written feedback on: SE strategy, performance testing protocol, software classification`,cn:`FDA书面反馈: SE策略, 性能测试方案, 软件分类`},detail:{en:`The Pre-Submission meeting is the interactive follow-up to the Q-Sub filing (R1). This is where we receive and discuss FDA's written feedback:
+
+- Meeting Format: Typically a 60-minute teleconference with the CDRH review team (lead reviewer, branch chief, software specialist). Sometimes in-person at FDA White Oak campus.
+- Written Feedback: FDA issues a formal letter responding to each question from R1. This letter becomes a binding reference document we can cite in the 510(k) submission.
+- SE Strategy Discussion: FDA confirms or challenges our substantial equivalence strategy — which predicate(s) are acceptable, what comparative testing they expect, and whether the technology raises any new safety/effectiveness questions.
+- Testing Protocol Agreement: The most critical outcome. If FDA agrees to our proposed test protocol, we can proceed with confidence. If they request additional tests or a larger sample size, we adjust the timeline and budget now, not after spending months on testing.
+- Software Classification: FDA clarifies SiMD vs. SaMD classification and the software documentation level (Basic, Enhanced, or Comprehensive) per the 2023 Content of Premarket Submissions guidance.
+
+Having clear FDA alignment from R2 de-risks the entire regulatory timeline from R3 through R4.`,cn:`预提交会议是Q-Sub提交（R1）后的互动跟进。在此处我们接收并讨论FDA的书面反馈：
+
+- 会议格式：通常与CDRH审查团队（主审员、分支主管、软件专家）进行60分钟电话会议。有时在FDA White Oak园区面对面。
+- 书面反馈：FDA就R1中的每个问题发出正式信函。此信成为我们可在510(k)提交中引用的约束性参考文件。
+- SE策略讨论：FDA确认或质疑我们的实质等效策略——哪些前置器械可接受，他们期望什么比较测试，以及该技术是否引发新的安全性/有效性问题。
+- 测试方案协议：最关键成果。如果FDA同意拟议测试方案，我们可信心十足地推进。如果他们要求额外测试或更大样本量，我们现在调整时间线和预算，而非测试数月后再调整。
+- 软件分类：FDA明确SiMD vs. SaMD分类和软件文档级别（基础、增强或综合），按2023年上市前提交内容指南。
+
+从R2获得明确的FDA一致意见可降低从R3到R4整个监管时间线的风险。`},status:`not-started`,owner:`regulatory`,category:`meeting`},{id:`R3`,month:6,title:{en:`510(k) Submission — sEMG Module`,cn:`510(k)提交 — sEMG模块`},description:{en:`Complete package: Cover letter, Device Description, SE Discussion, Performance Testing, Risk Analysis, Biocompatibility, Software, Labeling`,cn:`完整包: 附信、设备描述、SE讨论、性能测试、风险分析、生物相容性、软件、标签`},detail:{en:`The 510(k) submission is the culmination of all prior technical and regulatory milestones for the sEMG module. The complete package includes:
+
+- Cover Letter & Administrative: Device name, applicant (Arch Medical Management, LLC), classification (product code IKN), establishment registration.
+- Device Description: Detailed hardware/software architecture — electrode array, ADC, BT module, firmware, and MyoBus protocol. Block diagrams, photos, and component specifications.
+- Substantial Equivalence Discussion: Side-by-side comparison with the predicate device (as confirmed in R2). Covers intended use, technology, performance characteristics, and biocompatibility.
+- Performance Testing Report: All data from T3 (bench testing) and T4 (sensitivity/specificity). Includes IEC 60601-1 safety, EMC, usability, and clinical validation results.
+- Risk Analysis: ISO 14971 risk management file — hazard identification, risk estimation, risk evaluation, and risk control measures. Top risks: electrode detachment, ECG mis-gating, wireless interference.
+- Software Documentation: Per FDA guidance — software requirements, architecture, verification testing, cybersecurity (AES-256, SBOM), and SOUP/OTS documentation.
+- Biocompatibility: Electrode materials testing per ISO 10993 (surface contact &lt;24 hours category).
+- Labeling: Instructions for Use (IFU), clinician quick-start guide, package labeling per 21 CFR 801.
+
+The submission is filed through FDA's eSTAR electronic system. Standard review timeline is ~90 days to clearance (R4).`,cn:`510(k)提交是sEMG模块所有先前技术和监管里程碑的结晶。完整包包括：
+
+- 附信和行政文件：设备名称、申请人（Arch Medical Management, LLC）、分类（产品代码IKN）、机构注册。
+- 设备描述：详细的硬件/软件架构——电极阵列、ADC、蓝牙模块、固件和MyoBus协议。框图、照片和组件规格。
+- 实质等效讨论：与前置设备（R2中确认）的逐项比较。涵盖预期用途、技术、性能特征和生物相容性。
+- 性能测试报告：T3（台架测试）和T4（灵敏度/特异性）的所有数据。包括IEC 60601-1安全、EMC、可用性和临床验证结果。
+- 风险分析：ISO 14971风险管理文件——危害识别、风险估计、风险评价和风险控制措施。主要风险：电极脱落、ECG误门控、无线干扰。
+- 软件文档：按FDA指南——软件需求、架构、验证测试、网络安全（AES-256、SBOM）和SOUP/OTS文档。
+- 生物相容性：电极材料按ISO 10993测试（表面接触&lt;24小时类别）。
+- 标签：使用说明（IFU）、临床医生快速入门指南、按21 CFR 801的包装标签。
+
+通过FDA的eSTAR电子系统提交。标准审查时间约90天到获批（R4）。`},status:`not-started`,owner:`regulatory`,category:`submission`},{id:`R4`,month:9,title:{en:`Expected 510(k) Clearance — sEMG`,cn:`预计510(k)批准 — sEMG`},description:{en:`Standard 510(k) review ~90 days. IKN product code clearance → Module A commercial launch`,cn:`标准510(k)审查约90天。IKN产品代码批准 → A模块商业发布`},detail:{en:`This milestone marks the expected FDA clearance of the sEMG module — the go-to-market gate for Module A:
+
+- Review Timeline: Standard 510(k) reviews average ~90 calendar days from acceptance to decision. The FDA MDUFA V user fee goal is 90 days for 90% of standard 510(k)s.
+- Possible Outcomes:
+  1. Clearance (SE Order) — FDA determines substantial equivalence. We receive a clearance letter and K-number. Commercial sales can begin immediately.
+  2. Additional Information (AI) Request — FDA requests clarification or additional testing data. Clock stops while we respond (typically 30–60 days to prepare response). Common AI topics: labeling clarification, additional performance data breakdowns, software documentation updates.
+  3. Not Substantially Equivalent (NSE) — Rare for well-prepared Pre-Sub-aligned submissions. Would require either a de novo pathway or redesign.
+- Post-Clearance Actions: Upon clearance, we register the device establishment, list the device with FDA, begin Quality System compliance monitoring (21 CFR 820), and initiate Module A commercial launch with KOL sites.
+- Revenue Impact: Module A clearance enables Phase 1 revenue — the sEMG NRD monitor as a standalone clinical device, generating cash flow while Module B (EIT) continues development.
+
+The 90-day window from R3 to R4 assumes no AI requests. A 30-day AI buffer is built into the project risk register.`,cn:`此里程碑标志着sEMG模块的预期FDA批准——A模块的上市门槛：
+
+- 审查时间线：标准510(k)审查从受理到决定平均约90个日历天。FDA MDUFA V用户费目标为90%的标准510(k)在90天内完成。
+- 可能结果：
+  1. 批准（SE令）——FDA确定实质等效。收到批准信和K编号。可立即开始商业销售。
+  2. 补充信息（AI）请求——FDA要求澄清或额外测试数据。时钟暂停直到我们回复（通常30-60天准备响应）。常见AI话题：标签澄清、额外性能数据细分、软件文档更新。
+  3. 非实质等效（NSE）——对于经过良好Pre-Sub对齐的提交罕见。需要走de novo途径或重新设计。
+- 批准后行动：获批后注册设备机构、在FDA列出设备、开始质量体系合规监测（21 CFR 820），并与KOL站点启动A模块商业发布。
+- 收入影响：A模块获批启动第一阶段收入——sEMG NRD监测器作为独立临床设备，在B模块（EIT）继续开发期间产生现金流。
+
+从R3到R4的90天窗口假设无AI请求。项目风险登记册中已包含30天AI缓冲。`},status:`not-started`,owner:`regulatory`,category:`clearance`},{id:`R5`,month:12,title:{en:`Begin EIT 510(k) Preparation`,cn:`开始EIT 510(k)准备`},description:{en:`EIT system testing: V/Q validation, belt biocompatibility (ISO 10993-5/10), EIT-specific EMC`,cn:`EIT系统测试: V/Q验证, 带生物相容性(ISO 10993-5/10), EIT专用EMC`},detail:{en:`R5 marks the kickoff of the second 510(k) regulatory package — for the EIT system (Module B). This preparation phase runs in parallel with EIT technical milestones:
+
+- V/Q Validation Data Package: Compile all results from T6 (V/Q algorithm validation vs. DCE-CT). Structure the performance testing report to match the format agreed with FDA in the Pre-Sub (R2).
+- Belt Biocompatibility: Compile ISO 10993-5 and -10 test reports from T7. The EIT belt has prolonged skin contact (>24 hours continuous in ICU), which places it in a higher biocompatibility risk category than the sEMG electrodes.
+- EIT-Specific EMC: The EIT system injects AC current — it is both an emitter (50 kHz injection) and a receiver (boundary voltages). EMC testing must verify the belt's injection signal does not interfere with nearby medical devices (ventilators, infusion pumps, patient monitors) and that external EMI does not corrupt impedance measurements.
+- Predicate Alignment: Finalize the substantial equivalence discussion for the Timpel Enlight (product code DQS). Map our V/Q imaging capabilities to the predicate's functional claims.
+- DHF Assembly: Consolidate all design inputs, verification outputs, risk analysis updates, and traceability matrices into the EIT section of the Design History File.
+
+R5 runs for approximately 5 months (M+12 to M+17) before the EIT 510(k) is filed at R6.`,cn:`R5标志着第二个510(k)监管包——EIT系统（B模块）——准备工作的启动。此准备阶段与EIT技术里程碑并行运行：
+
+- V/Q验证数据包：编译T6（V/Q算法验证对比DCE-CT）的所有结果。按Pre-Sub（R2）中与FDA协议的格式组织性能测试报告。
+- 带生物相容性：编译T7的ISO 10993-5和-10测试报告。EIT带为长时间皮肤接触（ICU中>24小时连续），属于比sEMG电极更高的生物相容性风险类别。
+- EIT专用EMC：EIT系统注入交流电——它既是发射器（50kHz注入）又是接收器（边界电压）。EMC测试必须验证带的注入信号不干扰附近医疗设备（呼吸机、输液泵、患者监护仪），且外部EMI不损坏阻抗测量。
+- 前置器械对齐：确定与Timpel Enlight（产品代码DQS）的实质等效讨论。将V/Q成像能力映射到前置器械的功能声明。
+- DHF组装：将所有设计输入、验证输出、风险分析更新和追溯矩阵整合到设计历史文件的EIT部分。
+
+R5运行约5个月（M+12到M+17），之后在R6提交EIT 510(k)。`},status:`not-started`,owner:`regulatory`,category:`preparation`},{id:`R6`,month:17,title:{en:`510(k) Submission — EIT System`,cn:`510(k)提交 — EIT系统`},description:{en:`DQS product code, Timpel Enlight K250464 as primary predicate. V/Q imaging as performance enhancement`,cn:`DQS产品代码, Timpel Enlight K250464作为主要前置器械。V/Q成像作为性能增强`},detail:{en:`The EIT 510(k) submission is the second major regulatory filing — for Module B (EIT system with V/Q imaging). It follows the same structure as R3 but with EIT-specific content:
+
+- Product Code DQS: Impedance plethysmograph classification. The predicate device is the Timpel Enlight, the only FDA-cleared EIT system for lung imaging.
+- V/Q Imaging Claim: Our key differentiator. The Timpel Enlight provides ventilation imaging only. We claim both ventilation AND perfusion imaging via the proprietary V/Q separation algorithm. This is positioned as a performance enhancement over the predicate, not a new intended use.
+- Performance Data: T6 validation results (V/Q accuracy >85% vs. DCE-CT), T7 biocompatibility reports, EIT-specific EMC testing, and the 32-electrode belt mechanical testing.
+- Software Documentation: The V/Q algorithm is SiMD Level of Concern: Enhanced (per FDA 2023 guidance). Full software architecture, verification, SBOM, and cybersecurity documentation.
+- Integrated Platform Statement: While the EIT module is cleared independently, the submission includes a description of the MyoBus integration for the combined sEMG+EIT Digital Twin platform. This lays groundwork for the future integrated platform claim.
+
+The EIT 510(k) represents the highest regulatory risk in the project because of the novel V/Q perfusion imaging claim. The Pre-Sub feedback (R2) is critical for de-risking this submission.`,cn:`EIT 510(k)提交是第二个主要监管申报——针对B模块（带V/Q成像的EIT系统）。结构与R3相同，但包含EIT特定内容：
+
+- 产品代码DQS：阻抗体积描记器分类。前置设备是Timpel Enlight，唯一FDA批准的肺部成像EIT系统。
+- V/Q成像声明：我们的关键差异化。Timpel Enlight仅提供通气成像。我们通过专有V/Q分离算法声明通气和灌注成像。这被定位为对前置器械的性能增强，而非新的预期用途。
+- 性能数据：T6验证结果（V/Q准确度>85%对比DCE-CT）、T7生物相容性报告、EIT专用EMC测试和32电极带机械测试。
+- 软件文档：V/Q算法为SiMD关注级别：增强（按FDA 2023指南）。完整的软件架构、验证、SBOM和网络安全文档。
+- 集成平台声明：虽然EIT模块独立获批，提交中包含MyoBus集成描述用于组合sEMG+EIT数字孪生平台。为未来集成平台声明奠定基础。
+
+EIT 510(k)代表项目中最高的监管风险，因为新颖的V/Q灌注成像声明。Pre-Sub反馈（R2）对降低此提交风险至关重要。`},status:`not-started`,owner:`regulatory`,category:`submission`},{id:`R7`,month:23,title:{en:`Expected 510(k) Clearance — EIT System`,cn:`预计510(k)批准 — EIT系统`},description:{en:`Full platform commercially available. Integrated MyoBus system clinical deployment. File for integrated platform claim.`,cn:`完整平台商业可用。集成MyoBus系统临床部署。申请集成平台声明。`},detail:{en:`R7 is the program's culminating regulatory milestone — FDA clearance of the EIT system, completing the dual-module Digital Twin platform:
+
+- Full Platform Available: With both sEMG (cleared at R4) and EIT (cleared at R7) on the market, hospitals can deploy the complete ICU Respiratory Digital Twin — real-time muscle drive monitoring plus lung impedance imaging on a single bedside display via MyoBus.
+- Integrated Platform Claim: Upon EIT clearance, we file a 510(k) amendment or supplement to formally claim the integrated sEMG+EIT platform as a single system. This unified labeling enables marketing the combined solution.
+- Clinical Deployment: Initial deployment at 3–5 KOL academic medical centers for clinical validation and publication generation. Target: peer-reviewed publications demonstrating improved weaning success rates and reduced ventilator days.
+- Post-Market Surveillance: Both modules enter the post-market phase. Complaint handling, medical device reporting (MDR per 21 CFR 803), and annual registration renewal procedures activated.
+- Revenue Milestone: Module B clearance unlocks the premium pricing tier — the combined Digital Twin system commands significantly higher value than the standalone sEMG monitor.
+
+R7 at M+23 marks the end of the 23-month regulatory timeline and the beginning of the commercial growth phase.`,cn:`R7是项目的最终监管里程碑——EIT系统FDA批准，完成双模块数字孪生平台：
+
+- 完整平台可用：sEMG（R4获批）和EIT（R7获批）均上市后，医院可部署完整的ICU呼吸数字孪生——通过MyoBus在单一床旁显示器上实现实时肌肉驱动监测加肺阻抗成像。
+- 集成平台声明：EIT获批后，提交510(k)修正或补充，正式声明集成sEMG+EIT平台为单一系统。统一标签可营销组合解决方案。
+- 临床部署：在3-5所KOL学术医疗中心初始部署，进行临床验证和发表论文。目标：同行评审出版物证明改善脱机成功率和减少呼吸机天数。
+- 上市后监督：两个模块进入上市后阶段。投诉处理、医疗器械报告（按21 CFR 803的MDR）和年度注册更新程序启动。
+- 收入里程碑：B模块获批解锁高级定价层——组合数字孪生系统的价值远高于独立sEMG监测器。
+
+M+23的R7标志着23个月监管时间线的结束和商业增长阶段的开始。`},status:`not-started`,owner:`regulatory`,category:`clearance`},{id:`R8`,month:1,title:{en:`IP Buyout & US Legal Structure`,cn:`知识产权收购和美国法律结构`},description:{en:`Transfer patents, software copyrights, MyoBus IP to Company B USA. US-based DHF.`,cn:`将专利、软件版权、MyoBus知识产权转让给B公司美国。在美建立DHF。`},detail:{en:`R8 establishes the legal and intellectual property foundation required for a US-based FDA submission. The IP buyout transfers all technology assets from the China R&D entity to the US regulatory entity:
+
+- Patent Transfer: All filed and pending patents related to sEMG electrode design, ECG-gating algorithm, EIT reconstruction methods, and V/Q separation algorithms are assigned to Arch Medical Management, LLC (Oregon).
+- Software Copyrights: Source code, firmware, MyoBus protocol specification, and all software documentation copyrights transfer to the US entity. This ensures the 510(k) applicant owns the IP it is submitting.
+- MyoBus IP: The proprietary middleware protocol — including its timestamp synchronization, encryption, RBAC, and FHIR output modules — is included in the IP package.
+- US-Based Design History File (DHF): A compliant DHF per 21 CFR 820.30 is established in the US. All design inputs, outputs, reviews, verification, and validation records are maintained under US quality system control.
+- Transfer Agreement: A formal IP assignment agreement with consideration, executed under Oregon law, with representations and warranties regarding IP ownership, freedom to operate, and absence of encumbrances.
+
+R8 at M+1 must be completed before the Pre-Sub meeting (R2) at M+2, as FDA expects the submitting entity to demonstrate IP ownership.`,cn:`R8建立基于美国的FDA提交所需的法律和知识产权基础。IP收购将所有技术资产从中国研发实体转让给美国监管实体：
+
+- 专利转让：所有与sEMG电极设计、ECG门控算法、EIT重建方法和V/Q分离算法相关的已申请和待审专利转让给Arch Medical Management, LLC（俄勒冈州）。
+- 软件版权：源代码、固件、MyoBus协议规范和所有软件文档版权转让给美国实体。确保510(k)申请人拥有所提交的知识产权。
+- MyoBus IP：专有中间件协议——包括时间戳同步、加密、RBAC和FHIR输出模块——纳入IP包。
+- 美国设计历史文件（DHF）：在美国建立符合21 CFR 820.30的DHF。所有设计输入、输出、评审、验证和确认记录在美国质量体系控制下维护。
+- 转让协议：正式的IP转让协议含对价，依俄勒冈州法律执行，包含关于IP所有权、自由运营和无负担的陈述和保证。
+
+M+1的R8必须在M+2的Pre-Sub会议（R2）前完成，因为FDA期望提交实体证明IP所有权。`},status:`in-progress`,owner:`business`,category:`legal`},{id:`R9`,month:2,title:{en:`ISO 13485 Audit — Silan Technology`,cn:`ISO 13485审核 — 思澜科技`},description:{en:`Readiness assessment vs. 21 CFR 820 QSR and ISO 13485:2016. Gap remediation before FDA registration.`,cn:`对比21 CFR 820 QSR和ISO 13485:2016进行准备评估。FDA注册前差距修复。`},detail:{en:`R9 ensures the manufacturing quality system at Silan Technology (思澜科技, Chengdu) meets both international and US FDA standards before device production begins:
+
+- ISO 13485:2016 Audit: A third-party registrar (e.g., BSI, TÜV, SGS) performs a Stage 1 (documentation review) and Stage 2 (on-site) audit of Silan's QMS. Key areas: management responsibility, resource management, product realization, measurement/analysis/improvement.
+- 21 CFR 820 QSR Alignment: The US Quality System Regulation has additional requirements beyond ISO 13485 — particularly in design controls (820.30), CAPA (820.90), and complaint handling (820.198). The gap assessment maps Silan's existing processes to both standards.
+- Gap Remediation: Any nonconformities or gaps identified are remediated before FDA registration. Typical gaps for China-based manufacturers: design control documentation format, English-language DHF maintenance, complaint handling timelines, and CAPA effectiveness verification.
+- FDA Establishment Registration: Once the QMS is compliant, we register Silan as a contract manufacturer with FDA (21 CFR 807) and list both the sEMG and EIT devices.
+- Ongoing Compliance: After initial certification, annual surveillance audits maintain ISO 13485 certification. FDA may also conduct unannounced inspections of registered establishments.
+
+R9 at M+2 runs in parallel with R2 (Pre-Sub Meeting). QMS compliance is a prerequisite for any 510(k) filing — FDA reviewers verify establishment registration during submission acceptance.`,cn:`R9确保思澜科技（成都）的制造质量体系在设备生产开始前同时满足国际和美国FDA标准：
+
+- ISO 13485:2016审核：第三方注册机构（如BSI、TÜV、SGS）对思澜的QMS进行第一阶段（文件审核）和第二阶段（现场）审核。关键领域：管理职责、资源管理、产品实现、测量/分析/改进。
+- 21 CFR 820 QSR对齐：美国质量体系法规有超出ISO 13485的额外要求——特别是设计控制（820.30）、CAPA（820.90）和投诉处理（820.198）。差距评估将思澜现有流程映射到两个标准。
+- 差距修复：识别的任何不符合项或差距在FDA注册前修复。中国制造商的典型差距：设计控制文档格式、英文DHF维护、投诉处理时限和CAPA有效性验证。
+- FDA机构注册：QMS合规后，将思澜注册为FDA合同制造商（21 CFR 807）并列出sEMG和EIT设备。
+- 持续合规：初始认证后，年度监督审核维持ISO 13485认证。FDA也可能对注册机构进行不预先通知的检查。
+
+M+2的R9与R2（Pre-Sub会议）并行运行。QMS合规是任何510(k)提交的先决条件——FDA审查员在提交受理期间验证机构注册。`},status:`not-started`,owner:`regulatory`,category:`audit`}]}},n=[{id:`G1`,number:1,title:{en:`sEMG Design Verification Complete`,cn:`sEMG设计验证完成`},month:3,status:`not-started`,criteria:[{en:`ECG-gating algorithm validated (suppression >98%)`,cn:`ECG门控算法已验证（抑制>98%）`,met:!1},{en:`Bench testing per IEC 60601-1 passed`,cn:`符合IEC 60601-1的台架测试通过`,met:!1},{en:`sEMG sensitivity ≥92% confirmed`,cn:`sEMG灵敏度≥92%确认`,met:!1},{en:`EMC compliance (IEC 60601-1-2) verified`,cn:`EMC合规性(IEC 60601-1-2)已验证`,met:!1}],decision:null,decisionBy:null,decisionDate:null,notes:[],inputBusiness:[],inputTech:[]},{id:`G2`,number:2,title:{en:`Pre-Sub FDA Feedback Received`,cn:`预提交FDA反馈已收到`},month:2,status:`not-started`,criteria:[{en:`FDA written feedback received`,cn:`FDA书面反馈已收到`,met:!1},{en:`Predicate device strategy accepted`,cn:`前置器械策略被接受`,met:!1},{en:`Testing protocol approved by FDA`,cn:`测试方案获FDA批准`,met:!1},{en:`Software classification confirmed (Class C / IEC 62304 Class B)`,cn:`软件分类确认(C类 / IEC 62304 B类)`,met:!1}],decision:null,decisionBy:null,decisionDate:null,notes:[],inputBusiness:[],inputTech:[]},{id:`G3`,number:3,title:{en:`510(k) sEMG Submission Ready`,cn:`510(k) sEMG提交就绪`},month:6,status:`not-started`,criteria:[{en:`All 15 submission sections complete`,cn:`全部15个提交章节完成`,met:!1},{en:`Risk analysis (ISO 14971) finalized`,cn:`风险分析(ISO 14971)定稿`,met:!1},{en:`Clinical evidence dossier compiled`,cn:`临床证据档案汇编完成`,met:!1},{en:`Labeling & IFU reviewed (21 CFR 801)`,cn:`标签和IFU审核(21 CFR 801)`,met:!1},{en:`Quality system audit passed`,cn:`质量体系审核通过`,met:!1}],decision:null,decisionBy:null,decisionDate:null,notes:[],inputBusiness:[],inputTech:[]},{id:`G4`,number:4,title:{en:`sEMG Module Commercial Launch`,cn:`sEMG模块商业发布`},month:9,status:`not-started`,criteria:[{en:`510(k) clearance received (IKN)`,cn:`510(k)批准已获得(IKN)`,met:!1},{en:`Manufacturing scaled — Silan production ready`,cn:`制造已扩展 — 思澜生产就绪`,met:!1},{en:`Funding secured for commercial ops`,cn:`商业运营资金已到位`,met:!1}],decision:null,decisionBy:null,decisionDate:null,notes:[],inputBusiness:[],inputTech:[]},{id:`G5`,number:5,title:{en:`EIT 510(k) Submission Ready`,cn:`EIT 510(k)提交就绪`},month:17,status:`not-started`,criteria:[{en:`V/Q algorithm validated (>85% vs DCE-CT)`,cn:`V/Q算法已验证(>85%对比DCE-CT)`,met:!1},{en:`EIT biocompatibility testing complete`,cn:`EIT生物相容性测试完成`,met:!1},{en:`Timpel predicate comparison documented (K250464)`,cn:`Timpel前置器械比较文档完成（K250464）`,met:!1},{en:`EIT-specific EMC testing passed`,cn:`EIT专用EMC测试通过`,met:!1}],decision:null,decisionBy:null,decisionDate:null,notes:[],inputBusiness:[],inputTech:[]},{id:`G6`,number:6,title:{en:`Full Platform Launch — FDA Cleared`,cn:`完整平台发布 — FDA已批准`},month:23,status:`not-started`,criteria:[{en:`EIT 510(k) clearance (DQS)`,cn:`EIT 510(k)批准(DQS)`,met:!1},{en:`MyoBus integrated platform validated`,cn:`MyoBus集成平台已验证`,met:!1},{en:`Commercial deployment plan finalized`,cn:`商业部署计划已定稿`,met:!1}],decision:null,decisionBy:null,decisionDate:null,notes:[],inputBusiness:[],inputTech:[]}],r=[{id:`RISK-001`,title:{en:`False-negative sEMG signal (missed apnea / low-effort breath)`,cn:`sEMG信号假阴性（漏检呼吸暂停/低努力呼吸）`},severity:`high`,probability:`low`,riskLevel:`yellow`,controls:{en:`Dual-threshold algorithm + alarm; labeled as adjunct; clinical staff training`,cn:`双阈值算法+报警; 标注为辅助设备; 临床人员培训`},residual:{en:`Acceptable`,cn:`可接受`},mitigationStatus:`in-progress`,module:`A`,standard:`ISO 14971`},{id:`RISK-002`,title:{en:`ECG artifact misidentified as neural drive signal (false positive)`,cn:`ECG伪影被误识别为神经驱动信号（假阳性）`},severity:`medium`,probability:`medium`,riskLevel:`yellow`,controls:{en:`Proprietary ECG-gating (>98% suppression, validated); visual waveform display for verification`,cn:`专有ECG门控(>98%抑制, 已验证); 可视波形显示用于验证`},residual:{en:`Acceptable`,cn:`可接受`},mitigationStatus:`in-progress`,module:`A`,standard:`ISO 14971`},{id:`RISK-003`,title:{en:`EIT belt electrical leakage (patient contact current)`,cn:`EIT带电气泄漏（患者接触电流）`},severity:`high`,probability:`very-low`,riskLevel:`green`,controls:{en:`IEC 60601-1 Type BF; &lt;10 µA patient leakage; Bluetooth wireless isolation`,cn:`IEC 60601-1 BF型; &lt;10µA患者泄漏; 蓝牙无线隔离`},residual:{en:`Acceptable`,cn:`可接受`},mitigationStatus:`complete`,module:`B`,standard:`IEC 60601-1`},{id:`RISK-004`,title:{en:`V/Q perfusion image misinterpretation → incorrect ventilator adjustment`,cn:`V/Q灌注图像误判 → 呼吸机设置错误`},severity:`high`,probability:`low`,riskLevel:`red`,controls:{en:`Perfusion labeled 'investigational adjunct' in initial 510(k); mandated clinical training program`,cn:`灌注在初始510(k)中标注为'研究辅助工具'; 强制临床培训计划`},residual:{en:`Acceptable`,cn:`可接受`},mitigationStatus:`not-started`,module:`B`,standard:`ISO 14971`},{id:`RISK-005`,title:{en:`Cybersecurity breach / unauthorized data access or device tampering`,cn:`网络安全破坏/未授权数据访问或设备篡改`},severity:`medium`,probability:`low`,riskLevel:`yellow`,controls:{en:`AES-256 encryption; RBAC; isolated local network; FDA Cyber Guidance 2023; no remote FW update without auth`,cn:`AES-256加密; RBAC; 隔离本地网络; FDA网络安全指南2023; 无认证不允许远程固件更新`},residual:{en:`Acceptable`,cn:`可接受`},mitigationStatus:`in-progress`,module:`Both`,standard:`FDA Cybersecurity 2023`},{id:`RISK-006`,title:{en:`MyoBus synchronization failure — misaligned neural-mechanical data`,cn:`MyoBus同步故障 — 神经-机械数据不对齐`},severity:`medium`,probability:`very-low`,riskLevel:`green`,controls:{en:`Hardware timestamp redundancy; loss-of-sync alarm; automatic fallback to independent module mode`,cn:`硬件时间戳冗余; 同步丢失报警; 自动回退到独立模块模式`},residual:{en:`Acceptable`,cn:`可接受`},mitigationStatus:`complete`,module:`Both`,standard:`ISO 14971`},{id:`RISK-007`,title:{en:`510(k) rejection or De Novo reclassification — predicate not accepted or combined platform deemed novel`,cn:`510(k)被拒或De Novo重分类 — 前置器械未被接受或组合平台被认定为新型器械`},severity:`high`,probability:`medium`,riskLevel:`red`,controls:{en:`Two risk scenarios: (A) Predicate rejection per module — sEMG K082437 uses esophageal catheter vs. our surface electrodes (different transducer technology); EIT K250464 is ventilation-only vs. our V/Q perfusion claim (potentially new intended use). Mitigation: Pre-Sub Q-Meeting at M+0 to get FDA written concurrence before committing test resources; identify 2-3 alternative predicates per module. (B) De Novo for combined platform — FDA may view integrated sEMG+EIT Digital Twin as a novel device with no predicate. Mitigation: describe each module as standalone in 510(k) filings; decouple Digital Twin language from primary submission; prepare De Novo contingency package. De Novo impact: +$130K user fee, +6-12 months timeline, may require prospective clinical study, +$200K-$400K total. Silver lining: De Novo creates the product code — device becomes the predicate for all future competitors, increasing acquisition value.`,cn:`两个风险场景：(A) 各模块前置器械被拒 — sEMG K082437使用食管导管vs我们的表面电极（不同传感器技术）；EIT K250464仅通气vs我们的V/Q灌注声明（可能构成新预期用途）。缓解：M+0的Pre-Sub Q会议获取FDA书面认可后再投入测试资源；每个模块准备2-3个替代前置器械。(B) 组合平台De Novo — FDA可能认为集成sEMG+EIT数字孪生是无前置器械的新型器械。缓解：510(k)申报中将各模块描述为独立设备；将数字孪生语言与主要提交脱钩；准备De Novo备用方案。De Novo影响：+$130K用户费、+6-12个月时间线、可能需要前瞻性临床研究、总计+$200K-$400K。积极面：De Novo创建产品代码——设备成为所有未来竞争对手的前置器械，增加收购价值。`},residual:{en:`Manageable if detected at Pre-Sub (M+2)`,cn:`如在Pre-Sub(M+2)发现则可控`},mitigationStatus:`in-progress`,module:`Both`,standard:`21 CFR 807`},{id:`RISK-008`,title:{en:`Funding runway insufficient before sEMG clearance (M+9)`,cn:`sEMG批准(M+9)前资金跑道不足`},severity:`high`,probability:`medium`,riskLevel:`red`,controls:{en:`Phased milestone-based funding; sEMG-first strategy enables earlier revenue; investor gate reviews`,cn:`分阶段里程碑资金; sEMG优先策略实现更早收入; 投资者门控评审`},residual:{en:`Manageable`,cn:`可控`},mitigationStatus:`in-progress`,module:`N/A`,standard:`Business`}],i=[{id:`STD-01`,code:`IEC 60601-1:2005+AMD1`,title:{en:`Medical Electrical Equipment — General Safety`,cn:`医用电气设备 — 通用安全`},applies:`Both`,status:`in-progress`,progress:30},{id:`STD-02`,code:`IEC 60601-1-2:2014 Ed.4.1`,title:{en:`Electromagnetic Compatibility (EMC)`,cn:`电磁兼容性(EMC)`},applies:`Both`,status:`not-started`,progress:0},{id:`STD-03`,code:`IEC 60601-1-6:2010+AMD1`,title:{en:`Usability Engineering`,cn:`可用性工程`},applies:`Both`,status:`not-started`,progress:0},{id:`STD-04`,code:`ISO 14971:2019`,title:{en:`Risk Management for Medical Devices`,cn:`医疗器械风险管理`},applies:`Both`,status:`in-progress`,progress:45},{id:`STD-05`,code:`ISO 10993-1:2018`,title:{en:`Biocompatibility — Evaluation Framework`,cn:`生物相容性 — 评估框架`},applies:`sEMG Electrodes`,status:`not-started`,progress:0},{id:`STD-06`,code:`ISO 10993-5`,title:{en:`Cytotoxicity`,cn:`细胞毒性`},applies:`sEMG Electrodes`,status:`not-started`,progress:0},{id:`STD-07`,code:`ISO 10993-10`,title:{en:`Sensitization & Irritation`,cn:`致敏和刺激`},applies:`sEMG + EIT Belt`,status:`not-started`,progress:0},{id:`STD-08`,code:`FDA Cybersecurity 2023`,title:{en:`Medical Device Cybersecurity`,cn:`医疗器械网络安全`},applies:`Both`,status:`in-progress`,progress:25},{id:`STD-09`,code:`21 CFR Part 820`,title:{en:`Quality System Regulation (QSR)`,cn:`质量体系法规(QSR)`},applies:`Both`,status:`in-progress`,progress:40},{id:`STD-10`,code:`21 CFR Part 11`,title:{en:`Electronic Records & Signatures`,cn:`电子记录和签名`},applies:`Software`,status:`not-started`,progress:0},{id:`STD-11`,code:`IEC 62304`,title:{en:`Medical Device Software Lifecycle`,cn:`医疗器械软件生命周期`},applies:`Software`,status:`in-progress`,progress:20},{id:`STD-12`,code:`ISO 13485:2016`,title:{en:`QMS for Medical Devices`,cn:`医疗器械质量管理体系`},applies:`Silan Manufacturing`,status:`in-progress`,progress:60}],a=[{month:0,technical:{en:`Pre-Sub filed; prototype ready`,cn:`预提交已提交; 原型就绪`},business:{en:`FDA engagement initiated — clock starts`,cn:`FDA接触启动 — 计时开始`},impact:`neutral`},{month:2,technical:{en:`FDA Pre-Sub meeting`,cn:`FDA预提交会议`},business:{en:`Regulatory green light / red flag — pivotal investor signal`,cn:`法规绿灯/红旗 — 关键投资者信号`},impact:`critical`},{month:3,technical:{en:`Bench & performance testing begins`,cn:`台架和性能测试开始`},business:{en:`Testing costs ramp — largest pre-submission spend`,cn:`测试成本攀升 — 提交前最大支出`},impact:`warning`},{month:6,technical:{en:`510(k) sEMG submitted to FDA`,cn:`510(k) sEMG已提交FDA`},business:{en:`Submission milestone — investor confidence checkpoint`,cn:`提交里程碑 — 投资者信心检查点`},impact:`critical`},{month:9,technical:{en:`sEMG 510(k) clearance expected`,cn:`sEMG 510(k)预计批准`},business:{en:`Module A revenue-ready — funding runway extended`,cn:`A模块可产生收入 — 资金跑道延长`},impact:`critical`},{month:12,technical:{en:`EIT testing & validation begins`,cn:`EIT测试和验证开始`},business:{en:`Second major investment tranche needed`,cn:`需要第二笔主要投资`},impact:`warning`},{month:17,technical:{en:`510(k) EIT submitted`,cn:`510(k) EIT已提交`},business:{en:`Full platform pathway visible — strategic partnerships viable`,cn:`完整平台路径可见 — 战略合作可行`},impact:`critical`},{month:23,technical:{en:`EIT clearance — full platform`,cn:`EIT批准 — 完整平台`},business:{en:`Full commercial launch — ROI realization begins`,cn:`全面商业发布 — ROI实现开始`},impact:`critical`}],o={cashOnHand:32e4,monthlyBurn:45e3,runwayMonths:7,currency:`USD`,fundingRounds:[{id:`FR-001`,label:{en:`Founder Seed`,cn:`创始种子轮`},amount:15e4,date:`2025-09`,status:`received`},{id:`FR-002`,label:{en:`Angel Round`,cn:`天使轮`},amount:25e4,date:`2026-01`,status:`received`},{id:`FR-003`,label:{en:`Phase 1 Seed Round (PPT target: $2M)`,cn:`第一阶段种子轮（PPT目标: $2M）`},amount:2e6,date:`2026-06`,status:`pipeline`},{id:`FR-004`,label:{en:`Phase 2 Growth (PPT total: $5M)`,cn:`第二阶段增长轮（PPT总额: $5M）`},amount:3e6,date:`2027-06`,status:`pipeline`}],burnHistory:[{month:-3,burn:35e3,note:{en:`Setup & legal`,cn:`设立与法律`}},{month:-2,burn:38e3,note:{en:`Prototype materials`,cn:`原型材料`}},{month:-1,burn:42e3,note:{en:`Lab + early testing`,cn:`实验室+早期测试`}},{month:0,burn:45e3,note:{en:`Q-Sub prep + bench testing`,cn:`Q-Sub准备+台架测试`}}]},s=[{id:`INP-001`,from:`tech`,date:`2026-03-15`,gate:`G1`,content:{en:`ECG-gating algorithm showing 97.5% suppression in latest bench test — close to 98% target. Requesting 2 additional weeks for optimization.`,cn:`ECG门控算法在最新台架测试中显示97.5%抑制 — 接近98%目标。请求额外2周进行优化。`},status:`pending-review`,pmpResponse:null},{id:`INP-002`,from:`business`,date:`2026-03-10`,gate:`G4`,content:{en:`Investor board requests monthly progress reports starting M+3. Need clear KPIs tied to each gate.`,cn:`投资者委员会要求从M+3开始每月进度报告。需要与每个门控关联的明确KPI。`},status:`accepted`,pmpResponse:{en:`Approved. Monthly reports will align with gate criteria.`,cn:`已批准。月度报告将与门控标准对齐。`}}],c=[],l=[{id:`AUD-001`,timestamp:`2026-03-15T09:30:00Z`,user:`PMP`,action:`gate-criteria`,targetId:`G1`,field:`criteria[0].met`,oldValue:`false`,newValue:`true`,detail:`Marked ECG-gating criterion as met based on bench test results`},{id:`AUD-002`,timestamp:`2026-03-14T14:15:00Z`,user:`PMP`,action:`milestone-status`,targetId:`T1`,field:`status`,oldValue:`in-progress`,newValue:`complete`,detail:`sEMG prototype finalization confirmed complete`},{id:`AUD-003`,timestamp:`2026-03-12T11:00:00Z`,user:`PMP`,action:`risk-field`,targetId:`RISK-005`,field:`mitigationStatus`,oldValue:`not-started`,newValue:`in-progress`,detail:`Cybersecurity mitigation work started per FDA 2023 guidance`}],u=[{id:`DHF-001`,code:`DHF-DP`,title:{en:`Design Plan`,cn:`设计计划`},category:`Design Controls`,owner:`tech`,status:`approved`,dueMonth:0,notes:``},{id:`DHF-002`,code:`DHF-DI`,title:{en:`Design Inputs`,cn:`设计输入`},category:`Design Controls`,owner:`tech`,status:`in-review`,dueMonth:1,notes:``},{id:`DHF-003`,code:`DHF-DO`,title:{en:`Design Outputs`,cn:`设计输出`},category:`Design Controls`,owner:`tech`,status:`draft`,dueMonth:3,notes:``},{id:`DHF-004`,code:`DHF-DV`,title:{en:`Design Verification Report`,cn:`设计验证报告`},category:`Verification`,owner:`tech`,status:`not-started`,dueMonth:4,notes:``},{id:`DHF-005`,code:`DHF-VAL`,title:{en:`Design Validation Report`,cn:`设计确认报告`},category:`Validation`,owner:`tech`,status:`not-started`,dueMonth:6,notes:``},{id:`DHF-006`,code:`DHF-RA`,title:{en:`Risk Analysis (ISO 14971)`,cn:`风险分析(ISO 14971)`},category:`Risk Management`,owner:`tech`,status:`in-review`,dueMonth:2,notes:``},{id:`DHF-007`,code:`DHF-SW`,title:{en:`Software Documentation (IEC 62304)`,cn:`软件文档(IEC 62304)`},category:`Software`,owner:`tech`,status:`draft`,dueMonth:3,notes:``},{id:`DHF-008`,code:`DHF-BIO`,title:{en:`Biocompatibility Report (ISO 10993)`,cn:`生物相容性报告(ISO 10993)`},category:`Biocompatibility`,owner:`tech`,status:`not-started`,dueMonth:5,notes:``},{id:`DHF-009`,code:`DHF-EMC`,title:{en:`EMC Test Report (IEC 60601-1-2)`,cn:`EMC测试报告(IEC 60601-1-2)`},category:`Testing`,owner:`tech`,status:`not-started`,dueMonth:4,notes:``},{id:`DHF-010`,code:`DHF-LBL`,title:{en:`Labeling & IFU (21 CFR 801)`,cn:`标签和IFU(21 CFR 801)`},category:`Labeling`,owner:`regulatory`,status:`draft`,dueMonth:5,notes:``},{id:`DHF-011`,code:`DHF-CL`,title:{en:`510(k) Cover Letter`,cn:`510(k)附信`},category:`Submission`,owner:`regulatory`,status:`not-started`,dueMonth:6,notes:``},{id:`DHF-012`,code:`DHF-DD`,title:{en:`Device Description`,cn:`设备描述`},category:`Submission`,owner:`regulatory`,status:`draft`,dueMonth:5,notes:``}],d=[{id:`CAPA-001`,type:`corrective`,title:{en:`ECG Artifact Suppression Below Target`,cn:`ECG伪影抑制低于目标`},linkedRiskId:`RISK-002`,description:{en:`ECG-gating algorithm achieved 97.5% but target is 98%. Corrective action: add secondary adaptive filter stage.`,cn:`ECG门控算法达到97.5%但目标是98%。纠正措施：增加二级自适应滤波阶段。`},owner:`Tech Lead`,status:`in-progress`,openedDate:`2026-03-10`,dueDate:`2026-04-15`,closedDate:null},{id:`CAPA-002`,type:`preventive`,title:{en:`V/Q Misinterpretation Safeguard`,cn:`V/Q误判预防措施`},linkedRiskId:`RISK-004`,description:{en:`Preventive action for V/Q image misinterpretation risk: develop mandatory clinical training module and add on-screen confidence indicator.`,cn:`V/Q图像误判风险的预防措施：开发强制临床培训模块并添加屏幕置信度指示器。`},owner:`Clinical Affairs`,status:`open`,openedDate:`2026-03-05`,dueDate:`2026-07-01`,closedDate:null},{id:`CAPA-003`,type:`corrective`,title:{en:`Cybersecurity Penetration Test Findings`,cn:`网络安全渗透测试发现`},linkedRiskId:`RISK-005`,description:{en:`Penetration test revealed weak session token handling. Corrective: implement token rotation and session timeout per FDA Cyber 2023.`,cn:`渗透测试发现会话令牌处理薄弱。纠正：按FDA网络安全2023实施令牌轮换和会话超时。`},owner:`Security Engineer`,status:`in-progress`,openedDate:`2026-02-20`,dueDate:`2026-04-01`,closedDate:null},{id:`CAPA-004`,type:`preventive`,title:{en:`Predicate & De Novo Contingency Strategy`,cn:`前置器械与De Novo备用策略`},linkedRiskId:`RISK-007`,description:{en:`Three-pronged mitigation: (1) Identify 2-3 alternative IKN predicates for sEMG beyond K082437 (surface EMG devices, not catheter-based). (2) Prepare SE argument for EIT V/Q claim as performance enhancement vs. new intended use. (3) Draft De Novo pre-submission package for combined platform if FDA rejects modular 510(k) strategy. Budget reserve: $130K De Novo fee + $200K clinical study contingency.`,cn:`三管齐下缓解：(1) 为sEMG识别2-3个K082437之外的替代IKN前置器械（表面EMG设备而非导管类）。(2) 准备EIT V/Q声明作为性能增强而非新预期用途的SE论证。(3) 如FDA拒绝模块化510(k)策略，起草组合平台De Novo预提交包。预算储备：$130K De Novo费用 + $200K临床研究备用金。`},owner:`Regulatory Affairs`,status:`open`,openedDate:`2026-03-01`,dueDate:`2026-05-15`,closedDate:null}],f=[{id:`ACT-001`,title:{en:`Complete ECG-gating optimization (98% target)`,cn:`完成ECG门控优化（98%目标）`},assignee:`Dr. Chen`,owner:`tech`,priority:`high`,status:`in-progress`,dueDate:`2026-04-01`,linkedGate:`G1`,notes:``},{id:`ACT-002`,title:{en:`Prepare Pre-Sub meeting presentation`,cn:`准备预提交会议报告`},assignee:`Regulatory Lead`,owner:`regulatory`,priority:`high`,status:`in-progress`,dueDate:`2026-04-10`,linkedGate:`G2`,notes:``},{id:`ACT-003`,title:{en:`Draft risk analysis report (ISO 14971)`,cn:`起草风险分析报告(ISO 14971)`},assignee:`Quality Mgr`,owner:`tech`,priority:`high`,status:`in-progress`,dueDate:`2026-04-15`,linkedGate:`G1`,notes:``},{id:`ACT-004`,title:{en:`Source EIT electrode belt supplier`,cn:`寻找EIT电极带供应商`},assignee:`Procurement`,owner:`tech`,priority:`medium`,status:`todo`,dueDate:`2026-05-01`,linkedGate:null,notes:``},{id:`ACT-005`,title:{en:`Set up investor monthly reporting template`,cn:`建立投资者月度报告模板`},assignee:`PM Analyst`,owner:`business`,priority:`medium`,status:`done`,dueDate:`2026-03-15`,linkedGate:null,notes:``},{id:`ACT-006`,title:{en:`Schedule ISO 13485 gap assessment audit`,cn:`安排ISO 13485差距评估审核`},assignee:`Quality Mgr`,owner:`regulatory`,priority:`high`,status:`todo`,dueDate:`2026-04-20`,linkedGate:`G3`,notes:``},{id:`ACT-007`,title:{en:`Order biocompatibility test samples`,cn:`订购生物相容性测试样品`},assignee:`Lab Tech`,owner:`tech`,priority:`low`,status:`blocked`,dueDate:`2026-06-01`,linkedGate:null,notes:`Waiting for supplier qualification`},{id:`ACT-008`,title:{en:`MyoBus protocol security review`,cn:`MyoBus协议安全审查`},assignee:`Security Engineer`,owner:`tech`,priority:`high`,status:`in-progress`,dueDate:`2026-04-05`,linkedGate:`G1`,notes:``}],p=[{id:`BUD-001`,label:{en:`Prototype & Materials`,cn:`原型和材料`},planned:85e3,actual:78e3,notes:``},{id:`BUD-002`,label:{en:`Lab Testing & Validation`,cn:`实验室测试和验证`},planned:12e4,actual:45e3,notes:`Ramp expected M+3`},{id:`BUD-003`,label:{en:`Regulatory & Legal`,cn:`法规和法律`},planned:95e3,actual:62e3,notes:``},{id:`BUD-004`,label:{en:`Personnel`,cn:`人员`},planned:25e4,actual:135e3,notes:`Annualized — 6 FTE`},{id:`BUD-005`,label:{en:`Clinical Studies`,cn:`临床研究`},planned:8e4,actual:0,notes:`Begins at M+3`},{id:`BUD-006`,label:{en:`Equipment & Software`,cn:`设备和软件`},planned:6e4,actual:42e3,notes:``},{id:`BUD-007`,label:{en:`Manufacturing Setup`,cn:`生产线建设`},planned:1e5,actual:15e3,notes:`Silan facility upgrades`},{id:`BUD-008`,label:{en:`Travel & Conferences`,cn:`差旅和会议`},planned:25e3,actual:8e3,notes:``}],m=[{id:`TM-001`,name:`Dr. Dai`,role:{en:`Chief Technologist`,cn:`首席技术官`},allocation:[{workstream:`sEMG Algorithm`,pct:40},{workstream:`EIT Prototype`,pct:30},{workstream:`MyoBus Integration`,pct:20},{workstream:`Documentation`,pct:10}],capacity:100},{id:`TM-002`,name:`Lawrence Liu`,role:{en:`CEO & Investor Relations (Asia)`,cn:`CEO及投资者关系（亚洲）`},allocation:[{workstream:`Investor Relations`,pct:50},{workstream:`Business Strategy`,pct:30},{workstream:`Operations`,pct:20}],capacity:100},{id:`TM-003`,name:`Lon Dailey`,role:{en:`Regulatory & Investor Relations (N. America)`,cn:`法规及投资者关系（北美）`},allocation:[{workstream:`510(k) Prep`,pct:35},{workstream:`Standards Compliance`,pct:20},{workstream:`Investor Relations`,pct:25},{workstream:`Project Management`,pct:20}],capacity:100},{id:`TM-004`,name:`Danielle Liu`,role:{en:`Accounting`,cn:`会计`},allocation:[{workstream:`Budget Management`,pct:50},{workstream:`Financial Reporting`,pct:30},{workstream:`Investor Reports`,pct:20}],capacity:100}],h=[{id:`SUP-001`,name:`TechElec Components`,component:{en:`sEMG Electrode Arrays (Ag/AgCl)`,cn:`sEMG电极阵列(Ag/AgCl)`},status:`active`,leadTimeDays:21,poStatus:`PO-2026-014 Delivered`,contractMfgMilestone:`M+0`,notes:``},{id:`SUP-002`,name:`FlexBelt Medical`,component:{en:`EIT 32-Electrode Thoracic Belt`,cn:`EIT 32电极胸带`},status:`under-review`,leadTimeDays:45,poStatus:`RFQ Sent`,contractMfgMilestone:`M+6`,notes:`Biocompatibility cert required`},{id:`SUP-003`,name:`NordicSemi`,component:{en:`Bluetooth SoC (nRF52840)`,cn:`蓝牙SoC(nRF52840)`},status:`active`,leadTimeDays:14,poStatus:`PO-2026-009 In Transit`,contractMfgMilestone:`M+0`,notes:``},{id:`SUP-004`,name:`Texas Instruments`,component:{en:`24-bit ADC (ADS1298)`,cn:`24位ADC(ADS1298)`},status:`active`,leadTimeDays:28,poStatus:`PO-2026-011 Delivered`,contractMfgMilestone:`M+0`,notes:``},{id:`SUP-005`,name:`Silan Technology`,component:{en:`Contract Manufacturing (Assembly)`,cn:`合同生产(组装)`},status:`qualified`,leadTimeDays:60,poStatus:`Framework Agreement`,contractMfgMilestone:`M+8`,notes:`ISO 13485 audit pending`},{id:`SUP-006`,name:`CeramTec`,component:{en:`Medical-grade Ceramic Substrates`,cn:`医用级陶瓷基板`},status:`under-review`,leadTimeDays:35,poStatus:`Samples Requested`,contractMfgMilestone:`M+4`,notes:`Alternative to current PCB substrate`}],g=`pmp`;function _(e){g=e}var v={en:{appTitle:`Control Tower`,appSubtitle:`ICU Respiratory Digital Twin`,masterQuestion:`Are we still on track to FDA clearance — and what is at risk?`,pmpBadge:`PMP Authority`,currentMonth:`Current`,tabDualTrack:`Dual-Track`,tabGates:`Gate System`,tabRisks:`Risk Dashboard`,tabTimeline:`Timeline`,tabRegulatory:`Regulatory Tracker`,tabCashRunway:`Cash / Runway`,summaryOverall:`Overall Status`,summaryNextGate:`Next Gate`,summaryRedRisks:`Red Risks`,summaryPendingInputs:`Pending Inputs`,summaryDaysToMilestone:`Days to Next Milestone`,statusOnTrack:`ON TRACK`,statusAtRisk:`AT RISK`,statusBlocked:`BLOCKED`,dualTrackTitle:`Dual-Track Dashboard`,dualTrackDesc:`Technical progress and regulatory milestones — side by side`,techTrackTitle:`Technical Track`,regTrackTitle:`Regulatory Track`,gatesTitle:`Gate System`,gatesDesc:`Decision checkpoints — Proceed / Need Data / Stop`,gateMonthPrefix:`Target: M+`,gateCriteriaMet:`criteria met`,gateDecisionTitle:`PMP Decision (Authority)`,gateProceed:`✓ Proceed`,gateNeedData:`⟳ Need More Data`,gateStop:`✕ Stop`,gateInputsTitle:`Stakeholder Inputs`,gateNotesTitle:`Gate Notes`,addNotePlaceholder:`Add a note (PMP authority)...`,addNoteBtn:`Add Note`,risksTitle:`Risk Dashboard`,risksDesc:`ISO 14971 — Top risks, mitigation status, and residual assessment`,filterAll:`All`,filterRed:`Red`,filterYellow:`Yellow`,filterGreen:`Green`,topRisksTitle:`Top 5 Risks This Week`,riskSeverity:`Severity`,riskProbability:`Probability`,riskControls:`Controls`,riskResidual:`Residual`,riskMitigation:`Mitigation`,riskModule:`Module`,timelineTitle:`Timeline — Business Translation`,timelineDesc:`Technical milestones translated into investor and business language`,tlTechnical:`Technical`,tlBusiness:`Business Impact`,regulatoryTitle:`Regulatory Standards Tracker`,regulatoryDesc:`IEC 60601, ISO 10993, 21 CFR compliance matrix`,colCode:`Standard`,colTitle:`Description`,colApplies:`Applies To`,colStatus:`Status`,colProgress:`Progress`,cashRunwayTitle:`Cash / Runway`,cashRunwayDesc:`Financial position, burn rate, and funding milestones`,cashOnHand:`Cash on Hand`,monthlyBurnLabel:`Monthly Burn`,runwayLabel:`Runway`,editCashHint:`Edit (PMP only)`,editBurnHint:`Edit (PMP only)`,runwayMonths:`months`,fundingRoundsTitle:`Funding Rounds`,burnHistoryTitle:`Burn History`,frReceived:`Received`,frCommitted:`Committed`,frPipeline:`Pipeline`,inputPanelTitle:`Stakeholder Inputs`,inputFromTech:`Technology Team`,inputFromBusiness:`Business / Investors`,complete:`Complete`,inProgress:`In Progress`,notStarted:`Not Started`,pendingReview:`Pending Review`,accepted:`Accepted`,rejected:`Rejected`,noted:`Noted`,riskEditTitle:`Edit Risk`,riskFieldSeverity:`Severity`,riskFieldProbability:`Probability`,riskFieldLevel:`Risk Level`,riskSave:`Save`,addFundingTitle:`Record Funding`,fundingLabelPlaceholder:`Label (e.g. Series A)`,fundingAmountPlaceholder:`Amount ($)`,fundingDatePlaceholder:`Date (YYYY-MM)`,addFundingBtn:`+ Add Funding Round`,fundingNote:`Funds are recorded in the dashboard. Connect to your bank via Plaid or Mercury API for live sync.`,clickToChangeStatus:`Click to cycle status`,progressLabel:`Progress %`,crPendingTitle:`Pending Change Requests`,crSubmitTitle:`Submit Change Request`,crFrom:`Requested By`,crField:`Field`,crOldValue:`Current Value`,crNewValue:`Proposed Value`,crJustification:`Justification`,crEvidence:`Evidence / Reference`,crJustPlaceholder:`Why is this change warranted? Reference test data, FDA feedback, etc.`,crEvidencePlaceholder:`Link, document, or test report reference`,crSubmit:`Submit for PMP Approval`,crApprove:`✓ Approve`,crReject:`✕ Reject`,crNoPending:`No pending change requests`,crRequiresApproval:`Changes require PMP approval`,crRequestChange:`Request Change`,crPending:`Pending`,crApproved:`Approved`,crRejected:`Rejected`,crBadge:`CR`,crDocuments:`Attached Documents`,crChooseFiles:`Choose files (PDF, images, docs)`,crNoDocuments:`No documents attached`,rolePmp:`PMP (Full Authority)`,roleTech:`Technology Team`,roleBusiness:`Business / Investors`,roleAccounting:`Accounting`,roleLabel:`Active Role`,roleReadOnly:`Read-Only`,roleAccountingAccess:`Accounting has read-only access to: Cash/Runway, Timeline, Gate statuses`,apiTitle:`Payment & Banking Integrations`,apiDesc:`APIs for China-based investors and cross-border transactions`,apiAlipay:`Alipay Business`,apiAlipayDesc:`Cross-border payment collection, investor wire tracking, RMB/USD settlement`,apiWechat:`WeChat Pay Business`,apiWechatDesc:`Enterprise payments, investor communication channel, mini-program integration`,apiUnionpay:`UnionPay International`,apiUnionpayDesc:`Corporate card payments, cross-border B2B transfers, multi-currency support`,apiCmbchina:`China Merchants Bank (CMB)`,apiCmbchinaDesc:`Corporate banking API, treasury management, real-time balance & FX rates`,apiPingpong:`PingPong Global`,apiPingpongDesc:`Cross-border payment platform for startups, automated FX, VAT refund support`,apiXe:`XE Currency Data`,apiXeDesc:`Real-time CNY/USD exchange rates, historical rate data, currency conversion`,apiSwift:`SWIFT gpi`,apiSwiftDesc:`Cross-border wire tracking, payment status confirmation, compliance screening`,apiStatus:`Status`,apiAvailable:`Available`,apiPlanned:`Planned`,apiActive:`Active`,apiEndpoint:`Endpoint`,apiDocs:`Documentation`,auditTitle:`Audit Trail`,auditDesc:`Chronological log of all dashboard actions for DHF traceability`,auditTimestamp:`Timestamp`,auditUser:`User`,auditAction:`Action`,auditTarget:`Target`,auditOld:`Old`,auditNew:`New`,auditDetail:`Detail`,dhfTitle:`DHF Document Tracker`,dhfDesc:`Design History File — document status per regulatory requirement`,dhfCode:`Code`,dhfDocument:`Document`,dhfCategory:`Category`,dhfOwner:`Owner`,dhfStatus:`Status`,dhfDue:`Due`,dhfDraft:`Draft`,dhfInReview:`In Review`,dhfApproved:`Approved`,capaTitle:`CAPA Log`,capaDesc:`Corrective & Preventive Actions tied to risk items`,capaType:`Type`,capaCorrective:`Corrective`,capaPreventive:`Preventive`,capaLinkedRisk:`Linked Risk`,capaOwner:`Owner`,capaDue:`Due`,capaOpened:`Opened`,capaClosed:`Closed`,capaOpen:`Open`,capaInProgress:`In Progress`,capaDone:`Closed`,capaVerified:`Verified`,actionsTitle:`Action Items`,actionsDesc:`Task board — assignable items with owners and due dates`,actionAssignee:`Assignee`,actionPriority:`Priority`,actionDue:`Due`,actionGate:`Gate`,actionTodo:`To Do`,actionInProgress:`In Progress`,actionDone:`Done`,actionBlocked:`Blocked`,actionHigh:`High`,actionMedium:`Medium`,actionLow:`Low`,budgetTitle:`Budget vs. Actual`,budgetDesc:`Planned spend vs. actual spend per category`,budgetCategory:`Category`,budgetPlanned:`Planned`,budgetActual:`Actual`,budgetVariance:`Variance`,budgetTotal:`Total`,notifTitle:`Notifications`,notifPendingCR:`Pending CR`,notifOverdueMilestone:`Overdue Milestone`,notifApproachingGate:`Approaching Gate`,notifBudgetOverrun:`Budget Overrun`,notifRunwayWarning:`Runway Warning`,notifOverdueAction:`Overdue Action`,notifOverdueCapa:`Overdue CAPA`,notifDismiss:`Dismiss`,exportBtn:`Export Report`,exportTitle:`Status Report`,resourceTitle:`Resource Allocation`,resourceDesc:`Team assignments and capacity utilization`,resourceName:`Name`,resourceRole:`Role`,resourceWorkstream:`Workstream`,resourceCapacity:`Capacity`,resourceUtilization:`Utilization`,supplierTitle:`Supplier Tracker`,supplierDesc:`Hardware components — lead times, PO status, milestones`,supplierName:`Supplier`,supplierComponent:`Component`,supplierLead:`Lead Time`,supplierPO:`PO Status`,supplierMilestone:`Milestone`,supplierActive:`Active`,supplierQualified:`Qualified`,supplierUnderReview:`Under Review`,supplierRisk:`At Risk`,supplierDays:`days`,tabAudit:`Audit Trail`,tabActions:`Actions`,tabBudget:`Budget`,tabResources:`Resources`,tabSuppliers:`Suppliers`},cn:{appTitle:`控制塔`,appSubtitle:`ICU呼吸数字孪生`,masterQuestion:`我们是否仍在FDA批准的正轨上——有什么风险？`,pmpBadge:`PMP权限`,currentMonth:`当前`,tabDualTrack:`双轨视图`,tabGates:`门控系统`,tabRisks:`风险仪表盘`,tabTimeline:`时间线`,tabRegulatory:`法规追踪`,tabCashRunway:`资金/跑道`,summaryOverall:`总体状态`,summaryNextGate:`下一门控`,summaryRedRisks:`红色风险`,summaryPendingInputs:`待处理输入`,summaryDaysToMilestone:`距下一里程碑`,statusOnTrack:`正轨`,statusAtRisk:`有风险`,statusBlocked:`受阻`,dualTrackTitle:`双轨仪表盘`,dualTrackDesc:`技术进展与法规里程碑——并排显示`,techTrackTitle:`技术路径`,regTrackTitle:`法规路径`,gatesTitle:`门控系统`,gatesDesc:`决策检查点 — 通过 / 需更多数据 / 停止`,gateMonthPrefix:`目标: M+`,gateCriteriaMet:`标准已满足`,gateDecisionTitle:`PMP决策（权限）`,gateProceed:`✓ 通过`,gateNeedData:`⟳ 需更多数据`,gateStop:`✕ 停止`,gateInputsTitle:`利益相关方输入`,gateNotesTitle:`门控备注`,addNotePlaceholder:`添加备注（PMP权限）...`,addNoteBtn:`添加备注`,risksTitle:`风险仪表盘`,risksDesc:`ISO 14971 — 主要风险、缓解状态和残余评估`,filterAll:`全部`,filterRed:`红色`,filterYellow:`黄色`,filterGreen:`绿色`,topRisksTitle:`本周前5大风险`,riskSeverity:`严重性`,riskProbability:`可能性`,riskControls:`控制措施`,riskResidual:`残余风险`,riskMitigation:`缓解措施`,riskModule:`模块`,timelineTitle:`时间线 — 商业翻译`,timelineDesc:`技术里程碑转化为投资者和商业语言`,tlTechnical:`技术方面`,tlBusiness:`商业影响`,regulatoryTitle:`法规标准追踪器`,regulatoryDesc:`IEC 60601, ISO 10993, 21 CFR合规矩阵`,colCode:`标准`,colTitle:`描述`,colApplies:`适用于`,colStatus:`状态`,colProgress:`进度`,cashRunwayTitle:`资金/跑道`,cashRunwayDesc:`财务状况、燃烧率和融资里程碑`,cashOnHand:`现有资金`,monthlyBurnLabel:`月度燃烧`,runwayLabel:`跑道`,runwayMonths:`个月`,fundingRoundsTitle:`融资轮次`,burnHistoryTitle:`燃烧历史`,frReceived:`已到账`,frCommitted:`已承诺`,frPipeline:`洽谈中`,inputPanelTitle:`利益相关方输入`,inputFromTech:`技术团队`,inputFromBusiness:`商业/投资方`,complete:`已完成`,inProgress:`进行中`,notStarted:`未开始`,pendingReview:`待审核`,accepted:`已接受`,rejected:`已拒绝`,noted:`已记录`,riskEditTitle:`编辑风险`,riskFieldSeverity:`严重性`,riskFieldProbability:`可能性`,riskFieldLevel:`风险等级`,riskSave:`保存`,addFundingTitle:`记录资金`,fundingLabelPlaceholder:`标签（如 A轮）`,fundingAmountPlaceholder:`金额 ($)`,fundingDatePlaceholder:`日期 (YYYY-MM)`,addFundingBtn:`+ 添加融资轮次`,fundingNote:`资金记录在仪表盘中。通过Plaid或Mercury API连接银行账户实现实时同步。`,clickToChangeStatus:`点击切换状态`,progressLabel:`进度 %`,crPendingTitle:`待审批变更请求`,crSubmitTitle:`提交变更请求`,crFrom:`请求方`,crField:`字段`,crOldValue:`当前值`,crNewValue:`建议值`,crJustification:`理由`,crEvidence:`证据/参考`,crJustPlaceholder:`为什么此变更是合理的？引用测试数据、FDA反馈等。`,crEvidencePlaceholder:`链接、文件或测试报告参考`,crSubmit:`提交PMP审批`,crApprove:`✓ 批准`,crReject:`✕ 拒绝`,crNoPending:`无待审批变更请求`,crRequiresApproval:`变更需要PMP审批`,crRequestChange:`请求变更`,crPending:`待审批`,crApproved:`已批准`,crRejected:`已拒绝`,crBadge:`变更`,crDocuments:`附件文档`,crChooseFiles:`选择文件（PDF、图片、文档）`,crNoDocuments:`无附件`,rolePmp:`PMP（完全权限）`,roleTech:`技术团队`,roleBusiness:`商业/投资方`,roleAccounting:`财务会计`,roleLabel:`当前角色`,roleReadOnly:`只读`,roleAccountingAccess:`财务会计可只读访问：资金/跑道、时间线、门控状态`,apiTitle:`支付与银行集成`,apiDesc:`面向中国投资者和跨境交易的API`,apiAlipay:`支付宝商户`,apiAlipayDesc:`跨境收款、投资者汇款跟踪、人民币/美元结算`,apiWechat:`微信支付商户`,apiWechatDesc:`企业支付、投资者沟通渠道、小程序集成`,apiUnionpay:`银联国际`,apiUnionpayDesc:`企业卡支付、跨境B2B转账、多币种支持`,apiCmbchina:`招商银行`,apiCmbchinaDesc:`企业银行API、资金管理、实时余额与汇率`,apiPingpong:`PingPong全球`,apiPingpongDesc:`创业公司跨境支付平台、自动外汇、增值税退税`,apiXe:`XE汇率数据`,apiXeDesc:`实时人民币/美元汇率、历史汇率、货币转换`,apiSwift:`SWIFT gpi`,apiSwiftDesc:`跨境汇款跟踪、支付状态确认、合规审查`,apiStatus:`状态`,apiAvailable:`可用`,apiPlanned:`计划中`,apiActive:`已激活`,apiEndpoint:`端点`,apiDocs:`文档`,auditTitle:`审计追踪`,auditDesc:`所有仪表盘操作的时间顺序日志，用于DHF可追溯性`,auditTimestamp:`时间戳`,auditUser:`用户`,auditAction:`操作`,auditTarget:`目标`,auditOld:`旧值`,auditNew:`新值`,auditDetail:`详情`,dhfTitle:`DHF文档追踪器`,dhfDesc:`设计历史文件 — 按法规要求跟踪文档状态`,dhfCode:`编号`,dhfDocument:`文档`,dhfCategory:`类别`,dhfOwner:`负责人`,dhfStatus:`状态`,dhfDue:`到期`,dhfDraft:`草稿`,dhfInReview:`审核中`,dhfApproved:`已批准`,capaTitle:`CAPA日志`,capaDesc:`与风险项关联的纠正和预防措施`,capaType:`类型`,capaCorrective:`纠正`,capaPreventive:`预防`,capaLinkedRisk:`关联风险`,capaOwner:`负责人`,capaDue:`到期`,capaOpened:`开启日期`,capaClosed:`关闭日期`,capaOpen:`待处理`,capaInProgress:`进行中`,capaDone:`已关闭`,capaVerified:`已验证`,actionsTitle:`行动项`,actionsDesc:`任务看板 — 可分配的任务，含负责人和截止日期`,actionAssignee:`负责人`,actionPriority:`优先级`,actionDue:`截止`,actionGate:`门控`,actionTodo:`待办`,actionInProgress:`进行中`,actionDone:`已完成`,actionBlocked:`受阻`,actionHigh:`高`,actionMedium:`中`,actionLow:`低`,budgetTitle:`预算 vs 实际`,budgetDesc:`按类别计划支出与实际支出对比`,budgetCategory:`类别`,budgetPlanned:`计划`,budgetActual:`实际`,budgetVariance:`差异`,budgetTotal:`合计`,notifTitle:`通知`,notifPendingCR:`待审批变更请求`,notifOverdueMilestone:`逾期里程碑`,notifApproachingGate:`即将到达门控`,notifBudgetOverrun:`预算超支`,notifRunwayWarning:`跑道预警`,notifOverdueAction:`逾期行动项`,notifOverdueCapa:`逾期CAPA`,notifDismiss:`关闭`,exportBtn:`导出报告`,exportTitle:`状态报告`,resourceTitle:`资源分配`,resourceDesc:`团队分配和产能利用率`,resourceName:`姓名`,resourceRole:`角色`,resourceWorkstream:`工作流`,resourceCapacity:`产能`,resourceUtilization:`利用率`,supplierTitle:`供应商追踪器`,supplierDesc:`硬件组件 — 交期、采购订单状态、里程碑`,supplierName:`供应商`,supplierComponent:`组件`,supplierLead:`交期`,supplierPO:`采购订单`,supplierMilestone:`里程碑`,supplierActive:`活跃`,supplierQualified:`已认证`,supplierUnderReview:`审核中`,supplierRisk:`有风险`,supplierDays:`天`,tabAudit:`审计追踪`,tabActions:`行动项`,tabBudget:`预算`,tabResources:`资源`,tabSuppliers:`供应商`,editCashHint:`编辑（仅PMP）`,editBurnHint:`编辑（仅PMP）`}},y=`en`;function b(){return y}function x(e){y=e}function S(e){return v[y][e]||v.en[e]||e}function C(e){return e&&(e[y]||e.en)||``}function w(e){y=e,document.querySelectorAll(`[data-i18n]`).forEach(t=>{let n=t.getAttribute(`data-i18n`);v[e][n]&&(t.textContent=v[e][n])}),document.documentElement.lang=e===`cn`?`zh-CN`:`en`}var T=`ControlTowerDocs`,E=1,D=`documents`;function O(){return new Promise((e,t)=>{let n=indexedDB.open(T,E);n.onupgradeneeded=()=>{let e=n.result;e.objectStoreNames.contains(D)||e.createObjectStore(D)},n.onsuccess=()=>e(n.result),n.onerror=()=>t(n.error)})}async function k(e,t){let n=await O();return new Promise((r,i)=>{let a=n.transaction(D,`readwrite`);a.objectStore(D).put(t,e),a.oncomplete=()=>r(),a.onerror=()=>i(a.error)})}async function A(e){let t=await O();return new Promise((n,r)=>{let i=t.transaction(D,`readonly`).objectStore(D).get(e);i.onsuccess=()=>n(i.result??null),i.onerror=()=>r(i.error)})}var j=`dual-track`,M=`all`,N=[],P=new Set;function ee(){document.addEventListener(`click`,e=>{let t=e.target.closest(`[data-action]`);if(!t)return;let n=t.dataset;switch(n.action){case`openMilestone`:window._openMilestone(n.track,n.mid);break;case`cycleMilestoneStatus`:e.stopPropagation(),window._cycleMilestoneStatus(n.track,n.mid);break;case`openGate`:window._openGate(n.gid);break;case`toggleCriteria`:e.stopPropagation(),window._toggleCriteria(n.gid,Number(n.ci));break;case`setDecision`:window._setDecision(n.gid,n.decision);break;case`addGateNote`:window._addGateNote(n.gid);break;case`openRiskEditor`:window._openRiskEditor(n.rid);break;case`cycleStandardStatus`:window._cycleStandardStatus(n.sid);break;case`editCashField`:window._editCashField(n.field);break;case`toggleFundingStatus`:window._toggleFundingStatus(n.frid);break;case`addFundingRound`:window._addFundingRound();break;case`closeRiskEditor`:window._closeRiskEditor();break;case`closeChangeRequestForm`:window._closeChangeRequestForm();break;case`submitChangeRequest`:{let e=document.getElementById(`crNewValue`)?.value??``;window._submitChangeRequest(n.crtype,n.crtarget,n.crfield,n.crold,e);break}case`removeQueuedDocument`:window._removeQueuedDocument(Number(n.idx));break;case`approveChangeRequest`:window._approveChangeRequest(n.crid);break;case`rejectChangeRequest`:window._rejectChangeRequest(n.crid);break;case`downloadDocument`:e.preventDefault(),window._downloadDocument(n.dkey,n.dname);break;case`cycleActionStatus`:window._cycleActionStatus(n.aid);break;case`cycleDHFStatus`:window._cycleDHFStatus(n.did);break;case`cycleCAPAStatus`:window._cycleCAPAStatus(n.cid);break;case`cycleSupplierStatus`:window._cycleSupplierStatus(n.supid);break;case`dismissNotification`:window._dismissNotification(Number(n.nidx));break;case`exportReport`:window._exportReport();break}}),document.addEventListener(`change`,e=>{let t=e.target;if(!t.dataset.change)return;let n=t.value;switch(t.dataset.change){case`setStandardProgress`:window._setStandardProgress(t.dataset.sid,n);break;case`setRiskField`:window._setRiskField(t.dataset.rid,t.dataset.rfield,n);break}})}document.addEventListener(`DOMContentLoaded`,()=>{ee(),te(),ne(),re(),oe(),w(b()),F()});function te(){document.querySelectorAll(`.tab-btn`).forEach(e=>{e.addEventListener(`click`,()=>{let t=e.dataset.tab;if(!t||t===j)return;j=t,document.querySelectorAll(`.tab-btn`).forEach(e=>e.classList.remove(`active`)),e.classList.add(`active`),document.querySelectorAll(`.tab-panel`).forEach(e=>e.classList.remove(`active`));let n=document.getElementById(`panel-`+t);n&&n.classList.add(`active`)})})}function ne(){let e=document.getElementById(`langToggle`),t=document.getElementById(`langLabel`);function n(n){t.textContent=n===`en`?`EN`:`中`,e.title=n===`en`?`Switch to Chinese / 切换中文`:`Switch to English / 切换英文`}n(b()),e.addEventListener(`click`,()=>{let e=b()===`en`?`cn`:`en`;x(e),n(e),w(e),F()})}function re(){let e=document.getElementById(`fabInputs`),t=document.getElementById(`inputPanelOverlay`),n=document.getElementById(`inputPanelClose`);e.addEventListener(`click`,()=>{ae(),t.classList.add(`open`)}),n.addEventListener(`click`,()=>t.classList.remove(`open`)),t.addEventListener(`click`,e=>{e.target===t&&t.classList.remove(`open`)})}function F(){se(),I(),L(),z(),B(),ie(),V(),H(),q(),le(),Y(),X(),Z(),ue(),de(),Q(),fe(),$(),U()}function I(){let i=r.filter(e=>e.riskLevel===`red`).length;document.getElementById(`redRiskCount`).textContent=String(i);let a=s.filter(e=>e.status===`pending-review`).length;document.getElementById(`pendingInputCount`).textContent=String(a);let c=n.find(e=>e.status!==`approved`&&e.decision!==`proceed`);c&&(document.getElementById(`nextGate`).textContent=`G`+c.number+` (M+`+c.month+`)`);let l=document.getElementById(`overallStatus`);i>=3?(l.textContent=S(`statusBlocked`),l.className=`summary-value status-blocked`):i>=1?(l.textContent=S(`statusAtRisk`),l.className=`summary-value status-at-risk`):(l.textContent=S(`statusOnTrack`),l.className=`summary-value status-on-track`);let u=e.currentMonth,d=[...t.technical.milestones,...t.regulatory.milestones].filter(e=>e.month>u&&e.status!==`complete`);if(d.sort((e,t)=>e.month-t.month),d.length>0){let e=d[0].month-u;document.getElementById(`daysToMilestone`).textContent=`~`+e*30+`d`}document.getElementById(`currentMonthNum`).textContent=String(u);let f=document.getElementById(`summaryRunway`);f.textContent=o.runwayMonths+` `+S(`runwayMonths`),f.className=`summary-value `+(o.runwayMonths<=3?`runway-critical`:o.runwayMonths<=6?`runway-warning`:`runway-ok`)}function L(){let n=document.getElementById(`techMilestones`),r=document.getElementById(`regMilestones`),i=document.getElementById(`centerTimeline`),a=[...t.technical.milestones].sort((e,t)=>e.month-t.month),o=[...t.regulatory.milestones].sort((e,t)=>e.month-t.month);n.innerHTML=a.map(e=>R(e)).join(``),r.innerHTML=o.map(e=>R(e)).join(``);let s=[...new Set([...a.map(e=>e.month),...o.map(e=>e.month)])].sort((e,t)=>e-t);i.innerHTML=s.map((t,n)=>`
+        <div class="timeline-dot ${t<=e.currentMonth?`active`:``}" title="M+${t}"></div>
+        ${n<s.length-1?`<div class="timeline-line"></div>`:``}
+      `).join(``)}function R(e){let n=`status-`+e.status.replace(` `,`-`),r=e.status===`complete`?`badge-complete`:e.status===`in-progress`?`badge-in-progress`:`badge-not-started`,i=e.status===`complete`?S(`complete`):e.status===`in-progress`?S(`inProgress`):S(`notStarted`),a=t.technical.milestones.some(t=>t.id===e.id)?`technical`:`regulatory`;return`
+    <div class="milestone-card ${n}" data-action="openMilestone" data-track="${a}" data-mid="${e.id}" style="cursor:pointer;">
+      <div class="ms-header">
+        <span class="ms-title">${C(e.title)}</span>
+        <span class="ms-month">M+${e.month}</span>
+      </div>
+      <div class="ms-desc">${C(e.description)}</div>
+      <span class="ms-status-badge ${r} clickable-badge"
+            data-action="cycleMilestoneStatus" data-track="${a}" data-mid="${e.id}"
+            title="${S(`clickToChangeStatus`)}">
+        ${i}
+      </span>
+    </div>
+  `}function z(){let e=document.getElementById(`gatesPipeline`),t=[];n.forEach((e,r)=>{let i=e.criteria.filter(e=>e.met).length,a=e.criteria.length,o=a>0?Math.round(i/a*100):0,s=`gate-not-started`;e.decision===`proceed`?s=`gate-approved`:e.decision===`stop`?s=`gate-blocked`:(e.status===`pending-review`||e.decision===`more-data`)&&(s=`gate-pending`),t.push(`
+      <div class="gate-card ${s}" data-gate-id="${e.id}" data-action="openGate" data-gid="${e.id}" style="cursor:pointer">
+        <div class="gate-top">
+          <div class="gate-number">G${e.number}</div>
+          <div class="gate-title">${C(e.title)}</div>
+          <div class="gate-month">${S(`gateMonthPrefix`)}${e.month}</div>
+        </div>
+        <div class="gate-status-strip"></div>
+        <div class="gate-criteria-summary">
+          <div class="criteria-progress">
+            <span>${i}/${a} ${S(`gateCriteriaMet`)}</span>
+            <div class="criteria-bar">
+              <div class="criteria-bar-fill" style="width:${o}%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `),r<n.length-1&&t.push(`<div class="gate-connector">→</div>`)}),e.innerHTML=t.join(``)}window._openGate=function(e){let t=n.find(t=>t.id===e);if(!t)return;let r=document.getElementById(`gateDetailOverlay`),i=document.getElementById(`gateDetailContent`),a=t.criteria.filter(e=>e.met).length,o=t.criteria.map((t,n)=>`
+      <li class="criteria-item">
+        <div class="criteria-check ${t.met?`checked`:``}"
+             data-action="toggleCriteria" data-gid="${e}" data-ci="${n}">
+          ${t.met?`✓`:``}
+        </div>
+        <span>${C(t)}</span>
+      </li>
+    `).join(``),c=s.filter(t=>t.gate===e),l=c.length>0?c.map(e=>{let t=e.from===`tech`?`from-tech`:`from-business`,n=e.from===`tech`?S(`inputFromTech`):S(`inputFromBusiness`),r=e.status===`pending-review`?`<span class="input-status-badge input-status-pending">${S(`pendingReview`)}</span>`:`<span class="input-status-badge input-status-accepted">${S(`accepted`)}</span>`,i=``;return e.pmpResponse&&(i=`<div class="pmp-response">${C(e.pmpResponse)}</div>`),`
+              <div class="input-entry ${t}">
+                <div class="input-meta">${n} · ${e.date} ${r}</div>
+                <div>${C(e.content)}</div>
+                ${i}
+              </div>
+            `}).join(``):`<p style="color:var(--text-muted);font-size:0.8rem;">No inputs yet.</p>`,u=t.decision===`proceed`?`selected`:``,d=t.decision===`more-data`?`selected`:``,f=t.decision===`stop`?`selected`:``;i.innerHTML=`
+    <div class="gate-detail-header">
+      <h2>G${t.number} — ${C(t.title)}</h2>
+      <div class="gate-detail-meta">${S(`gateMonthPrefix`)}${t.month} · ${a}/${t.criteria.length} ${S(`gateCriteriaMet`)}</div>
+    </div>
+
+    <ul class="criteria-list">${o}</ul>
+
+    <div class="gate-decision-section">
+      <h4>${S(`gateDecisionTitle`)}</h4>
+      <div class="decision-buttons">
+        <button class="decision-btn btn-proceed ${u}" data-action="setDecision" data-gid="${e}" data-decision="proceed">${S(`gateProceed`)}</button>
+        <button class="decision-btn btn-data ${d}" data-action="setDecision" data-gid="${e}" data-decision="more-data">${S(`gateNeedData`)}</button>
+        <button class="decision-btn btn-stop ${f}" data-action="setDecision" data-gid="${e}" data-decision="stop">${S(`gateStop`)}</button>
+      </div>
+    </div>
+
+    <div class="gate-inputs-section">
+      <h4>${S(`gateInputsTitle`)}</h4>
+      ${l}
+    </div>
+
+    <div class="gate-inputs-section">
+      <h4>${S(`gateNotesTitle`)}</h4>
+      ${t.notes.map(e=>`<div class="input-entry from-tech"><div class="input-meta">PMP · ${e.date}</div>${e.text}</div>`).join(``)}
+      <div class="add-note-area">
+        <textarea id="gateNoteInput" placeholder="${S(`addNotePlaceholder`)}"></textarea>
+        <button data-action="addGateNote" data-gid="${e}">${S(`addNoteBtn`)}</button>
+      </div>
+    </div>
+  `,r.classList.add(`open`),document.getElementById(`gateModalClose`).onclick=()=>r.classList.remove(`open`),r.onclick=e=>{e.target===r&&r.classList.remove(`open`)}},window._toggleCriteria=function(e,t){let r=n.find(t=>t.id===e);if(!r)return;let i=String(r.criteria[t].met);r.criteria[t].met=!r.criteria[t].met,J(`gate-criteria`,e,`criteria[${t}].met`,i,String(r.criteria[t].met),`Gate criteria toggled`),z(),I(),window._openGate(e)},window._setDecision=function(e,t){let r=n.find(t=>t.id===e);if(!r)return;let i=String(r.decision);r.decision=t,r.decisionBy=`PMP`,r.decisionDate=new Date().toISOString().split(`T`)[0],J(`gate-decision`,e,`decision`,i,t,`Gate G${r.number} decision set`),z(),I(),window._openGate(e)},window._addGateNote=function(e){let t=n.find(t=>t.id===e),r=document.getElementById(`gateNoteInput`);!t||!r||!r.value.trim()||(t.notes.push({date:new Date().toISOString().split(`T`)[0],text:r.value.trim()}),window._openGate(e))},window._openMilestone=function(e,n){let r=(e===`technical`?t.technical:t.regulatory).milestones.find(e=>e.id===n);if(!r)return;let i=document.getElementById(`milestoneDetailOverlay`),a=document.getElementById(`milestoneDetailContent`),o=r.status===`complete`?S(`complete`):r.status===`in-progress`?S(`inProgress`):S(`notStarted`),s=r.status===`complete`?`badge-complete`:r.status===`in-progress`?`badge-in-progress`:`badge-not-started`,c=e===`technical`?`🔬 `+S(`techTrackTitle`):`📋 `+S(`regTrackTitle`),l=r.detail?C(r.detail).split(`
+
+`).map(e=>{if(e.includes(`
+- `)){let t=e.split(`
+- `);return`${t[0]?`<p>${t[0]}</p>`:``}<ul>${t.slice(1).map(e=>`<li>${e}</li>`).join(``)}</ul>`}return`<p>${e}</p>`}).join(``):`<p style="color:var(--text-muted);">${C(r.description)}</p>`;a.innerHTML=`
+    <div class="gate-detail-header">
+      <h2>${r.id} — ${C(r.title)}</h2>
+      <div class="gate-detail-meta">${c} · M+${r.month} · <span class="ms-status-badge ${s}" style="font-size:0.75rem;">${o}</span></div>
+    </div>
+    <div class="milestone-detail-body">${l}</div>
+  `,i.classList.add(`open`),document.getElementById(`milestoneModalClose`).onclick=()=>i.classList.remove(`open`),i.onclick=e=>{e.target===i&&i.classList.remove(`open`)}},window._cycleMilestoneStatus=function(e,n){let r=(e===`technical`?t.technical:t.regulatory).milestones.find(e=>e.id===n);if(!r)return;let i={"not-started":`in-progress`,"in-progress":`complete`,complete:`not-started`}[r.status];if(g!==`pmp`){window._openChangeRequestForm(`milestone-status`,n,`status`,r.status);return}r.status=i,J(`milestone-status`,n,`status`,r.status===`in-progress`?`not-started`:r.status===`complete`?`in-progress`:`complete`,i,`Milestone ${n} status changed`),F()};function B(){document.querySelectorAll(`.filter-btn`).forEach(e=>{e.classList.toggle(`active`,e.dataset.filter===M),e.onclick=()=>{M=e.dataset.filter||`all`,B()}});let e=M===`all`?r:r.filter(e=>e.riskLevel===M),t=document.getElementById(`riskGrid`);t.innerHTML=e.map(e=>{let t=`mitigation-`+e.mitigationStatus.replace(` `,`-`),n=e.mitigationStatus===`complete`?S(`complete`):e.mitigationStatus===`in-progress`?S(`inProgress`):S(`notStarted`);return`
+        <div class="risk-card risk-level-${e.riskLevel}" data-action="openRiskEditor" data-rid="${e.id}" style="cursor:pointer">
+          <div class="risk-card-header">
+            <span class="risk-id">${e.id}</span>
+            <span class="risk-level-badge badge-${e.riskLevel}">${e.riskLevel.toUpperCase()}</span>
+          </div>
+          <div class="risk-title">${C(e.title)}</div>
+          <div class="risk-detail-row">
+            <span class="risk-detail-label">${S(`riskSeverity`)}:</span>
+            <span>${W(e.severity)}</span>
+          </div>
+          <div class="risk-detail-row">
+            <span class="risk-detail-label">${S(`riskProbability`)}:</span>
+            <span>${W(e.probability)}</span>
+          </div>
+          <div class="risk-detail-row">
+            <span class="risk-detail-label">${S(`riskModule`)}:</span>
+            <span>${e.module}</span>
+          </div>
+          <div class="risk-detail-row">
+            <span class="risk-detail-label">${S(`riskControls`)}:</span>
+            <span>${C(e.controls)}</span>
+          </div>
+          <div class="risk-mitigation-bar ${t}">
+            <span>${S(`riskMitigation`)}: ${n}</span>
+            <div class="mitigation-bar"><div class="mitigation-bar-fill"></div></div>
+          </div>
+        </div>
+      `}).join(``);let n=[...r].sort((e,t)=>{let n={red:0,yellow:1,green:2},r={high:0,medium:1,low:2};return n[e.riskLevel]-n[t.riskLevel]||r[e.severity]-r[t.severity]}).slice(0,5),i=document.getElementById(`topRisksList`);i.innerHTML=n.map((e,t)=>`
+      <div class="top-risk-item">
+        <span class="top-risk-rank">${t+1}</span>
+        <span class="top-risk-indicator" style="background:var(--${e.riskLevel})"></span>
+        <span class="top-risk-text">${C(e.title)}</span>
+        <span class="top-risk-module">${e.module}</span>
+      </div>
+    `).join(``)}function ie(){let e=document.getElementById(`timelineVisual`);e.innerHTML=a.map(e=>`
+      <div class="timeline-event impact-${e.impact}">
+        <span class="tl-month-badge">M+${e.month}</span>
+        <div class="tl-columns">
+          <div class="tl-col tl-tech">
+            <h4>${S(`tlTechnical`)}</h4>
+            <p>${C(e.technical)}</p>
+          </div>
+          <div class="tl-col tl-biz">
+            <h4>${S(`tlBusiness`)}</h4>
+            <p>${C(e.business)}</p>
+          </div>
+        </div>
+      </div>
+    `).join(``)}function V(){let e=document.getElementById(`standardsBody`);e.innerHTML=i.map(e=>{let t=e.status===`complete`?`badge-complete`:e.status===`in-progress`?`badge-in-progress`:`badge-not-started`,n=e.status===`complete`?S(`complete`):e.status===`in-progress`?S(`inProgress`):S(`notStarted`);return`
+      <tr>
+        <td><span class="std-code">${e.code}</span></td>
+        <td>${C(e.title)}</td>
+        <td>${e.applies}</td>
+        <td>
+          <span class="std-status-badge ${t} clickable-badge"
+                data-action="cycleStandardStatus" data-sid="${e.id}"
+                title="${S(`clickToChangeStatus`)}">
+            ${n}
+          </span>
+        </td>
+        <td>
+          <div class="progress-cell">
+            <div class="progress-bar">
+              <div class="progress-bar-fill" style="width:${e.progress}%"></div>
+            </div>
+            <input type="number" class="progress-input" min="0" max="100" value="${e.progress}"
+                   data-change="setStandardProgress" data-sid="${e.id}"
+                   title="${S(`progressLabel`)}" />
+          </div>
+        </td>
+      </tr>
+    `}).join(``)}function H(){let e=o,t=e=>`$`+e.toLocaleString(),n=document.getElementById(`cashSummaryCards`),r=e.runwayMonths<=3?`runway-critical`:e.runwayMonths<=6?`runway-warning`:`runway-ok`,i=g===`pmp`;n.innerHTML=`
+    <div class="cash-card">
+      <div class="cash-card-label">${S(`cashOnHand`)}</div>
+      <div class="cash-card-value">${t(e.cashOnHand)}
+        ${i?`<button class="cash-edit-btn" data-action="editCashField" data-field="cashOnHand" title="${S(`editCashHint`)}">✎</button>`:``}
+      </div>
+    </div>
+    <div class="cash-card">
+      <div class="cash-card-label">${S(`monthlyBurnLabel`)}</div>
+      <div class="cash-card-value burn-value">${t(e.monthlyBurn)}/mo
+        ${i?`<button class="cash-edit-btn" data-action="editCashField" data-field="monthlyBurn" title="${S(`editBurnHint`)}">✎</button>`:``}
+      </div>
+    </div>
+    <div class="cash-card">
+      <div class="cash-card-label">${S(`runwayLabel`)}</div>
+      <div class="cash-card-value ${r}">${e.runwayMonths} ${S(`runwayMonths`)}</div>
+    </div>
+  `;let a=document.getElementById(`fundingRoundsContainer`);a.innerHTML=e.fundingRounds.map(e=>{let n=e.status===`received`?`frReceived`:e.status===`committed`?`frCommitted`:`frPipeline`,r=`fr-${e.status}`;return`
+      <div class="funding-round-row">
+        <div class="fr-label">${C(e.label)}</div>
+        <div class="fr-amount">${t(e.amount)}</div>
+        <div class="fr-date">${e.date}</div>
+        <div class="fr-status ${r} clickable-badge"
+             data-action="toggleFundingStatus" data-frid="${e.id}"
+             title="${S(`clickToChangeStatus`)}">
+          ${S(n)}
+        </div>
+      </div>
+    `}).join(``),a.innerHTML+=`
+    <div class="add-funding-form">
+      <h4>${S(`addFundingTitle`)}</h4>
+      <div class="funding-form-row">
+        <input type="text" id="newFundingLabel" placeholder="${S(`fundingLabelPlaceholder`)}" />
+        <input type="number" id="newFundingAmount" placeholder="${S(`fundingAmountPlaceholder`)}" min="0" />
+        <input type="text" id="newFundingDate" placeholder="${S(`fundingDatePlaceholder`)}" />
+        <button class="btn-add-funding" data-action="addFundingRound">${S(`addFundingBtn`)}</button>
+      </div>
+      <p class="funding-note">${S(`fundingNote`)}</p>
+    </div>
+  `;let s=document.getElementById(`burnHistoryContainer`),c=Math.max(...e.burnHistory.map(e=>e.burn));s.innerHTML=e.burnHistory.map(e=>{let n=Math.round(e.burn/c*100);return`
+      <div class="burn-row">
+        <span class="burn-month">${e.month<0?`M${e.month}`:`M+${e.month}`}</span>
+        <div class="burn-bar-wrap">
+          <div class="burn-bar" style="width:${n}%"></div>
+        </div>
+        <span class="burn-amount">${t(e.burn)}</span>
+        <span class="burn-note">${C(e.note)}</span>
+      </div>
+    `}).join(``)}function ae(){let e=document.getElementById(`inputPanelContent`);e.innerHTML=s.map(e=>{let t=e.from===`tech`?`from-tech`:`from-business`,n=e.from===`tech`?S(`inputFromTech`):S(`inputFromBusiness`),r=e.status===`pending-review`?`<span class="input-status-badge input-status-pending">${S(`pendingReview`)}</span>`:`<span class="input-status-badge input-status-accepted">${S(`accepted`)}</span>`,i=``;return e.pmpResponse&&(i=`<div class="pmp-response">${C(e.pmpResponse)}</div>`),`
+        <div class="input-entry ${t}" style="margin-bottom:var(--sp-md)">
+          <div class="input-meta">${n} · ${e.date} · Gate ${e.gate} ${r}</div>
+          <div style="margin-top:var(--sp-xs)">${C(e.content)}</div>
+          ${i}
+        </div>
+      `}).join(``)||`<p style="color:var(--text-muted)">No inputs.</p>`}function U(){let e=s.filter(e=>e.status===`pending-review`).length,t=document.getElementById(`fabBadge`);t.textContent=String(e),t.classList.toggle(`hidden`,e===0)}function W(e){return e?e.charAt(0).toUpperCase()+e.slice(1).replace(/-/g,` `):``}window._openRiskEditor=function(e){let t=r.find(t=>t.id===e);if(!t)return;let n=document.getElementById(`riskEditorOverlay`);n&&n.remove();let i=[`high`,`medium`,`low`],a=[`high`,`medium`,`low`,`very-low`],o=[`red`,`yellow`,`green`],s=[`not-started`,`in-progress`,`complete`],c=(e,t)=>e.map(e=>`<option value="${e}" ${e===t?`selected`:``}>${W(e)}</option>`).join(``),l=document.createElement(`div`);l.id=`riskEditorOverlay`,l.className=`gate-detail-overlay open`,l.innerHTML=`
+    <div class="gate-detail-modal" style="max-width:500px">
+      <button class="modal-close" data-action="closeRiskEditor">&times;</button>
+      <div class="gate-detail-header">
+        <h2>${t.id} — ${S(`riskEditTitle`)}</h2>
+        <div class="gate-detail-meta">${C(t.title)}</div>
+      </div>
+      <div class="risk-editor-fields">
+        <label>${S(`riskFieldSeverity`)}
+          <select data-change="setRiskField" data-rid="${e}" data-rfield="severity">
+            ${c(i,t.severity)}
+          </select>
+        </label>
+        <label>${S(`riskFieldProbability`)}
+          <select data-change="setRiskField" data-rid="${e}" data-rfield="probability">
+            ${c(a,t.probability)}
+          </select>
+        </label>
+        <label>${S(`riskFieldLevel`)}
+          <select data-change="setRiskField" data-rid="${e}" data-rfield="riskLevel">
+            ${c(o,t.riskLevel)}
+          </select>
+        </label>
+        <label>${S(`riskMitigation`)}
+          <select data-change="setRiskField" data-rid="${e}" data-rfield="mitigationStatus">
+            ${c(s,t.mitigationStatus)}
+          </select>
+        </label>
+      </div>
+    </div>
+  `,document.body.appendChild(l),l.addEventListener(`click`,e=>{e.target===l&&window._closeRiskEditor()})},window._setRiskField=function(e,t,n){let i=r.find(t=>t.id===e);if(!i)return;let a=String(i[t]??``);if(g!==`pmp`){window._closeRiskEditor(),window._openChangeRequestForm(`risk-field`,e,t,a);return}i[t]=n,B(),I()},window._closeRiskEditor=function(){let e=document.getElementById(`riskEditorOverlay`);e&&e.remove()},window._cycleStandardStatus=function(e){let t=i.find(t=>t.id===e);if(t){if(g!==`pmp`){window._openChangeRequestForm(`standard-status`,e,`status`,t.status);return}t.status={"not-started":`in-progress`,"in-progress":`complete`,complete:`not-started`}[t.status],t.status===`complete`?t.progress=100:t.status===`not-started`?t.progress=0:(t.progress===0||t.progress===100)&&(t.progress=50),V(),I()}},window._setStandardProgress=function(e,t){let n=i.find(t=>t.id===e);if(!n)return;if(g!==`pmp`){window._openChangeRequestForm(`standard-progress`,e,`progress`,String(n.progress));return}let r=Math.max(0,Math.min(100,parseInt(t,10)||0));n.progress=r,r===100?n.status=`complete`:r===0?n.status=`not-started`:n.status=`in-progress`,V(),I()},window._editCashField=function(e){if(g!==`pmp`)return;let t=S(e===`cashOnHand`?`cashOnHand`:`monthlyBurnLabel`),n=e===`cashOnHand`?o.cashOnHand:o.monthlyBurn,r=prompt(`${t} ($):`,String(n));if(r===null)return;let i=parseFloat(r.replace(/[^0-9.]/g,``));if(isNaN(i)||i<0)return;let a=n;e===`cashOnHand`?o.cashOnHand=i:o.monthlyBurn=i,o.runwayMonths=o.monthlyBurn>0?Math.floor(o.cashOnHand/o.monthlyBurn):0,J(`cash-field`,`CASH_RUNWAY`,e,`$`+a.toLocaleString(),`$`+i.toLocaleString(),`Runway recalculated: ${o.runwayMonths} months`),H(),F()},window._addFundingRound=function(){let e=document.getElementById(`newFundingLabel`),t=document.getElementById(`newFundingAmount`),n=document.getElementById(`newFundingDate`),r=e?.value?.trim(),i=parseFloat(t?.value||`0`),a=n?.value?.trim();if(!r||!i||!a)return;let s=`FR-`+String(o.fundingRounds.length+1).padStart(3,`0`);o.fundingRounds.push({id:s,label:{en:r,cn:r},amount:i,date:a,status:`pipeline`}),H()},window._toggleFundingStatus=function(e){let t=o.fundingRounds.find(t=>t.id===e);if(!t)return;if(g!==`pmp`){window._openChangeRequestForm(`funding-status`,e,`status`,t.status);return}let n={pipeline:`committed`,committed:`received`,received:`pipeline`},r=t.status;t.status=n[t.status],t.status===`received`&&r!==`received`&&(o.cashOnHand+=t.amount,o.runwayMonths=Math.floor(o.cashOnHand/o.monthlyBurn)),r===`received`&&t.status!==`received`&&(o.cashOnHand-=t.amount,o.runwayMonths=Math.floor(o.cashOnHand/o.monthlyBurn)),H(),I()};function oe(){let e=document.getElementById(`roleSwitcher`);e&&e.addEventListener(`change`,e=>{let t=e.target;t?.id===`roleSelect`&&window._setRole(t.value)})}window._setRole=function(e){_(e),F()};function se(){let e=g,t=document.querySelectorAll(`.tab-btn`),n=new Set([`cash-runway`,`timeline`,`gates`,`budget`]);if(t.forEach(t=>{let r=t.dataset.tab||``;if(e===`accounting`){let e=n.has(r);t.classList.toggle(`tab-restricted`,!e),t.disabled=!e}else t.classList.remove(`tab-restricted`),t.disabled=!1}),e===`accounting`&&!n.has(j)){let e=document.querySelector(`.tab-btn[data-tab="cash-runway"]`);e&&e.click()}let r=document.getElementById(`roleBadgeText`);r&&(r.textContent={pmp:S(`rolePmp`),tech:S(`roleTech`),business:S(`roleBusiness`),accounting:S(`roleAccounting`)}[e]||e);let i=document.getElementById(`accountingNotice`);i&&(i.style.display=e===`accounting`?`block`:`none`,i.textContent=S(`roleAccountingAccess`))}window._openChangeRequestForm=function(e,t,n,r){let i=document.getElementById(`crFormOverlay`);i&&i.remove();let a=S(g===`tech`?`inputFromTech`:`inputFromBusiness`),o=document.createElement(`div`);o.id=`crFormOverlay`,o.className=`gate-detail-overlay open`,o.innerHTML=`
+    <div class="gate-detail-modal cr-modal">
+      <button class="modal-close" data-action="closeChangeRequestForm">&times;</button>
+      <div class="gate-detail-header">
+        <h2>${S(`crSubmitTitle`)}</h2>
+        <div class="gate-detail-meta">${S(`crRequiresApproval`)}</div>
+      </div>
+      <div class="cr-form">
+        <div class="cr-form-row">
+          <label>${S(`crFrom`)}</label>
+          <span class="cr-value">${a}</span>
+        </div>
+        <div class="cr-form-row">
+          <label>${S(`crField`)}</label>
+          <span class="cr-value">${t} → ${n}</span>
+        </div>
+        <div class="cr-form-row">
+          <label>${S(`crOldValue`)}</label>
+          <span class="cr-value cr-old">${W(r)}</span>
+        </div>
+        <div class="cr-form-row">
+          <label>${S(`crNewValue`)}</label>
+          <input type="text" id="crNewValue" placeholder="${S(`crNewValue`)}" />
+        </div>
+        <div class="cr-form-row">
+          <label>${S(`crJustification`)}</label>
+          <textarea id="crJustification" placeholder="${S(`crJustPlaceholder`)}"></textarea>
+        </div>
+        <div class="cr-form-row">
+          <label>${S(`crEvidence`)}</label>
+          <input type="text" id="crEvidence" placeholder="${S(`crEvidencePlaceholder`)}" />
+        </div>
+        <div class="cr-form-row">
+          <label>${S(`crDocuments`)}</label>
+          <div class="cr-file-upload">
+            <input type="file" id="crFileInput" multiple class="cr-file-input" />
+            <label for="crFileInput" class="cr-file-label">${S(`crChooseFiles`)}</label>
+            <div id="crFileList" class="cr-file-list"></div>
+          </div>
+        </div>
+        <button class="btn-add-funding cr-submit-btn"
+                data-action="submitChangeRequest" data-crtype="${e}" data-crtarget="${t}" data-crfield="${n}" data-crold="${r}">
+          ${S(`crSubmit`)}
+        </button>
+      </div>
+    </div>
+  `,N=[],document.body.appendChild(o),o.addEventListener(`click`,e=>{e.target===o&&window._closeChangeRequestForm()});let s=document.getElementById(`crFileInput`);s?.addEventListener(`change`,()=>{if(s.files){for(let e of Array.from(s.files))N.push(e);s.value=``,G()}})},window._removeQueuedDocument=function(e){N.splice(e,1),G()};function G(){let e=document.getElementById(`crFileList`);e&&(e.innerHTML=N.map((e,t)=>`<div class="cr-file-item">
+          <span class="cr-file-name">${e.name}</span>
+          <span class="cr-file-size">(${K(e.size)})</span>
+          <button class="cr-file-remove" data-action="removeQueuedDocument" data-idx="${t}">&times;</button>
+        </div>`).join(``))}function K(e){return e<1024?e+` B`:e<1024*1024?(e/1024).toFixed(1)+` KB`:(e/(1024*1024)).toFixed(1)+` MB`}window._closeChangeRequestForm=function(){N=[];let e=document.getElementById(`crFormOverlay`);e&&e.remove()},window._submitChangeRequest=function(e,t,n,r,i){let a=document.getElementById(`crJustification`),o=document.getElementById(`crEvidence`),s=a?.value?.trim()||``,l=o?.value?.trim()||``;if(!i?.trim()||!s)return;let u=`CR-`+String(c.length+1).padStart(3,`0`),d=N.map((e,t)=>({name:e.name,size:e.size,type:e.type,key:`${u}-doc-${t}`}));N.forEach((e,t)=>{k(`${u}-doc-${t}`,e)});let f={id:u,type:e,from:g===`tech`?`tech`:`business`,date:new Date().toISOString().split(`T`)[0],targetId:t,field:n,oldValue:r,newValue:i.trim(),justification:s,evidence:l,documents:d,status:`pending`,pmpNote:null};c.push(f),window._closeChangeRequestForm(),q(),U()},window._approveChangeRequest=function(e){let t=c.find(t=>t.id===e);!t||t.status!==`pending`||(t.status=`approved`,t.pmpNote=`Approved by PMP on `+new Date().toISOString().split(`T`)[0],J(`cr-approved`,e,`status`,`pending`,`approved`,`CR ${e} approved`),ce(t),F())},window._rejectChangeRequest=function(e){let t=c.find(t=>t.id===e);!t||t.status!==`pending`||(t.status=`rejected`,t.pmpNote=`Rejected by PMP on `+new Date().toISOString().split(`T`)[0],J(`cr-rejected`,e,`status`,`pending`,`rejected`,`CR ${e} rejected`),q())},window._downloadDocument=function(e,t){A(e).then(e=>{if(!e)return;let n=URL.createObjectURL(e),r=document.createElement(`a`);r.href=n,r.download=t,document.body.appendChild(r),r.click(),document.body.removeChild(r),URL.revokeObjectURL(n)})};function ce(e){switch(e.type){case`milestone-status`:{let n=[...t.technical.milestones,...t.regulatory.milestones].find(t=>t.id===e.targetId);n&&(n.status=e.newValue);break}case`risk-field`:{let t=r.find(t=>t.id===e.targetId);t&&(t[e.field]=e.newValue);break}case`standard-status`:{let t=i.find(t=>t.id===e.targetId);t&&(t.status=e.newValue,t.status===`complete`?t.progress=100:t.status===`not-started`?t.progress=0:(t.progress===0||t.progress===100)&&(t.progress=50));break}case`standard-progress`:{let t=i.find(t=>t.id===e.targetId);if(t){let n=Math.max(0,Math.min(100,parseInt(e.newValue,10)||0));t.progress=n,n===100?t.status=`complete`:n===0?t.status=`not-started`:t.status=`in-progress`}break}case`funding-status`:{let t=o.fundingRounds.find(t=>t.id===e.targetId);if(t){let n=t.status;t.status=e.newValue,t.status===`received`&&n!==`received`&&(o.cashOnHand+=t.amount,o.runwayMonths=Math.floor(o.cashOnHand/o.monthlyBurn))}break}}}function q(){let e=document.getElementById(`crQueueContainer`);if(!e)return;let t=c.filter(e=>e.status===`pending`),n=c.filter(e=>e.status!==`pending`),r=g===`pmp`;if(t.length===0&&n.length===0){e.innerHTML=`<p class="cr-empty">${S(`crNoPending`)}</p>`;return}let i=e=>{let t=e.from===`tech`?S(`inputFromTech`):S(`inputFromBusiness`),n=e.status===`pending`?`cr-status-pending`:e.status===`approved`?`cr-status-approved`:`cr-status-rejected`,i=e.status===`pending`?S(`crPending`):e.status===`approved`?S(`crApproved`):S(`crRejected`),a=r&&e.status===`pending`?`<div class="cr-actions">
+            <button class="decision-btn btn-proceed" data-action="approveChangeRequest" data-crid="${e.id}">${S(`crApprove`)}</button>
+            <button class="decision-btn btn-stop" data-action="rejectChangeRequest" data-crid="${e.id}">${S(`crReject`)}</button>
+           </div>`:``;return`
+      <div class="cr-card ${n}">
+        <div class="cr-card-header">
+          <span class="cr-id">${e.id}</span>
+          <span class="cr-status-badge ${n}">${i}</span>
+        </div>
+        <div class="cr-meta">${t} · ${e.date}</div>
+        <div class="cr-detail"><strong>${e.targetId}</strong> → ${e.field}: <span class="cr-old">${W(e.oldValue)}</span> → <span class="cr-new">${W(e.newValue)}</span></div>
+        <div class="cr-justification"><em>${S(`crJustification`)}:</em> ${e.justification}</div>
+        ${e.evidence?`<div class="cr-evidence"><em>${S(`crEvidence`)}:</em> ${e.evidence}</div>`:``}
+        ${e.documents&&e.documents.length>0?`<div class="cr-docs"><em>${S(`crDocuments`)}:</em> ${e.documents.map(e=>`<a class="cr-doc-link" href="#" data-action="downloadDocument" data-dkey="${e.key}" data-dname="${e.name}">${e.name} (${K(e.size)})</a>`).join(`, `)}</div>`:``}
+        ${e.pmpNote?`<div class="pmp-response">${e.pmpNote}</div>`:``}
+        ${a}
+      </div>
+    `};e.innerHTML=(t.length>0?`<h4 class="cr-section-title">${S(`crPendingTitle`)} (${t.length})</h4>`+t.map(i).join(``):``)+(n.length>0?n.map(i).join(``):``)}function le(){let e=document.getElementById(`apiIntegrationsContainer`);if(!e)return;let t=[{name:S(`apiAlipay`),desc:S(`apiAlipayDesc`),status:`planned`,endpoint:`https://global.alipay.com/docs/ac`,docs:`Alipay Global Merchant API`},{name:S(`apiWechat`),desc:S(`apiWechatDesc`),status:`planned`,endpoint:`https://pay.weixin.qq.com/wiki/doc/api`,docs:`WeChat Pay API v3`},{name:S(`apiUnionpay`),desc:S(`apiUnionpayDesc`),status:`planned`,endpoint:`https://developer.unionpay.com`,docs:`UnionPay Online Payment API`},{name:S(`apiCmbchina`),desc:S(`apiCmbchinaDesc`),status:`available`,endpoint:`https://open.cmbchina.com`,docs:`CMB Open Banking API`},{name:S(`apiPingpong`),desc:S(`apiPingpongDesc`),status:`available`,endpoint:`https://www.pingpongx.com/api`,docs:`PingPong Global API`},{name:S(`apiXe`),desc:S(`apiXeDesc`),status:`active`,endpoint:`https://xecdapi.xe.com/v1`,docs:`XE Currency Data API`},{name:S(`apiSwift`),desc:S(`apiSwiftDesc`),status:`available`,endpoint:`https://developer.swift.com`,docs:`SWIFT gpi Tracker API`}],n=e=>S(e===`active`?`apiActive`:e===`available`?`apiAvailable`:`apiPlanned`);e.innerHTML=t.map(e=>`
+    <div class="api-card api-${e.status}">
+      <div class="api-card-header">
+        <span class="api-name">${e.name}</span>
+        <span class="api-status-badge api-badge-${e.status}">${n(e.status)}</span>
+      </div>
+      <div class="api-desc">${e.desc}</div>
+      <div class="api-meta">
+        <span><strong>${S(`apiDocs`)}:</strong> ${e.docs}</span>
+      </div>
+    </div>
+  `).join(``)}function J(e,t,n,r,i,a){let o=`AUD-`+String(l.length+1).padStart(3,`0`);l.unshift({id:o,timestamp:new Date().toISOString(),user:{pmp:`PMP`,tech:`Tech`,business:`Business`,accounting:`Accounting`}[g]||g,action:e,targetId:t,field:n,oldValue:r,newValue:i,detail:a})}function Y(){let e=document.getElementById(`actionBoard`);e&&(e.innerHTML=[{key:`todo`,label:S(`actionTodo`),items:f.filter(e=>e.status===`todo`)},{key:`in-progress`,label:S(`actionInProgress`),items:f.filter(e=>e.status===`in-progress`)},{key:`blocked`,label:S(`actionBlocked`),items:f.filter(e=>e.status===`blocked`)},{key:`done`,label:S(`actionDone`),items:f.filter(e=>e.status===`done`)}].map(e=>`
+      <div class="action-column action-col-${e.key}">
+        <h4 class="action-col-header">${e.label} (${e.items.length})</h4>
+        ${e.items.map(e=>`
+          <div class="action-card priority-${e.priority}" data-action="cycleActionStatus" data-aid="${e.id}" style="cursor:pointer">
+            <div class="action-card-top">
+              <span class="action-id">${e.id}</span>
+              <span class="action-priority-badge prio-${e.priority}">${e.priority===`high`?S(`actionHigh`):e.priority===`medium`?S(`actionMedium`):S(`actionLow`)}</span>
+            </div>
+            <div class="action-title">${C(e.title)}</div>
+            <div class="action-meta">
+              <span>${S(`actionAssignee`)}: ${e.assignee}</span>
+              <span>${S(`actionDue`)}: ${e.dueDate}</span>
+              ${e.linkedGate?`<span>${S(`actionGate`)}: ${e.linkedGate}</span>`:``}
+            </div>
+            ${e.notes?`<div class="action-notes">${e.notes}</div>`:``}
+          </div>`).join(``)}
+      </div>`).join(``))}window._cycleActionStatus=function(e){let t=f.find(t=>t.id===e);if(!t)return;let n={todo:`in-progress`,"in-progress":`done`,done:`todo`,blocked:`in-progress`},r=t.status;t.status=n[t.status],J(`action-item`,e,`status`,r,t.status,`Action ${e} status changed`),Y()};function X(){let e=document.getElementById(`dhfBody`);e&&(e.innerHTML=u.map(e=>{let t={"not-started":S(`notStarted`),draft:S(`dhfDraft`),"in-review":S(`dhfInReview`),approved:S(`dhfApproved`)},n=e.status===`approved`?`badge-complete`:e.status===`in-review`?`badge-in-progress`:e.status===`draft`?`badge-draft`:`badge-not-started`;return`
+      <tr>
+        <td><span class="std-code">${e.code}</span></td>
+        <td>${C(e.title)}</td>
+        <td>${e.category}</td>
+        <td>
+          <span class="std-status-badge ${n} clickable-badge"
+                data-action="cycleDHFStatus" data-did="${e.id}"
+                title="${S(`clickToChangeStatus`)}">
+            ${t[e.status]||e.status}
+          </span>
+        </td>
+        <td>M+${e.dueMonth}</td>
+      </tr>
+    `}).join(``))}window._cycleDHFStatus=function(e){let t=u.find(t=>t.id===e);if(!t)return;let n={"not-started":`draft`,draft:`in-review`,"in-review":`approved`,approved:`not-started`},r=t.status;t.status=n[t.status],J(`dhf-status`,e,`status`,r,t.status,`DHF ${t.code} status changed`),X()};function Z(){let e=document.getElementById(`capaContainer`);e&&(e.innerHTML=d.map(e=>{let t=e.type===`corrective`?S(`capaCorrective`):S(`capaPreventive`),n={open:S(`capaOpen`),"in-progress":S(`capaInProgress`),closed:S(`capaDone`),verified:S(`capaVerified`)},r=`capa-${e.status}`;return`
+      <div class="capa-card ${r}" data-action="cycleCAPAStatus" data-cid="${e.id}" style="cursor:pointer">
+        <div class="capa-header">
+          <span class="capa-id">${e.id}</span>
+          <span class="capa-type-badge capa-type-${e.type}">${t}</span>
+          <span class="capa-status-badge ${r}">${n[e.status]}</span>
+        </div>
+        <div class="capa-title">${C(e.title)}</div>
+        <div class="capa-desc">${C(e.description)}</div>
+        <div class="capa-meta">
+          <span>${S(`capaLinkedRisk`)}: ${e.linkedRiskId}</span>
+          <span>${S(`capaOwner`)}: ${e.owner}</span>
+          <span>${S(`capaOpened`)}: ${e.openedDate}</span>
+          <span>${S(`capaDue`)}: ${e.dueDate}</span>
+          ${e.closedDate?`<span>${S(`capaClosed`)}: ${e.closedDate}</span>`:``}
+        </div>
+      </div>
+    `}).join(``))}window._cycleCAPAStatus=function(e){let t=d.find(t=>t.id===e);if(!t)return;let n={open:`in-progress`,"in-progress":`closed`,closed:`verified`,verified:`open`},r=t.status;t.status=n[t.status],t.status===`closed`&&!t.closedDate&&(t.closedDate=new Date().toISOString().split(`T`)[0]),J(`capa-status`,e,`status`,r,t.status,`CAPA ${e} status changed`),Z()};function ue(){let e=document.getElementById(`budgetBody`);if(!e)return;let t=e=>`$`+e.toLocaleString(),n=0,r=0,i=p.map(e=>{n+=e.planned,r+=e.actual;let i=e.planned-e.actual,a=i<0?`budget-over`:i===0?``:`budget-under`;return`
+      <tr>
+        <td>${C(e.label)}</td>
+        <td>${t(e.planned)}</td>
+        <td>${t(e.actual)}</td>
+        <td class="${a}">${i>=0?`+`:``}${t(i)}</td>
+      </tr>
+    `}).join(``),a=n-r,o=a<0?`budget-over`:`budget-under`;e.innerHTML=i+`<tr class="budget-total-row">
+      <td><strong>${S(`budgetTotal`)}</strong></td>
+      <td><strong>${t(n)}</strong></td>
+      <td><strong>${t(r)}</strong></td>
+      <td class="${o}"><strong>${a>=0?`+`:``}${t(a)}</strong></td>
+    </tr>`}function de(){let e=document.getElementById(`resourceGrid`);e&&(e.innerHTML=m.map(e=>{let t=e.allocation.reduce((e,t)=>e+t.pct,0),n=Math.round(t/e.capacity*100),r=n>100?`util-over`:n>85?`util-high`:`util-ok`;return`
+      <div class="resource-card">
+        <div class="resource-header">
+          <span class="resource-name">${e.name}</span>
+          <span class="resource-util ${r}">${n}%</span>
+        </div>
+        <div class="resource-role">${C(e.role)}</div>
+        <div class="resource-alloc">
+          ${e.allocation.map(e=>`
+            <div class="alloc-row">
+              <span class="alloc-label">${e.workstream}</span>
+              <div class="alloc-bar-wrap">
+                <div class="alloc-bar" style="width:${e.pct}%"></div>
+              </div>
+              <span class="alloc-pct">${e.pct}%</span>
+            </div>`).join(``)}
+        </div>
+        <div class="resource-cap">${S(`resourceCapacity`)}: ${e.capacity}%</div>
+      </div>
+    `}).join(``))}function Q(){let e=document.getElementById(`supplierBody`);e&&(e.innerHTML=h.map(e=>{let t={active:S(`supplierActive`),qualified:S(`supplierQualified`),"under-review":S(`supplierUnderReview`),risk:S(`supplierRisk`)},n=`sup-${e.status}`;return`
+      <tr>
+        <td>${e.name}</td>
+        <td>${C(e.component)}</td>
+        <td>
+          <span class="sup-status-badge ${n} clickable-badge"
+                data-action="cycleSupplierStatus" data-supid="${e.id}"
+                title="${S(`clickToChangeStatus`)}">
+            ${t[e.status]}
+          </span>
+        </td>
+        <td>${e.leadTimeDays} ${S(`supplierDays`)}</td>
+        <td>${e.poStatus}</td>
+        <td>${e.contractMfgMilestone}</td>
+      </tr>
+    `}).join(``))}window._cycleSupplierStatus=function(e){let t=h.find(t=>t.id===e);if(!t)return;let n={"under-review":`qualified`,qualified:`active`,active:`risk`,risk:`under-review`},r=t.status;t.status=n[t.status],J(`supplier-status`,e,`status`,r,t.status,`Supplier ${t.name} status changed`),Q()};function fe(){let e=document.getElementById(`auditBody`);e&&(e.innerHTML=l.slice(0,50).map(e=>`
+      <tr>
+        <td class="audit-ts">${new Date(e.timestamp).toLocaleString()}</td>
+        <td>${e.user}</td>
+        <td><span class="audit-action-badge">${e.action}</span></td>
+        <td>${e.targetId}</td>
+        <td class="audit-old">${e.oldValue}</td>
+        <td class="audit-new">${e.newValue}</td>
+        <td class="audit-detail">${e.detail}</td>
+      </tr>
+    `).join(``))}function $(){let e=document.getElementById(`notifBar`),t=document.getElementById(`notifContainer`);if(!e||!t)return;let n=new Date().toISOString().split(`T`)[0],r=[];c.filter(e=>e.status===`pending`).forEach(e=>{let t=`cr-`+e.id;P.has(t)||r.push({key:t,type:`notifPendingCR`,text:`${e.id}: ${e.targetId} → ${e.field}`})}),f.filter(e=>e.status!==`done`&&e.dueDate<n).forEach(e=>{let t=`act-`+e.id;P.has(t)||r.push({key:t,type:`notifOverdueAction`,text:`${e.id}: ${C(e.title)}`})}),d.filter(e=>e.status!==`closed`&&e.status!==`verified`&&e.dueDate<n).forEach(e=>{let t=`capa-`+e.id;P.has(t)||r.push({key:t,type:`notifOverdueCapa`,text:`${e.id}: ${C(e.title)}`})}),p.filter(e=>e.actual>e.planned).forEach(e=>{let t=`bud-`+e.id;P.has(t)||r.push({key:t,type:`notifBudgetOverrun`,text:`${C(e.label)}: $${(e.actual-e.planned).toLocaleString()} over`})}),o.runwayMonths<=6&&!P.has(`runway`)&&r.push({key:`runway`,type:`notifRunwayWarning`,text:`${o.runwayMonths} months remaining`}),e.style.display=r.length>0?`block`:`none`,t.innerHTML=r.map((e,t)=>`
+      <div class="notif-item notif-${e.type}">
+        <span class="notif-type">${S(e.type)}</span>
+        <span class="notif-text">${e.text}</span>
+        <button class="notif-dismiss" data-action="dismissNotification" data-nidx="${t}" data-key="${e.key}">${S(`notifDismiss`)}</button>
+      </div>`).join(``)}window._dismissNotification=function(e){let t=document.querySelectorAll(`.notif-dismiss`)[e];if(t){let e=t.dataset.key;e&&P.add(e)}$()},window._exportReport=function(){let i=r.filter(e=>e.riskLevel===`red`).length,a=r.filter(e=>e.riskLevel===`yellow`).length,s=c.filter(e=>e.status===`pending`).length,l=n.find(e=>e.status!==`approved`&&e.decision!==`proceed`),m=[...t.technical.milestones,...t.regulatory.milestones].filter(e=>e.status===`complete`).length,h=t.technical.milestones.length+t.regulatory.milestones.length,_=p.reduce((e,t)=>e+t.planned,0),v=p.reduce((e,t)=>e+t.actual,0),y=d.filter(e=>e.status===`open`||e.status===`in-progress`).length,x=f.filter(e=>e.status!==`done`).length,C=e=>`$`+e.toLocaleString(),w=u.filter(e=>e.status===`approved`).length,T=u.length,E=[`${S(`exportTitle`)} — ${e.name[b()===`cn`?`cn`:`en`]}`,`${`=`.repeat(60)}`,`Date: ${new Date().toISOString().split(`T`)[0]}`,`Role: ${g.toUpperCase()}`,``,`OVERALL STATUS`,`  Red Risks: ${i}`,`  Yellow Risks: ${a}`,`  Milestones: ${m}/${h} complete`,`  Next Gate: ${l?`G${l.number} (M+${l.month})`:`None`}`,`  Pending CRs: ${s}`,``,`FINANCIAL`,`  Cash on Hand: ${C(o.cashOnHand)}`,`  Monthly Burn: ${C(o.monthlyBurn)}`,`  Runway: ${o.runwayMonths} months`,`  Budget: ${C(v)} / ${C(_)} (${v<=_?`on track`:`OVER`})`,``,`DHF: ${w}/${T} approved`,`Open CAPAs: ${y}`,`Open Actions: ${x}`,``,`RISKS`,...r.filter(e=>e.riskLevel===`red`).map(e=>`  [RED] ${e.id}: ${e.title.en}`),``,`MILESTONES (In Progress)`,...[...t.technical.milestones,...t.regulatory.milestones].filter(e=>e.status===`in-progress`).map(e=>`  ${e.id}: ${e.title.en} (M+${e.month})`)].join(`
+`),D=new Blob([E],{type:`text/plain`}),O=URL.createObjectURL(D),k=document.createElement(`a`);k.href=O,k.download=`Project_Status_Report_${new Date().toISOString().split(`T`)[0]}.txt`,document.body.appendChild(k),k.click(),document.body.removeChild(k),URL.revokeObjectURL(O)};</script>
+    <style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-border-style:solid;--tw-blur:initial;--tw-brightness:initial;--tw-contrast:initial;--tw-grayscale:initial;--tw-hue-rotate:initial;--tw-invert:initial;--tw-opacity:initial;--tw-saturate:initial;--tw-sepia:initial;--tw-drop-shadow:initial;--tw-drop-shadow-color:initial;--tw-drop-shadow-alpha:100%;--tw-drop-shadow-size:initial}}}@layer theme{:root,:host{--font-sans:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";--font-mono:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;--spacing:.25rem;--radius-sm:.25rem;--radius-md:.375rem;--radius-lg:.5rem;--default-font-family:var(--font-sans);--default-mono-font-family:var(--font-mono)}}@layer base{*,:after,:before,::backdrop{box-sizing:border-box;border:0 solid;margin:0;padding:0}::file-selector-button{box-sizing:border-box;border:0 solid;margin:0;padding:0}html,:host{-webkit-text-size-adjust:100%;tab-size:4;line-height:1.5;font-family:var(--default-font-family,ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");font-feature-settings:var(--default-font-feature-settings,normal);font-variation-settings:var(--default-font-variation-settings,normal);-webkit-tap-highlight-color:transparent}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,samp,pre{font-family:var(--default-mono-font-family,ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);font-feature-settings:var(--default-mono-font-feature-settings,normal);font-variation-settings:var(--default-mono-font-variation-settings,normal);font-size:1em}small{font-size:80%}sub,sup{vertical-align:baseline;font-size:75%;line-height:0;position:relative}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}:-moz-focusring{outline:auto}progress{vertical-align:baseline}summary{display:list-item}ol,ul,menu{list-style:none}img,svg,video,canvas,audio,iframe,embed,object{vertical-align:middle;display:block}img,video{max-width:100%;height:auto}button,input,select,optgroup,textarea{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}::file-selector-button{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}:where(select:is([multiple],[size])) optgroup{font-weight:bolder}:where(select:is([multiple],[size])) optgroup option{padding-inline-start:20px}::file-selector-button{margin-inline-end:4px}::placeholder{opacity:1}@supports (not ((-webkit-appearance:-apple-pay-button))) or (contain-intrinsic-size:1px){::placeholder{color:currentColor}@supports (color:color-mix(in lab, red, red)){::placeholder{color:color-mix(in oklab, currentcolor 50%, transparent)}}}textarea{resize:vertical}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-date-and-time-value{min-height:1lh;text-align:inherit}::-webkit-datetime-edit{display:inline-flex}::-webkit-datetime-edit-fields-wrapper{padding:0}::-webkit-datetime-edit{padding-block:0}::-webkit-datetime-edit-year-field{padding-block:0}::-webkit-datetime-edit-month-field{padding-block:0}::-webkit-datetime-edit-day-field{padding-block:0}::-webkit-datetime-edit-hour-field{padding-block:0}::-webkit-datetime-edit-minute-field{padding-block:0}::-webkit-datetime-edit-second-field{padding-block:0}::-webkit-datetime-edit-millisecond-field{padding-block:0}::-webkit-datetime-edit-meridiem-field{padding-block:0}::-webkit-calendar-picker-indicator{line-height:1}:-moz-ui-invalid{box-shadow:none}button,input:where([type=button],[type=reset],[type=submit]){appearance:button}::file-selector-button{appearance:button}::-webkit-inner-spin-button{height:auto}::-webkit-outer-spin-button{height:auto}[hidden]:where(:not([hidden=until-found])){display:none!important}}@layer components;@layer utilities{.visible{visibility:visible}.fixed{position:fixed}.relative{position:relative}.static{position:static}.sticky{position:sticky}.start{inset-inline-start:var(--spacing)}.end{inset-inline-end:var(--spacing)}.top-5{top:calc(var(--spacing) * 5)}.container{width:100%}@media (width>=40rem){.container{max-width:40rem}}@media (width>=48rem){.container{max-width:48rem}}@media (width>=64rem){.container{max-width:64rem}}@media (width>=80rem){.container{max-width:80rem}}@media (width>=96rem){.container{max-width:96rem}}.block{display:block}.grid{display:grid}.hidden{display:none}.inline{display:inline}.table{display:table}.border{border-style:var(--tw-border-style);border-width:1px}.italic{font-style:italic}.filter{filter:var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,)}}:root{--bg-primary:#0f1117;--bg-secondary:#161822;--bg-card:#1c1f2e;--bg-card-hover:#242840;--bg-elevated:#252a3a;--border:#2a2f45;--border-light:#353b55;--text-primary:#e8eaf0;--text-secondary:#9ca3bf;--text-muted:#6b7394;--accent:#4f8cff;--accent-dim:#3566c0;--accent-glow:#4f8cff26;--green:#2dd4a0;--green-dim:#1a9c72;--green-bg:#2dd4a01a;--yellow:#f5b731;--yellow-dim:#c48e10;--yellow-bg:#f5b7311a;--red:#f04e4e;--red-dim:#c02020;--red-bg:#f04e4e1a;--orange:#f08c3a;--purple:#a78bfa;--sp-xs:4px;--sp-sm:8px;--sp-md:16px;--sp-lg:24px;--sp-xl:32px;--sp-2xl:48px;--font:"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;--font-mono:"SF Mono", "Fira Code", monospace;--radius-sm:6px;--radius-md:10px;--radius-lg:16px;--transition:.2s ease}*,:before,:after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth;font-size:14px}body{font-family:var(--font);background:var(--bg-primary);color:var(--text-primary);-webkit-font-smoothing:antialiased;min-height:100vh;line-height:1.6}.top-bar{padding:var(--sp-sm) var(--sp-lg);background:var(--bg-secondary);border-bottom:1px solid var(--border);z-index:100;justify-content:space-between;align-items:center;gap:var(--sp-md);display:flex;position:sticky;top:0}.top-bar-left{align-items:center;gap:var(--sp-md);display:flex}.top-bar-center{text-align:center;flex:1}.top-bar-right{align-items:center;gap:var(--sp-md);display:flex}.logo{align-items:center;gap:var(--sp-sm);display:flex}.logo-icon{font-size:1.8rem}.logo-text{flex-direction:column;line-height:1.2;display:flex}.logo-title{color:var(--accent);font-size:1rem;font-weight:700}.logo-subtitle{color:var(--text-muted);white-space:nowrap;font-size:.7rem}.master-question{color:var(--text-secondary);max-width:500px;margin:0 auto;font-size:.85rem;font-style:italic}.pmp-badge{align-items:center;gap:var(--sp-xs);border:1px solid var(--red-dim);padding:var(--sp-xs) var(--sp-sm);border-radius:var(--radius-sm);color:var(--red);white-space:nowrap;background:#f04e4e1f;font-size:.75rem;font-weight:600;display:flex}.lang-toggle{background:var(--bg-elevated);border:1px solid var(--border-light);color:var(--accent);padding:var(--sp-xs) var(--sp-md);border-radius:var(--radius-sm);cursor:pointer;transition:var(--transition);font-size:.85rem;font-weight:700}.lang-toggle:hover{background:var(--accent);color:#fff}.current-month-badge{color:var(--text-secondary);background:var(--bg-elevated);padding:var(--sp-xs) var(--sp-sm);border-radius:var(--radius-sm);border:1px solid var(--border);white-space:nowrap;font-size:.8rem}.tab-nav{padding:var(--sp-sm) var(--sp-lg);background:var(--bg-secondary);border-bottom:1px solid var(--border);gap:2px;display:flex;overflow-x:auto}.tab-btn{align-items:center;gap:var(--sp-xs);padding:var(--sp-sm) var(--sp-md);color:var(--text-muted);cursor:pointer;border-radius:var(--radius-sm) var(--radius-sm) 0 0;transition:var(--transition);white-space:nowrap;font-size:.85rem;font-weight:500;font-family:var(--font);background:0 0;border:none;display:flex}.tab-btn:hover{color:var(--text-secondary);background:var(--bg-card)}.tab-btn.active{color:var(--accent);background:var(--bg-card);border-bottom:2px solid var(--accent)}.tab-icon{font-size:1rem}.status-summary{gap:var(--sp-md);padding:var(--sp-md) var(--sp-lg);display:flex;overflow-x:auto}.summary-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);min-width:160px;padding:var(--sp-md);text-align:center;flex:1}.summary-label{text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:var(--sp-xs);font-size:.7rem}.summary-value{font-size:1.1rem;font-weight:700}.status-on-track{color:var(--green)}.status-at-risk{color:var(--yellow)}.status-blocked,.risk-red{color:var(--red)}.dashboard-main{padding-bottom:80px}.tab-panel{padding:var(--sp-lg);animation:.3s fadeIn;display:none}.tab-panel.active{display:block}@keyframes fadeIn{0%{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}.panel-header{margin-bottom:var(--sp-lg)}.panel-header h2{margin-bottom:var(--sp-xs);font-size:1.4rem;font-weight:700}.panel-desc{color:var(--text-muted);font-size:.85rem}.dual-track-container{gap:var(--sp-md);grid-template-columns:1fr 60px 1fr;align-items:start;display:grid}.track-column{gap:var(--sp-md);flex-direction:column;display:flex}.track-header{align-items:center;gap:var(--sp-sm);padding-bottom:var(--sp-sm);border-bottom:2px solid var(--border);margin-bottom:var(--sp-sm);display:flex}.track-header h3{font-size:1rem;font-weight:600}.track-icon{font-size:1.4rem}.tech-column .track-header{border-color:var(--accent)}.reg-column .track-header{border-color:var(--purple)}.milestone-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:var(--sp-md);transition:var(--transition);cursor:default;position:relative}.milestone-card:hover{background:var(--bg-card-hover);border-color:var(--border-light)}.milestone-card.status-complete{border-left:3px solid var(--green)}.milestone-card.status-in-progress{border-left:3px solid var(--yellow)}.milestone-card.status-not-started{border-left:3px solid var(--text-muted)}.ms-header{margin-bottom:var(--sp-sm);justify-content:space-between;align-items:flex-start;display:flex}.ms-title{flex:1;font-size:.9rem;font-weight:600}.ms-month{color:var(--accent);background:var(--accent-glow);white-space:nowrap;margin-left:var(--sp-sm);border-radius:10px;padding:2px 8px;font-size:.7rem;font-weight:700}.ms-desc{color:var(--text-secondary);font-size:.78rem;line-height:1.5}.ms-status-badge{text-transform:uppercase;letter-spacing:.05em;margin-top:var(--sp-sm);border-radius:4px;padding:2px 8px;font-size:.65rem;font-weight:600;display:inline-block}.badge-complete{background:var(--green-bg);color:var(--green)}.badge-in-progress{background:var(--yellow-bg);color:var(--yellow)}.badge-not-started{color:var(--text-muted);background:#6b739426}.center-timeline{flex-direction:column;align-items:center;padding-top:60px;display:flex}.timeline-dot{background:var(--border-light);border-radius:50%;flex-shrink:0;width:12px;height:12px;margin-bottom:4px}.timeline-dot.active{background:var(--accent);box-shadow:0 0 8px var(--accent)}.timeline-line{background:var(--border);flex:1;width:2px;min-height:40px}.gates-pipeline{gap:var(--sp-md);padding-bottom:var(--sp-md);display:flex;overflow-x:auto}.gate-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);cursor:pointer;min-width:240px;max-width:280px;transition:var(--transition);flex-shrink:0;overflow:hidden}.gate-card:hover{border-color:var(--accent-dim);transform:translateY(-2px);box-shadow:0 8px 24px #0000004d}.gate-top{padding:var(--sp-md);text-align:center;position:relative}.gate-number{color:var(--text-muted);font-size:2rem;font-weight:800;line-height:1}.gate-card.gate-approved .gate-number{color:var(--green)}.gate-card.gate-blocked .gate-number{color:var(--red)}.gate-card.gate-pending .gate-number{color:var(--yellow)}.gate-title{margin-top:var(--sp-sm);font-size:.85rem;font-weight:600}.gate-month{color:var(--text-muted);margin-top:var(--sp-xs);font-size:.7rem}.gate-status-strip{background:var(--border);height:4px}.gate-card.gate-approved .gate-status-strip{background:var(--green)}.gate-card.gate-blocked .gate-status-strip{background:var(--red)}.gate-card.gate-pending .gate-status-strip{background:var(--yellow)}.gate-card.gate-not-started .gate-status-strip{background:var(--text-muted)}.gate-criteria-summary{padding:var(--sp-sm) var(--sp-md) var(--sp-md)}.criteria-progress{align-items:center;gap:var(--sp-sm);color:var(--text-secondary);font-size:.75rem;display:flex}.criteria-bar{background:var(--border);border-radius:3px;flex:1;height:6px;overflow:hidden}.criteria-bar-fill{background:var(--accent);border-radius:3px;height:100%;transition:width .5s}.gate-connector{color:var(--border-light);flex-shrink:0;align-self:center;align-items:center;font-size:1.5rem;display:flex}.gate-detail-overlay{z-index:200;padding:var(--sp-lg);background:#0009;justify-content:center;align-items:center;display:none;position:fixed;inset:0}.gate-detail-overlay.open{display:flex}.gate-detail-modal{background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:var(--radius-lg);width:100%;max-width:700px;max-height:85vh;padding:var(--sp-xl);animation:.25s modalIn;position:relative;overflow-y:auto}@keyframes modalIn{0%{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}.modal-close{top:var(--sp-md);right:var(--sp-md);color:var(--text-muted);cursor:pointer;background:0 0;border:none;font-size:1.5rem;position:absolute}.modal-close:hover{color:var(--text-primary)}.gate-detail-header{margin-bottom:var(--sp-lg)}.gate-detail-header h2{margin-bottom:var(--sp-xs);font-size:1.3rem}.gate-detail-meta{color:var(--text-muted);font-size:.8rem}.milestone-detail-body p{margin-bottom:var(--sp-sm);color:var(--text-primary);font-size:.85rem;line-height:1.6}.milestone-detail-body ul{margin:0 0 var(--sp-md) var(--sp-md);padding-left:var(--sp-md)}.milestone-detail-body li{margin-bottom:var(--sp-xs);color:var(--text-secondary);font-size:.83rem;line-height:1.55}.criteria-list{margin-bottom:var(--sp-lg);list-style:none}.criteria-item{align-items:center;gap:var(--sp-sm);padding:var(--sp-sm) 0;border-bottom:1px solid var(--border);font-size:.85rem;display:flex}.criteria-check{border:2px solid var(--border-light);cursor:pointer;width:20px;height:20px;transition:var(--transition);border-radius:4px;flex-shrink:0;justify-content:center;align-items:center;font-size:.75rem;display:flex}.criteria-check.checked{background:var(--green);border-color:var(--green);color:#fff}.criteria-check:hover{border-color:var(--accent)}.gate-decision-section{margin-top:var(--sp-lg);padding-top:var(--sp-lg);border-top:1px solid var(--border)}.gate-decision-section h4{color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:var(--sp-md);font-size:.85rem}.decision-buttons{gap:var(--sp-sm);display:flex}.decision-btn{padding:var(--sp-sm) var(--sp-md);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:var(--transition);background:var(--bg-card);color:var(--text-primary);font-size:.85rem;font-weight:600;font-family:var(--font);flex:1}.decision-btn:hover{transform:translateY(-1px)}.decision-btn.btn-proceed{border-color:var(--green-dim);color:var(--green)}.decision-btn.btn-proceed:hover{background:var(--green-bg)}.decision-btn.btn-proceed.selected{background:var(--green);color:#fff}.decision-btn.btn-data{border-color:var(--yellow-dim);color:var(--yellow)}.decision-btn.btn-data:hover{background:var(--yellow-bg)}.decision-btn.btn-data.selected{background:var(--yellow);color:#000}.decision-btn.btn-stop{border-color:var(--red-dim);color:var(--red)}.decision-btn.btn-stop:hover{background:var(--red-bg)}.decision-btn.btn-stop.selected{background:var(--red);color:#fff}.gate-inputs-section{margin-top:var(--sp-lg)}.gate-inputs-section h4{color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:var(--sp-sm);font-size:.85rem}.input-entry{background:var(--bg-card);border-radius:var(--radius-sm);padding:var(--sp-sm) var(--sp-md);margin-bottom:var(--sp-sm);border-left:3px solid var(--accent);font-size:.8rem}.input-entry.from-tech{border-left-color:var(--accent)}.input-entry.from-business{border-left-color:var(--orange)}.input-meta{color:var(--text-muted);margin-bottom:var(--sp-xs);font-size:.7rem}.input-status-badge{text-transform:uppercase;margin-left:var(--sp-xs);border-radius:3px;padding:1px 6px;font-size:.6rem;font-weight:600;display:inline-block}.input-status-pending{background:var(--yellow-bg);color:var(--yellow)}.input-status-accepted{background:var(--green-bg);color:var(--green)}.pmp-response{margin-top:var(--sp-xs);padding:var(--sp-xs) var(--sp-sm);border-radius:var(--radius-sm);color:var(--red);background:#f04e4e14;font-size:.75rem}.pmp-response:before{content:"🛡 PMP: ";font-weight:700}.add-note-area{margin-top:var(--sp-md)}.add-note-area textarea{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);width:100%;min-height:60px;color:var(--text-primary);padding:var(--sp-sm);font-family:var(--font);resize:vertical;font-size:.8rem}.add-note-area textarea:focus{border-color:var(--accent);outline:none}.add-note-area button{margin-top:var(--sp-sm);padding:var(--sp-xs) var(--sp-md);background:var(--accent);color:#fff;border-radius:var(--radius-sm);cursor:pointer;font-size:.8rem;font-weight:600;font-family:var(--font);border:none}.risk-filters{gap:var(--sp-sm);margin-bottom:var(--sp-lg);flex-wrap:wrap;display:flex}.filter-btn{align-items:center;gap:var(--sp-xs);padding:var(--sp-xs) var(--sp-md);background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-secondary);cursor:pointer;transition:var(--transition);font-size:.8rem;font-family:var(--font);display:flex}.filter-btn:hover{border-color:var(--accent);color:var(--text-primary)}.filter-btn.active{border-color:var(--accent);color:var(--accent);background:var(--accent-glow)}.dot{border-radius:50%;width:8px;height:8px;display:inline-block}.dot-red{background:var(--red)}.dot-yellow{background:var(--yellow)}.dot-green{background:var(--green)}.risk-grid{gap:var(--sp-md);margin-bottom:var(--sp-xl);grid-template-columns:repeat(auto-fill,minmax(320px,1fr));display:grid}.risk-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:var(--sp-md);transition:var(--transition)}.risk-card:hover{background:var(--bg-card-hover)}.risk-card.risk-level-red{border-left:4px solid var(--red)}.risk-card.risk-level-yellow{border-left:4px solid var(--yellow)}.risk-card.risk-level-green{border-left:4px solid var(--green)}.risk-card-header{margin-bottom:var(--sp-sm);justify-content:space-between;align-items:flex-start;display:flex}.risk-id{font-size:.65rem;font-family:var(--font-mono);color:var(--text-muted)}.risk-level-badge{text-transform:uppercase;border-radius:4px;padding:2px 8px;font-size:.65rem;font-weight:700}.badge-red{background:var(--red-bg);color:var(--red)}.badge-yellow{background:var(--yellow-bg);color:var(--yellow)}.badge-green{background:var(--green-bg);color:var(--green)}.risk-title{margin-bottom:var(--sp-sm);font-size:.85rem;font-weight:600}.risk-detail-row{gap:var(--sp-md);color:var(--text-secondary);margin-bottom:var(--sp-xs);font-size:.75rem;display:flex}.risk-detail-label{color:var(--text-muted);min-width:70px}.risk-mitigation-bar{margin-top:var(--sp-sm);align-items:center;gap:var(--sp-sm);color:var(--text-muted);font-size:.7rem;display:flex}.mitigation-bar{background:var(--border);border-radius:2px;flex:1;height:4px;overflow:hidden}.mitigation-bar-fill{border-radius:2px;height:100%;transition:width .5s}.mitigation-complete .mitigation-bar-fill{background:var(--green);width:100%}.mitigation-in-progress .mitigation-bar-fill{background:var(--yellow);width:50%}.mitigation-not-started .mitigation-bar-fill{background:var(--red);width:0%}.top-risks-section{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:var(--sp-lg)}.top-risks-section h3{margin-bottom:var(--sp-md);font-size:1rem}.top-risk-item{align-items:center;gap:var(--sp-md);padding:var(--sp-sm) 0;border-bottom:1px solid var(--border);display:flex}.top-risk-item:last-child{border-bottom:none}.top-risk-rank{color:var(--text-muted);text-align:center;min-width:30px;font-size:1.1rem;font-weight:800}.top-risk-indicator{border-radius:50%;flex-shrink:0;width:10px;height:10px}.top-risk-text{flex:1;font-size:.85rem}.top-risk-module{color:var(--text-muted);font-size:.7rem;font-family:var(--font-mono)}.timeline-visual{padding-left:40px;position:relative}.timeline-event{padding:var(--sp-md) var(--sp-lg);margin-bottom:var(--sp-md);background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);margin-left:40px;position:relative}.timeline-event:before{content:"";border:3px solid var(--border-light);background:var(--bg-primary);border-radius:50%;width:16px;height:16px;position:absolute;top:50%;left:-50px;transform:translateY(-50%)}.timeline-event.impact-critical:before{border-color:var(--red);background:var(--red)}.timeline-event.impact-warning:before{border-color:var(--yellow);background:var(--yellow)}.timeline-event.impact-neutral:before{border-color:var(--accent);background:var(--accent)}.timeline-event:after{content:"";width:2px;height:calc(100% + var(--sp-md));background:var(--border);position:absolute;top:calc(50% + 12px);left:-42px}.timeline-event:last-child:after{display:none}.tl-month-badge{color:var(--accent);background:var(--accent-glow);margin-bottom:var(--sp-sm);border-radius:10px;padding:2px 10px;font-size:.75rem;font-weight:700;display:inline-block}.tl-columns{gap:var(--sp-lg);grid-template-columns:1fr 1fr;display:grid}.tl-col h4{text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:var(--sp-xs);font-size:.7rem}.tl-col.tl-tech h4{color:var(--accent)}.tl-col.tl-biz h4{color:var(--orange)}.tl-col p{font-size:.85rem;line-height:1.5}.standards-table-wrap{overflow-x:auto}.standards-table{border-collapse:collapse;width:100%;font-size:.85rem}.standards-table th{text-align:left;padding:var(--sp-sm) var(--sp-md);background:var(--bg-elevated);color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--border);white-space:nowrap;font-size:.7rem}.standards-table td{padding:var(--sp-sm) var(--sp-md);border-bottom:1px solid var(--border);vertical-align:middle}.standards-table tr:hover td{background:var(--bg-card-hover)}.std-code{font-family:var(--font-mono);color:var(--accent);white-space:nowrap;font-size:.8rem;font-weight:600}.progress-bar{background:var(--border);border-radius:3px;width:80px;height:6px;overflow:hidden}.progress-bar-fill{background:var(--accent);border-radius:3px;height:100%;transition:width .5s}.progress-pct{color:var(--text-muted);min-width:32px;font-size:.75rem;font-weight:600}.std-status-badge{text-transform:uppercase;border-radius:4px;padding:2px 8px;font-size:.65rem;font-weight:600;display:inline-block}.cash-summary-cards{gap:var(--sp-md);margin-bottom:var(--sp-lg);grid-template-columns:repeat(3,1fr);display:grid}.cash-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:var(--sp-lg);text-align:center}.cash-card-label{color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:var(--sp-xs);font-size:.8rem}.cash-card-value{color:var(--text-primary);font-size:1.6rem;font-weight:700}.cash-edit-btn{border:1px solid rgba(var(--accent-rgb,99, 102, 241), .3);color:var(--accent,#6366f1);cursor:pointer;vertical-align:middle;opacity:.6;background:0 0;border-radius:4px;margin-left:6px;padding:1px 6px;font-size:.7rem;transition:opacity .15s}.cash-edit-btn:hover{opacity:1;background:rgba(var(--accent-rgb,99, 102, 241), .1)}.burn-value{color:var(--amber)}.runway-ok{color:var(--green)}.runway-warning{color:var(--amber)}.runway-critical{color:var(--red)}.cash-sections{gap:var(--sp-lg);grid-template-columns:1fr 1fr;display:grid}.cash-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:var(--sp-lg)}.cash-section h3{margin:0 0 var(--sp-md);color:var(--text-primary);font-size:1rem}.funding-round-row{gap:var(--sp-sm);padding:var(--sp-sm) 0;border-bottom:1px solid var(--border);grid-template-columns:1fr auto auto auto;align-items:center;display:grid}.funding-round-row:last-child{border-bottom:none}.fr-label{color:var(--text-primary);font-weight:600}.fr-amount{color:var(--text-primary);font-weight:700}.fr-date{color:var(--text-muted);font-size:.8rem}.fr-status{text-transform:uppercase;border-radius:4px;padding:2px 8px;font-size:.7rem;font-weight:600}.fr-received{color:var(--green);background:#2ea04326}.fr-committed{color:var(--blue);background:#4f8cff26}.fr-pipeline{color:var(--amber);background:#d2992226}.burn-row{gap:var(--sp-sm);padding:var(--sp-xs) 0;grid-template-columns:40px 1fr auto auto;align-items:center;display:grid}.burn-month{color:var(--text-muted);font-size:.8rem;font-weight:600}.burn-bar-wrap{background:var(--border);border-radius:4px;height:8px;overflow:hidden}.burn-bar{background:var(--amber);border-radius:4px;height:100%;transition:width .3s}.burn-amount{color:var(--text-primary);text-align:right;min-width:60px;font-size:.85rem;font-weight:600}.burn-note{color:var(--text-muted);font-size:.75rem}.input-panel-overlay{z-index:200;background:#00000080;display:none;position:fixed;inset:0}.input-panel-overlay.open{display:block}.input-panel{background:var(--bg-secondary);border-left:1px solid var(--border);width:400px;max-width:90vw;padding:var(--sp-xl);animation:.3s slideIn;position:fixed;top:0;bottom:0;right:0;overflow-y:auto}@keyframes slideIn{0%{transform:translate(100%)}to{transform:translate(0)}}.panel-close{top:var(--sp-md);right:var(--sp-md);color:var(--text-muted);cursor:pointer;background:0 0;border:none;font-size:1.5rem;position:absolute}.fab{bottom:var(--sp-xl);right:var(--sp-xl);background:var(--accent);cursor:pointer;width:56px;height:56px;transition:var(--transition);z-index:50;border:none;border-radius:50%;justify-content:center;align-items:center;display:flex;position:fixed;box-shadow:0 4px 20px #4f8cff4d}.fab:hover{transform:scale(1.1)}.fab-icon{font-size:1.4rem}.fab-badge{background:var(--red);color:#fff;border-radius:50%;justify-content:center;align-items:center;width:20px;height:20px;font-size:.65rem;font-weight:700;display:flex;position:absolute;top:-4px;right:-4px}.fab-badge.hidden{display:none}@media (width<=900px){.dual-track-container{grid-template-columns:1fr}.center-timeline{display:none}.top-bar{flex-wrap:wrap}.top-bar-center{margin-top:var(--sp-sm);flex-basis:100%;order:3}.tl-columns{grid-template-columns:1fr}.gates-pipeline{flex-direction:column;align-items:stretch}.gate-card{min-width:0;max-width:none}}@media (width<=600px){.status-summary{flex-direction:column}.summary-card{min-width:0}.cash-summary-cards,.cash-sections{grid-template-columns:1fr}html{font-size:13px}.pmp-badge{display:none}}.clickable-badge{cursor:pointer;-webkit-user-select:none;user-select:none;transition:transform .15s,box-shadow .15s}.clickable-badge:hover{transform:scale(1.08);box-shadow:0 2px 8px #00000026}.clickable-badge:active{transform:scale(.96)}.risk-editor-fields{gap:var(--sp-md);margin-top:var(--sp-md);flex-direction:column;display:flex}.risk-editor-fields label{color:var(--text-secondary);flex-direction:column;gap:4px;font-size:.85rem;font-weight:600;display:flex}.risk-editor-fields select{border:1px solid var(--border);background:var(--bg-card);color:var(--text-primary);cursor:pointer;border-radius:8px;padding:8px 12px;font-size:.9rem}.risk-editor-fields select:focus{outline:2px solid var(--accent);border-color:var(--accent)}.progress-input{border:1px solid var(--border);text-align:center;background:var(--bg-card);width:50px;color:var(--text-primary);border-radius:4px;padding:2px 6px;font-size:.75rem}.progress-input:focus{outline:2px solid var(--accent)}.progress-cell{align-items:center;gap:8px;display:flex}.add-funding-form{margin-top:var(--sp-lg);padding:var(--sp-md);border:1px dashed var(--border);background:var(--bg-card);border-radius:12px}.add-funding-form h4{margin:0 0 var(--sp-sm);color:var(--text-primary);font-size:.9rem}.funding-form-row{gap:var(--sp-sm);flex-wrap:wrap;align-items:center;display:flex}.funding-form-row input{border:1px solid var(--border);background:var(--bg-main);min-width:120px;color:var(--text-primary);border-radius:8px;flex:1;padding:8px 12px;font-size:.85rem}.funding-form-row input:focus{outline:2px solid var(--accent);border-color:var(--accent)}.btn-add-funding{background:var(--accent);color:#fff;cursor:pointer;white-space:nowrap;border:none;border-radius:8px;padding:8px 16px;font-size:.85rem;font-weight:600;transition:background .2s}.btn-add-funding:hover{background:var(--accent-hover,#2563eb)}.funding-note{margin-top:var(--sp-sm);color:var(--text-muted);font-size:.75rem;font-style:italic}.fr-status.clickable-badge{border-radius:6px;padding:4px 10px}.role-switcher{align-items:center;gap:6px;margin-left:8px;display:flex}.role-label{color:var(--text-muted);white-space:nowrap;font-size:.75rem}.role-select{border:1px solid var(--border);background:var(--bg-card,#fff);color:var(--text-main);cursor:pointer;border-radius:6px;padding:4px 8px;font-size:.8rem}.tab-btn.tab-restricted{opacity:.35;pointer-events:none;text-decoration:line-through}.accounting-notice{margin:0 var(--sp-lg) var(--sp-md);color:#92400e;text-align:center;background:#fef3c7;border:1px solid #f59e0b;border-radius:8px;padding:10px 16px;font-size:.85rem}.cr-queue-section{margin:0 var(--sp-lg) var(--sp-md)}.cr-queue-section .panel-header h3{font-size:1rem;font-weight:600}.cr-empty{text-align:center;color:var(--text-muted);padding:var(--sp-md);font-style:italic}.cr-section-title{margin-bottom:var(--sp-sm);color:var(--accent);font-size:.9rem;font-weight:600}.cr-card{border:1px solid var(--border);padding:var(--sp-sm) var(--sp-md);margin-bottom:var(--sp-sm);background:var(--bg-card);border-radius:10px}.cr-card.cr-status-pending{border-left:4px solid #f59e0b}.cr-card.cr-status-approved{opacity:.75;border-left:4px solid #10b981}.cr-card.cr-status-rejected{opacity:.65;border-left:4px solid #ef4444}.cr-card-header{justify-content:space-between;align-items:center;margin-bottom:4px;display:flex}.cr-id{color:var(--accent);font-size:.85rem;font-weight:700}.cr-status-badge{text-transform:uppercase;border-radius:10px;padding:2px 8px;font-size:.7rem;font-weight:600}.cr-status-badge.cr-status-pending{color:#92400e;background:#fef3c7}.cr-status-badge.cr-status-approved{color:#065f46;background:#d1fae5}.cr-status-badge.cr-status-rejected{color:#991b1b;background:#fee2e2}.cr-meta{color:var(--text-muted);margin-bottom:4px;font-size:.75rem}.cr-detail{margin-bottom:4px;font-size:.85rem}.cr-old{color:#ef4444;text-decoration:line-through}.cr-new{color:#10b981;font-weight:600}.cr-justification,.cr-evidence{color:var(--text-muted);margin-bottom:2px;font-size:.8rem}.pmp-response{color:var(--accent);margin-top:4px;font-size:.8rem;font-style:italic}.cr-actions{gap:var(--sp-sm);margin-top:var(--sp-sm);display:flex}.cr-modal{max-width:520px}.cr-form{gap:var(--sp-sm);padding:var(--sp-md) 0;flex-direction:column;display:flex}.cr-form-row{flex-direction:column;gap:4px;display:flex}.cr-form-row label{color:var(--text-muted);font-size:.8rem;font-weight:600}.cr-form-row input,.cr-form-row textarea{border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-family:inherit;font-size:.85rem}.cr-form-row textarea{resize:vertical;min-height:80px}.cr-value{font-size:.85rem}.cr-value.cr-old{color:#ef4444}.cr-submit-btn{margin-top:var(--sp-sm)}.api-section{margin-bottom:var(--sp-lg)}.api-section h3{margin-bottom:var(--sp-xs);font-size:1rem;font-weight:600}.api-grid{gap:var(--sp-sm);grid-template-columns:repeat(auto-fill,minmax(260px,1fr));display:grid}.api-card{border:1px solid var(--border);padding:var(--sp-sm) var(--sp-md);background:var(--bg-card);border-radius:10px}.api-card.api-active{border-left:4px solid #10b981}.api-card.api-available{border-left:4px solid #3b82f6}.api-card.api-planned{border-left:4px solid #a78bfa}.api-card-header{justify-content:space-between;align-items:center;margin-bottom:4px;display:flex}.api-name{font-size:.9rem;font-weight:600}.api-status-badge{text-transform:uppercase;border-radius:10px;padding:2px 8px;font-size:.7rem;font-weight:600}.api-badge-active{color:#065f46;background:#d1fae5}.api-badge-available{color:#1e40af;background:#dbeafe}.api-badge-planned{color:#5b21b6;background:#ede9fe}.api-desc{color:var(--text-muted);margin-bottom:6px;font-size:.8rem}.api-meta{color:var(--text-muted);font-size:.75rem}.cr-file-upload{flex-direction:column;gap:6px;display:flex}.cr-file-input{display:none}.cr-file-label{background:var(--bg-card);border:1px dashed var(--border);color:var(--accent);cursor:pointer;text-align:center;border-radius:6px;padding:8px 14px;font-size:.85rem;transition:background .15s;display:inline-block}.cr-file-label:hover{background:#f0f4ff}.cr-file-list{flex-direction:column;gap:4px;display:flex}.cr-file-item{background:#f8fafc;border-radius:4px;align-items:center;gap:6px;padding:4px 8px;font-size:.8rem;display:flex}.cr-file-name{word-break:break-all;font-weight:500}.cr-file-size{color:var(--text-muted);white-space:nowrap}.cr-file-remove{color:#ef4444;cursor:pointer;background:0 0;border:none;margin-left:auto;padding:0 4px;font-size:1rem;line-height:1}.cr-docs{color:var(--text-muted);margin-bottom:2px;font-size:.8rem}.cr-doc-link{color:var(--accent);cursor:pointer;text-decoration:underline}.cr-doc-link:hover{color:var(--accent-hover,#2563eb)}.notif-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:var(--sp-sm) var(--sp-md);margin-bottom:var(--sp-md)}.notif-header{margin-bottom:var(--sp-xs);justify-content:space-between;align-items:center;display:flex}.notif-header h4{margin:0;font-size:.9rem}.export-btn{background:var(--accent);color:#fff;border-radius:var(--radius);cursor:pointer;border:none;align-items:center;gap:4px;padding:6px 14px;font-size:.8rem;display:flex}.export-btn:hover{opacity:.85}.notif-item{align-items:center;gap:var(--sp-sm);border-bottom:1px solid var(--border);padding:6px 0;font-size:.82rem;display:flex}.notif-item:last-child{border-bottom:none}.notif-type{white-space:nowrap;border-radius:4px;padding:2px 8px;font-size:.75rem;font-weight:600}.notif-notifPendingCR .notif-type{color:#92400e;background:#fef3c7}.notif-notifOverdueAction .notif-type,.notif-notifOverdueMilestone .notif-type,.notif-notifOverdueCapa .notif-type{color:#991b1b;background:#fee2e2}.notif-notifBudgetOverrun .notif-type{color:#9d174d;background:#fce7f3}.notif-notifRunwayWarning .notif-type{color:#9a3412;background:#ffedd5}.notif-text{flex:1}.notif-dismiss{border:1px solid var(--border);cursor:pointer;color:var(--text-muted);background:0 0;border-radius:4px;padding:2px 8px;font-size:.75rem}.notif-dismiss:hover{background:var(--border)}.action-board{gap:var(--sp-md);margin-bottom:var(--sp-lg);grid-template-columns:repeat(4,1fr);display:grid}@media (width<=900px){.action-board{grid-template-columns:1fr 1fr}}.action-column{background:var(--surface);border-radius:var(--radius);padding:var(--sp-sm);border:1px solid var(--border)}.action-col-header{margin:0 0 var(--sp-sm) 0;padding-bottom:var(--sp-xs);border-bottom:2px solid var(--border);font-size:.85rem}.action-col-todo .action-col-header{border-bottom-color:#94a3b8}.action-col-in-progress .action-col-header{border-bottom-color:var(--accent)}.action-col-blocked .action-col-header{border-bottom-color:var(--red)}.action-col-done .action-col-header{border-bottom-color:var(--green)}.action-card{background:var(--bg);border-radius:var(--radius);padding:var(--sp-sm);margin-bottom:var(--sp-xs);border-left:3px solid #0000;transition:transform .1s}.action-card:hover{transform:translateY(-1px)}.action-card.priority-high{border-left-color:var(--red)}.action-card.priority-medium{border-left-color:var(--yellow)}.action-card.priority-low{border-left-color:var(--green)}.action-card-top{justify-content:space-between;align-items:center;margin-bottom:4px;display:flex}.action-id{color:var(--text-muted);font-family:monospace;font-size:.7rem}.action-priority-badge{text-transform:uppercase;border-radius:4px;padding:2px 6px;font-size:.65rem;font-weight:600}.prio-high{color:#991b1b;background:#fee2e2}.prio-medium{color:#92400e;background:#fef3c7}.prio-low{color:#065f46;background:#d1fae5}.action-title{margin-bottom:4px;font-size:.82rem;font-weight:500}.action-meta{color:var(--text-muted);flex-wrap:wrap;gap:8px;font-size:.72rem;display:flex}.action-notes{color:var(--text-muted);margin-top:4px;font-size:.72rem;font-style:italic}.dhf-section,.capa-section{margin-top:var(--sp-lg)}.badge-draft{color:#3730a3;background:#e0e7ff}.capa-card{background:var(--surface);border-radius:var(--radius);padding:var(--sp-md);margin-bottom:var(--sp-sm);border-left:4px solid var(--border);transition:transform .1s}.capa-card:hover{transform:translateY(-1px)}.capa-open{border-left-color:#f59e0b}.capa-in-progress{border-left-color:var(--accent)}.capa-closed{border-left-color:var(--green)}.capa-verified{border-left-color:#8b5cf6}.capa-header{align-items:center;gap:var(--sp-sm);margin-bottom:var(--sp-xs);display:flex}.capa-id{color:var(--text-muted);font-family:monospace;font-size:.8rem}.capa-type-badge{border-radius:4px;padding:2px 8px;font-size:.7rem;font-weight:600}.capa-type-corrective{color:#991b1b;background:#fee2e2}.capa-type-preventive{color:#1e40af;background:#dbeafe}.capa-status-badge{border-radius:4px;margin-left:auto;padding:2px 8px;font-size:.7rem;font-weight:500}.capa-status-badge.capa-open{color:#92400e;background:#fef3c7}.capa-status-badge.capa-in-progress{color:#1e40af;background:#dbeafe}.capa-status-badge.capa-closed{color:#065f46;background:#d1fae5}.capa-status-badge.capa-verified{color:#5b21b6;background:#ede9fe}.capa-title{margin-bottom:4px;font-size:.9rem;font-weight:600}.capa-desc{color:var(--text-secondary);margin-bottom:var(--sp-xs);font-size:.82rem}.capa-meta{color:var(--text-muted);flex-wrap:wrap;gap:12px;font-size:.72rem;display:flex}.budget-over{color:var(--red);font-weight:600}.budget-under{color:var(--green);font-weight:600}.budget-total-row{border-top:2px solid var(--text)}.resource-grid{gap:var(--sp-md);grid-template-columns:repeat(auto-fill,minmax(320px,1fr));display:grid}.resource-card{background:var(--surface);border-radius:var(--radius);padding:var(--sp-md);border:1px solid var(--border)}.resource-header{justify-content:space-between;align-items:center;margin-bottom:4px;display:flex}.resource-name{font-size:.95rem;font-weight:600}.resource-util{border-radius:4px;padding:2px 8px;font-size:.8rem;font-weight:700}.util-ok{color:#065f46;background:#d1fae5}.util-high{color:#92400e;background:#fef3c7}.util-over{color:#991b1b;background:#fee2e2}.resource-role{color:var(--text-muted);margin-bottom:var(--sp-sm);font-size:.8rem}.resource-alloc{margin-bottom:var(--sp-xs)}.alloc-row{align-items:center;gap:8px;margin-bottom:4px;font-size:.78rem;display:flex}.alloc-label{text-overflow:ellipsis;white-space:nowrap;width:120px;overflow:hidden}.alloc-bar-wrap{background:var(--border);border-radius:4px;flex:1;height:8px;overflow:hidden}.alloc-bar{background:var(--accent);border-radius:4px;height:100%}.alloc-pct{text-align:right;width:30px;color:var(--text-muted);font-size:.72rem}.resource-cap{color:var(--text-muted);font-size:.72rem}.sup-status-badge{cursor:pointer;border-radius:4px;padding:2px 8px;font-size:.75rem;font-weight:600;display:inline-block}.sup-active{color:#065f46;background:#d1fae5}.sup-qualified{color:#1e40af;background:#dbeafe}.sup-under-review{color:#92400e;background:#fef3c7}.sup-risk{color:#991b1b;background:#fee2e2}.audit-ts{white-space:nowrap;font-size:.75rem}.audit-action-badge{background:var(--surface);border-radius:4px;padding:2px 6px;font-family:monospace;font-size:.7rem}.audit-old{color:var(--red);font-size:.8rem}.audit-new{color:var(--green);font-size:.8rem}.audit-detail{color:var(--text-muted);text-overflow:ellipsis;white-space:nowrap;max-width:250px;font-size:.78rem;overflow:hidden}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}@property --tw-blur{syntax:"*";inherits:false}@property --tw-brightness{syntax:"*";inherits:false}@property --tw-contrast{syntax:"*";inherits:false}@property --tw-grayscale{syntax:"*";inherits:false}@property --tw-hue-rotate{syntax:"*";inherits:false}@property --tw-invert{syntax:"*";inherits:false}@property --tw-opacity{syntax:"*";inherits:false}@property --tw-saturate{syntax:"*";inherits:false}@property --tw-sepia{syntax:"*";inherits:false}@property --tw-drop-shadow{syntax:"*";inherits:false}@property --tw-drop-shadow-color{syntax:"*";inherits:false}@property --tw-drop-shadow-alpha{syntax:"<percentage>";inherits:false;initial-value:100%}@property --tw-drop-shadow-size{syntax:"*";inherits:false}
+</style>
+  </head>
+  <body>
+    <!-- ============================================ -->
+    <!-- TOP BAR                                      -->
+    <!-- ============================================ -->
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <div class="logo">
+          <span class="logo-icon">⚕</span>
+          <div class="logo-text">
+            <span class="logo-title" data-i18n="appTitle">Control Tower</span>
+            <span class="logo-subtitle" data-i18n="appSubtitle"
+              >ICU Respiratory Digital Twin</span
+            >
+          </div>
+        </div>
+      </div>
+      <div class="top-bar-center">
+        <div class="master-question" data-i18n="masterQuestion">
+          Are we still on track to FDA clearance — and what is at risk?
+        </div>
+      </div>
+      <div class="top-bar-right">
+        <div class="pmp-badge">
+          <span class="badge-icon">🛡</span>
+          <span class="badge-label" id="roleBadgeText" data-i18n="pmpBadge"
+            >PMP Authority</span
+          >
+        </div>
+        <div class="role-switcher" id="roleSwitcher">
+          <label class="role-label" data-i18n="roleLabel">Role:</label>
+          <select id="roleSelect" class="role-select">
+            <option value="pmp" selected data-i18n="rolePmp">PMP</option>
+            <option value="tech" data-i18n="roleTech">Technical</option>
+            <option value="business" data-i18n="roleBusiness">Business</option>
+            <option value="accounting" data-i18n="roleAccounting">
+              Accounting
+            </option>
+          </select>
+        </div>
+        <button
+          class="lang-toggle"
+          id="langToggle"
+          title="切换中文 / Switch English"
+        >
+          <span id="langLabel">EN</span>
+        </button>
+        <div class="current-month-badge">
+          <span data-i18n="currentMonth">Current</span>:
+          <strong>M+<span id="currentMonthNum">0</span></strong>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============================================ -->
+    <!-- NAVIGATION TABS                              -->
+    <!-- ============================================ -->
+    <nav class="tab-nav" id="tabNav">
+      <button class="tab-btn active" data-tab="dual-track">
+        <span class="tab-icon">📊</span>
+        <span data-i18n="tabDualTrack">Dual-Track</span>
+      </button>
+      <button class="tab-btn" data-tab="gates">
+        <span class="tab-icon">🚦</span>
+        <span data-i18n="tabGates">Gate System</span>
+      </button>
+      <button class="tab-btn" data-tab="risks">
+        <span class="tab-icon">⚠️</span>
+        <span data-i18n="tabRisks">Risk Dashboard</span>
+      </button>
+      <button class="tab-btn" data-tab="timeline">
+        <span class="tab-icon">📅</span>
+        <span data-i18n="tabTimeline">Timeline</span>
+      </button>
+      <button class="tab-btn" data-tab="regulatory">
+        <span class="tab-icon">📑</span>
+        <span data-i18n="tabRegulatory">Regulatory Tracker</span>
+      </button>
+      <button class="tab-btn" data-tab="cash-runway">
+        <span class="tab-icon">💰</span>
+        <span data-i18n="tabCashRunway">Cash / Runway</span>
+      </button>
+      <button class="tab-btn" data-tab="actions">
+        <span class="tab-icon">✅</span>
+        <span data-i18n="tabActions">Actions</span>
+      </button>
+      <button class="tab-btn" data-tab="budget">
+        <span class="tab-icon">📈</span>
+        <span data-i18n="tabBudget">Budget</span>
+      </button>
+      <button class="tab-btn" data-tab="resources">
+        <span class="tab-icon">👥</span>
+        <span data-i18n="tabResources">Resources</span>
+      </button>
+      <button class="tab-btn" data-tab="suppliers">
+        <span class="tab-icon">🏭</span>
+        <span data-i18n="tabSuppliers">Suppliers</span>
+      </button>
+      <button class="tab-btn" data-tab="audit">
+        <span class="tab-icon">📋</span>
+        <span data-i18n="tabAudit">Audit Trail</span>
+      </button>
+    </nav>
+
+    <!-- ============================================ -->
+    <!-- MAIN CONTENT AREA                            -->
+    <!-- ============================================ -->
+    <main class="dashboard-main">
+      <!-- ── STATUS SUMMARY BAR ──────────────────── -->
+      <section class="status-summary" id="statusSummary">
+        <div class="summary-card" id="summaryOverall">
+          <div class="summary-label" data-i18n="summaryOverall">
+            Overall Status
+          </div>
+          <div class="summary-value status-on-track" id="overallStatus">
+            ON TRACK
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label" data-i18n="summaryNextGate">Next Gate</div>
+          <div class="summary-value" id="nextGate">—</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label" data-i18n="summaryRedRisks">Red Risks</div>
+          <div class="summary-value risk-red" id="redRiskCount">0</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label" data-i18n="summaryPendingInputs">
+            Pending Inputs
+          </div>
+          <div class="summary-value" id="pendingInputCount">0</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label" data-i18n="summaryDaysToMilestone">
+            Days to Next Milestone
+          </div>
+          <div class="summary-value" id="daysToMilestone">—</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label" data-i18n="runwayLabel">Runway</div>
+          <div class="summary-value" id="summaryRunway">—</div>
+        </div>
+      </section>
+
+      <!-- ── ACCOUNTING NOTICE ───────────────────── -->
+      <div
+        id="accountingNotice"
+        class="accounting-notice"
+        style="display: none"
+      ></div>
+
+      <!-- ── NOTIFICATIONS BAR ───────────────────── -->
+      <section class="notif-bar" id="notifBar" style="display: none">
+        <div class="notif-header">
+          <h4 data-i18n="notifTitle">Notifications</h4>
+          <button
+            class="export-btn"
+            id="exportReportBtn"
+            data-action="exportReport"
+          >
+            <span>📄</span> <span data-i18n="exportBtn">Export Report</span>
+          </button>
+        </div>
+        <div id="notifContainer"></div>
+      </section>
+
+      <!-- ── CHANGE REQUEST QUEUE ────────────────── -->
+      <section class="cr-queue-section" id="crQueueSection">
+        <div class="panel-header">
+          <h3 data-i18n="crBadge">Change Requests</h3>
+        </div>
+        <div id="crQueueContainer"></div>
+      </section>
+
+      <!-- ── TAB: DUAL-TRACK DASHBOARD ───────────── -->
+      <section class="tab-panel active" id="panel-dual-track">
+        <div class="panel-header">
+          <h2 data-i18n="dualTrackTitle">Dual-Track Dashboard</h2>
+          <p class="panel-desc" data-i18n="dualTrackDesc">
+            Technical progress and regulatory milestones — side by side
+          </p>
+        </div>
+        <div class="dual-track-container">
+          <div class="track-column tech-column">
+            <div class="track-header">
+              <span class="track-icon">🔬</span>
+              <h3 data-i18n="techTrackTitle">Technical Track</h3>
+            </div>
+            <div class="milestone-list" id="techMilestones"></div>
+          </div>
+          <div class="center-timeline" id="centerTimeline"></div>
+          <div class="track-column reg-column">
+            <div class="track-header">
+              <span class="track-icon">📋</span>
+              <h3 data-i18n="regTrackTitle">Regulatory Track</h3>
+            </div>
+            <div class="milestone-list" id="regMilestones"></div>
+          </div>
+        </div>
+
+        <!-- Milestone Detail Modal -->
+        <div class="gate-detail-overlay" id="milestoneDetailOverlay">
+          <div class="gate-detail-modal" id="milestoneDetailModal">
+            <button class="modal-close" id="milestoneModalClose">
+              &times;
+            </button>
+            <div id="milestoneDetailContent"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── TAB: GATE SYSTEM ───────────────────── -->
+      <section class="tab-panel" id="panel-gates">
+        <div class="panel-header">
+          <h2 data-i18n="gatesTitle">Gate System</h2>
+          <p class="panel-desc" data-i18n="gatesDesc">
+            Decision checkpoints — Proceed / Need Data / Stop
+          </p>
+        </div>
+        <div class="gates-pipeline" id="gatesPipeline"></div>
+        <div class="gate-detail-overlay" id="gateDetailOverlay">
+          <div class="gate-detail-modal" id="gateDetailModal">
+            <button class="modal-close" id="gateModalClose">&times;</button>
+            <div id="gateDetailContent"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── TAB: RISK DASHBOARD ────────────────── -->
+      <section class="tab-panel" id="panel-risks">
+        <div class="panel-header">
+          <h2 data-i18n="risksTitle">Risk Dashboard</h2>
+          <p class="panel-desc" data-i18n="risksDesc">
+            ISO 14971 — Top risks, mitigation status, and residual assessment
+          </p>
+        </div>
+        <div class="risk-filters" id="riskFilters">
+          <button
+            class="filter-btn active"
+            data-filter="all"
+            data-i18n="filterAll"
+          >
+            All
+          </button>
+          <button class="filter-btn" data-filter="red">
+            <span class="dot dot-red"></span>
+            <span data-i18n="filterRed">Red</span>
+          </button>
+          <button class="filter-btn" data-filter="yellow">
+            <span class="dot dot-yellow"></span>
+            <span data-i18n="filterYellow">Yellow</span>
+          </button>
+          <button class="filter-btn" data-filter="green">
+            <span class="dot dot-green"></span>
+            <span data-i18n="filterGreen">Green</span>
+          </button>
+        </div>
+        <div class="risk-grid" id="riskGrid"></div>
+        <div class="top-risks-section">
+          <h3 data-i18n="topRisksTitle">Top 5 Risks This Week</h3>
+          <div class="top-risks-list" id="topRisksList"></div>
+        </div>
+      </section>
+
+      <!-- ── TAB: TIMELINE ──────────────────────── -->
+      <section class="tab-panel" id="panel-timeline">
+        <div class="panel-header">
+          <h2 data-i18n="timelineTitle">Timeline — Business Translation</h2>
+          <p class="panel-desc" data-i18n="timelineDesc">
+            Technical milestones translated into investor and business language
+          </p>
+        </div>
+        <div class="timeline-visual" id="timelineVisual"></div>
+      </section>
+
+      <!-- ── TAB: REGULATORY TRACKER ────────────── -->
+      <section class="tab-panel" id="panel-regulatory">
+        <div class="panel-header">
+          <h2 data-i18n="regulatoryTitle">Regulatory Standards Tracker</h2>
+          <p class="panel-desc" data-i18n="regulatoryDesc">
+            IEC 60601, ISO 10993, 21 CFR compliance matrix
+          </p>
+        </div>
+        <div class="standards-table-wrap">
+          <table class="standards-table" id="standardsTable">
+            <thead>
+              <tr>
+                <th data-i18n="colCode">Standard</th>
+                <th data-i18n="colTitle">Description</th>
+                <th data-i18n="colApplies">Applies To</th>
+                <th data-i18n="colStatus">Status</th>
+                <th data-i18n="colProgress">Progress</th>
+              </tr>
+            </thead>
+            <tbody id="standardsBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── TAB: CASH / RUNWAY ─────────────────── -->
+      <section class="tab-panel" id="panel-cash-runway">
+        <div class="panel-header">
+          <h2 data-i18n="cashRunwayTitle">Cash / Runway</h2>
+          <p class="panel-desc" data-i18n="cashRunwayDesc">
+            Financial position, burn rate, and funding milestones
+          </p>
+        </div>
+        <div class="cash-summary-cards" id="cashSummaryCards"></div>
+        <div class="api-section">
+          <h3 data-i18n="apiTitle">China Investor API Integrations</h3>
+          <p class="panel-desc" data-i18n="apiDesc">
+            Payment, banking, and currency APIs for Chinese investors
+          </p>
+          <div class="api-grid" id="apiIntegrationsContainer"></div>
+        </div>
+        <div class="cash-sections">
+          <div class="cash-section">
+            <h3 data-i18n="fundingRoundsTitle">Funding Rounds</h3>
+            <div id="fundingRoundsContainer"></div>
+          </div>
+          <div class="cash-section">
+            <h3 data-i18n="burnHistoryTitle">Burn History</h3>
+            <div id="burnHistoryContainer"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── TAB: ACTION ITEMS ──────────────────── -->
+      <section class="tab-panel" id="panel-actions">
+        <div class="panel-header">
+          <h2 data-i18n="actionsTitle">Action Items</h2>
+          <p class="panel-desc" data-i18n="actionsDesc">
+            Task board — assignable items with owners and due dates
+          </p>
+        </div>
+        <div class="action-board" id="actionBoard"></div>
+        <div class="dhf-section">
+          <h3 data-i18n="dhfTitle">DHF Document Tracker</h3>
+          <p class="panel-desc" data-i18n="dhfDesc">
+            Design History File — document status per regulatory requirement
+          </p>
+          <div class="standards-table-wrap">
+            <table class="standards-table" id="dhfTable">
+              <thead>
+                <tr>
+                  <th data-i18n="dhfCode">Code</th>
+                  <th data-i18n="dhfDocument">Document</th>
+                  <th data-i18n="dhfCategory">Category</th>
+                  <th data-i18n="dhfStatus">Status</th>
+                  <th data-i18n="dhfDue">Due</th>
+                </tr>
+              </thead>
+              <tbody id="dhfBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="capa-section">
+          <h3 data-i18n="capaTitle">CAPA Log</h3>
+          <p class="panel-desc" data-i18n="capaDesc">
+            Corrective & Preventive Actions tied to risk items
+          </p>
+          <div id="capaContainer"></div>
+        </div>
+      </section>
+
+      <!-- ── TAB: BUDGET vs ACTUAL ──────────────── -->
+      <section class="tab-panel" id="panel-budget">
+        <div class="panel-header">
+          <h2 data-i18n="budgetTitle">Budget vs. Actual</h2>
+          <p class="panel-desc" data-i18n="budgetDesc">
+            Planned spend vs. actual spend per category
+          </p>
+        </div>
+        <div class="budget-table-wrap">
+          <table class="standards-table" id="budgetTable">
+            <thead>
+              <tr>
+                <th data-i18n="budgetCategory">Category</th>
+                <th data-i18n="budgetPlanned">Planned</th>
+                <th data-i18n="budgetActual">Actual</th>
+                <th data-i18n="budgetVariance">Variance</th>
+              </tr>
+            </thead>
+            <tbody id="budgetBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── TAB: RESOURCES ─────────────────────── -->
+      <section class="tab-panel" id="panel-resources">
+        <div class="panel-header">
+          <h2 data-i18n="resourceTitle">Resource Allocation</h2>
+          <p class="panel-desc" data-i18n="resourceDesc">
+            Team assignments and capacity utilization
+          </p>
+        </div>
+        <div class="resource-grid" id="resourceGrid"></div>
+      </section>
+
+      <!-- ── TAB: SUPPLIERS ─────────────────────── -->
+      <section class="tab-panel" id="panel-suppliers">
+        <div class="panel-header">
+          <h2 data-i18n="supplierTitle">Supplier Tracker</h2>
+          <p class="panel-desc" data-i18n="supplierDesc">
+            Hardware components — lead times, PO status, milestones
+          </p>
+        </div>
+        <div class="standards-table-wrap">
+          <table class="standards-table" id="supplierTable">
+            <thead>
+              <tr>
+                <th data-i18n="supplierName">Supplier</th>
+                <th data-i18n="supplierComponent">Component</th>
+                <th data-i18n="colStatus">Status</th>
+                <th data-i18n="supplierLead">Lead Time</th>
+                <th data-i18n="supplierPO">PO Status</th>
+                <th data-i18n="supplierMilestone">Milestone</th>
+              </tr>
+            </thead>
+            <tbody id="supplierBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── TAB: AUDIT TRAIL ───────────────────── -->
+      <section class="tab-panel" id="panel-audit">
+        <div class="panel-header">
+          <h2 data-i18n="auditTitle">Audit Trail</h2>
+          <p class="panel-desc" data-i18n="auditDesc">
+            Chronological log of all dashboard actions for DHF traceability
+          </p>
+        </div>
+        <div class="standards-table-wrap">
+          <table class="standards-table" id="auditTable">
+            <thead>
+              <tr>
+                <th data-i18n="auditTimestamp">Timestamp</th>
+                <th data-i18n="auditUser">User</th>
+                <th data-i18n="auditAction">Action</th>
+                <th data-i18n="auditTarget">Target</th>
+                <th data-i18n="auditOld">Old</th>
+                <th data-i18n="auditNew">New</th>
+                <th data-i18n="auditDetail">Detail</th>
+              </tr>
+            </thead>
+            <tbody id="auditBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── PMP INPUT PANEL (slide-in) ─────────── -->
+      <div class="input-panel-overlay" id="inputPanelOverlay">
+        <div class="input-panel" id="inputPanel">
+          <button class="panel-close" id="inputPanelClose">&times;</button>
+          <h3 data-i18n="inputPanelTitle">Stakeholder Input</h3>
+          <div id="inputPanelContent"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ============================================ -->
+    <!-- FLOATING ACTION — VIEW INPUTS               -->
+    <!-- ============================================ -->
+    <button class="fab" id="fabInputs" title="View Stakeholder Inputs">
+      <span class="fab-icon">💬</span>
+      <span class="fab-badge" id="fabBadge">0</span>
+    </button>
+
+  </body>
+</html>
