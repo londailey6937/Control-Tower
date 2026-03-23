@@ -1001,9 +1001,87 @@ def build_english():
         "    Responsibilities: Investor relations (Asia), business strategy,\n"
         "    operations management")
 
-    # 28. Glossary
+    # 28. Inventor Q&A Message Board
     pdf.add_page()
-    pdf.sec(28, "Glossary of Key Terms")
+    pdf.sec(28, "Tab 14: Inventor Q&A Message Board")
+    pdf.txt(
+        "The Inventor Q&A Message Board provides bi-directional, threaded messaging "
+        "between the PMP and the Inventor. It enables structured technical dialogue "
+        "organized around 30 pre-defined questions across 8 topic sections, with "
+        "messages stored locally in each user's browser.")
+
+    pdf.sub("28.1 Bi-Directional Communication")
+    pdf.txt(
+        "The board supports true two-way conversation:\n\n"
+        "  Role Picker    -- Toggle 'Posting as' between PMP and Inventor\n"
+        "  Message Alignment -- Your messages align RIGHT, the other party's LEFT\n"
+        "  Bubble Styling  -- Self messages have a bottom-right corner notch;\n"
+        "                     incoming messages have a bottom-left corner notch\n"
+        "  Live Re-render  -- Switching roles instantly flips alignment, read\n"
+        "                     receipts, and the email target for all threads")
+
+    pdf.sub("28.2 Threaded Questions (Q1-Q30)")
+    pdf.txt(
+        "Messages are organized under 30 questions in 8 sections:\n\n"
+        "  Section 1: Device Architecture & Design Decisions (Q1-Q6)\n"
+        "  Section 2: Regulatory & Standards Strategy (Q7-Q10)\n"
+        "  Section 3: Clinical & Human Factors (Q11-Q13)\n"
+        "  Section 4: Risk Management & Safety (Q14-Q17)\n"
+        "  Section 5: Manufacturing & Supply Chain (Q18-Q20)\n"
+        "  Section 6: Software & Algorithms (Q21-Q23)\n"
+        "  Section 7: Project Management & Timeline (Q24-Q26)\n"
+        "  Section 8: Inventor Relationship & Ongoing Role (Q27-Q30)\n\n"
+        "Each question shows a message count, unread indicator, and a collapse/expand "
+        "toggle. Context notes explain why each question matters, and follow-up "
+        "prompts are provided where relevant.")
+
+    pdf.sub("28.3 Read Receipts & Unread Indicators")
+    pdf.txt(
+        "Every message tracks who has read it:\n\n"
+        "  Sent messages   -- Show a single check (Unread) or double check (Read)\n"
+        "                     indicating whether the other party has seen it\n"
+        "  Received messages -- Highlighted with a blue left border when unread\n"
+        "  Mark as Read     -- Click the envelope icon to mark a message as read\n"
+        "  Tab Badge        -- A red count badge on the Q&A tab shows total\n"
+        "                     unread messages for the current role")
+
+    pdf.sub("28.4 Cross-Tab Sync")
+    pdf.txt(
+        "Open two browser windows -- one as PMP, one as Inventor. Messages sent in "
+        "one window appear in the other automatically via browser StorageEvent sync. "
+        "When a new message arrives from the other party, a toast notification slides "
+        "up showing the sender, question number, and a message preview.")
+
+    pdf.sub("28.5 Email Notification")
+    pdf.txt(
+        "Click the Settings (gear) icon to configure PMP and Inventor email addresses. "
+        "When configured, sending a message triggers a notification email to the "
+        "recipient. The email subject line identifies who posted and the question "
+        "number (e.g. '[Control Tower] New Q&A post from PMP on Q5'). The actual "
+        "message body is NOT included in the email -- the recipient is directed to "
+        "open the Control Tower to read the full post. This keeps sensitive content "
+        "within the dashboard and encourages direct engagement with the board.")
+
+    pdf.sub("28.6 Export & Archive")
+    pdf.txt(
+        "  Export Thread  -- Downloads all active messages as a .txt file organized\n"
+        "                    by section and question\n"
+        "  Archive Thread -- Exports a single question's thread to a file, saves it\n"
+        "                    to archive storage, and clears it from the active board\n"
+        "  View Archive   -- Browse previously archived threads with message previews\n"
+        "  Delete Archive -- Permanently remove an archived thread entry")
+
+    pdf.sub("28.7 Data Storage")
+    pdf.txt(
+        "All messages are stored in browser localStorage under the key "
+        "'ctower_qa_messages'. Settings are stored under 'ctower_qa_settings'. "
+        "Archives are stored under 'ctower_qa_archive'. Data persists across "
+        "sessions but is local to each browser -- clearing browser data will "
+        "remove all messages.")
+
+    # 29. Glossary
+    pdf.add_page()
+    pdf.sec(29, "Glossary of Key Terms")
     pdf.ln(2)
     terms = [
         ("M+N", "Month notation. M+0 = project start (March 2026). M+6 = six months later (Sep 2026). Used throughout for all scheduling."),
@@ -1994,9 +2072,79 @@ def build_chinese():
         "  Lawrence Lui -- CEO\uff0cB\u516c\u53f8\n"
         "    \u804c\u8d23\uff1a\u6295\u8d44\u8005\u5173\u7cfb\uff08\u4e9a\u6d32\uff09\u3001\u5546\u4e1a\u6218\u7565\u3001\u8fd0\u8425\u7ba1\u7406")
 
-    # 28 关键术语表
+    # 28. 发明人问答留言板
     pdf.add_page()
-    pdf.sec(28, "\u5173\u952e\u672f\u8bed\u8868")
+    pdf.sec(28, "\u9009\u9879\u530114\uff1a\u53d1\u660e\u4eba\u95ee\u7b54\u7559\u8a00\u677f")
+    pdf.txt(
+        "\u53d1\u660e\u4eba\u95ee\u7b54\u7559\u8a00\u677f\u63d0\u4f9b\u9879\u76ee\u7ecf\u7406(PMP)\u4e0e\u53d1\u660e\u4eba\u4e4b\u95f4\u7684"
+        "\u53cc\u5411\u7ebf\u7a0b\u5f0f\u6d88\u606f\u529f\u80fd\u3002\u5b83\u652f\u6301\u56f4\u7ed530\u4e2a\u9884\u5b9a\u4e49"
+        "\u95ee\u9898\uff088\u4e2a\u4e3b\u9898\u90e8\u5206\uff09\u7684\u7ed3\u6784\u5316\u6280\u672f\u5bf9\u8bdd\uff0c"
+        "\u6d88\u606f\u5b58\u50a8\u5728\u6bcf\u4e2a\u7528\u6237\u7684\u6d4f\u89c8\u5668\u672c\u5730\u3002")
+
+    pdf.sub("28.1 \u53cc\u5411\u901a\u4fe1")
+    pdf.txt(
+        "\u7559\u8a00\u677f\u652f\u6301\u771f\u6b63\u7684\u53cc\u5411\u5bf9\u8bdd\uff1a\n\n"
+        "  \u89d2\u8272\u9009\u62e9\u5668  -- \u5728PMP\u548c\u53d1\u660e\u4eba\u4e4b\u95f4\u5207\u6362\u201c\u53d1\u5e03\u8eab\u4efd\u201d\n"
+        "  \u6d88\u606f\u5bf9\u9f50    -- \u60a8\u7684\u6d88\u606f\u9760\u53f3\u5bf9\u9f50\uff0c\u5bf9\u65b9\u6d88\u606f\u9760\u5de6\u5bf9\u9f50\n"
+        "  \u6c14\u6ce1\u6837\u5f0f    -- \u81ea\u5df1\u7684\u6d88\u606f\u53f3\u4e0b\u89d2\u5706\u89d2\uff0c\u5bf9\u65b9\u6d88\u606f\u5de6\u4e0b\u89d2\u5706\u89d2\n"
+        "  \u5b9e\u65f6\u91cd\u65b0\u6e32\u67d3 -- \u5207\u6362\u89d2\u8272\u540e\u7acb\u5373\u7ffb\u8f6c\u5bf9\u9f50\u3001\u5df2\u8bfb\u56de\u6267\u548c\u90ae\u4ef6\u76ee\u6807")
+
+    pdf.sub("28.2 \u7ebf\u7a0b\u5f0f\u95ee\u9898\uff08Q1-Q30\uff09")
+    pdf.txt(
+        "\u6d88\u606f\u630930\u4e2a\u95ee\u9898\u5206\u5e038\u4e2a\u90e8\u5206\u7ec4\u7ec7\uff1a\n\n"
+        "  \u7b2c1\u90e8\u5206\uff1a\u8bbe\u5907\u67b6\u6784\u4e0e\u8bbe\u8ba1\u51b3\u7b56\uff08Q1-Q6\uff09\n"
+        "  \u7b2c2\u90e8\u5206\uff1a\u6cd5\u89c4\u4e0e\u6807\u51c6\u7b56\u7565\uff08Q7-Q10\uff09\n"
+        "  \u7b2c3\u90e8\u5206\uff1a\u4e34\u5e8a\u4e0e\u4eba\u56e0\u5de5\u7a0b\uff08Q11-Q13\uff09\n"
+        "  \u7b2c4\u90e8\u5206\uff1a\u98ce\u9669\u7ba1\u7406\u4e0e\u5b89\u5168\uff08Q14-Q17\uff09\n"
+        "  \u7b2c5\u90e8\u5206\uff1a\u5236\u9020\u4e0e\u4f9b\u5e94\u94fe\uff08Q18-Q20\uff09\n"
+        "  \u7b2c6\u90e8\u5206\uff1a\u8f6f\u4ef6\u4e0e\u7b97\u6cd5\uff08Q21-Q23\uff09\n"
+        "  \u7b2c7\u90e8\u5206\uff1a\u9879\u76ee\u7ba1\u7406\u4e0e\u65f6\u95f4\u8868\uff08Q24-Q26\uff09\n"
+        "  \u7b2c8\u90e8\u5206\uff1a\u53d1\u660e\u4eba\u5173\u7cfb\u4e0e\u6301\u7eed\u89d2\u8272\uff08Q27-Q30\uff09\n\n"
+        "\u6bcf\u4e2a\u95ee\u9898\u663e\u793a\u6d88\u606f\u8ba1\u6570\u3001\u672a\u8bfb\u6307\u793a\u5668\u548c\u6298\u53e0/\u5c55\u5f00\u5207\u6362\u3002"
+        "\u80cc\u666f\u6ce8\u91ca\u89e3\u91ca\u6bcf\u4e2a\u95ee\u9898\u7684\u91cd\u8981\u6027\uff0c\u5e76\u5728\u76f8\u5173\u5904\u63d0\u4f9b\u540e\u7eed\u63d0\u793a\u3002")
+
+    pdf.sub("28.3 \u5df2\u8bfb\u56de\u6267\u4e0e\u672a\u8bfb\u6307\u793a\u5668")
+    pdf.txt(
+        "\u6bcf\u6761\u6d88\u606f\u90fd\u8ddf\u8e2a\u8c01\u5df2\u8bfb\uff1a\n\n"
+        "  \u5df2\u53d1\u6d88\u606f -- \u663e\u793a\u5355\u52fe\uff08\u672a\u8bfb\uff09\u6216\u53cc\u52fe\uff08\u5df2\u8bfb\uff09\n"
+        "  \u6536\u5230\u7684\u6d88\u606f -- \u672a\u8bfb\u65f6\u5de6\u4fa7\u663e\u793a\u84dd\u8272\u8fb9\u6846\u9ad8\u4eae\n"
+        "  \u6807\u8bb0\u5df2\u8bfb   -- \u70b9\u51fb\u4fe1\u5c01\u56fe\u6807\u6807\u8bb0\u4e3a\u5df2\u8bfb\n"
+        "  \u6807\u7b7e\u5fbd\u7ae0   -- Q&A\u9009\u9879\u5361\u4e0a\u7684\u7ea2\u8272\u8ba1\u6570\u5fbd\u7ae0\u663e\u793a\u5f53\u524d\u89d2\u8272\u7684\u672a\u8bfb\u603b\u6570")
+
+    pdf.sub("28.4 \u8de8\u9009\u9879\u5361\u540c\u6b65")
+    pdf.txt(
+        "\u6253\u5f00\u4e24\u4e2a\u6d4f\u89c8\u5668\u7a97\u53e3 -- \u4e00\u4e2a\u4f5cPMP\uff0c\u4e00\u4e2a\u4f5c\u53d1\u660e\u4eba\u3002"
+        "\u5728\u4e00\u4e2a\u7a97\u53e3\u53d1\u9001\u7684\u6d88\u606f\u4f1a\u901a\u8fc7\u6d4f\u89c8\u5668StorageEvent\u540c\u6b65\u81ea\u52a8\u5728\u53e6\u4e00\u4e2a\u7a97\u53e3\u663e\u793a\u3002"
+        "\u5f53\u5bf9\u65b9\u6709\u65b0\u6d88\u606f\u65f6\uff0c\u4f1a\u5f39\u51fa\u901a\u77e5\u63d0\u793a\uff0c\u663e\u793a\u53d1\u9001\u8005\u3001\u95ee\u9898\u7f16\u53f7\u548c\u6d88\u606f\u9884\u89c8\u3002")
+
+    pdf.sub("28.5 \u90ae\u4ef6\u901a\u77e5")
+    pdf.txt(
+        "\u70b9\u51fb\u8bbe\u7f6e\uff08\u9f7f\u8f6e\uff09\u56fe\u6807\u914d\u7f6ePMP\u548c\u53d1\u660e\u4eba\u90ae\u7bb1\u3002"
+        "\u914d\u7f6e\u540e\uff0c\u53d1\u9001\u6d88\u606f\u4f1a\u89e6\u53d1\u5411\u6536\u4ef6\u4eba\u7684\u901a\u77e5\u90ae\u4ef6\u3002"
+        "\u90ae\u4ef6\u4e3b\u9898\u884c\u6807\u8bc6\u53d1\u5e03\u8005\u548c\u95ee\u9898\u7f16\u53f7"
+        "\uff08\u4f8b\u5982\u2018[Control Tower] PMP\u5728Q5\u53d1\u5e03\u4e86\u65b0\u6d88\u606f\u2019\uff09\u3002"
+        "\u5b9e\u9645\u6d88\u606f\u5185\u5bb9\u4e0d\u4f1a\u5305\u542b\u5728\u90ae\u4ef6\u4e2d -- "
+        "\u6536\u4ef6\u4eba\u88ab\u5f15\u5bfc\u6253\u5f00\u63a7\u5236\u5854\u67e5\u770b\u5b8c\u6574\u5e16\u5b50\u3002"
+        "\u8fd9\u786e\u4fdd\u654f\u611f\u5185\u5bb9\u59cb\u7ec8\u4fdd\u7559\u5728\u4eea\u8868\u76d8\u5185\u3002")
+
+    pdf.sub("28.6 \u5bfc\u51fa\u4e0e\u5f52\u6863")
+    pdf.txt(
+        "  \u5bfc\u51fa\u7ebf\u7a0b  -- \u5c06\u6240\u6709\u6d3b\u52a8\u6d88\u606f\u4e0b\u8f7d\u4e3a.txt\u6587\u4ef6\n"
+        "  \u5f52\u6863\u7ebf\u7a0b  -- \u5c06\u5355\u4e2a\u95ee\u9898\u7684\u7ebf\u7a0b\u5bfc\u51fa\u5e76\u4ece\u6d3b\u52a8\u677f\u6e05\u9664\n"
+        "  \u67e5\u770b\u5f52\u6863  -- \u6d4f\u89c8\u5df2\u5f52\u6863\u7684\u7ebf\u7a0b\u548c\u6d88\u606f\u9884\u89c8\n"
+        "  \u5220\u9664\u5f52\u6863  -- \u6c38\u4e45\u5220\u9664\u5df2\u5f52\u6863\u7684\u7ebf\u7a0b\u6761\u76ee")
+
+    pdf.sub("28.7 \u6570\u636e\u5b58\u50a8")
+    pdf.txt(
+        "\u6240\u6709\u6d88\u606f\u5b58\u50a8\u5728\u6d4f\u89c8\u5668localStorage\u4e2d\uff08\u952e\u540d\u2018ctower_qa_messages\u2019\uff09\u3002"
+        "\u8bbe\u7f6e\u5b58\u50a8\u5728\u2018ctower_qa_settings\u2019\u3002"
+        "\u5f52\u6863\u5b58\u50a8\u5728\u2018ctower_qa_archive\u2019\u3002"
+        "\u6570\u636e\u5728\u4f1a\u8bdd\u95f4\u6301\u4e45\u5316\uff0c\u4f46\u4ec5\u9650\u672c\u5730\u6d4f\u89c8\u5668 -- "
+        "\u6e05\u9664\u6d4f\u89c8\u5668\u6570\u636e\u5c06\u5220\u9664\u6240\u6709\u6d88\u606f\u3002")
+
+    # 29 关键术语表
+    pdf.add_page()
+    pdf.sec(29, "\u5173\u952e\u672f\u8bed\u8868")
     pdf.ln(2)
     terms = [
         ("M+N", "\u6708\u4efd\u6807\u8bb0\u3002M+0 = \u9879\u76ee\u542f\u52a8\uff082026\u5e743\u6708\uff09\u3002M+6 = \u542f\u52a8\u540e6\u4e2a\u6708\u3002\u8d2f\u7a7f\u6240\u6709\u8ba1\u5212\u4f7f\u7528\u3002"),

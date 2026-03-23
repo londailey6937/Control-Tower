@@ -427,6 +427,7 @@ function milestoneCard(m: Milestone): string {
   return `
     <div class="milestone-card ${statusClass}" data-action="openMilestone" data-track="${trackKey}" data-mid="${m.id}" style="cursor:pointer;">
       <div class="ms-header">
+        <span class="ms-id" style="font-weight:700;color:#6366f1;margin-right:4px;">${m.id}</span>
         <span class="ms-title">${localizedText(m.title)}</span>
         <span class="ms-month">M+${m.month}</span>
       </div>
@@ -2660,6 +2661,7 @@ function markQaRead(msgId: string): void {
     saveQaMessages(msgs);
     // Re-render the thread containing this message
     renderQaThread(msg.qNum);
+    updateQaUnreadBadge();
   }
 }
 
@@ -2681,16 +2683,17 @@ function sendQaMessage(qNum: number): void {
   msgs.push(msg);
   saveQaMessages(msgs);
 
-  // Open mailto: if recipient email is configured
+  // Open mailto: if recipient email is configured — header only, no body text
   const settings = loadQaSettings();
   const recipientEmail =
     qaPostingRole === "pmp" ? settings.inventorEmail : settings.pmpEmail;
   if (recipientEmail) {
+    const senderLabel = qaPostingRole === "pmp" ? "PMP" : "Inventor";
     const subject = encodeURIComponent(
-      `[Q&A] Q${qNum} — ICU Respiratory Digital Twin`,
+      `[Control Tower] New Q&A post from ${senderLabel} on Q${qNum}`,
     );
     const body = encodeURIComponent(
-      `${qaPostingRole === "pmp" ? "PMP" : "Inventor"} posted on Q${qNum}:\n\n${msg.text}\n\n—\nSent from Control Tower Q&A`,
+      `${senderLabel} posted a new message on Q${qNum} — ICU Respiratory Digital Twin.\n\nPlease open the Control Tower to view the full message:\nInventor Q&A Message Board → Q${qNum}\n\n—\nControl Tower Notification`,
     );
     window.open(
       `mailto:${encodeURIComponent(recipientEmail)}?subject=${subject}&body=${body}`,
@@ -2701,6 +2704,7 @@ function sendQaMessage(qNum: number): void {
   input.value = "";
   renderQaThread(qNum);
   showQaSaveStatus();
+  updateQaUnreadBadge();
 }
 
 function showQaSaveStatus(): void {
@@ -2741,14 +2745,16 @@ function renderQaThread(qNum: number): void {
 
   container.innerHTML = msgs
     .map((m) => {
-      const isSelf = m.sender === "pmp";
+      const isSelf = m.sender === qaPostingRole;
       const senderLabel = m.sender === "pmp" ? t("qaPmp") : t("qaInventor");
       const icon = m.sender === "pmp" ? "\ud83c\udfaf" : "\ud83d\udd2c";
       const isReadByViewer = m.readBy?.includes(qaPostingRole) ?? false;
+      const otherRole: "pmp" | "inventor" =
+        qaPostingRole === "pmp" ? "inventor" : "pmp";
       const isReadByRecipient =
-        m.sender === "pmp"
-          ? (m.readBy?.includes("inventor") ?? false)
-          : (m.readBy?.includes("pmp") ?? false);
+        m.sender === qaPostingRole
+          ? (m.readBy?.includes(otherRole) ?? false)
+          : false;
       const readIndicator =
         m.sender === qaPostingRole
           ? isReadByRecipient
@@ -2762,7 +2768,7 @@ function renderQaThread(qNum: number): void {
           ? `<button class="qa-mark-read-btn" onclick="window._markQaRead('${m.id}')" title="${t("qaMarkRead")}">&#x2709;</button>`
           : "";
       return `
-      <div class="qa-msg ${isSelf ? "qa-msg-pmp" : "qa-msg-inventor"}${unreadClass}">
+      <div class="qa-msg ${isSelf ? "qa-msg-self" : "qa-msg-other"} ${m.sender === "pmp" ? "qa-msg-pmp" : "qa-msg-inventor"}${unreadClass}">
         <div class="qa-msg-header">
           <span class="qa-msg-sender">${icon} ${senderLabel}</span>
           <span class="qa-msg-meta">${readIndicator}${markReadBtn}<span class="qa-msg-time">${formatMsgTime(m.timestamp)}</span></span>
@@ -2893,6 +2899,9 @@ function renderQaSheet(): void {
     sec.questions.forEach((q) => renderQaThread(q.num)),
   );
 
+  // Update unread badge on tab
+  updateQaUnreadBadge();
+
   // Wire export button
   const exportBtn = document.getElementById("qaExportBtn");
   if (exportBtn) {
@@ -2929,6 +2938,31 @@ function renderQaSheet(): void {
         .querySelectorAll(".qa-role-btn")
         .forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
+      // Re-render all threads so alignment, read receipts, and compose target flip
+      const qaSettings = loadQaSettings();
+      const emailTarget =
+        qaPostingRole === "pmp"
+          ? qaSettings.inventorEmail
+          : qaSettings.pmpEmail;
+      QA_SECTIONS.forEach((sec) =>
+        sec.questions.forEach((q) => {
+          renderQaThread(q.num);
+          // Update email target indicator
+          const emailEl = document.querySelector(
+            `#qa-wrap-${q.num} .qa-email-target`,
+          );
+          if (emailEl) {
+            if (emailTarget) {
+              emailEl.textContent = `📧 ${emailTarget}`;
+              emailEl.classList.remove("qa-no-email");
+            } else {
+              emailEl.textContent = "📧 —";
+              emailEl.classList.add("qa-no-email");
+            }
+          }
+        }),
+      );
+      updateQaUnreadBadge();
     });
   }
 }
@@ -3053,6 +3087,94 @@ function deleteQaArchive(idx: number): void {
   viewQaArchive();
 }
 
+// ── Unread badge on Inventor Q&A tab button ──────────────
+function updateQaUnreadBadge(): void {
+  const tabBtn = document.querySelector('.tab-btn[data-tab="qa-sheet"]');
+  if (!tabBtn) return;
+  const msgs = loadQaMessages();
+  const unread = msgs.filter(
+    (m) => m.sender !== qaPostingRole && !m.readBy?.includes(qaPostingRole),
+  ).length;
+  let badge = tabBtn.querySelector(".qa-tab-badge") as HTMLElement | null;
+  if (unread > 0) {
+    if (!badge) {
+      badge = document.createElement("span");
+      badge.className = "qa-tab-badge";
+      tabBtn.appendChild(badge);
+    }
+    badge.textContent = String(unread);
+  } else if (badge) {
+    badge.remove();
+  }
+}
+
+// ── Cross-tab sync via StorageEvent ──────────────────────
+window.addEventListener("storage", (e: StorageEvent) => {
+  if (e.key !== QA_STORAGE_KEY) return;
+  // Another tab/window modified messages — re-render and notify
+  const panel = document.getElementById("panel-qa-sheet");
+  if (
+    panel &&
+    !panel.classList.contains("hidden") &&
+    panel.style.display !== "none"
+  ) {
+    QA_SECTIONS.forEach((sec) =>
+      sec.questions.forEach((q) => renderQaThread(q.num)),
+    );
+  }
+  updateQaUnreadBadge();
+  // Show toast notification for new messages
+  const newMsgs: QAMessage[] = e.newValue ? JSON.parse(e.newValue) : [];
+  const oldMsgs: QAMessage[] = e.oldValue ? JSON.parse(e.oldValue) : [];
+  if (newMsgs.length > oldMsgs.length) {
+    const latest = newMsgs[newMsgs.length - 1];
+    if (latest.sender !== qaPostingRole) {
+      showQaNotification(latest);
+    }
+  }
+});
+
+// ── Toast notification for incoming messages ─────────────
+function showQaNotification(msg: QAMessage): void {
+  const senderLabel = msg.sender === "pmp" ? t("qaPmp") : t("qaInventor");
+  const icon = msg.sender === "pmp" ? "\ud83c\udfaf" : "\ud83d\udd2c";
+  const preview = msg.text.length > 60 ? msg.text.slice(0, 60) + "…" : msg.text;
+
+  const toast = document.createElement("div");
+  toast.className = "qa-toast";
+  toast.innerHTML = `
+    <div class="qa-toast-header">${icon} ${senderLabel} — Q${msg.qNum}</div>
+    <div class="qa-toast-body">${preview.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+  `;
+  document.body.appendChild(toast);
+  // Trigger animation
+  requestAnimationFrame(() => toast.classList.add("qa-toast-show"));
+  setTimeout(() => {
+    toast.classList.remove("qa-toast-show");
+    toast.addEventListener("transitionend", () => toast.remove());
+  }, 4000);
+}
+
+// ── Auto-mark messages read when thread is visible ──────
+function autoMarkVisibleAsRead(): void {
+  const msgs = loadQaMessages();
+  let changed = false;
+  msgs.forEach((m) => {
+    if (m.sender !== qaPostingRole && !m.readBy?.includes(qaPostingRole)) {
+      const threadEl = document.getElementById(`qa-thread-${m.qNum}`);
+      if (threadEl && threadEl.offsetParent !== null) {
+        if (!m.readBy) m.readBy = [];
+        m.readBy.push(qaPostingRole);
+        changed = true;
+      }
+    }
+  });
+  if (changed) {
+    saveQaMessages(msgs);
+    updateQaUnreadBadge();
+  }
+}
+
 // Expose Q&A functions globally
 (window as any)._sendQaMessage = sendQaMessage;
 (window as any)._exportQaThread = exportQaThread;
@@ -3063,6 +3185,7 @@ function deleteQaArchive(idx: number): void {
 (window as any)._viewQaArchive = viewQaArchive;
 (window as any)._closeQaArchive = closeQaArchive;
 (window as any)._deleteQaArchive = deleteQaArchive;
+(window as any)._autoMarkVisibleAsRead = autoMarkVisibleAsRead;
 
 // ══════════════════════════════════════════════════
 // AUDIT TRAIL HELPER

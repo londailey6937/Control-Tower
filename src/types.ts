@@ -363,6 +363,7 @@ declare global {
     _viewQaArchive: () => void;
     _closeQaArchive: () => void;
     _deleteQaArchive: (idx: number) => void;
+    _autoMarkVisibleAsRead: () => void;
     _logStakeholderInput: () => void;
   }
 }
