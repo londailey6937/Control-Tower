@@ -209,7 +209,9 @@ export type AuditAction =
   | "resource-change"
   | "supplier-status"
   | "cash-field"
-  | "doc-status";
+  | "doc-status"
+  | "api-remove"
+  | "api-restore";
 
 export interface AuditEntry {
   id: string;
@@ -327,6 +329,8 @@ declare global {
     _editCashField: (field: "cashOnHand" | "monthlyBurn") => void;
     _addFundingRound: () => void;
     _toggleFundingStatus: (roundId: string) => void;
+    _removeApiIntegration: (apiKey: string) => void;
+    _restoreApiIntegrations: () => void;
     _submitChangeRequest: (
       type: string,
       targetId: string,

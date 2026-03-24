@@ -519,7 +519,12 @@ def build_english():
         "  - Evidence/Reference (optional) -- Link or document reference\n"
         "  - Attached Documents (optional) -- File uploads stored locally\n\n"
         "The request is then queued for PMP review. The PMP can Approve (applies the change) "
-        "or Reject (with a note explaining why).")
+        "or Reject (with a note explaining why).\n\n"
+        "DIRECT EDIT PRIVILEGES:\n"
+        "Business and Technology roles also have direct edit access (no CR required) for:\n"
+        "  - Cash on Hand and Monthly Burn fields in the Cash / Runway tab\n"
+        "  - Funding round status cycling (Pipeline / Committed / Received)\n"
+        "  - Removing Payment & Banking API integrations they do not use (with Restore option)")
 
     pdf.sub("13.4 Accounting Role")
     pdf.txt(
@@ -626,6 +631,16 @@ def build_english():
         "Each card also shows the documentation source for developer reference. "
         "These APIs are particularly relevant for investors based in mainland China "
         "who need to transfer funds cross-border, track payments, and manage currency conversion.")
+
+    pdf.sub("15.3 Removing & Restoring Integrations")
+    pdf.txt(
+        "PMP, Business, and Technology roles can remove API integration cards they do not need. "
+        "Each card displays a close button (X) in the top-right corner. Clicking it shows a "
+        "confirmation prompt; once confirmed, the card is hidden and the removal is logged in the "
+        "Audit Trail.\n\n"
+        "If any integrations have been removed, a 'Restore Removed Integrations' button appears "
+        "at the bottom of the panel. Clicking it brings back all previously hidden cards. "
+        "Removed integrations are remembered across browser sessions via localStorage.")
 
     # 16. Action Items / Task Board
     pdf.add_page()
@@ -911,6 +926,13 @@ def build_english():
         "These APIs support the US investment pipeline managed by Lon Dailey (Investor Relations, "
         "N. America). They enable automated financial tracking, investor reporting, and regulatory "
         "compliance for US-based fundraising activities.")
+
+    pdf.sub("25.2 Removing & Restoring Integrations")
+    pdf.txt(
+        "PMP, Business, and Technology roles can remove API cards they do not need by clicking "
+        "the close button (X) on any card. Removed cards can be restored at any time using the "
+        "'Restore Removed Integrations' button that appears when any cards have been removed.\n\n"
+        "Removals persist across sessions via localStorage and are recorded in the Audit Trail.")
 
     # 26. US Investment & Investor Relations Tab
     pdf.add_page()
@@ -1647,7 +1669,12 @@ def build_chinese():
         "  - \u7406\u7531\uff08\u5fc5\u586b\uff09" + EM + " \u4e3a\u4ec0\u4e48\u9700\u8981\u8fd9\u4e2a\u53d8\u66f4\n"
         "  - \u8bc1\u636e/\u53c2\u8003\uff08\u53ef\u9009\uff09" + EM + " \u94fe\u63a5\u6216\u6587\u6863\u53c2\u8003\n"
         "  - \u9644\u4ef6\u6587\u6863\uff08\u53ef\u9009\uff09" + EM + " \u672c\u5730\u5b58\u50a8\u7684\u6587\u4ef6\u4e0a\u4f20\n\n"
-        "\u8bf7\u6c42\u5c06\u6392\u961f\u7b49\u5f85PMP\u5ba1\u6838\u3002PMP\u53ef\u4ee5\u6279\u51c6\uff08\u5e94\u7528\u53d8\u66f4\uff09\u6216\u62d2\u7edd\uff08\u9644\u5e26\u8bf4\u660e\uff09\u3002")
+        "\u8bf7\u6c42\u5c06\u6392\u961f\u7b49\u5f85PMP\u5ba1\u6838\u3002PMP\u53ef\u4ee5\u6279\u51c6\uff08\u5e94\u7528\u53d8\u66f4\uff09\u6216\u62d2\u7edd\uff08\u9644\u5e26\u8bf4\u660e\uff09\u3002\n\n"
+        "\u76f4\u63a5\u7f16\u8f91\u6743\u9650\uff1a\n"
+        "\u5546\u4e1a\u548c\u6280\u672f\u89d2\u8272\u8fd8\u53ef\u4ee5\u76f4\u63a5\u7f16\u8f91\uff08\u65e0\u9700CR\uff09\uff1a\n"
+        "  - \u8d44\u91d1/\u8dd1\u9053\u4e2d\u7684\u73b0\u91d1\u4f59\u989d\u548c\u6708\u5ea6\u71c3\u70e7\u7387\n"
+        "  - \u878d\u8d44\u8f6e\u72b6\u6001\u5207\u6362\uff08\u7ba1\u9053/\u5df2\u627f\u8bfa/\u5df2\u6536\u5230\uff09\n"
+        "  - \u79fb\u9664\u4e0d\u4f7f\u7528\u7684\u652f\u4ed8\u4e0e\u94f6\u884cAPI\u96c6\u6210\uff08\u53ef\u6062\u590d\uff09")
 
     pdf.sub("13.4 \u8d22\u52a1\u4f1a\u8ba1\u89d2\u8272")
     pdf.txt(
@@ -1745,6 +1772,15 @@ def build_chinese():
         "\u6bcf\u5f20\u5361\u7247\u8fd8\u663e\u793a\u5f00\u53d1\u8005\u53c2\u8003\u6587\u6863\u6765\u6e90\u3002"
         "\u8fd9\u4e9bAPI\u5bf9\u4e8e\u9700\u8981\u8de8\u5883\u8f6c\u8d26\u3001\u8ddf\u8e2a\u4ed8\u6b3e\u548c\u7ba1\u7406\u8d27\u5e01\u5151\u6362\u7684"
         "\u4e2d\u56fd\u5927\u9646\u6295\u8d44\u8005\u5c24\u5176\u91cd\u8981\u3002")
+
+    pdf.sub("15.3 \u79fb\u9664\u548c\u6062\u590dAPI\u96c6\u6210")
+    pdf.txt(
+        "PMP\u3001\u5546\u4e1a\u548c\u6280\u672f\u89d2\u8272\u53ef\u4ee5\u79fb\u9664\u4e0d\u9700\u8981\u7684API\u96c6\u6210\u5361\u7247\u3002"
+        "\u6bcf\u5f20\u5361\u7247\u53f3\u4e0a\u89d2\u663e\u793a\u5173\u95ed\u6309\u94ae(\u2715)\u3002\u70b9\u51fb\u540e\u663e\u793a\u786e\u8ba4\u63d0\u793a\uff0c"
+        "\u786e\u8ba4\u540e\u5361\u7247\u88ab\u9690\u85cf\uff0c\u64cd\u4f5c\u8bb0\u5f55\u5728\u5ba1\u8ba1\u8ffd\u8e2a\u4e2d\u3002\n\n"
+        "\u5982\u6709\u96c6\u6210\u88ab\u79fb\u9664\uff0c\u9762\u677f\u5e95\u90e8\u4f1a\u51fa\u73b0\u201c\u6062\u590d\u5df2\u79fb\u9664\u7684\u96c6\u6210\u201d\u6309\u94ae\uff0c"
+        "\u70b9\u51fb\u53ef\u6062\u590d\u6240\u6709\u9690\u85cf\u7684\u5361\u7247\u3002\u79fb\u9664\u72b6\u6001\u901a\u8fc7localStorage\u8de8\u4f1a\u8bdd\u4fdd\u7559\u3002")
+
 
     # 16 行动项/任务看板
     pdf.add_page()
@@ -2018,6 +2054,13 @@ def build_chinese():
     pdf.kv("AngelList", "\u878d\u8d44\u5e73\u53f0\u96c6\u6210\u3001SPV\u7ba1\u7406\u3001\u80a1\u6743\u8868\u540c\u6b65")
     pdf.kv("Carta", "\u80a1\u6743\u8868\u7ba1\u7406\u3001409A\u4f30\u503c\u3001\u80a1\u6743\u8ba1\u5212\u7ba1\u7406")
     pdf.kv("SEC EDGAR", "\u76d1\u7ba1\u5907\u6848\u76d1\u63a7\u3001Form D\u8ffd\u8e2a\u3001\u6295\u8d44\u8005\u8d44\u8d28\u9a8c\u8bc1")
+
+    pdf.sub("25.2 \u79fb\u9664\u548c\u6062\u590dAPI\u96c6\u6210")
+    pdf.txt(
+        "PMP\u3001\u5546\u4e1a\u548c\u6280\u672f\u89d2\u8272\u53ef\u4ee5\u70b9\u51fb\u5361\u7247\u4e0a\u7684\u5173\u95ed\u6309\u94ae(\u2715)\u79fb\u9664\u4e0d\u9700\u8981\u7684API\u3002"
+        "\u5df2\u79fb\u9664\u7684\u5361\u7247\u53ef\u4ee5\u968f\u65f6\u901a\u8fc7\u201c\u6062\u590d\u5df2\u79fb\u9664\u7684\u96c6\u6210\u201d\u6309\u94ae\u6062\u590d\u3002\n\n"
+        "\u79fb\u9664\u64cd\u4f5c\u901a\u8fc7localStorage\u8de8\u4f1a\u8bdd\u4fdd\u7559\uff0c\u5e76\u8bb0\u5f55\u5728\u5ba1\u8ba1\u8ffd\u8e2a\u4e2d\u3002")
+
 
     # 26. 美国投资与投资者关系选项卡
     pdf.add_page()

@@ -38,6 +38,10 @@ import type {
   QASettings,
 } from "./types.ts";
 import { storeDocument, getDocument } from "./docstore.ts";
+import {
+  isOnline, fetchMessages, insertMessage, markMessageRead,
+  deleteMessages, subscribeMessages, type DbMessage,
+} from "./supabase.ts";
 
 // ── STATE ─────────────────────────────────────
 const USD_CNY_RATE = 7.25;
@@ -132,6 +136,12 @@ function setupEventDelegation(): void {
       case "addFundingRound":
         window._addFundingRound();
         break;
+      case "removeApiIntegration":
+        window._removeApiIntegration(a.apikey!);
+        break;
+      case "restoreApiIntegrations":
+        window._restoreApiIntegrations();
+        break;
       case "closeRiskEditor":
         window._closeRiskEditor();
         break;
@@ -212,7 +222,12 @@ document.addEventListener("DOMContentLoaded", () => {
   initFab();
   initRoleSwitcher();
   applyLanguage(getLang());
-  renderAll();
+
+  // Bootstrap Supabase messages, then render
+  initQaMessages().then(() => {
+    renderAll();
+    setupRealtimeMessages();
+  });
 });
 
 // ── TAB NAVIGATION ────────────────────────────
@@ -898,18 +913,18 @@ function renderCashRunway(): void {
       : cr.runwayMonths <= 6
         ? "runway-warning"
         : "runway-ok";
-  const isPMP = ACTIVE_ROLE === "pmp";
+  const canEditCash = ["pmp", "business", "technology"].includes(ACTIVE_ROLE);
   cards.innerHTML = `
     <div class="cash-card">
       <div class="cash-card-label">${t("cashOnHand")}</div>
       <div class="cash-card-value">${fmtCurrency(cr.cashOnHand)}
-        ${isPMP ? `<button class="cash-edit-btn" data-action="editCashField" data-field="cashOnHand" title="${t("editCashHint")}">✎</button>` : ""}
+        ${canEditCash ? `<button class="cash-edit-btn" data-action="editCashField" data-field="cashOnHand" title="${t("editCashHint")}">✎</button>` : ""}
       </div>
     </div>
     <div class="cash-card">
       <div class="cash-card-label">${t("monthlyBurnLabel")}</div>
       <div class="cash-card-value burn-value">${fmtCurrency(cr.monthlyBurn)}/mo
-        ${isPMP ? `<button class="cash-edit-btn" data-action="editCashField" data-field="monthlyBurn" title="${t("editBurnHint")}">✎</button>` : ""}
+        ${canEditCash ? `<button class="cash-edit-btn" data-action="editCashField" data-field="monthlyBurn" title="${t("editBurnHint")}">✎</button>` : ""}
       </div>
     </div>
     <div class="cash-card">
@@ -1279,7 +1294,7 @@ window._setStandardProgress = function (
 
 // ── FUNDING MANAGEMENT ────────────────────────
 window._editCashField = function (field: "cashOnHand" | "monthlyBurn"): void {
-  if (ACTIVE_ROLE !== "pmp") return;
+  if (!["pmp", "business", "technology"].includes(ACTIVE_ROLE)) return;
   const label =
     field === "cashOnHand" ? t("cashOnHand") : t("monthlyBurnLabel");
   const current =
@@ -1340,7 +1355,7 @@ window._addFundingRound = function (): void {
 window._toggleFundingStatus = function (roundId: string): void {
   const round = CASH_RUNWAY.fundingRounds.find((fr) => fr.id === roundId);
   if (!round) return;
-  if (ACTIVE_ROLE !== "pmp") {
+  if (!["pmp", "business", "technology"].includes(ACTIVE_ROLE)) {
     window._openChangeRequestForm(
       "funding-status",
       roundId,
@@ -1843,64 +1858,58 @@ function renderChangeRequestQueue(): void {
       : "") + (historyCrs.length > 0 ? historyCrs.map(renderCr).join("") : "");
 }
 
+// ── HIDDEN API PERSISTENCE ─────────────────────
+const HIDDEN_APIS_KEY = "ctower_hidden_apis";
+function loadHiddenApis(): Set<string> {
+  try {
+    const raw = localStorage.getItem(HIDDEN_APIS_KEY);
+    return raw ? new Set(JSON.parse(raw)) : new Set();
+  } catch { return new Set(); }
+}
+function saveHiddenApis(hidden: Set<string>): void {
+  localStorage.setItem(HIDDEN_APIS_KEY, JSON.stringify([...hidden]));
+}
+
+window._removeApiIntegration = function (apiKey: string): void {
+  if (!["pmp", "business", "technology"].includes(ACTIVE_ROLE)) return;
+  if (!confirm(t("apiRemoveConfirm"))) return;
+  const hidden = loadHiddenApis();
+  hidden.add(apiKey);
+  saveHiddenApis(hidden);
+  logAudit("api-remove", "API", apiKey, "visible", "hidden", "Integration removed");
+  renderApiIntegrations();
+  renderUsApiIntegrations();
+};
+
+window._restoreApiIntegrations = function (): void {
+  if (!["pmp", "business", "technology"].includes(ACTIVE_ROLE)) return;
+  const hidden = loadHiddenApis();
+  if (hidden.size === 0) return;
+  hidden.clear();
+  saveHiddenApis(hidden);
+  logAudit("api-restore", "API", "all", "hidden", "visible", "All integrations restored");
+  renderApiIntegrations();
+  renderUsApiIntegrations();
+};
+
 // ══════════════════════════════════════════════════
 // CHINA INVESTOR API INTEGRATIONS PANEL
 // ══════════════════════════════════════════════════
 function renderApiIntegrations(): void {
   const container = document.getElementById("apiIntegrationsContainer");
   if (!container) return;
+  const hidden = loadHiddenApis();
+  const canEdit = ["pmp", "business", "technology"].includes(ACTIVE_ROLE);
 
   const apis = [
-    {
-      name: t("apiAlipay"),
-      desc: t("apiAlipayDesc"),
-      status: "planned",
-      endpoint: "https://global.alipay.com/docs/ac",
-      docs: "Alipay Global Merchant API",
-    },
-    {
-      name: t("apiWechat"),
-      desc: t("apiWechatDesc"),
-      status: "planned",
-      endpoint: "https://pay.weixin.qq.com/wiki/doc/api",
-      docs: "WeChat Pay API v3",
-    },
-    {
-      name: t("apiUnionpay"),
-      desc: t("apiUnionpayDesc"),
-      status: "planned",
-      endpoint: "https://developer.unionpay.com",
-      docs: "UnionPay Online Payment API",
-    },
-    {
-      name: t("apiCmbchina"),
-      desc: t("apiCmbchinaDesc"),
-      status: "available",
-      endpoint: "https://open.cmbchina.com",
-      docs: "CMB Open Banking API",
-    },
-    {
-      name: t("apiPingpong"),
-      desc: t("apiPingpongDesc"),
-      status: "available",
-      endpoint: "https://www.pingpongx.com/api",
-      docs: "PingPong Global API",
-    },
-    {
-      name: t("apiXe"),
-      desc: t("apiXeDesc"),
-      status: "active",
-      endpoint: "https://xecdapi.xe.com/v1",
-      docs: "XE Currency Data API",
-    },
-    {
-      name: t("apiSwift"),
-      desc: t("apiSwiftDesc"),
-      status: "available",
-      endpoint: "https://developer.swift.com",
-      docs: "SWIFT gpi Tracker API",
-    },
-  ];
+    { key: "cn-alipay", name: t("apiAlipay"), desc: t("apiAlipayDesc"), status: "planned", docs: "Alipay Global Merchant API" },
+    { key: "cn-wechat", name: t("apiWechat"), desc: t("apiWechatDesc"), status: "planned", docs: "WeChat Pay API v3" },
+    { key: "cn-unionpay", name: t("apiUnionpay"), desc: t("apiUnionpayDesc"), status: "planned", docs: "UnionPay Online Payment API" },
+    { key: "cn-cmbchina", name: t("apiCmbchina"), desc: t("apiCmbchinaDesc"), status: "available", docs: "CMB Open Banking API" },
+    { key: "cn-pingpong", name: t("apiPingpong"), desc: t("apiPingpongDesc"), status: "available", docs: "PingPong Global API" },
+    { key: "cn-xe", name: t("apiXe"), desc: t("apiXeDesc"), status: "active", docs: "XE Currency Data API" },
+    { key: "cn-swift", name: t("apiSwift"), desc: t("apiSwiftDesc"), status: "available", docs: "SWIFT gpi Tracker API" },
+  ].filter(api => !hidden.has(api.key));
 
   const statusLabel = (s: string) =>
     s === "active"
@@ -1916,6 +1925,7 @@ function renderApiIntegrations(): void {
       <div class="api-card-header">
         <span class="api-name">${api.name}</span>
         <span class="api-status-badge api-badge-${api.status}">${statusLabel(api.status)}</span>
+        ${canEdit ? `<button class="cash-edit-btn" data-action="removeApiIntegration" data-apikey="${api.key}" title="${t("apiRemove")}">✕</button>` : ""}
       </div>
       <div class="api-desc">${api.desc}</div>
       <div class="api-meta">
@@ -1924,7 +1934,7 @@ function renderApiIntegrations(): void {
     </div>
   `,
     )
-    .join("");
+    .join("") + (canEdit && hidden.size > 0 ? `<button class="btn-add-funding" data-action="restoreApiIntegrations">${t("apiRestoreAll")}</button>` : "");
 }
 
 // ══════════════════════════════════════════════════
@@ -1933,51 +1943,18 @@ function renderApiIntegrations(): void {
 function renderUsApiIntegrations(): void {
   const container = document.getElementById("usApiIntegrationsContainer");
   if (!container) return;
+  const hidden = loadHiddenApis();
+  const canEdit = ["pmp", "business", "technology"].includes(ACTIVE_ROLE);
 
   const apis = [
-    {
-      name: t("usApiPlaid"),
-      desc: t("usApiPlaidDesc"),
-      status: "available",
-      docs: "Plaid Link + Balance API",
-    },
-    {
-      name: t("usApiMercury"),
-      desc: t("usApiMercuryDesc"),
-      status: "active",
-      docs: "Mercury Banking API v2",
-    },
-    {
-      name: t("usApiStripe"),
-      desc: t("usApiStripeDesc"),
-      status: "available",
-      docs: "Stripe Payments API",
-    },
-    {
-      name: t("usApiSvb"),
-      desc: t("usApiSvbDesc"),
-      status: "planned",
-      docs: "SVB API Gateway",
-    },
-    {
-      name: t("usApiAngellist"),
-      desc: t("usApiAngellistDesc"),
-      status: "planned",
-      docs: "AngelList Stack API",
-    },
-    {
-      name: t("usApiCarta"),
-      desc: t("usApiCartaDesc"),
-      status: "planned",
-      docs: "Carta Connect API",
-    },
-    {
-      name: t("usApiSec"),
-      desc: t("usApiSecDesc"),
-      status: "available",
-      docs: "SEC EDGAR XBRL API",
-    },
-  ];
+    { key: "us-plaid", name: t("usApiPlaid"), desc: t("usApiPlaidDesc"), status: "available", docs: "Plaid Link + Balance API" },
+    { key: "us-mercury", name: t("usApiMercury"), desc: t("usApiMercuryDesc"), status: "active", docs: "Mercury Banking API v2" },
+    { key: "us-stripe", name: t("usApiStripe"), desc: t("usApiStripeDesc"), status: "available", docs: "Stripe Payments API" },
+    { key: "us-svb", name: t("usApiSvb"), desc: t("usApiSvbDesc"), status: "planned", docs: "SVB API Gateway" },
+    { key: "us-angellist", name: t("usApiAngellist"), desc: t("usApiAngellistDesc"), status: "planned", docs: "AngelList Stack API" },
+    { key: "us-carta", name: t("usApiCarta"), desc: t("usApiCartaDesc"), status: "planned", docs: "Carta Connect API" },
+    { key: "us-sec", name: t("usApiSec"), desc: t("usApiSecDesc"), status: "available", docs: "SEC EDGAR XBRL API" },
+  ].filter(api => !hidden.has(api.key));
 
   const statusLabel = (s: string) =>
     s === "active"
@@ -1993,6 +1970,7 @@ function renderUsApiIntegrations(): void {
       <div class="api-card-header">
         <span class="api-name">${api.name}</span>
         <span class="api-status-badge api-badge-${api.status}">${statusLabel(api.status)}</span>
+        ${canEdit ? `<button class="cash-edit-btn" data-action="removeApiIntegration" data-apikey="${api.key}" title="${t("apiRemove")}">✕</button>` : ""}
       </div>
       <div class="api-desc">${api.desc}</div>
       <div class="api-meta">
@@ -2001,7 +1979,7 @@ function renderUsApiIntegrations(): void {
     </div>
   `,
     )
-    .join("");
+    .join("") + (canEdit && hidden.size > 0 ? `<button class="btn-add-funding" data-action="restoreApiIntegrations">${t("apiRestoreAll")}</button>` : "");
 }
 
 // ══════════════════════════════════════════════════
@@ -3044,6 +3022,7 @@ function renderDocLibrary(): void {
 
 // ══════════════════════════════════════════════════
 // MESSAGE BOARD — threaded messaging (PMP ↔ Dr. Dai)
+// Supabase Realtime primary, localStorage fallback
 // ══════════════════════════════════════════════════
 
 const QA_STORAGE_KEY = "ctower_qa_messages";
@@ -3051,17 +3030,61 @@ const QA_SETTINGS_KEY = "ctower_qa_settings";
 let qaPostingRole: "pmp" | "inventor" = "pmp";
 let qaCollapsed: Set<number> = new Set();
 
-function loadQaMessages(): QAMessage[] {
+// ── Supabase ↔ localStorage message cache ─────────────
+let _qaCache: QAMessage[] = [];
+
+function dbToQa(db: DbMessage): QAMessage {
+  return {
+    id: db.id,
+    qNum: db.q_num,
+    sender: db.sender,
+    text: db.text,
+    timestamp: db.created_at,
+    readBy: db.read_by ?? [],
+  };
+}
+
+function loadQaMessagesLocal(): QAMessage[] {
   try {
     const raw = localStorage.getItem(QA_STORAGE_KEY);
     return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
+  } catch { return []; }
+}
+
+function saveQaMessagesLocal(msgs: QAMessage[]): void {
+  localStorage.setItem(QA_STORAGE_KEY, JSON.stringify(msgs));
+}
+
+/** Bootstrap: pull from Supabase if online, else localStorage */
+async function initQaMessages(): Promise<void> {
+  if (isOnline()) {
+    try {
+      const rows = await fetchMessages();
+      _qaCache = rows.map(dbToQa);
+      saveQaMessagesLocal(_qaCache);   // update local cache
+    } catch {
+      _qaCache = loadQaMessagesLocal();
+    }
+  } else {
+    _qaCache = loadQaMessagesLocal();
   }
 }
 
-function saveQaMessages(msgs: QAMessage[]): void {
-  localStorage.setItem(QA_STORAGE_KEY, JSON.stringify(msgs));
+/** Push any localStorage-only messages to Supabase (offline sync) */
+async function syncOfflineMessages(): Promise<void> {
+  if (!isOnline()) return;
+  const localMsgs = loadQaMessagesLocal();
+  const remoteIds = new Set(_qaCache.map(m => m.id));
+  for (const m of localMsgs) {
+    if (!remoteIds.has(m.id)) {
+      await insertMessage({
+        q_num: m.qNum,
+        sender: m.sender,
+        text: m.text,
+        read_by: m.readBy ?? [],
+      });
+    }
+  }
 }
 
 function loadQaSettings(): QASettings {
@@ -3120,14 +3143,13 @@ function saveQaSettingsUI(): void {
 }
 
 function markQaRead(msgId: string): void {
-  const msgs = loadQaMessages();
-  const msg = msgs.find((m) => m.id === msgId);
+  const msg = _qaCache.find((m) => m.id === msgId);
   if (!msg) return;
   if (!msg.readBy) msg.readBy = [];
   if (!msg.readBy.includes(qaPostingRole)) {
     msg.readBy.push(qaPostingRole);
-    saveQaMessages(msgs);
-    // Re-render the thread containing this message
+    saveQaMessagesLocal(_qaCache);
+    if (isOnline()) markMessageRead(msgId, qaPostingRole);
     renderQaThread(msg.qNum);
     updateQaUnreadBadge();
   }
@@ -3139,40 +3161,43 @@ function sendQaMessage(qNum: number): void {
   ) as HTMLTextAreaElement | null;
   if (!input || !input.value.trim()) return;
 
-  const msgs = loadQaMessages();
-  const msg: QAMessage = {
+  const text = input.value.trim();
+  const localMsg: QAMessage = {
     id: `qm-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
     qNum,
     sender: qaPostingRole,
-    text: input.value.trim(),
+    text,
     timestamp: new Date().toISOString(),
     readBy: [qaPostingRole],
   };
-  msgs.push(msg);
-  saveQaMessages(msgs);
 
-  // Open mailto: if recipient email is configured — header only, no body text
-  const settings = loadQaSettings();
-  const recipientEmail =
-    qaPostingRole === "pmp" ? settings.inventorEmail : settings.pmpEmail;
-  if (recipientEmail) {
-    const senderLabel = qaPostingRole === "pmp" ? "PMP" : "Dr. Dai";
-    const subject = encodeURIComponent(
-      `[Control Tower] New message from ${senderLabel} on Q${qNum}`,
-    );
-    const body = encodeURIComponent(
-      `${senderLabel} posted a new message on Q${qNum} — ICU Respiratory Digital Twin.\n\nPlease open the Control Tower to view the full message:\nMessage Board → Q${qNum}\n\n—\nControl Tower Notification`,
-    );
-    window.open(
-      `mailto:${encodeURIComponent(recipientEmail)}?subject=${subject}&body=${body}`,
-      "_self",
-    );
-  }
-
+  // Optimistic local update
+  _qaCache.push(localMsg);
+  saveQaMessagesLocal(_qaCache);
   input.value = "";
   renderQaThread(qNum);
   showQaSaveStatus();
   updateQaUnreadBadge();
+
+  // Push to Supabase
+  if (isOnline()) {
+    insertMessage({
+      q_num: qNum,
+      sender: qaPostingRole,
+      text,
+      read_by: [qaPostingRole],
+    }).then((dbMsg) => {
+      if (dbMsg) {
+        // Replace local optimistic entry with the Supabase one (real ID + timestamp)
+        const idx = _qaCache.findIndex((m) => m.id === localMsg.id);
+        if (idx !== -1) {
+          _qaCache[idx] = dbToQa(dbMsg);
+          saveQaMessagesLocal(_qaCache);
+          renderQaThread(qNum);
+        }
+      }
+    });
+  }
 }
 
 function showQaSaveStatus(): void {
@@ -3203,8 +3228,7 @@ function renderQaThread(qNum: number): void {
   const container = document.getElementById(`qa-thread-${qNum}`);
   if (!container) return;
 
-  const allMsgs = loadQaMessages();
-  const msgs = allMsgs.filter((m) => m.qNum === qNum);
+  const msgs = _qaCache.filter((m) => m.qNum === qNum);
 
   if (msgs.length === 0) {
     container.innerHTML = `<div class="qa-no-messages">${t("qaNoMessages")}</div>`;
@@ -3250,7 +3274,7 @@ function renderQaThread(qNum: number): void {
 }
 
 function exportQaThread(): void {
-  const msgs = loadQaMessages();
+  const msgs = _qaCache;
   const lines: string[] = [
     "ICU Respiratory Digital Twin \u2014 Message Board Thread",
     `Exported: ${new Date().toISOString().split("T")[0]}`,
@@ -3291,7 +3315,7 @@ function renderQaSheet(): void {
   const body = document.getElementById("qaSheetBody");
   if (!body) return;
 
-  const allMsgs = loadQaMessages();
+  const allMsgs = _qaCache;
   const qaSettings = loadQaSettings();
   const emailTarget =
     qaPostingRole === "pmp" ? qaSettings.inventorEmail : qaSettings.pmpEmail;
@@ -3447,7 +3471,7 @@ function loadQaArchive(): Array<{ archivedAt: string; messages: QAMessage[] }> {
 }
 
 function archiveQaMessages(qNum: number): void {
-  const allMsgs = loadQaMessages();
+  const allMsgs = _qaCache;
   const threadMsgs = allMsgs.filter((m) => m.qNum === qNum);
   if (threadMsgs.length === 0) return;
   if (!confirm(t("qaArchiveConfirm"))) return;
@@ -3494,7 +3518,10 @@ function archiveQaMessages(qNum: number): void {
 
   // Remove archived messages from active storage
   const remaining = allMsgs.filter((m) => m.qNum !== qNum);
-  saveQaMessages(remaining);
+  _qaCache.length = 0;
+  remaining.forEach(m => _qaCache.push(m));
+  saveQaMessagesLocal(_qaCache);
+  if (isOnline()) deleteMessages(qNum);
   renderQaSheet();
   showQaSaveStatus();
 }
@@ -3559,7 +3586,7 @@ function deleteQaArchive(idx: number): void {
 function updateQaUnreadBadge(): void {
   const tabBtn = document.querySelector('.tab-btn[data-tab="qa-sheet"]');
   if (!tabBtn) return;
-  const msgs = loadQaMessages();
+  const msgs = _qaCache;
   const unread = msgs.filter(
     (m) => m.sender !== qaPostingRole && !m.readBy?.includes(qaPostingRole),
   ).length;
@@ -3576,10 +3603,12 @@ function updateQaUnreadBadge(): void {
   }
 }
 
-// ── Cross-tab sync via StorageEvent ──────────────────────
+// ── Cross-tab sync via StorageEvent (offline fallback) ───
 window.addEventListener("storage", (e: StorageEvent) => {
   if (e.key !== QA_STORAGE_KEY) return;
-  // Another tab/window modified messages — re-render and notify
+  // Update cache from localStorage changed in another tab
+  const newMsgs: QAMessage[] = e.newValue ? JSON.parse(e.newValue) : [];
+  _qaCache = newMsgs;
   const panel = document.getElementById("panel-qa-sheet");
   if (
     panel &&
@@ -3591,8 +3620,6 @@ window.addEventListener("storage", (e: StorageEvent) => {
     );
   }
   updateQaUnreadBadge();
-  // Show toast notification for new messages
-  const newMsgs: QAMessage[] = e.newValue ? JSON.parse(e.newValue) : [];
   const oldMsgs: QAMessage[] = e.oldValue ? JSON.parse(e.oldValue) : [];
   if (newMsgs.length > oldMsgs.length) {
     const latest = newMsgs[newMsgs.length - 1];
@@ -3625,7 +3652,7 @@ function showQaNotification(msg: QAMessage): void {
 
 // ── Auto-mark messages read when thread is visible ──────
 function autoMarkVisibleAsRead(): void {
-  const msgs = loadQaMessages();
+  const msgs = _qaCache;
   let changed = false;
   msgs.forEach((m) => {
     if (m.sender !== qaPostingRole && !m.readBy?.includes(qaPostingRole)) {
@@ -3633,12 +3660,13 @@ function autoMarkVisibleAsRead(): void {
       if (threadEl && threadEl.offsetParent !== null) {
         if (!m.readBy) m.readBy = [];
         m.readBy.push(qaPostingRole);
+        if (isOnline()) markMessageRead(m.id, qaPostingRole);
         changed = true;
       }
     }
   });
   if (changed) {
-    saveQaMessages(msgs);
+    saveQaMessagesLocal(_qaCache);
     updateQaUnreadBadge();
   }
 }
@@ -3654,6 +3682,49 @@ function autoMarkVisibleAsRead(): void {
 (window as any)._closeQaArchive = closeQaArchive;
 (window as any)._deleteQaArchive = deleteQaArchive;
 (window as any)._autoMarkVisibleAsRead = autoMarkVisibleAsRead;
+
+// ── Supabase Realtime Subscription ────────────────────
+function setupRealtimeMessages(): void {
+  subscribeMessages(
+    // On INSERT: a new message arrived from another device/user
+    (dbMsg) => {
+      const msg = dbToQa(dbMsg);
+      // Avoid duplicates (optimistic local message already in cache)
+      if (!_qaCache.some(m => m.id === msg.id)) {
+        _qaCache.push(msg);
+        saveQaMessagesLocal(_qaCache);
+        renderQaThread(msg.qNum);
+        updateQaUnreadBadge();
+        if (msg.sender !== qaPostingRole) {
+          showQaNotification(msg);
+        }
+      }
+    },
+    // On UPDATE: read receipt updated from another device
+    (dbMsg) => {
+      const idx = _qaCache.findIndex(m => m.id === dbMsg.id);
+      if (idx !== -1) {
+        _qaCache[idx].readBy = dbMsg.read_by ?? [];
+        saveQaMessagesLocal(_qaCache);
+        renderQaThread(_qaCache[idx].qNum);
+        updateQaUnreadBadge();
+      }
+    },
+  );
+}
+
+// Re-sync when coming back online
+window.addEventListener("online", async () => {
+  await syncOfflineMessages();
+  const rows = await fetchMessages();
+  _qaCache = rows.map(dbToQa);
+  saveQaMessagesLocal(_qaCache);
+  const panel = document.getElementById("panel-qa-sheet");
+  if (panel && panel.style.display !== "none") {
+    QA_SECTIONS.forEach(sec => sec.questions.forEach(q => renderQaThread(q.num)));
+  }
+  updateQaUnreadBadge();
+});
 
 // ══════════════════════════════════════════════════
 // AUDIT TRAIL HELPER

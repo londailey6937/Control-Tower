@@ -203,6 +203,9 @@ export const I18N: I18nMessages = {
     apiActive: "Active",
     apiEndpoint: "Endpoint",
     apiDocs: "Documentation",
+    apiRemove: "Remove",
+    apiRemoveConfirm: "Remove this integration?",
+    apiRestoreAll: "Restore Removed Integrations",
 
     // Audit Trail
     auditTitle: "Audit Trail",
@@ -635,6 +638,9 @@ export const I18N: I18nMessages = {
     apiActive: "已激活",
     apiEndpoint: "端点",
     apiDocs: "文档",
+    apiRemove: "移除",
+    apiRemoveConfirm: "确定移除此集成？",
+    apiRestoreAll: "恢复已移除的集成",
 
     // Audit Trail
     auditTitle: "审计追踪",
