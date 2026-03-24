@@ -39,8 +39,13 @@ import type {
 } from "./types.ts";
 import { storeDocument, getDocument } from "./docstore.ts";
 import {
-  isOnline, fetchMessages, insertMessage, markMessageRead,
-  deleteMessages, subscribeMessages, type DbMessage,
+  isOnline,
+  fetchMessages,
+  insertMessage,
+  markMessageRead,
+  deleteMessages,
+  subscribeMessages,
+  type DbMessage,
 } from "./supabase.ts";
 
 // ── STATE ─────────────────────────────────────
@@ -129,6 +134,9 @@ function setupEventDelegation(): void {
         break;
       case "editCashField":
         window._editCashField(a.field! as "cashOnHand" | "monthlyBurn");
+        break;
+      case "editBudgetField":
+        window._editBudgetField(a.budgetid!, a.field! as "planned" | "actual");
         break;
       case "toggleFundingStatus":
         window._toggleFundingStatus(a.frid!);
@@ -1325,6 +1333,37 @@ window._editCashField = function (field: "cashOnHand" | "monthlyBurn"): void {
   renderAll();
 };
 
+window._editBudgetField = function (
+  budgetId: string,
+  field: "planned" | "actual",
+): void {
+  if (!["pmp", "business", "technology"].includes(ACTIVE_ROLE)) return;
+  const cat = BUDGET_CATEGORIES.find((b) => b.id === budgetId);
+  if (!cat) return;
+  const label = `${localizedText(cat.label)} — ${field === "planned" ? t("budgetPlanned") : t("budgetActual")}`;
+  const current = field === "planned" ? cat.planned : cat.actual;
+  const input = prompt(`${label} (USD):`, String(current));
+  if (input === null) return;
+  const val = parseFloat(input.replace(/[^0-9.]/g, ""));
+  if (isNaN(val) || val < 0) return;
+  const prev = current;
+  if (field === "planned") {
+    cat.planned = val;
+  } else {
+    cat.actual = val;
+  }
+  logAudit(
+    "budget-field",
+    budgetId,
+    field,
+    t("currencySymbol") + prev.toLocaleString(),
+    t("currencySymbol") + val.toLocaleString(),
+    localizedText(cat.label),
+  );
+  renderBudget();
+  renderAll();
+};
+
 window._addFundingRound = function (): void {
   const labelEl = document.getElementById(
     "newFundingLabel",
@@ -1864,7 +1903,9 @@ function loadHiddenApis(): Set<string> {
   try {
     const raw = localStorage.getItem(HIDDEN_APIS_KEY);
     return raw ? new Set(JSON.parse(raw)) : new Set();
-  } catch { return new Set(); }
+  } catch {
+    return new Set();
+  }
 }
 function saveHiddenApis(hidden: Set<string>): void {
   localStorage.setItem(HIDDEN_APIS_KEY, JSON.stringify([...hidden]));
@@ -1876,7 +1917,14 @@ window._removeApiIntegration = function (apiKey: string): void {
   const hidden = loadHiddenApis();
   hidden.add(apiKey);
   saveHiddenApis(hidden);
-  logAudit("api-remove", "API", apiKey, "visible", "hidden", "Integration removed");
+  logAudit(
+    "api-remove",
+    "API",
+    apiKey,
+    "visible",
+    "hidden",
+    "Integration removed",
+  );
   renderApiIntegrations();
   renderUsApiIntegrations();
 };
@@ -1887,7 +1935,14 @@ window._restoreApiIntegrations = function (): void {
   if (hidden.size === 0) return;
   hidden.clear();
   saveHiddenApis(hidden);
-  logAudit("api-restore", "API", "all", "hidden", "visible", "All integrations restored");
+  logAudit(
+    "api-restore",
+    "API",
+    "all",
+    "hidden",
+    "visible",
+    "All integrations restored",
+  );
   renderApiIntegrations();
   renderUsApiIntegrations();
 };
@@ -1902,14 +1957,56 @@ function renderApiIntegrations(): void {
   const canEdit = ["pmp", "business", "technology"].includes(ACTIVE_ROLE);
 
   const apis = [
-    { key: "cn-alipay", name: t("apiAlipay"), desc: t("apiAlipayDesc"), status: "planned", docs: "Alipay Global Merchant API" },
-    { key: "cn-wechat", name: t("apiWechat"), desc: t("apiWechatDesc"), status: "planned", docs: "WeChat Pay API v3" },
-    { key: "cn-unionpay", name: t("apiUnionpay"), desc: t("apiUnionpayDesc"), status: "planned", docs: "UnionPay Online Payment API" },
-    { key: "cn-cmbchina", name: t("apiCmbchina"), desc: t("apiCmbchinaDesc"), status: "available", docs: "CMB Open Banking API" },
-    { key: "cn-pingpong", name: t("apiPingpong"), desc: t("apiPingpongDesc"), status: "available", docs: "PingPong Global API" },
-    { key: "cn-xe", name: t("apiXe"), desc: t("apiXeDesc"), status: "active", docs: "XE Currency Data API" },
-    { key: "cn-swift", name: t("apiSwift"), desc: t("apiSwiftDesc"), status: "available", docs: "SWIFT gpi Tracker API" },
-  ].filter(api => !hidden.has(api.key));
+    {
+      key: "cn-alipay",
+      name: t("apiAlipay"),
+      desc: t("apiAlipayDesc"),
+      status: "planned",
+      docs: "Alipay Global Merchant API",
+    },
+    {
+      key: "cn-wechat",
+      name: t("apiWechat"),
+      desc: t("apiWechatDesc"),
+      status: "planned",
+      docs: "WeChat Pay API v3",
+    },
+    {
+      key: "cn-unionpay",
+      name: t("apiUnionpay"),
+      desc: t("apiUnionpayDesc"),
+      status: "planned",
+      docs: "UnionPay Online Payment API",
+    },
+    {
+      key: "cn-cmbchina",
+      name: t("apiCmbchina"),
+      desc: t("apiCmbchinaDesc"),
+      status: "available",
+      docs: "CMB Open Banking API",
+    },
+    {
+      key: "cn-pingpong",
+      name: t("apiPingpong"),
+      desc: t("apiPingpongDesc"),
+      status: "available",
+      docs: "PingPong Global API",
+    },
+    {
+      key: "cn-xe",
+      name: t("apiXe"),
+      desc: t("apiXeDesc"),
+      status: "active",
+      docs: "XE Currency Data API",
+    },
+    {
+      key: "cn-swift",
+      name: t("apiSwift"),
+      desc: t("apiSwiftDesc"),
+      status: "available",
+      docs: "SWIFT gpi Tracker API",
+    },
+  ].filter((api) => !hidden.has(api.key));
 
   const statusLabel = (s: string) =>
     s === "active"
@@ -1918,9 +2015,10 @@ function renderApiIntegrations(): void {
         ? t("apiAvailable")
         : t("apiPlanned");
 
-  container.innerHTML = apis
-    .map(
-      (api) => `
+  container.innerHTML =
+    apis
+      .map(
+        (api) => `
     <div class="api-card api-${api.status}">
       <div class="api-card-header">
         <span class="api-name">${api.name}</span>
@@ -1933,8 +2031,11 @@ function renderApiIntegrations(): void {
       </div>
     </div>
   `,
-    )
-    .join("") + (canEdit && hidden.size > 0 ? `<button class="btn-add-funding" data-action="restoreApiIntegrations">${t("apiRestoreAll")}</button>` : "");
+      )
+      .join("") +
+    (canEdit && hidden.size > 0
+      ? `<button class="btn-add-funding" data-action="restoreApiIntegrations">${t("apiRestoreAll")}</button>`
+      : "");
 }
 
 // ══════════════════════════════════════════════════
@@ -1947,14 +2048,56 @@ function renderUsApiIntegrations(): void {
   const canEdit = ["pmp", "business", "technology"].includes(ACTIVE_ROLE);
 
   const apis = [
-    { key: "us-plaid", name: t("usApiPlaid"), desc: t("usApiPlaidDesc"), status: "available", docs: "Plaid Link + Balance API" },
-    { key: "us-mercury", name: t("usApiMercury"), desc: t("usApiMercuryDesc"), status: "active", docs: "Mercury Banking API v2" },
-    { key: "us-stripe", name: t("usApiStripe"), desc: t("usApiStripeDesc"), status: "available", docs: "Stripe Payments API" },
-    { key: "us-svb", name: t("usApiSvb"), desc: t("usApiSvbDesc"), status: "planned", docs: "SVB API Gateway" },
-    { key: "us-angellist", name: t("usApiAngellist"), desc: t("usApiAngellistDesc"), status: "planned", docs: "AngelList Stack API" },
-    { key: "us-carta", name: t("usApiCarta"), desc: t("usApiCartaDesc"), status: "planned", docs: "Carta Connect API" },
-    { key: "us-sec", name: t("usApiSec"), desc: t("usApiSecDesc"), status: "available", docs: "SEC EDGAR XBRL API" },
-  ].filter(api => !hidden.has(api.key));
+    {
+      key: "us-plaid",
+      name: t("usApiPlaid"),
+      desc: t("usApiPlaidDesc"),
+      status: "available",
+      docs: "Plaid Link + Balance API",
+    },
+    {
+      key: "us-mercury",
+      name: t("usApiMercury"),
+      desc: t("usApiMercuryDesc"),
+      status: "active",
+      docs: "Mercury Banking API v2",
+    },
+    {
+      key: "us-stripe",
+      name: t("usApiStripe"),
+      desc: t("usApiStripeDesc"),
+      status: "available",
+      docs: "Stripe Payments API",
+    },
+    {
+      key: "us-svb",
+      name: t("usApiSvb"),
+      desc: t("usApiSvbDesc"),
+      status: "planned",
+      docs: "SVB API Gateway",
+    },
+    {
+      key: "us-angellist",
+      name: t("usApiAngellist"),
+      desc: t("usApiAngellistDesc"),
+      status: "planned",
+      docs: "AngelList Stack API",
+    },
+    {
+      key: "us-carta",
+      name: t("usApiCarta"),
+      desc: t("usApiCartaDesc"),
+      status: "planned",
+      docs: "Carta Connect API",
+    },
+    {
+      key: "us-sec",
+      name: t("usApiSec"),
+      desc: t("usApiSecDesc"),
+      status: "available",
+      docs: "SEC EDGAR XBRL API",
+    },
+  ].filter((api) => !hidden.has(api.key));
 
   const statusLabel = (s: string) =>
     s === "active"
@@ -1963,9 +2106,10 @@ function renderUsApiIntegrations(): void {
         ? t("apiAvailable")
         : t("apiPlanned");
 
-  container.innerHTML = apis
-    .map(
-      (api) => `
+  container.innerHTML =
+    apis
+      .map(
+        (api) => `
     <div class="api-card api-${api.status}">
       <div class="api-card-header">
         <span class="api-name">${api.name}</span>
@@ -1978,8 +2122,11 @@ function renderUsApiIntegrations(): void {
       </div>
     </div>
   `,
-    )
-    .join("") + (canEdit && hidden.size > 0 ? `<button class="btn-add-funding" data-action="restoreApiIntegrations">${t("apiRestoreAll")}</button>` : "");
+      )
+      .join("") +
+    (canEdit && hidden.size > 0
+      ? `<button class="btn-add-funding" data-action="restoreApiIntegrations">${t("apiRestoreAll")}</button>`
+      : "");
 }
 
 // ══════════════════════════════════════════════════
@@ -3027,8 +3174,29 @@ function renderDocLibrary(): void {
 
 const QA_STORAGE_KEY = "ctower_qa_messages";
 const QA_SETTINGS_KEY = "ctower_qa_settings";
+const QA_CUSTOM_TOPICS_KEY = "ctower_qa_custom_topics";
 let qaPostingRole: "pmp" | "inventor" = "pmp";
 let qaCollapsed: Set<number> = new Set();
+
+// ── Custom topics ─────────────────────────────
+interface CustomTopic {
+  qNum: number;
+  title: string;
+  createdAt: string;
+}
+
+function loadCustomTopics(): CustomTopic[] {
+  try {
+    const raw = localStorage.getItem(QA_CUSTOM_TOPICS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveCustomTopics(topics: CustomTopic[]): void {
+  localStorage.setItem(QA_CUSTOM_TOPICS_KEY, JSON.stringify(topics));
+}
 
 // ── Supabase ↔ localStorage message cache ─────────────
 let _qaCache: QAMessage[] = [];
@@ -3048,7 +3216,9 @@ function loadQaMessagesLocal(): QAMessage[] {
   try {
     const raw = localStorage.getItem(QA_STORAGE_KEY);
     return raw ? JSON.parse(raw) : [];
-  } catch { return []; }
+  } catch {
+    return [];
+  }
 }
 
 function saveQaMessagesLocal(msgs: QAMessage[]): void {
@@ -3061,7 +3231,7 @@ async function initQaMessages(): Promise<void> {
     try {
       const rows = await fetchMessages();
       _qaCache = rows.map(dbToQa);
-      saveQaMessagesLocal(_qaCache);   // update local cache
+      saveQaMessagesLocal(_qaCache); // update local cache
     } catch {
       _qaCache = loadQaMessagesLocal();
     }
@@ -3074,7 +3244,7 @@ async function initQaMessages(): Promise<void> {
 async function syncOfflineMessages(): Promise<void> {
   if (!isOnline()) return;
   const localMsgs = loadQaMessagesLocal();
-  const remoteIds = new Set(_qaCache.map(m => m.id));
+  const remoteIds = new Set(_qaCache.map((m) => m.id));
   for (const m of localMsgs) {
     if (!remoteIds.has(m.id)) {
       await insertMessage({
@@ -3386,10 +3556,68 @@ function renderQaSheet(): void {
       </div>`;
   }).join("");
 
+  // ── Custom Topics Section ──────────────────────
+  const customTopics = loadCustomTopics();
+  if (customTopics.length > 0) {
+    const customHtml = customTopics
+      .map((tp) => {
+        const qMsgs = allMsgs.filter((m) => m.qNum === tp.qNum);
+        const msgCount = qMsgs.length;
+        const unreadCount = qMsgs.filter(
+          (m) =>
+            m.sender !== qaPostingRole && !m.readBy?.includes(qaPostingRole),
+        ).length;
+        const isCollapsed = qaCollapsed.has(tp.qNum);
+
+        return `
+        <div class="qa-question-block">
+          <div class="qa-question-header">
+            <div class="qa-q-left">
+              <span class="qa-qnum">💬</span>
+              <span class="qa-qtext">${tp.title}</span>
+            </div>
+            <div class="qa-q-right">
+              <span class="qa-msg-count">${msgCount > 0 ? `\ud83d\udcac ${msgCount} ${t("qaMessages")}${unreadCount > 0 ? ` (${unreadCount} ${t("qaUnread")})` : ""}` : ""}</span>
+              ${msgCount > 0 ? `<button class="qa-archive-btn" onclick="window._archiveQaMessages(${tp.qNum})" title="${t("qaArchive")}">\ud83d\udce6</button>` : ""}
+              <button class="qa-archive-btn" onclick="window._deleteQaTopic(${tp.qNum})" title="${t("qaDeleteTopic")}">🗑️</button>
+              <button class="qa-collapse-btn" data-qatoggle="${tp.qNum}">${isCollapsed ? t("qaExpand") : t("qaCollapse")}</button>
+            </div>
+          </div>
+          <div class="qa-thread-wrap${isCollapsed ? " collapsed" : ""}" id="qa-wrap-${tp.qNum}">
+            <div class="qa-thread" id="qa-thread-${tp.qNum}"></div>
+            <div class="qa-compose">
+              <textarea
+                id="qa-input-${tp.qNum}"
+                class="qa-compose-input"
+                rows="2"
+                placeholder="${t("qaAnswerPlaceholder")}"
+              ></textarea>
+              <div class="qa-compose-actions">
+                ${emailTarget ? `<span class="qa-email-target" title="${t("qaSendViaEmail")}">📧 ${emailTarget}</span>` : `<span class="qa-email-target qa-no-email" title="${t("qaSettings")}">📧 —</span>`}
+                <button class="qa-send-btn" onclick="window._sendQaMessage(${tp.qNum})">
+                  ${t("qaSend")} \u27a4
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      })
+      .join("");
+
+    body.innerHTML += `
+      <div class="qa-section">
+        <div class="qa-section-header">
+          <h3 class="qa-section-title">💬 ${t("qaCustomTopics")}</h3>
+        </div>
+        ${customHtml}
+      </div>`;
+  }
+
   // Render all threads
   QA_SECTIONS.forEach((sec) =>
     sec.questions.forEach((q) => renderQaThread(q.num)),
   );
+  customTopics.forEach((tp) => renderQaThread(tp.qNum));
 
   // Update unread badge on tab
   updateQaUnreadBadge();
@@ -3519,7 +3747,7 @@ function archiveQaMessages(qNum: number): void {
   // Remove archived messages from active storage
   const remaining = allMsgs.filter((m) => m.qNum !== qNum);
   _qaCache.length = 0;
-  remaining.forEach(m => _qaCache.push(m));
+  remaining.forEach((m) => _qaCache.push(m));
   saveQaMessagesLocal(_qaCache);
   if (isOnline()) deleteMessages(qNum);
   renderQaSheet();
@@ -3671,6 +3899,37 @@ function autoMarkVisibleAsRead(): void {
   }
 }
 
+function createQaTopic(): void {
+  const title = prompt(t("qaNewTopicPlaceholder"));
+  if (!title || !title.trim()) return;
+  const topics = loadCustomTopics();
+  // Assign qNum starting at 1000 to avoid collisions with predefined questions
+  const maxQ = topics.reduce((mx, tp) => Math.max(mx, tp.qNum), 999);
+  const qNum = maxQ + 1;
+  topics.push({
+    qNum,
+    title: title.trim(),
+    createdAt: new Date().toISOString(),
+  });
+  saveCustomTopics(topics);
+  logAudit("qa-topic", String(qNum), "create", "", title.trim(), "");
+  renderQaSheet();
+}
+
+function deleteQaTopic(qNum: number): void {
+  if (!confirm(t("qaDeleteTopicConfirm"))) return;
+  let topics = loadCustomTopics();
+  const topic = topics.find((tp) => tp.qNum === qNum);
+  topics = topics.filter((tp) => tp.qNum !== qNum);
+  saveCustomTopics(topics);
+  // Remove associated messages from cache
+  _qaCache = _qaCache.filter((m) => m.qNum !== qNum);
+  saveQaMessagesLocal(_qaCache);
+  if (isOnline()) deleteMessages(qNum);
+  logAudit("qa-topic", String(qNum), "delete", topic?.title ?? "", "", "");
+  renderQaSheet();
+}
+
 // Expose Q&A functions globally
 (window as any)._sendQaMessage = sendQaMessage;
 (window as any)._exportQaThread = exportQaThread;
@@ -3682,6 +3941,8 @@ function autoMarkVisibleAsRead(): void {
 (window as any)._closeQaArchive = closeQaArchive;
 (window as any)._deleteQaArchive = deleteQaArchive;
 (window as any)._autoMarkVisibleAsRead = autoMarkVisibleAsRead;
+(window as any)._createQaTopic = createQaTopic;
+(window as any)._deleteQaTopic = deleteQaTopic;
 
 // ── Supabase Realtime Subscription ────────────────────
 function setupRealtimeMessages(): void {
@@ -3690,7 +3951,7 @@ function setupRealtimeMessages(): void {
     (dbMsg) => {
       const msg = dbToQa(dbMsg);
       // Avoid duplicates (optimistic local message already in cache)
-      if (!_qaCache.some(m => m.id === msg.id)) {
+      if (!_qaCache.some((m) => m.id === msg.id)) {
         _qaCache.push(msg);
         saveQaMessagesLocal(_qaCache);
         renderQaThread(msg.qNum);
@@ -3702,7 +3963,7 @@ function setupRealtimeMessages(): void {
     },
     // On UPDATE: read receipt updated from another device
     (dbMsg) => {
-      const idx = _qaCache.findIndex(m => m.id === dbMsg.id);
+      const idx = _qaCache.findIndex((m) => m.id === dbMsg.id);
       if (idx !== -1) {
         _qaCache[idx].readBy = dbMsg.read_by ?? [];
         saveQaMessagesLocal(_qaCache);
@@ -3721,7 +3982,9 @@ window.addEventListener("online", async () => {
   saveQaMessagesLocal(_qaCache);
   const panel = document.getElementById("panel-qa-sheet");
   if (panel && panel.style.display !== "none") {
-    QA_SECTIONS.forEach(sec => sec.questions.forEach(q => renderQaThread(q.num)));
+    QA_SECTIONS.forEach((sec) =>
+      sec.questions.forEach((q) => renderQaThread(q.num)),
+    );
   }
   updateQaUnreadBadge();
 });
@@ -3976,6 +4239,7 @@ function renderBudget(): void {
   const tbody = document.getElementById("budgetBody");
   if (!tbody) return;
 
+  const canEditBudget = ["pmp", "business", "technology"].includes(ACTIVE_ROLE);
   let totalPlanned = 0;
   let totalActual = 0;
 
@@ -3988,8 +4252,8 @@ function renderBudget(): void {
     return `
       <tr>
         <td>${localizedText(b.label)}</td>
-        <td>${fmtCurrency(b.planned)}</td>
-        <td>${fmtCurrency(b.actual)}</td>
+        <td>${fmtCurrency(b.planned)}${canEditBudget ? ` <button class="cash-edit-btn" data-action="editBudgetField" data-budgetid="${b.id}" data-field="planned" title="${t("budgetEditPlanned")}">✎</button>` : ""}</td>
+        <td>${fmtCurrency(b.actual)}${canEditBudget ? ` <button class="cash-edit-btn" data-action="editBudgetField" data-budgetid="${b.id}" data-field="actual" title="${t("budgetEditActual")}">✎</button>` : ""}</td>
         <td class="${varianceClass}">${variance >= 0 ? "+" : ""}${fmtCurrency(variance)}</td>
       </tr>
     `;
@@ -4027,6 +4291,7 @@ function renderResources(): void {
           <span class="resource-util ${utilClass}">${utilPct}%</span>
         </div>
         <div class="resource-role">${localizedText(m.role)}</div>
+        ${m.email ? `<div class="resource-email">📧 <a href="mailto:${m.email}">${m.email}</a></div>` : ""}
         <div class="resource-alloc">
           ${m.allocation
             .map(

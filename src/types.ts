@@ -211,7 +211,9 @@ export type AuditAction =
   | "cash-field"
   | "doc-status"
   | "api-remove"
-  | "api-restore";
+  | "api-restore"
+  | "budget-field"
+  | "qa-topic";
 
 export interface AuditEntry {
   id: string;
@@ -286,6 +288,7 @@ export interface TeamMember {
   id: string;
   name: string;
   role: LocalizedString;
+  email?: string;
   allocation: { workstream: string; pct: number }[];
   capacity: number;
 }
@@ -373,6 +376,9 @@ declare global {
     _deleteQaArchive: (idx: number) => void;
     _autoMarkVisibleAsRead: () => void;
     _logStakeholderInput: () => void;
+    _editBudgetField: (budgetId: string, field: "planned" | "actual") => void;
+    _createQaTopic: () => void;
+    _deleteQaTopic: (qNum: number) => void;
   }
 }
 

@@ -207,6 +207,10 @@ export const I18N: I18nMessages = {
     apiRemoveConfirm: "Remove this integration?",
     apiRestoreAll: "Restore Removed Integrations",
 
+    // Budget editing
+    budgetEditPlanned: "Edit Planned Amount",
+    budgetEditActual: "Edit Actual Amount",
+
     // Audit Trail
     auditTitle: "Audit Trail",
     auditDesc:
@@ -451,6 +455,13 @@ export const I18N: I18nMessages = {
     qaNoArchives: "No archived threads yet",
     qaViewArchive: "View Archive",
     qaArchiveDeleteConfirm: "Delete this archived thread permanently?",
+    qaNewTopic: "New Topic",
+    qaNewTopicTitle: "Topic Title",
+    qaNewTopicPlaceholder: "Enter topic title...",
+    qaCustomTopics: "Custom Topics",
+    qaDeleteTopic: "Delete Topic",
+    qaDeleteTopicConfirm: "Delete this custom topic and all its messages?",
+    resourceEmail: "Email",
   },
 
   cn: {
@@ -641,6 +652,10 @@ export const I18N: I18nMessages = {
     apiRemove: "移除",
     apiRemoveConfirm: "确定移除此集成？",
     apiRestoreAll: "恢复已移除的集成",
+
+    // Budget editing
+    budgetEditPlanned: "编辑计划金额",
+    budgetEditActual: "编辑实际金额",
 
     // Audit Trail
     auditTitle: "审计追踪",
@@ -875,6 +890,13 @@ export const I18N: I18nMessages = {
     qaNoArchives: "暂无已归档对话",
     qaViewArchive: "查看归档",
     qaArchiveDeleteConfirm: "永久删除此归档对话？",
+    qaNewTopic: "新话题",
+    qaNewTopicTitle: "话题标题",
+    qaNewTopicPlaceholder: "输入话题标题...",
+    qaCustomTopics: "自定义话题",
+    qaDeleteTopic: "删除话题",
+    qaDeleteTopicConfirm: "删除此自定义话题及其所有消息？",
+    resourceEmail: "邮箱",
   },
 };
 
