@@ -162,8 +162,9 @@ def build_english():
         "NRD detection sensitivity >= 92%, asynchrony specificity >= 88%, signal latency < 50 ms",
         "V/Q separation accuracy > 85% vs. DCE-CT reference for EIT module",
         "ECG artifact suppression > 98% via proprietary ECG-gating algorithm",
-        "Secure $2M Phase 1 seed funding by M+3 (Jun 2026)",
-        "Complete IP transfer to Company B USA by M+2 (May 2026)",
+        "Seed round complete: $1.8M raised (direct equity) -- funds available for deployment",
+        "Complete sEMG IP transfer to Company B USA by M+2 (May 2026); EIT IP transfer",
+        "  deferred to Series A timeframe per inventor's business plan (Year 1 Q2-Q4)",
         "Achieve ISO 13485 audit readiness at Silan Technology by M+2",
     ]
     for o in objectives:
@@ -244,7 +245,7 @@ def build_english():
     milestones = [
         ("M+0", "Prototype finalized -- sEMG module", "Technical", "BOM locked; specs match Pre-Sub"),
         ("M+0", "Pre-Sub Q-Meeting request filed", "Regulatory", "Q-Sub to FDA CDRH"),
-        ("M+1", "IP buyout & US legal structure", "Regulatory", "Patents transferred to Co. B USA"),
+        ("M+1", "sEMG IP assignment & US legal structure", "Regulatory", "sEMG patents transferred to Co. B USA"),
         ("M+2", "FDA Pre-Submission meeting", "Regulatory", "FDA feedback on SE strategy"),
         ("M+2", "ISO 13485 audit -- Silan Technology", "Regulatory", "Gap remediation complete"),
         ("M+3", "Bench & performance testing -- sEMG", "Technical", "IEC 60601-1, EMC, n>=30"),
@@ -435,8 +436,9 @@ def build_chinese():
         "NRD检测灵敏度 ≥ 92%，异步特异性 ≥ 88%，信号延迟 < 50ms",
         "EIT模块V/Q分离准确度 > 85%（对比DCE-CT参考）",
         "通过专有ECG门控算法实现ECG伪影抑制 > 98%",
-        "在M+3（2026年6月）前获得200万美元第一阶段种子融资",
-        "在M+2（2026年5月）前完成知识产权转让至B公司美国",
+        "种子轮已完成: 已融资$1.8M (直接股权) -- 资金可供部署",
+        "在M+2（2026年5月）前完成sEMG知识产权转让至B公司美国;",
+        "  EIT知识产权转让推迟至A轮时间框架 (按发明人商业计划, Year 1 Q2-Q4)",
         "在M+2前实现思澜科技ISO 13485审核就绪",
     ]
     for o in objectives:
@@ -517,7 +519,7 @@ def build_chinese():
     milestones = [
         ("M+0", "原型定型 — sEMG模块", "技术", "BOM锁定；规格匹配Pre-Sub"),
         ("M+0", "预提交Q会议申请已提交", "法规", "向FDA CDRH提交Q-Sub"),
-        ("M+1", "知识产权收购和美国法律结构", "法规", "专利转让至B公司美国"),
+        ("M+1", "sEMG知识产权转让和美国法律结构", "法规", "sEMG专利转让至B公司美国"),
         ("M+2", "FDA预提交会议", "法规", "FDA反馈SE策略"),
         ("M+2", "ISO 13485审核—思澜科技", "法规", "差距修复完成"),
         ("M+3", "台架和性能测试—sEMG", "技术", "IEC 60601-1, EMC, n≥30"),

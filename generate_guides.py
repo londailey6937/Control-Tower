@@ -226,7 +226,7 @@ def build_english():
     pdf.kv("Suppliers", "Hardware component vendor tracking")
     pdf.kv("Audit Trail", "Chronological log of all dashboard actions for DHF traceability")
     pdf.kv("US Investment", "North America fundraising pipeline, investor tracking, and IR activities")
-    pdf.kv("Document Library", "Centralized repository for all project documents and templates")
+    pdf.kv("Document Control", "ISO 13485-aligned document lifecycle, revision history, and review scheduling")
 
     # 5. Dual-Track
     pdf.add_page()
@@ -922,7 +922,7 @@ def build_english():
         "N. America.\n\n"
         "Because this tab provides dedicated investor-facing content -- pipeline metrics, "
         "target investor details, and an activity log -- standalone investor pitch deck "
-        "documents were removed from the Document Library to avoid duplication. All investor "
+        "documents were removed from Document Control to avoid duplication. All investor "
         "materials and engagement history now live here.")
 
     pdf.sub("26.1 IR Metrics Cards")
@@ -959,17 +959,26 @@ def build_english():
         "and fundraising presentation preparation. This log provides an auditable "
         "record of all investor engagement for both internal review and board reporting.")
 
-    # 27. Document Library
+    # 27. Document Control
     pdf.add_page()
-    pdf.sec(27, "Tab 13: Document Library")
+    pdf.sec(27, "Tab 13: Document Control")
     pdf.txt(
-        "The Document Library is a centralized repository for all project documents, "
-        "templates, and deliverables. It provides a single place to find and reference "
-        "every key document in the project.")
+        "Document Control provides ISO 13485-aligned document lifecycle management. "
+        "Every document carries a Document Control Number (DCN), a 5-stage status "
+        "workflow, full revision history, and automated review scheduling.")
 
-    pdf.sub("27.1 Category Filters")
+    pdf.sub("27.1 Summary Bar")
     pdf.txt(
-        "Filter buttons at the top allow viewing documents by category:\n\n"
+        "At the top of the panel, counter-cards provide an at-a-glance summary:\n\n"
+        "  Total      -- Total number of controlled documents\n"
+        "  Effective   -- Documents in active use\n"
+        "  In Review   -- Documents awaiting approval\n"
+        "  Draft       -- New or in-progress documents\n"
+        "  Overdue     -- Documents past their scheduled review date (red badge)")
+
+    pdf.sub("27.2 Category Filters")
+    pdf.txt(
+        "Filter buttons allow viewing documents by category:\n\n"
         "  All Categories  -- Show everything (default)\n"
         "  Regulatory       -- FDA submissions, pre-sub packages, compliance docs\n"
         "  Technical        -- Design specs, algorithm reports, protocol docs\n"
@@ -978,28 +987,48 @@ def build_english():
         "  Finance          -- Budget reports, burn reports, financial statements\n"
         "  Templates        -- Reusable templates for recurring documents")
 
-    pdf.sub("27.2 Document Table")
+    pdf.sub("27.3 Document Table")
     pdf.txt(
         "Each row shows:\n\n"
-        "  Category    -- Color-coded badge (Regulatory=blue, Technical=green, etc.)\n"
-        "  Document    -- Document name (bilingual)\n"
-        "  Version     -- Current version number\n"
-        "  Last Updated -- Date of most recent edit\n"
-        "  Owner       -- Team member responsible for the document\n"
-        "  Status      -- Final (green) / Draft (yellow) / Archived (gray)")
+        "  Category         -- Color-coded badge (Regulatory=blue, Technical=green, etc.)\n"
+        "  DCN              -- Unique Document Control Number (e.g., DCN-REG-001)\n"
+        "  Document         -- Clickable name opens the Revision History panel\n"
+        "  Version          -- Current version number\n"
+        "  Last Updated     -- Date of most recent edit\n"
+        "  Owner            -- Team member responsible for the document\n"
+        "  Linked Milestone -- Associated R-number or T-number milestone\n"
+        "  Status           -- Clickable badge (PMP only) to advance the workflow\n\n"
+        "The status badge cycles through five lifecycle stages:\n\n"
+        "  Draft -> In Review -> Approved -> Effective -> Obsolete\n\n"
+        "Status changes are logged to the Audit Trail for DHF traceability.")
 
-    pdf.sub("27.3 Team Members & Dashboard Roles")
+    pdf.sub("27.4 Revision History")
     pdf.txt(
-        "The dashboard team consists of three members:\n\n"
+        "Click any document name to open a modal panel showing:\n\n"
+        "  Document metadata  -- Owner, version, effective date, next review, linked milestone\n"
+        "  Revision table     -- Every revision with rev number, date, author, and change description\n\n"
+        "This provides full traceability for design control documentation.")
+
+    pdf.sub("27.5 Review Scheduling")
+    pdf.txt(
+        "Each document has a Next Review date. Documents past their review date are highlighted "
+        "with a warning badge and a tinted row background. The summary bar shows the count of "
+        "overdue reviews.")
+
+    pdf.sub("27.6 Team Members & Dashboard Roles")
+    pdf.txt(
+        "The dashboard team consists of four members:\n\n"
         "  Lon Dailey -- Regulatory & Investor Relations (N. America)\n"
         "    Responsibilities: 510(k) preparation, standards compliance,\n"
         "    investor relations for North America, project management\n\n"
         "  Dr. Dai -- Chief Technology Officer\n"
         "    Responsibilities: sEMG algorithm development, EIT prototype,\n"
         "    MyoBus integration, technical documentation\n\n"
-        "  Lawrence Lui -- CEO, Company B\n"
+        "  Lawrence Liu -- CEO, Company B\n"
         "    Responsibilities: Investor relations (Asia), business strategy,\n"
-        "    operations management")
+        "    operations management\n\n"
+        "  Danielle Liu -- Accounting\n"
+        "    Responsibilities: Monthly burn reports, budget tracking, financial statements")
 
     # 28. Inventor Q&A Message Board
     pdf.add_page()
@@ -1999,7 +2028,7 @@ def build_chinese():
         "\u7531Lon Dailey\u4f5c\u4e3a\u5317\u7f8e IR\u8d1f\u8d23\u4eba\u7ba1\u7406\u3002\n\n"
         "\u7531\u4e8e\u6b64\u9009\u9879\u5361\u63d0\u4f9b\u4e13\u95e8\u7684\u6295\u8d44\u8005\u5185\u5bb9\u2014\u2014\u7ba1\u9053\u6307\u6807\u3001"
         "\u76ee\u6807\u6295\u8d44\u8005\u8be6\u7ec6\u4fe1\u606f\u548c\u6d3b\u52a8\u65e5\u5fd7\u2014\u2014\u72ec\u7acb\u7684\u6295\u8d44\u8005\u6f14\u793a\u6587\u7a3f"
-        "\u5df2\u4ece\u6587\u6863\u5e93\u4e2d\u79fb\u9664\u4ee5\u907f\u514d\u91cd\u590d\u3002\u6240\u6709\u6295\u8d44\u8005\u6750\u6599\u548c\u4e92\u52a8\u5386\u53f2\u73b0\u5728\u90fd\u5728\u8fd9\u91cc\u3002")
+        "\u5df2\u4ece\u6587\u6863\u63a7\u5236\u4e2d\u79fb\u9664\u4ee5\u907f\u514d\u91cd\u590d\u3002\u6240\u6709\u6295\u8d44\u8005\u6750\u6599\u548c\u4e92\u52a8\u5386\u53f2\u73b0\u5728\u90fd\u5728\u8fd9\u91cc\u3002")
 
     pdf.sub("26.1 IR\u6307\u6807\u5361\u7247")
     pdf.txt(
@@ -2035,15 +2064,25 @@ def build_chinese():
         "\u878d\u8d44\u6f14\u793a\u51c6\u5907\u3002\u6b64\u65e5\u5fd7\u4e3a\u5185\u90e8\u5ba1\u67e5\u548c\u8463\u4e8b\u4f1a\u62a5\u544a"
         "\u63d0\u4f9b\u6240\u6709\u6295\u8d44\u8005\u4e92\u52a8\u7684\u53ef\u5ba1\u8ba1\u8bb0\u5f55\u3002")
 
-    # 27. 文档库
+    # 27. 文档控制
     pdf.add_page()
-    pdf.sec(27, "\u9009\u9879\u530113\uff1a\u6587\u6863\u5e93")
+    pdf.sec(27, "\u9009\u9879\u530113\uff1a\u6587\u6863\u63a7\u5236")
     pdf.txt(
-        "\u6587\u6863\u5e93\u662f\u6240\u6709\u9879\u76ee\u6587\u6863\u3001\u6a21\u677f\u548c\u4ea4\u4ed8\u7269\u7684\u96c6\u4e2d\u5b58\u50a8\u5e93\u3002")
+        "\u6587\u6863\u63a7\u5236\u63d0\u4f9bISO 13485\u5408\u89c4\u7684\u6587\u6863\u751f\u547d\u5468\u671f\u7ba1\u7406\u3002\u6bcf\u4e2a\u6587\u6863\u90fd\u5e26\u6709"
+        "\u6587\u63a7\u7f16\u53f7(DCN)\u3001\u4e94\u9636\u6bb5\u72b6\u6001\u5de5\u4f5c\u6d41\u3001\u5b8c\u6574\u7684\u4fee\u8ba2\u5386\u53f2\u548c\u81ea\u52a8\u5ba1\u6838\u6392\u7a0b\u3002")
 
-    pdf.sub("27.1 \u7c7b\u522b\u7b5b\u9009")
+    pdf.sub("27.1 \u6458\u8981\u680f")
     pdf.txt(
-        "\u9876\u90e8\u7684\u7b5b\u9009\u6309\u94ae\u5141\u8bb8\u6309\u7c7b\u522b\u67e5\u770b\u6587\u6863\uff1a\n\n"
+        "\u9762\u677f\u9876\u90e8\u7684\u8ba1\u6570\u5361\u7247\u63d0\u4f9b\u5feb\u901f\u6982\u89c8\uff1a\n\n"
+        "  \u603b\u8ba1      -- \u53d7\u63a7\u6587\u6863\u603b\u6570\n"
+        "  \u5df2\u751f\u6548    -- \u5f53\u524d\u6709\u6548\u6587\u6863\n"
+        "  \u5ba1\u6838\u4e2d    -- \u7b49\u5f85\u5ba1\u6279\u7684\u6587\u6863\n"
+        "  \u8349\u7a3f      -- \u65b0\u5efa\u6216\u7f16\u5199\u4e2d\u7684\u6587\u6863\n"
+        "  \u903e\u671f      -- \u8d85\u8fc7\u8ba1\u5212\u5ba1\u6838\u65e5\u671f\u7684\u6587\u6863\uff08\u7ea2\u8272\u6807\u8bb0\uff09")
+
+    pdf.sub("27.2 \u7c7b\u522b\u7b5b\u9009")
+    pdf.txt(
+        "\u7b5b\u9009\u6309\u94ae\u5141\u8bb8\u6309\u7c7b\u522b\u67e5\u770b\u6587\u6863\uff1a\n\n"
         "  \u6240\u6709\u7c7b\u522b  -- \u663e\u793a\u6240\u6709\u5185\u5bb9\uff08\u9ed8\u8ba4\uff09\n"
         "  \u6cd5\u89c4      -- FDA\u63d0\u4ea4\u3001\u9884\u63d0\u4ea4\u5305\u3001\u5408\u89c4\u6587\u6863\n"
         "  \u6280\u672f      -- \u8bbe\u8ba1\u89c4\u683c\u3001\u7b97\u6cd5\u62a5\u544a\u3001\u534f\u8bae\u6587\u6863\n"
@@ -2052,25 +2091,44 @@ def build_chinese():
         "  \u8d22\u52a1      -- \u9884\u7b97\u62a5\u544a\u3001\u71c3\u70e7\u62a5\u544a\u3001\u8d22\u52a1\u62a5\u8868\n"
         "  \u6a21\u677f      -- \u53ef\u91cd\u590d\u4f7f\u7528\u7684\u5e38\u89c4\u6587\u6863\u6a21\u677f")
 
-    pdf.sub("27.2 \u6587\u6863\u8868\u683c")
+    pdf.sub("27.3 \u6587\u6863\u8868\u683c")
     pdf.txt(
         "\u6bcf\u884c\u663e\u793a\uff1a\n\n"
-        "  \u7c7b\u522b      -- \u989c\u8272\u7f16\u7801\u6807\u7b7e\n"
-        "  \u6587\u6863      -- \u6587\u6863\u540d\u79f0\uff08\u53cc\u8bed\uff09\n"
-        "  \u7248\u672c      -- \u5f53\u524d\u7248\u672c\u53f7\n"
-        "  \u6700\u540e\u66f4\u65b0  -- \u6700\u8fd1\u7f16\u8f91\u65e5\u671f\n"
-        "  \u8d1f\u8d23\u4eba    -- \u8d1f\u8d23\u6587\u6863\u7684\u56e2\u961f\u6210\u5458\n"
-        "  \u72b6\u6001      -- \u5b9a\u7a3f\uff08\u7eff\u8272\uff09/ \u8349\u7a3f\uff08\u9ec4\u8272\uff09/ \u5df2\u5f52\u6863\uff08\u7070\u8272\uff09")
+        "  \u7c7b\u522b         -- \u989c\u8272\u7f16\u7801\u6807\u7b7e\n"
+        "  \u6587\u63a7\u7f16\u53f7     -- \u552f\u4e00\u6587\u63a7\u7f16\u53f7\uff08\u5982 DCN-REG-001\uff09\n"
+        "  \u6587\u6863         -- \u70b9\u51fb\u540d\u79f0\u6253\u5f00\u4fee\u8ba2\u5386\u53f2\u9762\u677f\n"
+        "  \u7248\u672c         -- \u5f53\u524d\u7248\u672c\u53f7\n"
+        "  \u6700\u540e\u66f4\u65b0     -- \u6700\u8fd1\u7f16\u8f91\u65e5\u671f\n"
+        "  \u8d1f\u8d23\u4eba       -- \u8d1f\u8d23\u6587\u6863\u7684\u56e2\u961f\u6210\u5458\n"
+        "  \u5173\u8054\u91cc\u7a0b\u7891   -- \u5173\u8054\u7684R\u7f16\u53f7\u6216T\u7f16\u53f7\u91cc\u7a0b\u7891\n"
+        "  \u72b6\u6001         -- \u53ef\u70b9\u51fb\u6807\u7b7e\uff08\u4ec5PMP\uff09\u63a8\u8fdb\u5de5\u4f5c\u6d41\n\n"
+        "\u72b6\u6001\u6807\u7b7e\u5728\u4e94\u4e2a\u751f\u547d\u5468\u671f\u9636\u6bb5\u4e4b\u95f4\u5faa\u73af\uff1a\n\n"
+        "  \u8349\u7a3f -> \u5ba1\u6838\u4e2d -> \u5df2\u6279\u51c6 -> \u5df2\u751f\u6548 -> \u5df2\u5e9f\u6b62\n\n"
+        "\u72b6\u6001\u53d8\u66f4\u8bb0\u5f55\u5230\u5ba1\u8ba1\u8ffd\u8e2a\u4ee5\u5b9e\u73b0DHF\u53ef\u8ffd\u6eaf\u6027\u3002")
 
-    pdf.sub("27.3 \u56e2\u961f\u6210\u5458\u4e0e\u4eea\u8868\u76d8\u89d2\u8272")
+    pdf.sub("27.4 \u4fee\u8ba2\u5386\u53f2")
     pdf.txt(
-        "\u4eea\u8868\u76d8\u56e2\u961f\u7531\u4e09\u540d\u6210\u5458\u7ec4\u6210\uff1a\n\n"
+        "\u70b9\u51fb\u4efb\u4f55\u6587\u6863\u540d\u79f0\u53ef\u6253\u5f00\u6a21\u6001\u9762\u677f\uff0c\u663e\u793a\uff1a\n\n"
+        "  \u6587\u6863\u5143\u6570\u636e  -- \u8d1f\u8d23\u4eba\u3001\u7248\u672c\u3001\u751f\u6548\u65e5\u671f\u3001\u4e0b\u6b21\u5ba1\u6838\u3001\u5173\u8054\u91cc\u7a0b\u7891\n"
+        "  \u4fee\u8ba2\u8868     -- \u6bcf\u6b21\u4fee\u8ba2\u7684\u7248\u6b21\u3001\u65e5\u671f\u3001\u4f5c\u8005\u548c\u53d8\u66f4\u8bf4\u660e\n\n"
+        "\u8fd9\u4e3a\u8bbe\u8ba1\u63a7\u5236\u6587\u6863\u63d0\u4f9b\u5b8c\u6574\u7684\u53ef\u8ffd\u6eaf\u6027\u3002")
+
+    pdf.sub("27.5 \u5ba1\u6838\u6392\u7a0b")
+    pdf.txt(
+        "\u6bcf\u4e2a\u6587\u6863\u90fd\u6709\u4e0b\u6b21\u5ba1\u6838\u65e5\u671f\u3002\u8d85\u8fc7\u5ba1\u6838\u65e5\u671f\u7684\u6587\u6863\u4f1a\u4ee5"
+        "\u8b66\u544a\u6807\u7b7e\u548c\u7740\u8272\u884c\u80cc\u666f\u9ad8\u4eae\u663e\u793a\u3002\u6458\u8981\u680f\u663e\u793a\u903e\u671f\u5ba1\u6838\u7684\u6570\u91cf\u3002")
+
+    pdf.sub("27.6 \u56e2\u961f\u6210\u5458\u4e0e\u4eea\u8868\u76d8\u89d2\u8272")
+    pdf.txt(
+        "\u4eea\u8868\u76d8\u56e2\u961f\u7531\u56db\u540d\u6210\u5458\u7ec4\u6210\uff1a\n\n"
         "  Lon Dailey -- \u6cd5\u89c4\u53ca\u6295\u8d44\u8005\u5173\u7cfb\uff08\u5317\u7f8e\uff09\n"
         "    \u804c\u8d23\uff1a510(k)\u51c6\u5907\u3001\u6807\u51c6\u5408\u89c4\u3001\u5317\u7f8e\u6295\u8d44\u8005\u5173\u7cfb\u3001\u9879\u76ee\u7ba1\u7406\n\n"
         "  \u6234\u535a\u58eb -- \u9996\u5e2d\u6280\u672f\u5b98\n"
         "    \u804c\u8d23\uff1asEMG\u7b97\u6cd5\u5f00\u53d1\u3001EIT\u539f\u578b\u3001MyoBus\u96c6\u6210\u3001\u6280\u672f\u6587\u6863\n\n"
-        "  Lawrence Lui -- CEO\uff0cB\u516c\u53f8\n"
-        "    \u804c\u8d23\uff1a\u6295\u8d44\u8005\u5173\u7cfb\uff08\u4e9a\u6d32\uff09\u3001\u5546\u4e1a\u6218\u7565\u3001\u8fd0\u8425\u7ba1\u7406")
+        "  Lawrence Liu -- CEO\uff0cB\u516c\u53f8\n"
+        "    \u804c\u8d23\uff1a\u6295\u8d44\u8005\u5173\u7cfb\uff08\u4e9a\u6d32\uff09\u3001\u5546\u4e1a\u6218\u7565\u3001\u8fd0\u8425\u7ba1\u7406\n\n"
+        "  Danielle Liu -- \u4f1a\u8ba1\n"
+        "    \u804c\u8d23\uff1a\u6708\u5ea6\u71c3\u70e7\u62a5\u544a\u3001\u9884\u7b97\u8ffd\u8e2a\u3001\u8d22\u52a1\u62a5\u8868")
 
     # 28. 发明人问答留言板
     pdf.add_page()

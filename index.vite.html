@@ -117,7 +117,7 @@
       </button>
       <button class="tab-btn" data-tab="doc-library">
         <span class="tab-icon">📚</span>
-        <span data-i18n="tabDocLibrary">Document Library</span>
+        <span data-i18n="tabDocLibrary">Document Control</span>
       </button>
       <button class="tab-btn" data-tab="qa-sheet">
         <span class="tab-icon">📝</span>
@@ -523,15 +523,16 @@
         </section>
       </section>
 
-      <!-- ── TAB: DOCUMENT LIBRARY ───────────────── -->
+      <!-- ── TAB: DOCUMENT CONTROL ────────────────── -->
       <section class="tab-panel" id="panel-doc-library">
         <div class="panel-header">
-          <h2 data-i18n="docLibTitle">Document Library</h2>
+          <h2 data-i18n="docLibTitle">Document Control</h2>
           <p class="panel-desc" data-i18n="docLibDesc">
-            Centralized repository for all project documents, templates, and
-            deliverables
+            ISO 13485–aligned document control — lifecycle tracking, revision
+            history, and review scheduling
           </p>
         </div>
+        <div id="docControlSummary" class="doc-control-summary"></div>
         <div class="doc-lib-toolbar">
           <div class="doc-lib-filters" id="docLibFilters"></div>
           <button
@@ -551,10 +552,12 @@
             <thead>
               <tr>
                 <th data-i18n="docLibCategory">Category</th>
+                <th data-i18n="docLibDCN">DCN</th>
                 <th data-i18n="docLibName">Document</th>
                 <th data-i18n="docLibVersion">Version</th>
                 <th data-i18n="docLibDate">Last Updated</th>
                 <th data-i18n="docLibOwner">Owner</th>
+                <th data-i18n="docLibLinked">Linked</th>
                 <th data-i18n="docLibStatus">Status</th>
                 <th></th>
               </tr>
@@ -562,6 +565,7 @@
             <tbody id="docLibBody"></tbody>
           </table>
         </div>
+        <div id="docHistoryOverlay" class="doc-history-overlay"></div>
       </section>
       <!-- ── INVENTOR Q&A MESSAGE BOARD ────────── -->
       <section class="tab-panel" id="panel-qa-sheet">

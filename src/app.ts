@@ -33,6 +33,7 @@ import type {
   UserRole,
   AuditEntry,
   DocLibItem,
+  DocStatus,
   QAMessage,
   QASettings,
 } from "./types.ts";
@@ -2131,7 +2132,7 @@ function renderUsInvestment(): void {
       {
         date: "2026-04-01",
         activity:
-          "Prepare Phase 1 Seed Round investor presentation ($2M target)",
+          "Prepare Phase 1 Seed Round investor update ($1.8M raised — deployment plan)",
         status: "todo",
       },
       {
@@ -2172,7 +2173,7 @@ function renderUsInvestment(): void {
 }
 
 // ══════════════════════════════════════════════════
-// DOCUMENT LIBRARY
+// DOCUMENT CONTROL
 // ══════════════════════════════════════════════════
 
 const DOCLIB_STORAGE_KEY = "ctower_doclib_docs";
@@ -2180,42 +2181,124 @@ const DOCLIB_STORAGE_KEY = "ctower_doclib_docs";
 const DEFAULT_DOCS: DocLibItem[] = [
   {
     id: "doc-1",
+    dcn: "DCN-REG-001",
     cat: "regulatory",
     name: { en: "510(k) Pre-Submission Package", cn: "510(k)预提交包" },
     version: "2.0",
     date: "2026-03-15",
     owner: "Lon Dailey",
-    status: "final",
+    status: "effective",
+    effectiveDate: "2026-03-15",
+    nextReview: "2026-06-15",
+    linkedMilestone: "R1",
+    revisions: [
+      {
+        rev: "1.0",
+        date: "2026-02-01",
+        author: "Lon Dailey",
+        change: { en: "Initial draft", cn: "初稿" },
+      },
+      {
+        rev: "2.0",
+        date: "2026-03-15",
+        author: "Lon Dailey",
+        change: {
+          en: "Revised per FDA Pre-Sub guidance; updated predicate strategy",
+          cn: "根据FDA Pre-Sub指南修订；更新前置器械策略",
+        },
+      },
+    ],
   },
   {
     id: "doc-2",
+    dcn: "DCN-REG-002",
     cat: "regulatory",
     name: { en: "FDA Pre-Sub Q-Meeting Minutes", cn: "FDA预提交Q会议纪要" },
     version: "1.0",
     date: "2026-03-01",
     owner: "Lon Dailey",
     status: "draft",
+    effectiveDate: "",
+    nextReview: "2026-04-01",
+    linkedMilestone: "R2",
+    revisions: [
+      {
+        rev: "1.0",
+        date: "2026-03-01",
+        author: "Lon Dailey",
+        change: { en: "Draft pending meeting", cn: "待会议草稿" },
+      },
+    ],
   },
   {
     id: "doc-3",
+    dcn: "DCN-REG-003",
     cat: "regulatory",
     name: { en: "Predicate Device Comparison (IKN)", cn: "前置器械对比(IKN)" },
     version: "1.1",
     date: "2026-03-10",
     owner: "Lon Dailey",
-    status: "draft",
+    status: "in-review",
+    effectiveDate: "",
+    nextReview: "2026-04-10",
+    linkedMilestone: "R3",
+    revisions: [
+      {
+        rev: "1.0",
+        date: "2026-02-20",
+        author: "Lon Dailey",
+        change: { en: "Initial comparison K082437", cn: "初始比较K082437" },
+      },
+      {
+        rev: "1.1",
+        date: "2026-03-10",
+        author: "Lon Dailey",
+        change: {
+          en: "Added Timpel Enlight DQS for EIT module",
+          cn: "添加Timpel Enlight DQS用于EIT模块",
+        },
+      },
+    ],
   },
   {
     id: "doc-4",
+    dcn: "DCN-TECH-001",
     cat: "technical",
     name: { en: "sEMG Module Design Specification", cn: "sEMG模块设计规格" },
     version: "3.0",
     date: "2026-03-12",
     owner: "Dr. Dai",
-    status: "final",
+    status: "effective",
+    effectiveDate: "2026-03-12",
+    nextReview: "2026-06-12",
+    linkedMilestone: "T1",
+    revisions: [
+      {
+        rev: "1.0",
+        date: "2025-10-01",
+        author: "Dr. Dai",
+        change: { en: "Initial design spec", cn: "初始设计规格" },
+      },
+      {
+        rev: "2.0",
+        date: "2026-01-15",
+        author: "Dr. Dai",
+        change: {
+          en: "Updated electrode array (4→8 channel option)",
+          cn: "更新电极阵列（4→8通道选项）",
+        },
+      },
+      {
+        rev: "3.0",
+        date: "2026-03-12",
+        author: "Dr. Dai",
+        change: { en: "Production-intent design freeze", cn: "生产级设计冻结" },
+      },
+    ],
   },
   {
     id: "doc-5",
+    dcn: "DCN-TECH-002",
     cat: "technical",
     name: {
       en: "ECG-Gating Algorithm Technical Report",
@@ -2224,28 +2307,88 @@ const DEFAULT_DOCS: DocLibItem[] = [
     version: "1.2",
     date: "2026-03-18",
     owner: "Dr. Dai",
-    status: "draft",
+    status: "in-review",
+    effectiveDate: "",
+    nextReview: "2026-04-18",
+    linkedMilestone: "T2",
+    revisions: [
+      {
+        rev: "1.0",
+        date: "2026-02-01",
+        author: "Dr. Dai",
+        change: {
+          en: "Algorithm description and bench data",
+          cn: "算法描述和台架数据",
+        },
+      },
+      {
+        rev: "1.2",
+        date: "2026-03-18",
+        author: "Dr. Dai",
+        change: {
+          en: "Updated suppression to 97.5%; added 30-patient dataset results",
+          cn: "更新抑制率至97.5%；添加30例患者数据集结果",
+        },
+      },
+    ],
   },
   {
     id: "doc-6",
+    dcn: "DCN-TECH-003",
     cat: "technical",
     name: { en: "MyoBus Protocol Specification", cn: "MyoBus协议规范" },
     version: "2.1",
     date: "2026-03-05",
     owner: "Dr. Dai",
-    status: "final",
+    status: "effective",
+    effectiveDate: "2026-03-05",
+    nextReview: "2026-06-05",
+    linkedMilestone: "T8",
+    revisions: [
+      {
+        rev: "1.0",
+        date: "2025-11-01",
+        author: "Dr. Dai",
+        change: { en: "Initial protocol design", cn: "初始协议设计" },
+      },
+      {
+        rev: "2.1",
+        date: "2026-03-05",
+        author: "Dr. Dai",
+        change: {
+          en: "Added FHIR output module; AES-256 encryption spec",
+          cn: "添加FHIR输出模块；AES-256加密规范",
+        },
+      },
+    ],
   },
   {
     id: "doc-7",
+    dcn: "DCN-TECH-004",
     cat: "technical",
     name: { en: "EIT Belt Hardware Design Doc", cn: "EIT电极带硬件设计文档" },
     version: "1.0",
     date: "2026-02-28",
     owner: "Dr. Dai",
     status: "draft",
+    effectiveDate: "",
+    nextReview: "2026-05-28",
+    linkedMilestone: "T5",
+    revisions: [
+      {
+        rev: "1.0",
+        date: "2026-02-28",
+        author: "Dr. Dai",
+        change: {
+          en: "Initial 32-electrode belt design",
+          cn: "初始32电极带设计",
+        },
+      },
+    ],
   },
   {
     id: "doc-10",
+    dcn: "DCN-BIZ-001",
     cat: "business",
     name: {
       en: "Phase 1 Seed Round Term Sheet Template",
@@ -2253,35 +2396,80 @@ const DEFAULT_DOCS: DocLibItem[] = [
     },
     version: "1.0",
     date: "2026-03-08",
-    owner: "Lawrence Lui",
-    status: "draft",
+    owner: "Lawrence Liu",
+    status: "approved",
+    effectiveDate: "",
+    nextReview: "2026-06-08",
+    linkedMilestone: "",
+    revisions: [
+      {
+        rev: "1.0",
+        date: "2026-03-08",
+        author: "Lawrence Liu",
+        change: { en: "Template for $1.8M seed round", cn: "$1.8M种子轮模板" },
+      },
+    ],
   },
   {
     id: "doc-11",
+    dcn: "DCN-LEG-001",
     cat: "legal",
     name: {
-      en: "IP Assignment Agreement (CN→US)",
-      cn: "IP转让协议(中国→美国)",
+      en: "sEMG IP Assignment Agreement (CN→US)",
+      cn: "sEMG IP转让协议(中国→美国)",
     },
     version: "2.0",
     date: "2026-02-15",
-    owner: "Lawrence Lui",
-    status: "final",
+    owner: "Lawrence Liu",
+    status: "effective",
+    effectiveDate: "2026-02-15",
+    nextReview: "2026-08-15",
+    linkedMilestone: "R8",
+    revisions: [
+      {
+        rev: "1.0",
+        date: "2025-12-01",
+        author: "Lawrence Liu",
+        change: { en: "Initial IP transfer framework", cn: "初始IP转让框架" },
+      },
+      {
+        rev: "2.0",
+        date: "2026-02-15",
+        author: "Lawrence Liu",
+        change: {
+          en: "Scoped to sEMG only; EIT deferred to Series A",
+          cn: "范围限sEMG；EIT推迟至A轮",
+        },
+      },
+    ],
   },
   {
     id: "doc-12",
+    dcn: "DCN-LEG-002",
     cat: "legal",
     name: {
-      en: "Company B USA Articles of Organization",
-      cn: "B公司美国组织章程",
+      en: "Company B USA — Delaware C-Corp Filing",
+      cn: "B公司美国 — 特拉华州C-Corp注册",
     },
     version: "1.0",
     date: "2025-09-01",
     owner: "Lon Dailey",
-    status: "final",
+    status: "effective",
+    effectiveDate: "2025-09-01",
+    nextReview: "2026-09-01",
+    linkedMilestone: "R8",
+    revisions: [
+      {
+        rev: "1.0",
+        date: "2025-09-01",
+        author: "Lon Dailey",
+        change: { en: "Incorporation filing", cn: "公司注册" },
+      },
+    ],
   },
   {
     id: "doc-13",
+    dcn: "DCN-FIN-001",
     cat: "finance",
     name: {
       en: "Monthly Burn Report — March 2026",
@@ -2289,60 +2477,178 @@ const DEFAULT_DOCS: DocLibItem[] = [
     },
     version: "1.0",
     date: "2026-03-22",
-    owner: "Lawrence Lui",
-    status: "final",
+    owner: "Danielle Liu",
+    status: "effective",
+    effectiveDate: "2026-03-22",
+    nextReview: "2026-04-22",
+    linkedMilestone: "",
+    revisions: [
+      {
+        rev: "1.0",
+        date: "2026-03-22",
+        author: "Danielle Liu",
+        change: {
+          en: "March actuals: $45K burn, $1.8M cash",
+          cn: "3月实际：$45K消耗，$1.8M现金",
+        },
+      },
+    ],
   },
   {
     id: "doc-14",
+    dcn: "DCN-FIN-002",
     cat: "finance",
     name: { en: "Budget vs. Actual YTD", cn: "预算vs实际 年初至今" },
     version: "3.0",
     date: "2026-03-20",
-    owner: "Lawrence Lui",
-    status: "draft",
+    owner: "Danielle Liu",
+    status: "in-review",
+    effectiveDate: "",
+    nextReview: "2026-04-20",
+    linkedMilestone: "",
+    revisions: [
+      {
+        rev: "1.0",
+        date: "2026-01-15",
+        author: "Danielle Liu",
+        change: { en: "Q1 initial budget", cn: "Q1初始预算" },
+      },
+      {
+        rev: "3.0",
+        date: "2026-03-20",
+        author: "Danielle Liu",
+        change: {
+          en: "Updated with $1.8M seed inflow",
+          cn: "更新$1.8M种子资金流入",
+        },
+      },
+    ],
   },
   {
     id: "doc-15",
+    dcn: "DCN-TPL-001",
     cat: "templates",
     name: { en: "Monthly Investor Update Template", cn: "月度投资者更新模板" },
     version: "1.0",
     date: "2026-02-01",
     owner: "Lon Dailey",
-    status: "final",
+    status: "effective",
+    effectiveDate: "2026-02-01",
+    nextReview: "2026-08-01",
+    linkedMilestone: "",
+    revisions: [
+      {
+        rev: "1.0",
+        date: "2026-02-01",
+        author: "Lon Dailey",
+        change: { en: "Standardized template", cn: "标准化模板" },
+      },
+    ],
   },
   {
     id: "doc-16",
+    dcn: "DCN-TPL-002",
     cat: "templates",
     name: { en: "Gate Review Checklist", cn: "门控审查清单" },
     version: "1.0",
     date: "2026-01-15",
     owner: "Lon Dailey",
-    status: "final",
+    status: "effective",
+    effectiveDate: "2026-01-15",
+    nextReview: "2026-07-15",
+    linkedMilestone: "",
+    revisions: [
+      {
+        rev: "1.0",
+        date: "2026-01-15",
+        author: "Lon Dailey",
+        change: {
+          en: "6-gate checklist per ISO 13485 design controls",
+          cn: "按ISO 13485设计控制的6门控清单",
+        },
+      },
+    ],
   },
   {
     id: "doc-17",
+    dcn: "DCN-REG-004",
     cat: "regulatory",
     name: { en: "Dashboard Users Guide (EN)", cn: "仪表盘用户指南(英文)" },
     version: "1.1",
     date: "2026-03-22",
     owner: "Lon Dailey",
     status: "draft",
+    effectiveDate: "",
+    nextReview: "2026-04-22",
+    linkedMilestone: "",
+    revisions: [
+      {
+        rev: "1.0",
+        date: "2026-03-15",
+        author: "Lon Dailey",
+        change: { en: "Initial guide", cn: "初始指南" },
+      },
+      {
+        rev: "1.1",
+        date: "2026-03-22",
+        author: "Lon Dailey",
+        change: {
+          en: "Added document control tab instructions",
+          cn: "添加文档控制页签说明",
+        },
+      },
+    ],
   },
   {
     id: "doc-18",
+    dcn: "DCN-REG-005",
     cat: "regulatory",
     name: { en: "Dashboard Users Guide (CN)", cn: "仪表盘用户指南(中文)" },
     version: "1.1",
     date: "2026-03-22",
     owner: "Lon Dailey",
     status: "draft",
+    effectiveDate: "",
+    nextReview: "2026-04-22",
+    linkedMilestone: "",
+    revisions: [
+      {
+        rev: "1.0",
+        date: "2026-03-15",
+        author: "Lon Dailey",
+        change: { en: "Initial guide (CN)", cn: "初始指南（中文）" },
+      },
+      {
+        rev: "1.1",
+        date: "2026-03-22",
+        author: "Lon Dailey",
+        change: {
+          en: "Added document control tab instructions (CN)",
+          cn: "添加文档控制页签说明（中文）",
+        },
+      },
+    ],
   },
 ];
+
+let docActiveFilter = "all";
 
 function loadDocLibDocs(): DocLibItem[] {
   try {
     const raw = localStorage.getItem(DOCLIB_STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [...DEFAULT_DOCS];
+    if (!raw) return [...DEFAULT_DOCS];
+    const parsed = JSON.parse(raw) as DocLibItem[];
+    // Migrate old format: add missing fields
+    return parsed.map((d) => ({
+      ...{
+        dcn: "",
+        effectiveDate: "",
+        nextReview: "",
+        linkedMilestone: "",
+        revisions: [] as any[],
+      },
+      ...d,
+    }));
   } catch {
     return [...DEFAULT_DOCS];
   }
@@ -2358,6 +2664,95 @@ function deleteDocLibItem(id: string): void {
   const docs = loadDocLibDocs().filter((d) => d.id !== id);
   saveDocLibDocs(docs);
   renderDocLibTable();
+}
+
+const DOC_STATUS_ORDER: DocStatus[] = [
+  "draft",
+  "in-review",
+  "approved",
+  "effective",
+  "obsolete",
+];
+
+function cycleDocStatus(id: string): void {
+  if (ACTIVE_ROLE !== "pmp") return;
+  const docs = loadDocLibDocs();
+  const doc = docs.find((d) => d.id === id);
+  if (!doc) return;
+  const idx = DOC_STATUS_ORDER.indexOf(doc.status);
+  const next = DOC_STATUS_ORDER[(idx + 1) % DOC_STATUS_ORDER.length];
+  const prev = doc.status;
+  doc.status = next;
+  if (next === "effective" && !doc.effectiveDate) {
+    doc.effectiveDate = new Date().toISOString().split("T")[0];
+  }
+  saveDocLibDocs(docs);
+  logAudit(
+    "doc-status" as AuditEntry["action"],
+    id,
+    "status",
+    prev,
+    next,
+    `${localizedText(doc.name)}: ${prev} → ${next}`,
+  );
+  renderDocLibTable();
+}
+
+function openDocHistory(id: string): void {
+  const docs = loadDocLibDocs();
+  const doc = docs.find((d) => d.id === id);
+  if (!doc) return;
+  const overlay = document.getElementById("docHistoryOverlay");
+  if (!overlay) return;
+  overlay.innerHTML = `
+    <div class="doc-history-panel">
+      <div class="doc-history-header">
+        <h3>${localizedText(doc.name)}</h3>
+        <span class="doc-dcn-label">${doc.dcn}</span>
+        <button class="modal-close" onclick="window._closeDocHistory()">✕</button>
+      </div>
+      <div class="doc-history-meta">
+        <div><strong>${t("docLibOwner")}:</strong> ${doc.owner}</div>
+        <div><strong>${t("docLibVersion")}:</strong> v${doc.version}</div>
+        <div><strong>${t("docLibEffective")}:</strong> ${doc.effectiveDate || "—"}</div>
+        <div><strong>${t("docLibNextReview")}:</strong> ${doc.nextReview || "—"}</div>
+        <div><strong>${t("docLibLinked")}:</strong> ${doc.linkedMilestone || "—"}</div>
+      </div>
+      <h4 class="doc-history-subtitle">${t("docLibRevHistory")}</h4>
+      <table class="standards-table doc-rev-table">
+        <thead><tr>
+          <th>${t("docLibRev")}</th>
+          <th>${t("docLibDate")}</th>
+          <th>${t("docLibAuthor")}</th>
+          <th>${t("docLibChange")}</th>
+        </tr></thead>
+        <tbody>
+          ${doc.revisions
+            .map(
+              (r) => `
+            <tr>
+              <td>v${r.rev}</td>
+              <td>${r.date}</td>
+              <td>${r.author}</td>
+              <td>${localizedText(r.change)}</td>
+            </tr>
+          `,
+            )
+            .join("")}
+          ${doc.revisions.length === 0 ? `<tr><td colspan="4" style="text-align:center; opacity:0.5">No revision history</td></tr>` : ""}
+        </tbody>
+      </table>
+    </div>
+  `;
+  overlay.classList.add("open");
+}
+
+function closeDocHistory(): void {
+  const overlay = document.getElementById("docHistoryOverlay");
+  if (overlay) {
+    overlay.classList.remove("open");
+    overlay.innerHTML = "";
+  }
 }
 
 function openAddDocForm(): void {
@@ -2400,12 +2795,8 @@ function openAddDocForm(): void {
       <label>${t("docLibFormOwner")}
         <input type="text" id="docFormOwner" class="doc-form-input" />
       </label>
-      <label>${t("docLibFormStatus")}
-        <select id="docFormStatus" class="doc-form-input">
-          <option value="draft">${t("docLibDraft")}</option>
-          <option value="final">${t("docLibFinal")}</option>
-          <option value="archived">${t("docLibArchived")}</option>
-        </select>
+      <label>${t("docLibLinked")}
+        <input type="text" id="docFormLinked" class="doc-form-input" placeholder="e.g. R8, T2" />
       </label>
     </div>
     <div class="doc-form-actions">
@@ -2423,24 +2814,49 @@ function addDocLibItem(): void {
     "docFormVersion",
   ) as HTMLInputElement;
   const ownerEl = document.getElementById("docFormOwner") as HTMLInputElement;
-  const statusEl = document.getElementById(
-    "docFormStatus",
-  ) as HTMLSelectElement;
+  const linkedEl = document.getElementById("docFormLinked") as HTMLInputElement;
 
   if (!nameEl?.value.trim()) return;
 
   const docs = loadDocLibDocs();
+  const cat = catEl.value;
+  const catPrefixes: Record<string, string> = {
+    regulatory: "REG",
+    technical: "TECH",
+    business: "BIZ",
+    legal: "LEG",
+    finance: "FIN",
+    templates: "TPL",
+  };
+  const prefix = catPrefixes[cat] || "DOC";
+  const catDocs = docs.filter((d) => d.dcn.includes(`-${prefix}-`));
+  const nextNum = String(catDocs.length + 1).padStart(3, "0");
+  const today = new Date().toISOString().split("T")[0];
+  const ver = versionEl.value.trim() || "1.0";
+
   const newDoc: DocLibItem = {
     id: `doc-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-    cat: catEl.value,
+    dcn: `DCN-${prefix}-${nextNum}`,
+    cat,
     name: {
       en: nameEl.value.trim(),
       cn: nameCnEl?.value.trim() || nameEl.value.trim(),
     },
-    version: versionEl.value.trim() || "1.0",
-    date: new Date().toISOString().split("T")[0],
+    version: ver,
+    date: today,
     owner: ownerEl.value.trim() || "—",
-    status: statusEl.value,
+    status: "draft",
+    effectiveDate: "",
+    nextReview: "",
+    linkedMilestone: linkedEl?.value.trim() || "",
+    revisions: [
+      {
+        rev: ver,
+        date: today,
+        author: ownerEl.value.trim() || "—",
+        change: { en: "Initial draft", cn: "初稿" },
+      },
+    ],
   };
   docs.push(newDoc);
   saveDocLibDocs(docs);
@@ -2450,32 +2866,41 @@ function addDocLibItem(): void {
   renderDocLibTable();
 }
 
+function docStatusClass(s: string): string {
+  switch (s) {
+    case "effective":
+      return "doc-status-effective";
+    case "approved":
+      return "doc-status-approved";
+    case "in-review":
+      return "doc-status-review";
+    case "draft":
+      return "doc-status-draft";
+    default:
+      return "doc-status-obsolete";
+  }
+}
+
+function docStatusLabel(s: string): string {
+  switch (s) {
+    case "effective":
+      return t("docLibEffectiveStatus");
+    case "approved":
+      return t("docLibApproved");
+    case "in-review":
+      return t("docLibInReview");
+    case "draft":
+      return t("docLibDraft");
+    default:
+      return t("docLibObsolete");
+  }
+}
+
 function renderDocLibTable(): void {
   const tbody = document.getElementById("docLibBody");
   if (!tbody) return;
 
   const docs = loadDocLibDocs();
-
-  const statusClass = (s: string) => {
-    switch (s) {
-      case "final":
-        return "std-complete";
-      case "draft":
-        return "std-in-progress";
-      default:
-        return "std-not-started";
-    }
-  };
-  const statusLabel = (s: string) => {
-    switch (s) {
-      case "final":
-        return t("docLibFinal");
-      case "draft":
-        return t("docLibDraft");
-      default:
-        return t("docLibArchived");
-    }
-  };
   const catLabel = (c: string) => {
     const map: Record<string, string> = {
       regulatory: t("docLibCatRegulatory"),
@@ -2488,40 +2913,77 @@ function renderDocLibTable(): void {
     return map[c] || c;
   };
 
-  tbody.innerHTML = docs
-    .map(
-      (d) => `
-    <tr data-category="${d.cat}">
+  // Sort: effective first, then approved, in-review, draft, obsolete
+  const statusOrder: Record<string, number> = {
+    effective: 0,
+    approved: 1,
+    "in-review": 2,
+    draft: 3,
+    obsolete: 4,
+  };
+  const sorted = [...docs].sort((a, b) => {
+    if (a.cat !== b.cat) return a.cat.localeCompare(b.cat);
+    return (statusOrder[a.status] ?? 9) - (statusOrder[b.status] ?? 9);
+  });
+
+  // Check for overdue reviews
+  const today = new Date().toISOString().split("T")[0];
+
+  tbody.innerHTML = sorted
+    .map((d) => {
+      const overdue =
+        d.nextReview && d.nextReview <= today && d.status !== "obsolete";
+      return `
+    <tr data-category="${d.cat}" class="${overdue ? "doc-overdue-row" : ""}">
       <td><span class="doc-cat-badge doc-cat-${d.cat}">${catLabel(d.cat)}</span></td>
-      <td>${localizedText(d.name)}</td>
+      <td class="doc-dcn-cell">${d.dcn}</td>
+      <td class="doc-name-cell">
+        <button class="doc-name-link" onclick="window._openDocHistory('${d.id}')">${localizedText(d.name)}</button>
+      </td>
       <td>v${d.version}</td>
       <td>${d.date}</td>
       <td>${d.owner}</td>
-      <td><span class="${statusClass(d.status)}">${statusLabel(d.status)}</span></td>
+      <td>${d.linkedMilestone || "—"}</td>
+      <td>
+        <button class="doc-status-btn ${docStatusClass(d.status)}" onclick="window._cycleDocStatus('${d.id}')" title="${ACTIVE_ROLE === "pmp" ? t("clickToChangeStatus") : ""}">${docStatusLabel(d.status)}</button>
+        ${overdue ? `<span class="doc-overdue-badge" title="${t("docLibOverdue")}">⚠</span>` : ""}
+      </td>
       <td>${ACTIVE_ROLE === "pmp" ? `<button class="doc-remove-btn" onclick="window._deleteDocLibItem('${d.id}')" title="${t("docLibRemove")}">✕</button>` : ""}</td>
-    </tr>
-  `,
-    )
+    </tr>`;
+    })
     .join("");
 
   // Re-apply active filter
-  const activeFilter = document.querySelector<HTMLButtonElement>(
-    "#docLibFilters .filter-btn.active",
-  );
-  if (activeFilter) {
-    const filter = activeFilter.dataset.docfilter!;
-    if (filter !== "all") {
-      const rows =
-        document.querySelectorAll<HTMLTableRowElement>("#docLibBody tr");
-      rows.forEach((row) => {
-        row.style.display = row.dataset.category === filter ? "" : "none";
+  if (docActiveFilter !== "all") {
+    document
+      .querySelectorAll<HTMLTableRowElement>("#docLibBody tr")
+      .forEach((row) => {
+        row.style.display =
+          row.dataset.category === docActiveFilter ? "" : "none";
       });
-    }
+  }
+
+  // Update summary counters
+  const summaryEl = document.getElementById("docControlSummary");
+  if (summaryEl) {
+    const total = docs.length;
+    const eff = docs.filter((d) => d.status === "effective").length;
+    const rev = docs.filter((d) => d.status === "in-review").length;
+    const drafts = docs.filter((d) => d.status === "draft").length;
+    const overdueCount = docs.filter(
+      (d) => d.nextReview && d.nextReview <= today && d.status !== "obsolete",
+    ).length;
+    summaryEl.innerHTML = `
+      <div class="doc-summary-item"><span class="doc-summary-num">${total}</span><span class="doc-summary-label">${t("docLibTotal")}</span></div>
+      <div class="doc-summary-item doc-summary-effective"><span class="doc-summary-num">${eff}</span><span class="doc-summary-label">${t("docLibEffectiveStatus")}</span></div>
+      <div class="doc-summary-item doc-summary-review"><span class="doc-summary-num">${rev}</span><span class="doc-summary-label">${t("docLibInReview")}</span></div>
+      <div class="doc-summary-item doc-summary-draft"><span class="doc-summary-num">${drafts}</span><span class="doc-summary-label">${t("docLibDraft")}</span></div>
+      ${overdueCount > 0 ? `<div class="doc-summary-item doc-summary-overdue"><span class="doc-summary-num">${overdueCount}</span><span class="doc-summary-label">${t("docLibOverdue")}</span></div>` : ""}
+    `;
   }
 }
 
 function renderDocLibrary(): void {
-  // Filters
   const filters = document.getElementById("docLibFilters");
   if (filters) {
     const cats = [
@@ -2545,7 +3007,7 @@ function renderDocLibrary(): void {
     filters.innerHTML = cats
       .map(
         (c) =>
-          `<button class="filter-btn${c === "all" ? " active" : ""}" data-docfilter="${c}">${catLabels[c]}</button>`,
+          `<button class="filter-btn${c === docActiveFilter ? " active" : ""}" data-docfilter="${c}">${catLabels[c]}</button>`,
       )
       .join("");
 
@@ -2558,23 +3020,27 @@ function renderDocLibrary(): void {
         .querySelectorAll(".filter-btn")
         .forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
-      const filter = btn.dataset.docfilter!;
+      docActiveFilter = btn.dataset.docfilter!;
       const rows =
         document.querySelectorAll<HTMLTableRowElement>("#docLibBody tr");
       rows.forEach((row) => {
         row.style.display =
-          filter === "all" || row.dataset.category === filter ? "" : "none";
+          docActiveFilter === "all" || row.dataset.category === docActiveFilter
+            ? ""
+            : "none";
       });
     });
   }
-
   renderDocLibTable();
 }
 
-// Expose Doc Library functions globally
+// Expose Document Control functions globally
 (window as any)._deleteDocLibItem = deleteDocLibItem;
 (window as any)._openAddDocForm = openAddDocForm;
 (window as any)._addDocLibItem = addDocLibItem;
+(window as any)._cycleDocStatus = cycleDocStatus;
+(window as any)._openDocHistory = openDocHistory;
+(window as any)._closeDocHistory = closeDocHistory;
 
 // ══════════════════════════════════════════════════
 // INVENTOR Q&A — threaded messaging (PMP ↔ Inventor)

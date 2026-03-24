@@ -2491,7 +2491,7 @@ body {
 }
 
 /* ══════════════════════════════════════════════════
-   DOCUMENT LIBRARY
+   DOCUMENT CONTROL
    ══════════════════════════════════════════════════ */
 .doc-lib-filters {
   display: flex;
@@ -2532,7 +2532,7 @@ body {
   color: #475569;
 }
 
-/* Doc Library Toolbar */
+/* Doc Control Toolbar */
 .doc-lib-toolbar {
   display: flex;
   align-items: flex-start;
@@ -2564,7 +2564,186 @@ body {
   background: rgba(239, 68, 68, 0.1);
 }
 
-/* Doc Library Add Form */
+/* Doc Control Summary Bar */
+.doc-control-summary {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: var(--sp-md);
+}
+.doc-summary-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  min-width: 70px;
+}
+.doc-summary-num {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.doc-summary-label {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.doc-summary-effective .doc-summary-num {
+  color: #059669;
+}
+.doc-summary-review .doc-summary-num {
+  color: #d97706;
+}
+.doc-summary-draft .doc-summary-num {
+  color: #6b7280;
+}
+.doc-summary-overdue .doc-summary-num {
+  color: #ef4444;
+}
+.doc-summary-overdue {
+  border-color: #fca5a5;
+}
+
+/* Doc Status Badges (clickable) */
+.doc-status-btn {
+  border: none;
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  transition:
+    filter 0.15s,
+    transform 0.1s;
+}
+.doc-status-btn:hover {
+  filter: brightness(0.9);
+  transform: scale(1.05);
+}
+.doc-status-effective {
+  background: #d1fae5;
+  color: #065f46;
+}
+.doc-status-approved {
+  background: #dbeafe;
+  color: #1e40af;
+}
+.doc-status-review {
+  background: #fef3c7;
+  color: #92400e;
+}
+.doc-status-draft {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+.doc-status-obsolete {
+  background: #fee2e2;
+  color: #991b1b;
+  text-decoration: line-through;
+}
+
+/* Overdue indicators */
+.doc-overdue-row {
+  background: rgba(239, 68, 68, 0.04);
+}
+.doc-overdue-badge {
+  font-size: 0.85rem;
+  margin-left: 4px;
+  vertical-align: middle;
+  cursor: help;
+}
+
+/* Doc name as clickable link to history */
+.doc-name-link {
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+  text-align: left;
+  padding: 0;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.15s;
+}
+.doc-name-link:hover {
+  text-decoration-color: var(--accent);
+}
+.doc-dcn-cell {
+  font-family: var(--font-mono, "SF Mono", "Fira Code", monospace);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* Revision History Overlay */
+.doc-history-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+}
+.doc-history-overlay.open {
+  display: flex;
+}
+.doc-history-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  max-width: 700px;
+  width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg, 0 25px 50px -12px rgba(0, 0, 0, 0.25));
+}
+.doc-history-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.doc-history-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  flex: 1;
+}
+.doc-dcn-label {
+  font-family: var(--font-mono, "SF Mono", "Fira Code", monospace);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.doc-history-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.4rem 1.5rem;
+  font-size: 0.82rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.doc-history-subtitle {
+  font-size: 0.9rem;
+  margin: 0 0 0.5rem 0;
+}
+.doc-rev-table {
+  font-size: 0.82rem;
+}
+
+/* Doc Control Add Form */
 .doc-lib-form {
   background: var(--bg-card);
   border: 1px solid var(--border);

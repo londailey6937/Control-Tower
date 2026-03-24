@@ -208,7 +208,8 @@ export type AuditAction =
   | "budget-entry"
   | "resource-change"
   | "supplier-status"
-  | "cash-field";
+  | "cash-field"
+  | "doc-status";
 
 export interface AuditEntry {
   id: string;
@@ -356,6 +357,9 @@ declare global {
     _deleteDocLibItem: (id: string) => void;
     _openAddDocForm: () => void;
     _addDocLibItem: () => void;
+    _cycleDocStatus: (id: string) => void;
+    _openDocHistory: (id: string) => void;
+    _closeDocHistory: () => void;
     _openQaSettings: () => void;
     _saveQaSettings: () => void;
     _markQaRead: (msgId: string) => void;
@@ -368,15 +372,34 @@ declare global {
   }
 }
 
-// ── Document Library ────────────────────────────
+// ── Document Control ────────────────────────────
+export type DocStatus =
+  | "draft"
+  | "in-review"
+  | "approved"
+  | "effective"
+  | "obsolete";
+
+export interface DocRevision {
+  rev: string;
+  date: string;
+  author: string;
+  change: LocalizedString;
+}
+
 export interface DocLibItem {
   id: string;
+  dcn: string;
   cat: string;
   name: LocalizedString;
   version: string;
   date: string;
   owner: string;
-  status: string;
+  status: DocStatus;
+  effectiveDate: string;
+  nextReview: string;
+  linkedMilestone: string;
+  revisions: DocRevision[];
 }
 
 // ── Inventor Q&A ────────────────────────────────

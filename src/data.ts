@@ -253,8 +253,8 @@ export const TRACKS: Tracks = {
           cn: "完整包: 附信、设备描述、SE讨论、性能测试、风险分析、生物相容性、软件、标签",
         },
         detail: {
-          en: "The 510(k) submission is the culmination of all prior technical and regulatory milestones for the sEMG module. The complete package includes:\n\n- Cover Letter & Administrative: Device name, applicant (Arch Medical Management, LLC), classification (product code IKN), establishment registration.\n- Device Description: Detailed hardware/software architecture — electrode array, ADC, BT module, firmware, and MyoBus protocol. Block diagrams, photos, and component specifications.\n- Substantial Equivalence Discussion: Side-by-side comparison with the predicate device (as confirmed in R2). Covers intended use, technology, performance characteristics, and biocompatibility.\n- Performance Testing Report: All data from T3 (bench testing) and T4 (sensitivity/specificity). Includes IEC 60601-1 safety, EMC, usability, and clinical validation results.\n- Risk Analysis: ISO 14971 risk management file — hazard identification, risk estimation, risk evaluation, and risk control measures. Top risks: electrode detachment, ECG mis-gating, wireless interference.\n- Software Documentation: Per FDA guidance — software requirements, architecture, verification testing, cybersecurity (AES-256, SBOM), and SOUP/OTS documentation.\n- Biocompatibility: Electrode materials testing per ISO 10993 (surface contact &lt;24 hours category).\n- Labeling: Instructions for Use (IFU), clinician quick-start guide, package labeling per 21 CFR 801.\n\nThe submission is filed through FDA's eSTAR electronic system. Standard review timeline is ~90 days to clearance (R4).",
-          cn: "510(k)提交是sEMG模块所有先前技术和监管里程碑的结晶。完整包包括：\n\n- 附信和行政文件：设备名称、申请人（Arch Medical Management, LLC）、分类（产品代码IKN）、机构注册。\n- 设备描述：详细的硬件/软件架构——电极阵列、ADC、蓝牙模块、固件和MyoBus协议。框图、照片和组件规格。\n- 实质等效讨论：与前置设备（R2中确认）的逐项比较。涵盖预期用途、技术、性能特征和生物相容性。\n- 性能测试报告：T3（台架测试）和T4（灵敏度/特异性）的所有数据。包括IEC 60601-1安全、EMC、可用性和临床验证结果。\n- 风险分析：ISO 14971风险管理文件——危害识别、风险估计、风险评价和风险控制措施。主要风险：电极脱落、ECG误门控、无线干扰。\n- 软件文档：按FDA指南——软件需求、架构、验证测试、网络安全（AES-256、SBOM）和SOUP/OTS文档。\n- 生物相容性：电极材料按ISO 10993测试（表面接触&lt;24小时类别）。\n- 标签：使用说明（IFU）、临床医生快速入门指南、按21 CFR 801的包装标签。\n\n通过FDA的eSTAR电子系统提交。标准审查时间约90天到获批（R4）。",
+          en: "The 510(k) submission is the culmination of all prior technical and regulatory milestones for the sEMG module. The complete package includes:\n\n- Cover Letter & Administrative: Device name, applicant (Company B USA), classification (product code IKN), establishment registration.\n- Device Description: Detailed hardware/software architecture — electrode array, ADC, BT module, firmware, and MyoBus protocol. Block diagrams, photos, and component specifications.\n- Substantial Equivalence Discussion: Side-by-side comparison with the predicate device (as confirmed in R2). Covers intended use, technology, performance characteristics, and biocompatibility.\n- Performance Testing Report: All data from T3 (bench testing) and T4 (sensitivity/specificity). Includes IEC 60601-1 safety, EMC, usability, and clinical validation results.\n- Risk Analysis: ISO 14971 risk management file — hazard identification, risk estimation, risk evaluation, and risk control measures. Top risks: electrode detachment, ECG mis-gating, wireless interference.\n- Software Documentation: Per FDA guidance — software requirements, architecture, verification testing, cybersecurity (AES-256, SBOM), and SOUP/OTS documentation.\n- Biocompatibility: Electrode materials testing per ISO 10993 (surface contact &lt;24 hours category).\n- Labeling: Instructions for Use (IFU), clinician quick-start guide, package labeling per 21 CFR 801.\n\nThe submission is filed through FDA's eSTAR electronic system. Standard review timeline is ~90 days to clearance (R4).",
+          cn: "510(k)提交是sEMG模块所有先前技术和监管里程碑的结晶。完整包包括：\n\n- 附信和行政文件：设备名称、申请人（Company B USA）、分类（产品代码IKN）、机构注册。\n- 设备描述：详细的硬件/软件架构——电极阵列、ADC、蓝牙模块、固件和MyoBus协议。框图、照片和组件规格。\n- 实质等效讨论：与前置设备（R2中确认）的逐项比较。涵盖预期用途、技术、性能特征和生物相容性。\n- 性能测试报告：T3（台架测试）和T4（灵敏度/特异性）的所有数据。包括IEC 60601-1安全、EMC、可用性和临床验证结果。\n- 风险分析：ISO 14971风险管理文件——危害识别、风险估计、风险评价和风险控制措施。主要风险：电极脱落、ECG误门控、无线干扰。\n- 软件文档：按FDA指南——软件需求、架构、验证测试、网络安全（AES-256、SBOM）和SOUP/OTS文档。\n- 生物相容性：电极材料按ISO 10993测试（表面接触&lt;24小时类别）。\n- 标签：使用说明（IFU）、临床医生快速入门指南、按21 CFR 801的包装标签。\n\n通过FDA的eSTAR电子系统提交。标准审查时间约90天到获批（R4）。",
         },
         status: "not-started",
         owner: "regulatory",
@@ -337,16 +337,16 @@ export const TRACKS: Tracks = {
         id: "R8",
         month: 1,
         title: {
-          en: "IP Buyout & US Legal Structure",
-          cn: "知识产权收购和美国法律结构",
+          en: "sEMG IP Assignment & US Legal Structure",
+          cn: "sEMG知识产权转让和美国法律结构",
         },
         description: {
-          en: "Transfer patents, software copyrights, MyoBus IP to Company B USA. US-based DHF.",
-          cn: "将专利、软件版权、MyoBus知识产权转让给B公司美国。在美建立DHF。",
+          en: "Transfer sEMG patents, software copyrights, MyoBus IP to Company B USA. EIT IP deferred to Series A. US-based DHF.",
+          cn: "将sEMG专利、软件版权、MyoBus知识产权转让给B公司美国。EIT知识产权推迟至A轮。在美建立DHF。",
         },
         detail: {
-          en: "R8 establishes the legal and intellectual property foundation required for a US-based FDA submission. The IP buyout transfers all technology assets from the China R&D entity to the US regulatory entity:\n\n- Patent Transfer: All filed and pending patents related to sEMG electrode design, ECG-gating algorithm, EIT reconstruction methods, and V/Q separation algorithms are assigned to Arch Medical Management, LLC (Oregon).\n- Software Copyrights: Source code, firmware, MyoBus protocol specification, and all software documentation copyrights transfer to the US entity. This ensures the 510(k) applicant owns the IP it is submitting.\n- MyoBus IP: The proprietary middleware protocol — including its timestamp synchronization, encryption, RBAC, and FHIR output modules — is included in the IP package.\n- US-Based Design History File (DHF): A compliant DHF per 21 CFR 820.30 is established in the US. All design inputs, outputs, reviews, verification, and validation records are maintained under US quality system control.\n- Transfer Agreement: A formal IP assignment agreement with consideration, executed under Oregon law, with representations and warranties regarding IP ownership, freedom to operate, and absence of encumbrances.\n\nR8 at M+1 must be completed before the Pre-Sub meeting (R2) at M+2, as FDA expects the submitting entity to demonstrate IP ownership.",
-          cn: "R8建立基于美国的FDA提交所需的法律和知识产权基础。IP收购将所有技术资产从中国研发实体转让给美国监管实体：\n\n- 专利转让：所有与sEMG电极设计、ECG门控算法、EIT重建方法和V/Q分离算法相关的已申请和待审专利转让给Arch Medical Management, LLC（俄勒冈州）。\n- 软件版权：源代码、固件、MyoBus协议规范和所有软件文档版权转让给美国实体。确保510(k)申请人拥有所提交的知识产权。\n- MyoBus IP：专有中间件协议——包括时间戳同步、加密、RBAC和FHIR输出模块——纳入IP包。\n- 美国设计历史文件（DHF）：在美国建立符合21 CFR 820.30的DHF。所有设计输入、输出、评审、验证和确认记录在美国质量体系控制下维护。\n- 转让协议：正式的IP转让协议含对价，依俄勒冈州法律执行，包含关于IP所有权、自由运营和无负担的陈述和保证。\n\nM+1的R8必须在M+2的Pre-Sub会议（R2）前完成，因为FDA期望提交实体证明IP所有权。",
+          en: "R8 establishes the legal and intellectual property foundation required for a US-based FDA submission. Phase 1 transfers sEMG-related technology assets from the China R&D entity to the US regulatory entity. EIT IP (reconstruction methods, V/Q separation algorithms) remains with Company A and is deferred to Series A negotiation.\n\n- Patent Transfer (sEMG only): All filed and pending patents related to sEMG electrode design and ECG-gating algorithm are assigned to Company B USA (Delaware C-Corp). EIT reconstruction and V/Q separation patents remain with Company A pending Series A IP negotiation.\n- Software Copyrights: Source code, firmware, MyoBus protocol specification, and all software documentation copyrights transfer to Company B USA. This ensures the 510(k) applicant owns the IP it is submitting.\n- MyoBus IP: The proprietary middleware protocol — including its timestamp synchronization, encryption, RBAC, and FHIR output modules — is included in the IP package.\n- US-Based Design History File (DHF): A compliant DHF per 21 CFR 820.30 is established under Company B USA. All design inputs, outputs, reviews, verification, and validation records are maintained under US quality system control.\n- Transfer Agreement: A formal IP assignment agreement with consideration, executed under Delaware law, with representations and warranties regarding IP ownership, freedom to operate, and absence of encumbrances.\n\nR8 at M+1 must be completed before the Pre-Sub meeting (R2) at M+2, as FDA expects the submitting entity to demonstrate IP ownership.",
+          cn: "R8建立基于美国的FDA提交所需的法律和知识产权基础。第一阶段将sEMG相关技术资产从中国研发实体转让给美国监管实体。EIT知识产权（重建方法、V/Q分离算法）保留在A公司，推迟至A轮谈判。\n\n- 专利转让（仅sEMG）：所有与sEMG电极设计和ECG门控算法相关的已申请和待审专利转让给Company B USA（特拉华州C-Corp）。EIT重建和V/Q分离专利保留在A公司，待A轮IP谈判。\n- 软件版权：源代码、固件、MyoBus协议规范和所有软件文档版权转让给Company B USA。确保510(k)申请人拥有所提交的知识产权。\n- MyoBus IP：专有中间件协议——包括时间戳同步、加密、RBAC和FHIR输出模块——纳入IP包。\n- 美国设计历史文件（DHF）：在Company B USA下建立符合21 CFR 820.30的DHF。所有设计输入、输出、评审、验证和确认记录在美国质量体系控制下维护。\n- 转让协议：正式的IP转让协议含对价，依特拉华州法律执行，包含关于IP所有权、自由运营和无负担的陈述和保证。\n\nM+1的R8必须在M+2的Pre-Sub会议（R2）前完成，因为FDA期望提交实体证明IP所有权。",
         },
         status: "in-progress",
         owner: "business",
@@ -723,18 +723,18 @@ export const RISKS: Risk[] = [
   {
     id: "RISK-008",
     title: {
-      en: "Funding runway insufficient before sEMG clearance (M+9)",
-      cn: "sEMG批准(M+9)前资金跑道不足",
+      en: "Funding deployment risk — $1.8M seed raised, ~40-month runway at current burn",
+      cn: "资金部署风险 — $1.8M种子轮已完成，当前消耗率下约40个月跑道",
     },
-    severity: "high",
-    probability: "medium",
-    riskLevel: "red",
+    severity: "medium",
+    probability: "low",
+    riskLevel: "yellow",
     controls: {
-      en: "Phased milestone-based funding; sEMG-first strategy enables earlier revenue; investor gate reviews",
-      cn: "分阶段里程碑资金; sEMG优先策略实现更早收入; 投资者门控评审",
+      en: "$1.8M seed closed; phased milestone-based deployment; sEMG-first strategy enables earlier revenue; investor gate reviews",
+      cn: "$1.8M种子轮已完成; 分阶段里程碑部署; sEMG优先策略实现更早收入; 投资者门控评审",
     },
-    residual: { en: "Manageable", cn: "可控" },
-    mitigationStatus: "in-progress",
+    residual: { en: "Low", cn: "低" },
+    mitigationStatus: "complete",
     module: "N/A",
     standard: "Business",
   },
@@ -957,9 +957,9 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
 // ============================================================
 
 export const CASH_RUNWAY: CashRunway = {
-  cashOnHand: 320000,
+  cashOnHand: 1800000,
   monthlyBurn: 45000,
-  runwayMonths: 7,
+  runwayMonths: 40,
   currency: "USD",
   fundingRounds: [
     {
@@ -979,12 +979,12 @@ export const CASH_RUNWAY: CashRunway = {
     {
       id: "FR-003",
       label: {
-        en: "Phase 1 Seed Round (PPT target: $2M)",
-        cn: "\u7b2c\u4e00\u9636\u6bb5\u79cd\u5b50\u8f6e\uff08PPT\u76ee\u6807: $2M\uff09",
+        en: "Phase 1 Seed Round ($1.8M raised — direct equity)",
+        cn: "\u7b2c\u4e00\u9636\u6bb5\u79cd\u5b50\u8f6e\uff08$1.8M\u5df2\u52df\u96c6 — \u76f4\u63a5\u80a1\u6743\uff09",
       },
-      amount: 2000000,
-      date: "2026-06",
-      status: "pipeline",
+      amount: 1800000,
+      date: "2026-03",
+      status: "received",
     },
     {
       id: "FR-004",
@@ -1912,8 +1912,8 @@ export const QA_SECTIONS: QASection[] = [
     num: 3,
     title: { en: "Intellectual Property & Ownership", cn: "知识产权与所有权" },
     context: {
-      en: "R8 (IP Buyout & US Legal Structure) is IN PROGRESS. The 510(k) applicant must be Company B USA. All IP must be transferred or licensed before filing.",
-      cn: "R8（IP收购和美国法律结构）正在进行中。510(k)申请人必须是Company B USA。所有IP必须在提交前转让或许可。",
+      en: "R8 (sEMG IP Assignment & US Legal Structure) is IN PROGRESS. Phase 1 covers sEMG IP only; EIT IP deferred to Series A. The 510(k) applicant must be Company B USA.",
+      cn: "R8（sEMG知识产权转让和美国法律结构）正在进行中。第一阶段仅涉及sEMG知识产权；EIT知识产权推迟至A轮。510(k)申请人必须是Company B USA。",
     },
     questions: [
       {
@@ -2329,12 +2329,12 @@ export const QA_SECTIONS: QASection[] = [
       {
         num: 26,
         question: {
-          en: "RISK-008 is RED: Funding runway insufficient before sEMG clearance. What is the minimum viable hardware cost to reach 510(k) submission?",
-          cn: "RISK-008为红色：sEMG获批前資金不足。达到510(k)提交的最低可行硬件成本是多少？",
+          en: "RISK-008 is YELLOW: $1.8M seed raised with ~40-month runway. What is the minimum viable hardware cost to reach 510(k) submission?",
+          cn: "RISK-008为黄色：$1.8M种子轮已完成，约40个月跑道。达到510(k)提交的最低可行硬件成本是多少？",
         },
         why: {
-          en: "$320K cash, $45K/mo burn, 7-month runway. Submission is at M+6. We need to know if the budget is realistic.",
-          cn: "现金32万美元，月消耗4.5万美元，7个月跑道。提交在M+6。我们需要知道预算是否现实。",
+          en: "$1.8M seed raised, $45K/mo burn, ~40-month runway. Submission is at M+6. We need to know if the budget is realistic.",
+          cn: "$1.8M种子轮已完成，月消耗4.5万美元，约40个月跑道。提交在M+6。我们需要知道预算是否现实。",
         },
         followUps: [
           {
