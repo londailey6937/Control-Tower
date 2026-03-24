@@ -3586,27 +3586,89 @@ function renderQaSheet(): void {
     .map(([, email]) => email);
   const emailTargetStr = otherEmails.join(", ");
 
-  body.innerHTML = QA_SECTIONS.map((sec) => {
-    const questionsHtml = sec.questions
-      .map((q) => {
-        const qMsgs = allMsgs.filter((m) => m.qNum === q.num);
+  // ── Custom Topics Section (renders first, above predefined) ──
+  const customTopics = loadCustomTopics();
+  let customSectionHtml = "";
+  if (customTopics.length > 0) {
+    const customHtml = customTopics
+      .map((tp) => {
+        const qMsgs = allMsgs.filter((m) => m.qNum === tp.qNum);
         const msgCount = qMsgs.length;
         const unreadCount = qMsgs.filter(
           (m) =>
-            normalizeRole(m.sender) !== normalizeRole(qaPostingRole) && !m.readBy?.includes(normalizeRole(qaPostingRole)),
+            normalizeRole(m.sender) !== normalizeRole(qaPostingRole) &&
+            !m.readBy?.includes(normalizeRole(qaPostingRole)),
         ).length;
-        const isCollapsed = qaCollapsed.has(q.num);
-
-        const whyHtml = q.why
-          ? `<div class="qa-why"><span class="qa-why-label">[${t("qaWhy")}]</span> ${localizedText(q.why)}</div>`
-          : "";
-
-        const fuHtml =
-          q.followUps && q.followUps.length > 0
-            ? `<div class="qa-followups"><span class="qa-fu-label">${t("qaFollowUps")}:</span><ul>${q.followUps.map((fu) => `<li>${localizedText(fu)}</li>`).join("")}</ul></div>`
-            : "";
+        const isCollapsed = qaCollapsed.has(tp.qNum);
 
         return `
+        <div class="qa-question-block" id="qa-topic-${tp.qNum}">
+          <div class="qa-question-header">
+            <div class="qa-q-left">
+              <span class="qa-qnum">\ud83d\udcac</span>
+              <span class="qa-qtext">${tp.title}</span>
+            </div>
+            <div class="qa-q-right">
+              <span class="qa-msg-count">${msgCount > 0 ? `\ud83d\udcac ${msgCount} ${t("qaMessages")}${unreadCount > 0 ? ` (${unreadCount} ${t("qaUnread")})` : ""}` : ""}</span>
+              ${msgCount > 0 ? `<button class="qa-archive-btn" onclick="window._archiveQaMessages(${tp.qNum})" title="${t("qaArchive")}">\ud83d\udce6</button>` : ""}
+              <button class="qa-archive-btn" onclick="window._deleteQaTopic(${tp.qNum})" title="${t("qaDeleteTopic")}">\ud83d\uddd1\ufe0f</button>
+              <button class="qa-collapse-btn" data-qatoggle="${tp.qNum}">${isCollapsed ? t("qaExpand") : t("qaCollapse")}</button>
+            </div>
+          </div>
+          <div class="qa-thread-wrap${isCollapsed ? " collapsed" : ""}" id="qa-wrap-${tp.qNum}">
+            <div class="qa-thread" id="qa-thread-${tp.qNum}"></div>
+            <div class="qa-compose">
+              <textarea
+                id="qa-input-${tp.qNum}"
+                class="qa-compose-input"
+                rows="2"
+                placeholder="${t("qaAnswerPlaceholder")}"
+              ></textarea>
+              <div class="qa-compose-actions">
+                ${emailTargetStr ? `<span class="qa-email-target" title="${t("qaSendViaEmail")}">\ud83d\udce7 ${emailTargetStr}</span>` : `<span class="qa-email-target qa-no-email" title="${t("qaSettings")}">\ud83d\udce7 \u2014</span>`}
+                <button class="qa-send-btn" onclick="window._sendQaMessage(${tp.qNum})">
+                  ${t("qaSend")} \u27a4
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      })
+      .join("");
+
+    customSectionHtml = `
+      <div class="qa-section">
+        <div class="qa-section-header">
+          <h3 class="qa-section-title">\ud83d\udcac ${t("qaCustomTopics")}</h3>
+        </div>
+        ${customHtml}
+      </div>`;
+  }
+
+  body.innerHTML =
+    customSectionHtml +
+    QA_SECTIONS.map((sec) => {
+      const questionsHtml = sec.questions
+        .map((q) => {
+          const qMsgs = allMsgs.filter((m) => m.qNum === q.num);
+          const msgCount = qMsgs.length;
+          const unreadCount = qMsgs.filter(
+            (m) =>
+              normalizeRole(m.sender) !== normalizeRole(qaPostingRole) &&
+              !m.readBy?.includes(normalizeRole(qaPostingRole)),
+          ).length;
+          const isCollapsed = qaCollapsed.has(q.num);
+
+          const whyHtml = q.why
+            ? `<div class="qa-why"><span class="qa-why-label">[${t("qaWhy")}]</span> ${localizedText(q.why)}</div>`
+            : "";
+
+          const fuHtml =
+            q.followUps && q.followUps.length > 0
+              ? `<div class="qa-followups"><span class="qa-fu-label">${t("qaFollowUps")}:</span><ul>${q.followUps.map((fu) => `<li>${localizedText(fu)}</li>`).join("")}</ul></div>`
+              : "";
+
+          return `
         <div class="qa-question-block">
           <div class="qa-question-header">
             <div class="qa-q-left">
@@ -3639,10 +3701,10 @@ function renderQaSheet(): void {
             </div>
           </div>
         </div>`;
-      })
-      .join("");
+        })
+        .join("");
 
-    return `
+      return `
       <div class="qa-section">
         <div class="qa-section-header">
           <h3 class="qa-section-title">Section ${sec.num}: ${localizedText(sec.title)}</h3>
@@ -3650,64 +3712,7 @@ function renderQaSheet(): void {
         <p class="qa-section-context">${localizedText(sec.context)}</p>
         ${questionsHtml}
       </div>`;
-  }).join("");
-
-  // ── Custom Topics Section ──────────────────────
-  const customTopics = loadCustomTopics();
-  if (customTopics.length > 0) {
-    const customHtml = customTopics
-      .map((tp) => {
-        const qMsgs = allMsgs.filter((m) => m.qNum === tp.qNum);
-        const msgCount = qMsgs.length;
-        const unreadCount = qMsgs.filter(
-          (m) =>
-            normalizeRole(m.sender) !== normalizeRole(qaPostingRole) && !m.readBy?.includes(normalizeRole(qaPostingRole)),
-        ).length;
-        const isCollapsed = qaCollapsed.has(tp.qNum);
-
-        return `
-        <div class="qa-question-block">
-          <div class="qa-question-header">
-            <div class="qa-q-left">
-              <span class="qa-qnum">💬</span>
-              <span class="qa-qtext">${tp.title}</span>
-            </div>
-            <div class="qa-q-right">
-              <span class="qa-msg-count">${msgCount > 0 ? `\ud83d\udcac ${msgCount} ${t("qaMessages")}${unreadCount > 0 ? ` (${unreadCount} ${t("qaUnread")})` : ""}` : ""}</span>
-              ${msgCount > 0 ? `<button class="qa-archive-btn" onclick="window._archiveQaMessages(${tp.qNum})" title="${t("qaArchive")}">\ud83d\udce6</button>` : ""}
-              <button class="qa-archive-btn" onclick="window._deleteQaTopic(${tp.qNum})" title="${t("qaDeleteTopic")}">🗑️</button>
-              <button class="qa-collapse-btn" data-qatoggle="${tp.qNum}">${isCollapsed ? t("qaExpand") : t("qaCollapse")}</button>
-            </div>
-          </div>
-          <div class="qa-thread-wrap${isCollapsed ? " collapsed" : ""}" id="qa-wrap-${tp.qNum}">
-            <div class="qa-thread" id="qa-thread-${tp.qNum}"></div>
-            <div class="qa-compose">
-              <textarea
-                id="qa-input-${tp.qNum}"
-                class="qa-compose-input"
-                rows="2"
-                placeholder="${t("qaAnswerPlaceholder")}"
-              ></textarea>
-              <div class="qa-compose-actions">
-                ${emailTargetStr ? `<span class="qa-email-target" title="${t("qaSendViaEmail")}">📧 ${emailTargetStr}</span>` : `<span class="qa-email-target qa-no-email" title="${t("qaSettings")}">📧 —</span>`}
-                <button class="qa-send-btn" onclick="window._sendQaMessage(${tp.qNum})">
-                  ${t("qaSend")} \u27a4
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>`;
-      })
-      .join("");
-
-    body.innerHTML += `
-      <div class="qa-section">
-        <div class="qa-section-header">
-          <h3 class="qa-section-title">💬 ${t("qaCustomTopics")}</h3>
-        </div>
-        ${customHtml}
-      </div>`;
-  }
+    }).join("");
 
   // Render all threads
   QA_SECTIONS.forEach((sec) =>
@@ -3990,6 +3995,11 @@ function createQaTopic(): void {
   saveCustomTopics(topics);
   logAudit("qa-topic", String(qNum), "create", "", title.trim(), "");
   renderQaSheet();
+  // Auto-scroll to the newly created topic
+  setTimeout(() => {
+    const el = document.getElementById(`qa-topic-${qNum}`);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 100);
 }
 
 function deleteQaTopic(qNum: number): void {

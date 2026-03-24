@@ -803,7 +803,44 @@ Resources:`;for(let t of c){if(!t||typeof t!=`string`)throw Error(`@supabase/aut
         </div>
         <div class="qa-msg-body">${e.text.replace(/</g,`&lt;`).replace(/>/g,`&gt;`).replace(/\n/g,`<br>`)}</div>
       </div>`}).join(``),t.scrollTop=t.scrollHeight}function wo(){let e=Y,t=[`ICU Respiratory Digital Twin — Message Board Thread`,`Exported: ${new Date().toISOString().split(`T`)[0]}`,`=`.repeat(60),``];g.forEach(n=>{e.filter(e=>n.questions.some(t=>t.num===e.qNum)).length!==0&&(t.push(`SECTION ${n.num}: ${b(n.title)}`),t.push(`-`.repeat(50)),n.questions.forEach(n=>{let r=e.filter(e=>e.qNum===n.num);r.length!==0&&(t.push(`\nQ${n.num}. ${b(n.question)}`),r.forEach(e=>{let n=e.sender===`pmp`?`PMP`:`Dr. Dai`;t.push(`  [${n} | ${Co(e.timestamp)}] ${e.text}`)}))}),t.push(``))});let n=new Blob([t.join(`
-`)],{type:`text/plain`}),r=URL.createObjectURL(n),i=document.createElement(`a`);i.href=r,i.download=`Message_Board_Thread_${new Date().toISOString().split(`T`)[0]}.txt`,document.body.appendChild(i),i.click(),document.body.removeChild(i),URL.revokeObjectURL(r)}function To(){let e=document.getElementById(`qaSheetBody`);if(!e)return;let t=Y,n=go(),r={pmp:n.pmpEmail,technology:n.technologyEmail,business:n.businessEmail,accounting:n.accountingEmail},i=Object.entries(r).filter(([e,t])=>J(e)!==J(q)&&t).map(([,e])=>e).join(`, `);e.innerHTML=g.map(e=>{let n=e.questions.map(e=>{let n=t.filter(t=>t.qNum===e.num),r=n.length,a=n.filter(e=>J(e.sender)!==J(q)&&!e.readBy?.includes(J(q))).length,o=oo.has(e.num),s=e.why?`<div class="qa-why"><span class="qa-why-label">[${y(`qaWhy`)}]</span> ${b(e.why)}</div>`:``,c=e.followUps&&e.followUps.length>0?`<div class="qa-followups"><span class="qa-fu-label">${y(`qaFollowUps`)}:</span><ul>${e.followUps.map(e=>`<li>${b(e)}</li>`).join(``)}</ul></div>`:``;return`
+`)],{type:`text/plain`}),r=URL.createObjectURL(n),i=document.createElement(`a`);i.href=r,i.download=`Message_Board_Thread_${new Date().toISOString().split(`T`)[0]}.txt`,document.body.appendChild(i),i.click(),document.body.removeChild(i),URL.revokeObjectURL(r)}function To(){let e=document.getElementById(`qaSheetBody`);if(!e)return;let t=Y,n=go(),r={pmp:n.pmpEmail,technology:n.technologyEmail,business:n.businessEmail,accounting:n.accountingEmail},i=Object.entries(r).filter(([e,t])=>J(e)!==J(q)&&t).map(([,e])=>e).join(`, `),a=lo(),o=``;if(a.length>0){let e=a.map(e=>{let n=t.filter(t=>t.qNum===e.qNum),r=n.length,a=n.filter(e=>J(e.sender)!==J(q)&&!e.readBy?.includes(J(q))).length,o=oo.has(e.qNum);return`
+        <div class="qa-question-block" id="qa-topic-${e.qNum}">
+          <div class="qa-question-header">
+            <div class="qa-q-left">
+              <span class="qa-qnum">\ud83d\udcac</span>
+              <span class="qa-qtext">${e.title}</span>
+            </div>
+            <div class="qa-q-right">
+              <span class="qa-msg-count">${r>0?`\ud83d\udcac ${r} ${y(`qaMessages`)}${a>0?` (${a} ${y(`qaUnread`)})`:``}`:``}</span>
+              ${r>0?`<button class="qa-archive-btn" onclick="window._archiveQaMessages(${e.qNum})" title="${y(`qaArchive`)}">\ud83d\udce6</button>`:``}
+              <button class="qa-archive-btn" onclick="window._deleteQaTopic(${e.qNum})" title="${y(`qaDeleteTopic`)}">\ud83d\uddd1\ufe0f</button>
+              <button class="qa-collapse-btn" data-qatoggle="${e.qNum}">${y(o?`qaExpand`:`qaCollapse`)}</button>
+            </div>
+          </div>
+          <div class="qa-thread-wrap${o?` collapsed`:``}" id="qa-wrap-${e.qNum}">
+            <div class="qa-thread" id="qa-thread-${e.qNum}"></div>
+            <div class="qa-compose">
+              <textarea
+                id="qa-input-${e.qNum}"
+                class="qa-compose-input"
+                rows="2"
+                placeholder="${y(`qaAnswerPlaceholder`)}"
+              ></textarea>
+              <div class="qa-compose-actions">
+                ${i?`<span class="qa-email-target" title="${y(`qaSendViaEmail`)}">\ud83d\udce7 ${i}</span>`:`<span class="qa-email-target qa-no-email" title="${y(`qaSettings`)}">\ud83d\udce7 \u2014</span>`}
+                <button class="qa-send-btn" onclick="window._sendQaMessage(${e.qNum})">
+                  ${y(`qaSend`)} \u27a4
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>`}).join(``);o=`
+      <div class="qa-section">
+        <div class="qa-section-header">
+          <h3 class="qa-section-title">\ud83d\udcac ${y(`qaCustomTopics`)}</h3>
+        </div>
+        ${e}
+      </div>`}e.innerHTML=o+g.map(e=>{let n=e.questions.map(e=>{let n=t.filter(t=>t.qNum===e.num),r=n.length,a=n.filter(e=>J(e.sender)!==J(q)&&!e.readBy?.includes(J(q))).length,o=oo.has(e.num),s=e.why?`<div class="qa-why"><span class="qa-why-label">[${y(`qaWhy`)}]</span> ${b(e.why)}</div>`:``,c=e.followUps&&e.followUps.length>0?`<div class="qa-followups"><span class="qa-fu-label">${y(`qaFollowUps`)}:</span><ul>${e.followUps.map(e=>`<li>${b(e)}</li>`).join(``)}</ul></div>`:``;return`
         <div class="qa-question-block">
           <div class="qa-question-header">
             <div class="qa-q-left">
@@ -842,44 +879,7 @@ Resources:`;for(let t of c){if(!t||typeof t!=`string`)throw Error(`@supabase/aut
         </div>
         <p class="qa-section-context">${b(e.context)}</p>
         ${n}
-      </div>`}).join(``);let a=lo();if(a.length>0){let n=a.map(e=>{let n=t.filter(t=>t.qNum===e.qNum),r=n.length,a=n.filter(e=>J(e.sender)!==J(q)&&!e.readBy?.includes(J(q))).length,o=oo.has(e.qNum);return`
-        <div class="qa-question-block">
-          <div class="qa-question-header">
-            <div class="qa-q-left">
-              <span class="qa-qnum">💬</span>
-              <span class="qa-qtext">${e.title}</span>
-            </div>
-            <div class="qa-q-right">
-              <span class="qa-msg-count">${r>0?`\ud83d\udcac ${r} ${y(`qaMessages`)}${a>0?` (${a} ${y(`qaUnread`)})`:``}`:``}</span>
-              ${r>0?`<button class="qa-archive-btn" onclick="window._archiveQaMessages(${e.qNum})" title="${y(`qaArchive`)}">\ud83d\udce6</button>`:``}
-              <button class="qa-archive-btn" onclick="window._deleteQaTopic(${e.qNum})" title="${y(`qaDeleteTopic`)}">🗑️</button>
-              <button class="qa-collapse-btn" data-qatoggle="${e.qNum}">${y(o?`qaExpand`:`qaCollapse`)}</button>
-            </div>
-          </div>
-          <div class="qa-thread-wrap${o?` collapsed`:``}" id="qa-wrap-${e.qNum}">
-            <div class="qa-thread" id="qa-thread-${e.qNum}"></div>
-            <div class="qa-compose">
-              <textarea
-                id="qa-input-${e.qNum}"
-                class="qa-compose-input"
-                rows="2"
-                placeholder="${y(`qaAnswerPlaceholder`)}"
-              ></textarea>
-              <div class="qa-compose-actions">
-                ${i?`<span class="qa-email-target" title="${y(`qaSendViaEmail`)}">📧 ${i}</span>`:`<span class="qa-email-target qa-no-email" title="${y(`qaSettings`)}">📧 —</span>`}
-                <button class="qa-send-btn" onclick="window._sendQaMessage(${e.qNum})">
-                  ${y(`qaSend`)} \u27a4
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>`}).join(``);e.innerHTML+=`
-      <div class="qa-section">
-        <div class="qa-section-header">
-          <h3 class="qa-section-title">💬 ${y(`qaCustomTopics`)}</h3>
-        </div>
-        ${n}
-      </div>`}g.forEach(e=>e.questions.forEach(e=>Z(e.num))),a.forEach(e=>Z(e.qNum)),Q();let o=document.getElementById(`qaExportBtn`);o&&(o.onclick=wo),e.addEventListener(`click`,e=>{let t=e.target.closest(`[data-qatoggle]`);if(!t)return;let n=Number(t.dataset.qatoggle);oo.has(n)?oo.delete(n):oo.add(n);let r=document.getElementById(`qa-wrap-${n}`);r&&r.classList.toggle(`collapsed`),t.textContent=oo.has(n)?y(`qaExpand`):y(`qaCollapse`)});let s=document.getElementById(`qaToolbar`);s&&s.addEventListener(`click`,e=>{let t=e.target.closest(`[data-qarole]`);t&&(q=t.dataset.qarole,s.querySelectorAll(`.qa-role-btn`).forEach(e=>e.classList.remove(`active`)),t.classList.add(`active`),To(),Q())})}var Eo=`ctower_qa_archive`;function Do(){try{let e=localStorage.getItem(Eo);return e?JSON.parse(e):[]}catch{return[]}}function Oo(e){let t=Y,n=t.filter(t=>t.qNum===e);if(n.length===0||!confirm(y(`qaArchiveConfirm`)))return;let r=`Q${e}`;for(let t of g){let n=t.questions.find(t=>t.num===e);if(n){r=`Q${e}. ${b(n.question)}`;break}}let i=[`ICU Respiratory Digital Twin — Message Board Archive`,`Archived: ${new Date().toISOString().split(`T`)[0]}`,r,`Messages: ${n.length}`,`=`.repeat(60),``];n.forEach(e=>{let t=e.sender===`pmp`?`PMP`:`Dr. Dai`,n=e.readBy?.length?` [Read by: ${e.readBy.join(`, `)}]`:``;i.push(`[${t} | ${Co(e.timestamp)}]${n} ${e.text}`)});let a=new Blob([i.join(`
+      </div>`}).join(``),g.forEach(e=>e.questions.forEach(e=>Z(e.num))),a.forEach(e=>Z(e.qNum)),Q();let s=document.getElementById(`qaExportBtn`);s&&(s.onclick=wo),e.addEventListener(`click`,e=>{let t=e.target.closest(`[data-qatoggle]`);if(!t)return;let n=Number(t.dataset.qatoggle);oo.has(n)?oo.delete(n):oo.add(n);let r=document.getElementById(`qa-wrap-${n}`);r&&r.classList.toggle(`collapsed`),t.textContent=oo.has(n)?y(`qaExpand`):y(`qaCollapse`)});let c=document.getElementById(`qaToolbar`);c&&c.addEventListener(`click`,e=>{let t=e.target.closest(`[data-qarole]`);t&&(q=t.dataset.qarole,c.querySelectorAll(`.qa-role-btn`).forEach(e=>e.classList.remove(`active`)),t.classList.add(`active`),To(),Q())})}var Eo=`ctower_qa_archive`;function Do(){try{let e=localStorage.getItem(Eo);return e?JSON.parse(e):[]}catch{return[]}}function Oo(e){let t=Y,n=t.filter(t=>t.qNum===e);if(n.length===0||!confirm(y(`qaArchiveConfirm`)))return;let r=`Q${e}`;for(let t of g){let n=t.questions.find(t=>t.num===e);if(n){r=`Q${e}. ${b(n.question)}`;break}}let i=[`ICU Respiratory Digital Twin — Message Board Archive`,`Archived: ${new Date().toISOString().split(`T`)[0]}`,r,`Messages: ${n.length}`,`=`.repeat(60),``];n.forEach(e=>{let t=e.sender===`pmp`?`PMP`:`Dr. Dai`,n=e.readBy?.length?` [Read by: ${e.readBy.join(`, `)}]`:``;i.push(`[${t} | ${Co(e.timestamp)}]${n} ${e.text}`)});let a=new Blob([i.join(`
 `)],{type:`text/plain`}),o=URL.createObjectURL(a),s=document.createElement(`a`);s.href=o,s.download=`MB_Q${e}_Archive_${new Date().toISOString().split(`T`)[0]}.txt`,document.body.appendChild(s),s.click(),document.body.removeChild(s),URL.revokeObjectURL(o);let c=Do();c.push({archivedAt:new Date().toISOString(),messages:n}),localStorage.setItem(Eo,JSON.stringify(c));let l=t.filter(t=>t.qNum!==e);Y.length=0,l.forEach(e=>Y.push(e)),X(Y),Ji()&&Qi(e),To(),So()}function ko(){let e=document.getElementById(`qaSheetBody`);if(!e)return;let t=Do();if(t.length===0){e.innerHTML=`<div class="qa-archive-empty">${y(`qaNoArchives`)}</div>`;return}e.innerHTML=`
     <div class="qa-archive-header">
       <h3>${y(`qaArchiveTitle`)}</h3>
@@ -899,7 +899,7 @@ Resources:`;for(let t of c){if(!t||typeof t!=`string`)throw Error(`@supabase/aut
   `}function Ao(){To()}function jo(e){if(!confirm(y(`qaArchiveDeleteConfirm`)))return;let t=Do();t.splice(e,1),localStorage.setItem(Eo,JSON.stringify(t)),ko()}function Q(){let e=document.querySelector(`.tab-btn[data-tab="qa-sheet"]`);if(!e)return;let t=Y,n=J(q),r=t.filter(e=>J(e.sender)!==n&&!e.readBy?.includes(n)).length,i=e.querySelector(`.qa-tab-badge`);r>0?(i||(i=document.createElement(`span`),i.className=`qa-tab-badge`,e.appendChild(i)),i.textContent=String(r)):i&&i.remove()}window.addEventListener(`storage`,e=>{if(e.key!==ro)return;let t=e.newValue?JSON.parse(e.newValue):[];Y=t;let n=document.getElementById(`panel-qa-sheet`);n&&!n.classList.contains(`hidden`)&&n.style.display!==`none`&&g.forEach(e=>e.questions.forEach(e=>Z(e.num))),Q();let r=e.oldValue?JSON.parse(e.oldValue):[];if(t.length>r.length){let e=t[t.length-1];e.sender!==J(q)&&Mo(e)}});function Mo(e){let t=so(e.sender),n=co(e.sender),r=e.text.length>60?e.text.slice(0,60)+`…`:e.text,i=document.createElement(`div`);i.className=`qa-toast`,i.innerHTML=`
     <div class="qa-toast-header">${n} ${t} — Q${e.qNum}</div>
     <div class="qa-toast-body">${r.replace(/</g,`&lt;`).replace(/>/g,`&gt;`)}</div>
-  `,document.body.appendChild(i),requestAnimationFrame(()=>i.classList.add(`qa-toast-show`)),setTimeout(()=>{i.classList.remove(`qa-toast-show`),i.addEventListener(`transitionend`,()=>i.remove())},4e3)}function No(){let e=Y,t=J(q),n=!1;e.forEach(e=>{if(J(e.sender)!==t&&!e.readBy?.includes(t)){let r=document.getElementById(`qa-thread-${e.qNum}`);r&&r.offsetParent!==null&&(e.readBy||=[],e.readBy.push(t),Ji()&&Zi(e.id,t),n=!0)}}),n&&(X(Y),Q())}function Po(){let e=prompt(y(`qaNewTopicPlaceholder`));if(!e||!e.trim())return;let t=lo(),n=t.reduce((e,t)=>Math.max(e,t.qNum),999)+1;t.push({qNum:n,title:e.trim(),createdAt:new Date().toISOString()}),uo(t),$(`qa-topic`,String(n),`create`,``,e.trim(),``),To()}function Fo(e){if(!confirm(y(`qaDeleteTopicConfirm`)))return;let t=lo(),n=t.find(t=>t.qNum===e);t=t.filter(t=>t.qNum!==e),uo(t),Y=Y.filter(t=>t.qNum!==e),X(Y),Ji()&&Qi(e),$(`qa-topic`,String(e),`delete`,n?.title??``,``,``),To()}window._sendQaMessage=xo,window._exportQaThread=wo,window._openQaSettings=vo,window._saveQaSettings=yo,window._markQaRead=bo,window._archiveQaMessages=Oo,window._viewQaArchive=ko,window._closeQaArchive=Ao,window._deleteQaArchive=jo,window._autoMarkVisibleAsRead=No,window._createQaTopic=Po,window._deleteQaTopic=Fo;function Io(){ea(e=>{let t=fo(e);Y.some(e=>e.id===t.id)||(Y.push(t),X(Y),Z(t.qNum),Q(),J(t.sender)!==J(q)&&Mo(t))},e=>{let t=Y.findIndex(t=>t.id===e.id);t!==-1&&(Y[t].readBy=e.read_by??[],X(Y),Z(Y[t].qNum),Q())})}window.addEventListener(`online`,async()=>{await ho(),Y=(await Yi()).map(fo),X(Y);let e=document.getElementById(`panel-qa-sheet`);e&&e.style.display!==`none`&&g.forEach(e=>e.questions.forEach(e=>Z(e.num))),Q()});function $(e,t,n,r,i,a){let o=`AUD-`+String(l.length+1).padStart(3,`0`);l.unshift({id:o,timestamp:new Date().toISOString(),user:{pmp:`PMP`,tech:`Tech`,business:`Business`,accounting:`Accounting`}[_]||_,action:e,targetId:t,field:n,oldValue:r,newValue:i,detail:a})}function Lo(){let e=document.getElementById(`actionBoard`);e&&(e.innerHTML=[{key:`todo`,label:y(`actionTodo`),items:f.filter(e=>e.status===`todo`)},{key:`in-progress`,label:y(`actionInProgress`),items:f.filter(e=>e.status===`in-progress`)},{key:`blocked`,label:y(`actionBlocked`),items:f.filter(e=>e.status===`blocked`)},{key:`done`,label:y(`actionDone`),items:f.filter(e=>e.status===`done`)}].map(e=>`
+  `,document.body.appendChild(i),requestAnimationFrame(()=>i.classList.add(`qa-toast-show`)),setTimeout(()=>{i.classList.remove(`qa-toast-show`),i.addEventListener(`transitionend`,()=>i.remove())},4e3)}function No(){let e=Y,t=J(q),n=!1;e.forEach(e=>{if(J(e.sender)!==t&&!e.readBy?.includes(t)){let r=document.getElementById(`qa-thread-${e.qNum}`);r&&r.offsetParent!==null&&(e.readBy||=[],e.readBy.push(t),Ji()&&Zi(e.id,t),n=!0)}}),n&&(X(Y),Q())}function Po(){let e=prompt(y(`qaNewTopicPlaceholder`));if(!e||!e.trim())return;let t=lo(),n=t.reduce((e,t)=>Math.max(e,t.qNum),999)+1;t.push({qNum:n,title:e.trim(),createdAt:new Date().toISOString()}),uo(t),$(`qa-topic`,String(n),`create`,``,e.trim(),``),To(),setTimeout(()=>{let e=document.getElementById(`qa-topic-${n}`);e&&e.scrollIntoView({behavior:`smooth`,block:`start`})},100)}function Fo(e){if(!confirm(y(`qaDeleteTopicConfirm`)))return;let t=lo(),n=t.find(t=>t.qNum===e);t=t.filter(t=>t.qNum!==e),uo(t),Y=Y.filter(t=>t.qNum!==e),X(Y),Ji()&&Qi(e),$(`qa-topic`,String(e),`delete`,n?.title??``,``,``),To()}window._sendQaMessage=xo,window._exportQaThread=wo,window._openQaSettings=vo,window._saveQaSettings=yo,window._markQaRead=bo,window._archiveQaMessages=Oo,window._viewQaArchive=ko,window._closeQaArchive=Ao,window._deleteQaArchive=jo,window._autoMarkVisibleAsRead=No,window._createQaTopic=Po,window._deleteQaTopic=Fo;function Io(){ea(e=>{let t=fo(e);Y.some(e=>e.id===t.id)||(Y.push(t),X(Y),Z(t.qNum),Q(),J(t.sender)!==J(q)&&Mo(t))},e=>{let t=Y.findIndex(t=>t.id===e.id);t!==-1&&(Y[t].readBy=e.read_by??[],X(Y),Z(Y[t].qNum),Q())})}window.addEventListener(`online`,async()=>{await ho(),Y=(await Yi()).map(fo),X(Y);let e=document.getElementById(`panel-qa-sheet`);e&&e.style.display!==`none`&&g.forEach(e=>e.questions.forEach(e=>Z(e.num))),Q()});function $(e,t,n,r,i,a){let o=`AUD-`+String(l.length+1).padStart(3,`0`);l.unshift({id:o,timestamp:new Date().toISOString(),user:{pmp:`PMP`,tech:`Tech`,business:`Business`,accounting:`Accounting`}[_]||_,action:e,targetId:t,field:n,oldValue:r,newValue:i,detail:a})}function Lo(){let e=document.getElementById(`actionBoard`);e&&(e.innerHTML=[{key:`todo`,label:y(`actionTodo`),items:f.filter(e=>e.status===`todo`)},{key:`in-progress`,label:y(`actionInProgress`),items:f.filter(e=>e.status===`in-progress`)},{key:`blocked`,label:y(`actionBlocked`),items:f.filter(e=>e.status===`blocked`)},{key:`done`,label:y(`actionDone`),items:f.filter(e=>e.status===`done`)}].map(e=>`
       <div class="action-column action-col-${e.key}">
         <h4 class="action-col-header">${e.label} (${e.items.length})</h4>
         ${e.items.map(e=>`
