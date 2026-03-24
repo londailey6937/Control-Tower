@@ -402,7 +402,7 @@ export interface DocLibItem {
   revisions: DocRevision[];
 }
 
-// ── Inventor Q&A ────────────────────────────────
+// ── Message Board ────────────────────────────────
 export interface QASection {
   num: number;
   title: LocalizedString;

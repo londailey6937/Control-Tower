@@ -244,7 +244,7 @@ def build():
     pdf.bullet_aligned("Role-Based Access Control:", "Role-based access (PMP/Tech/Business/Accounting) with appropriate visibility controls.", dash=False)
     pdf.bullet_aligned("Cash & Runway Tracking:", "PMP-editable cash-on-hand and monthly burn fields with automatic runway recalculation.", dash=False)
     pdf.bullet_aligned("Regulatory Compliance Tools:", "Design History File index, CAPA log, action items, supplier management, notification system.", dash=False)
-    pdf.bullet_aligned("Documentation:", "EN + CN User Guides (25 sections each), Project Charters (EN/CN), Inventor Q&A Sheet.", dash=False)
+    pdf.bullet_aligned("Documentation:", "EN + CN User Guides (25 sections each), Project Charters (EN/CN), Message Board Q&A Sheet.", dash=False)
     pdf.bullet_aligned("Risk Register:", "Eight defined risks with probability/impact scoring, mitigation strategies, and trigger conditions.", dash=False)
 
     # ── 5. PROPOSED ENGAGEMENT ──

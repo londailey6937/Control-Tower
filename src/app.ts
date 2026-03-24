@@ -3043,7 +3043,7 @@ function renderDocLibrary(): void {
 (window as any)._closeDocHistory = closeDocHistory;
 
 // ══════════════════════════════════════════════════
-// INVENTOR Q&A — threaded messaging (PMP ↔ Inventor)
+// MESSAGE BOARD — threaded messaging (PMP ↔ Dr. Dai)
 // ══════════════════════════════════════════════════
 
 const QA_STORAGE_KEY = "ctower_qa_messages";
@@ -3067,9 +3067,11 @@ function saveQaMessages(msgs: QAMessage[]): void {
 function loadQaSettings(): QASettings {
   try {
     const raw = localStorage.getItem(QA_SETTINGS_KEY);
-    return raw ? JSON.parse(raw) : { pmpEmail: "", inventorEmail: "" };
+    return raw
+      ? JSON.parse(raw)
+      : { pmpEmail: "", inventorEmail: "uniquedai@gmail.com" };
   } catch {
-    return { pmpEmail: "", inventorEmail: "" };
+    return { pmpEmail: "", inventorEmail: "uniquedai@gmail.com" };
   }
 }
 
@@ -3089,7 +3091,7 @@ function openQaSettings(): void {
         <input type="email" id="qaSettingsPmpEmail" class="qa-settings-input" value="${settings.pmpEmail.replace(/"/g, "&quot;")}" placeholder="pmp@example.com" />
       </label>
       <label class="qa-settings-label">🔬 ${t("qaInventorEmail")}
-        <input type="email" id="qaSettingsInventorEmail" class="qa-settings-input" value="${settings.inventorEmail.replace(/"/g, "&quot;")}" placeholder="inventor@example.com" />
+        <input type="email" id="qaSettingsInventorEmail" class="qa-settings-input" value="${settings.inventorEmail.replace(/"/g, "&quot;")}" placeholder="uniquedai@gmail.com" />
       </label>
     </div>
     <div class="qa-settings-actions">
@@ -3154,12 +3156,12 @@ function sendQaMessage(qNum: number): void {
   const recipientEmail =
     qaPostingRole === "pmp" ? settings.inventorEmail : settings.pmpEmail;
   if (recipientEmail) {
-    const senderLabel = qaPostingRole === "pmp" ? "PMP" : "Inventor";
+    const senderLabel = qaPostingRole === "pmp" ? "PMP" : "Dr. Dai";
     const subject = encodeURIComponent(
-      `[Control Tower] New Q&A post from ${senderLabel} on Q${qNum}`,
+      `[Control Tower] New message from ${senderLabel} on Q${qNum}`,
     );
     const body = encodeURIComponent(
-      `${senderLabel} posted a new message on Q${qNum} — ICU Respiratory Digital Twin.\n\nPlease open the Control Tower to view the full message:\nInventor Q&A Message Board → Q${qNum}\n\n—\nControl Tower Notification`,
+      `${senderLabel} posted a new message on Q${qNum} — ICU Respiratory Digital Twin.\n\nPlease open the Control Tower to view the full message:\nMessage Board → Q${qNum}\n\n—\nControl Tower Notification`,
     );
     window.open(
       `mailto:${encodeURIComponent(recipientEmail)}?subject=${subject}&body=${body}`,
@@ -3250,7 +3252,7 @@ function renderQaThread(qNum: number): void {
 function exportQaThread(): void {
   const msgs = loadQaMessages();
   const lines: string[] = [
-    "ICU Respiratory Digital Twin \u2014 Inventor Q&A Message Thread",
+    "ICU Respiratory Digital Twin \u2014 Message Board Thread",
     `Exported: ${new Date().toISOString().split("T")[0]}`,
     "=".repeat(60),
     "",
@@ -3267,7 +3269,7 @@ function exportQaThread(): void {
       if (qMsgs.length === 0) return;
       lines.push(`\nQ${q.num}. ${localizedText(q.question)}`);
       qMsgs.forEach((m) => {
-        const sender = m.sender === "pmp" ? "PMP" : "Inventor";
+        const sender = m.sender === "pmp" ? "PMP" : "Dr. Dai";
         lines.push(`  [${sender} | ${formatMsgTime(m.timestamp)}] ${m.text}`);
       });
     });
@@ -3278,7 +3280,7 @@ function exportQaThread(): void {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `Inventor_QA_Thread_${new Date().toISOString().split("T")[0]}.txt`;
+  a.download = `Message_Board_Thread_${new Date().toISOString().split("T")[0]}.txt`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -3462,7 +3464,7 @@ function archiveQaMessages(qNum: number): void {
 
   // Export as file
   const lines: string[] = [
-    "ICU Respiratory Digital Twin \u2014 Q&A Thread Archive",
+    "ICU Respiratory Digital Twin \u2014 Message Board Archive",
     `Archived: ${new Date().toISOString().split("T")[0]}`,
     qText,
     `Messages: ${threadMsgs.length}`,
@@ -3470,7 +3472,7 @@ function archiveQaMessages(qNum: number): void {
     "",
   ];
   threadMsgs.forEach((m) => {
-    const sender = m.sender === "pmp" ? "PMP" : "Inventor";
+    const sender = m.sender === "pmp" ? "PMP" : "Dr. Dai";
     const read = m.readBy?.length ? ` [Read by: ${m.readBy.join(", ")}]` : "";
     lines.push(`[${sender} | ${formatMsgTime(m.timestamp)}]${read} ${m.text}`);
   });
@@ -3479,7 +3481,7 @@ function archiveQaMessages(qNum: number): void {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `QA_Q${qNum}_Archive_${new Date().toISOString().split("T")[0]}.txt`;
+  a.download = `MB_Q${qNum}_Archive_${new Date().toISOString().split("T")[0]}.txt`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -3553,7 +3555,7 @@ function deleteQaArchive(idx: number): void {
   viewQaArchive();
 }
 
-// ── Unread badge on Inventor Q&A tab button ──────────────
+// ── Unread badge on Message Board tab button ──────────────
 function updateQaUnreadBadge(): void {
   const tabBtn = document.querySelector('.tab-btn[data-tab="qa-sheet"]');
   if (!tabBtn) return;

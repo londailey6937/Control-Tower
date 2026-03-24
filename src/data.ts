@@ -1620,7 +1620,7 @@ export const SUPPLIERS: Supplier[] = [
 ];
 
 // ============================================================
-// INVENTOR Q&A SECTIONS
+// MESSAGE BOARD SECTIONS
 // ============================================================
 
 export const QA_SECTIONS: QASection[] = [

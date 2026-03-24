@@ -1030,19 +1030,19 @@ def build_english():
         "  Danielle Liu -- Accounting\n"
         "    Responsibilities: Monthly burn reports, budget tracking, financial statements")
 
-    # 28. Inventor Q&A Message Board
+    # 28. Message Board
     pdf.add_page()
-    pdf.sec(28, "Tab 14: Inventor Q&A Message Board")
+    pdf.sec(28, "Tab 14: Message Board")
     pdf.txt(
-        "The Inventor Q&A Message Board provides bi-directional, threaded messaging "
-        "between the PMP and the Inventor. It enables structured technical dialogue "
+        "The Message Board provides bi-directional, threaded messaging "
+        "between the PMP and Dr. Dai. It enables structured technical dialogue "
         "organized around 30 pre-defined questions across 8 topic sections, with "
         "messages stored locally in each user's browser.")
 
     pdf.sub("28.1 Bi-Directional Communication")
     pdf.txt(
         "The board supports true two-way conversation:\n\n"
-        "  Role Picker    -- Toggle 'Posting as' between PMP and Inventor\n"
+        "  Role Picker    -- Toggle 'Posting as' between PMP and Dr. Dai\n"
         "  Message Alignment -- Your messages align RIGHT, the other party's LEFT\n"
         "  Bubble Styling  -- Self messages have a bottom-right corner notch;\n"
         "                     incoming messages have a bottom-left corner notch\n"
@@ -1083,10 +1083,10 @@ def build_english():
 
     pdf.sub("28.5 Email Notification")
     pdf.txt(
-        "Click the Settings (gear) icon to configure PMP and Inventor email addresses. "
+        "Click the Settings (gear) icon to configure PMP and Dr. Dai email addresses. "
         "When configured, sending a message triggers a notification email to the "
         "recipient. The email subject line identifies who posted and the question "
-        "number (e.g. '[Control Tower] New Q&A post from PMP on Q5'). The actual "
+        "number (e.g. '[Control Tower] New message from PMP on Q5'). The actual "
         "message body is NOT included in the email -- the recipient is directed to "
         "open the Control Tower to read the full post. This keeps sensitive content "
         "within the dashboard and encourages direct engagement with the board.")
@@ -2130,11 +2130,11 @@ def build_chinese():
         "  Danielle Liu -- \u4f1a\u8ba1\n"
         "    \u804c\u8d23\uff1a\u6708\u5ea6\u71c3\u70e7\u62a5\u544a\u3001\u9884\u7b97\u8ffd\u8e2a\u3001\u8d22\u52a1\u62a5\u8868")
 
-    # 28. 发明人问答留言板
+    # 28. 留言板
     pdf.add_page()
-    pdf.sec(28, "\u9009\u9879\u530114\uff1a\u53d1\u660e\u4eba\u95ee\u7b54\u7559\u8a00\u677f")
+    pdf.sec(28, "\u9009\u9879\u530114\uff1a\u7559\u8a00\u677f")
     pdf.txt(
-        "\u53d1\u660e\u4eba\u95ee\u7b54\u7559\u8a00\u677f\u63d0\u4f9b\u9879\u76ee\u7ecf\u7406(PMP)\u4e0e\u53d1\u660e\u4eba\u4e4b\u95f4\u7684"
+        "\u7559\u8a00\u677f\u63d0\u4f9b\u9879\u76ee\u7ecf\u7406(PMP)\u4e0e\u6234\u535a\u58eb\u4e4b\u95f4\u7684"
         "\u53cc\u5411\u7ebf\u7a0b\u5f0f\u6d88\u606f\u529f\u80fd\u3002\u5b83\u652f\u6301\u56f4\u7ed530\u4e2a\u9884\u5b9a\u4e49"
         "\u95ee\u9898\uff088\u4e2a\u4e3b\u9898\u90e8\u5206\uff09\u7684\u7ed3\u6784\u5316\u6280\u672f\u5bf9\u8bdd\uff0c"
         "\u6d88\u606f\u5b58\u50a8\u5728\u6bcf\u4e2a\u7528\u6237\u7684\u6d4f\u89c8\u5668\u672c\u5730\u3002")
@@ -2142,7 +2142,7 @@ def build_chinese():
     pdf.sub("28.1 \u53cc\u5411\u901a\u4fe1")
     pdf.txt(
         "\u7559\u8a00\u677f\u652f\u6301\u771f\u6b63\u7684\u53cc\u5411\u5bf9\u8bdd\uff1a\n\n"
-        "  \u89d2\u8272\u9009\u62e9\u5668  -- \u5728PMP\u548c\u53d1\u660e\u4eba\u4e4b\u95f4\u5207\u6362\u201c\u53d1\u5e03\u8eab\u4efd\u201d\n"
+        "  \u89d2\u8272\u9009\u62e9\u5668  -- \u5728PMP\u548c\u6234\u535a\u58eb\u4e4b\u95f4\u5207\u6362\u201c\u53d1\u5e03\u8eab\u4efd\u201d\n"
         "  \u6d88\u606f\u5bf9\u9f50    -- \u60a8\u7684\u6d88\u606f\u9760\u53f3\u5bf9\u9f50\uff0c\u5bf9\u65b9\u6d88\u606f\u9760\u5de6\u5bf9\u9f50\n"
         "  \u6c14\u6ce1\u6837\u5f0f    -- \u81ea\u5df1\u7684\u6d88\u606f\u53f3\u4e0b\u89d2\u5706\u89d2\uff0c\u5bf9\u65b9\u6d88\u606f\u5de6\u4e0b\u89d2\u5706\u89d2\n"
         "  \u5b9e\u65f6\u91cd\u65b0\u6e32\u67d3 -- \u5207\u6362\u89d2\u8272\u540e\u7acb\u5373\u7ffb\u8f6c\u5bf9\u9f50\u3001\u5df2\u8bfb\u56de\u6267\u548c\u90ae\u4ef6\u76ee\u6807")
@@ -2171,13 +2171,13 @@ def build_chinese():
 
     pdf.sub("28.4 \u8de8\u9009\u9879\u5361\u540c\u6b65")
     pdf.txt(
-        "\u6253\u5f00\u4e24\u4e2a\u6d4f\u89c8\u5668\u7a97\u53e3 -- \u4e00\u4e2a\u4f5cPMP\uff0c\u4e00\u4e2a\u4f5c\u53d1\u660e\u4eba\u3002"
+        "\u6253\u5f00\u4e24\u4e2a\u6d4f\u89c8\u5668\u7a97\u53e3 -- \u4e00\u4e2a\u4f5cPMP\uff0c\u4e00\u4e2a\u4f5c\u6234\u535a\u58eb\u3002"
         "\u5728\u4e00\u4e2a\u7a97\u53e3\u53d1\u9001\u7684\u6d88\u606f\u4f1a\u901a\u8fc7\u6d4f\u89c8\u5668StorageEvent\u540c\u6b65\u81ea\u52a8\u5728\u53e6\u4e00\u4e2a\u7a97\u53e3\u663e\u793a\u3002"
         "\u5f53\u5bf9\u65b9\u6709\u65b0\u6d88\u606f\u65f6\uff0c\u4f1a\u5f39\u51fa\u901a\u77e5\u63d0\u793a\uff0c\u663e\u793a\u53d1\u9001\u8005\u3001\u95ee\u9898\u7f16\u53f7\u548c\u6d88\u606f\u9884\u89c8\u3002")
 
     pdf.sub("28.5 \u90ae\u4ef6\u901a\u77e5")
     pdf.txt(
-        "\u70b9\u51fb\u8bbe\u7f6e\uff08\u9f7f\u8f6e\uff09\u56fe\u6807\u914d\u7f6ePMP\u548c\u53d1\u660e\u4eba\u90ae\u7bb1\u3002"
+        "\u70b9\u51fb\u8bbe\u7f6e\uff08\u9f7f\u8f6e\uff09\u56fe\u6807\u914d\u7f6ePMP\u548c\u6234\u535a\u58eb\u90ae\u7bb1\u3002"
         "\u914d\u7f6e\u540e\uff0c\u53d1\u9001\u6d88\u606f\u4f1a\u89e6\u53d1\u5411\u6536\u4ef6\u4eba\u7684\u901a\u77e5\u90ae\u4ef6\u3002"
         "\u90ae\u4ef6\u4e3b\u9898\u884c\u6807\u8bc6\u53d1\u5e03\u8005\u548c\u95ee\u9898\u7f16\u53f7"
         "\uff08\u4f8b\u5982\u2018[Control Tower] PMP\u5728Q5\u53d1\u5e03\u4e86\u65b0\u6d88\u606f\u2019\uff09\u3002"

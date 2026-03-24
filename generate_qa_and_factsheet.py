@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Generate two PDFs:
-1. Inventor Q&A Sheet — questions for the PMP to ask the inventor
+1. Message Board Q&A Sheet — questions for the PMP to ask Dr. Dai
 2. China Control Tower Implementation Fact Sheet
 """
 
@@ -37,7 +37,7 @@ GREEN = (20, 130, 70)
 ORANGE = (200, 120, 20)
 
 # ────────────────────────────────────────
-#  1.  INVENTOR Q&A SHEET
+#  1.  MESSAGE BOARD Q&A SHEET
 # ────────────────────────────────────────
 
 class SafePDF(FPDF):
@@ -61,7 +61,7 @@ class QASheet(SafePDF):
     def header(self):
         self.set_font("Helvetica", "B", 9)
         self.set_text_color(*GRAY)
-        self.cell(0, 6, "ICU Respiratory Digital Twin - Inventor Q&A Sheet  |  CONFIDENTIAL", align="R")
+        self.cell(0, 6, "ICU Respiratory Digital Twin - Message Board Q&A Sheet  |  CONFIDENTIAL", align="R")
         self.ln(10)
 
     def footer(self):
@@ -906,7 +906,7 @@ def build_qa():
         x=pdf.l_margin, y=y, w=box_w, h=50,
     )
 
-    path = os.path.join(OUT_DIR, "Inventor_QA_Sheet.pdf")
+    path = os.path.join(OUT_DIR, "Message_Board_QA_Sheet.pdf")
     pdf.output(path)
     return path
 
@@ -1270,7 +1270,7 @@ def build_factsheet():
 # ────────────────────────────────────
 if __name__ == "__main__":
     qa = build_qa()
-    print(f"Inventor Q&A Sheet: {qa}")
+    print(f"Message Board Q&A Sheet: {qa}")
     fs = build_factsheet()
     print(f"China Fact Sheet:   {fs}")
     print("Done.")
