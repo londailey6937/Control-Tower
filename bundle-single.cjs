@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 
 const dist = path.join(__dirname, "dist");
-const htmlPath = path.join(dist, "index.vite.html");
+const htmlPath = path.join(dist, "index.html");
 let html = fs.readFileSync(htmlPath, "utf8");
 
 // Inline CSS: <link rel="stylesheet" ... href="/assets/xxx.css">
