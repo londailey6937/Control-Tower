@@ -213,6 +213,13 @@ export type AuditAction =
   | "api-remove"
   | "api-restore"
   | "budget-field"
+  | "budget-add"
+  | "budget-delete"
+  | "supplier-add"
+  | "supplier-delete"
+  | "burn-edit"
+  | "burn-add"
+  | "burn-delete"
   | "qa-topic";
 
 export interface AuditEntry {
@@ -379,6 +386,16 @@ declare global {
     _editBudgetField: (budgetId: string, field: "planned" | "actual") => void;
     _createQaTopic: () => void;
     _deleteQaTopic: (qNum: number) => void;
+    _addSupplier: () => void;
+    _deleteSupplier: (supplierId: string) => void;
+    _openAddSupplierForm: () => void;
+    _addBudgetCategory: () => void;
+    _deleteBudgetCategory: (budgetId: string) => void;
+    _openAddBudgetForm: () => void;
+    _editBurnEntry: (month: number) => void;
+    _addBurnEntry: () => void;
+    _deleteBurnEntry: (month: number) => void;
+    _toggleQaTestMode: (checked: boolean) => void;
   }
 }
 

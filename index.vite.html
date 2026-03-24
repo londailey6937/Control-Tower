@@ -415,6 +415,12 @@
             <tbody id="budgetBody"></tbody>
           </table>
         </div>
+        <div id="budgetAddForm" class="add-funding-form" style="display:none"></div>
+        <div class="budget-toolbar">
+          <button class="btn-primary doc-lib-add-btn" data-action="openAddBudgetForm">
+            ＋ <span data-i18n="budgetAddBtn">Add Category</span>
+          </button>
+        </div>
       </section>
 
       <!-- ── TAB: RESOURCES ─────────────────────── -->
@@ -446,10 +452,17 @@
                 <th data-i18n="supplierLead">Lead Time</th>
                 <th data-i18n="supplierPO">PO Status</th>
                 <th data-i18n="supplierMilestone">Milestone</th>
+                <th></th>
               </tr>
             </thead>
             <tbody id="supplierBody"></tbody>
           </table>
+        </div>
+        <div id="supplierAddForm" class="add-funding-form"></div>
+        <div class="budget-toolbar">
+          <button class="btn-primary doc-lib-add-btn" data-action="openAddSupplierForm">
+            ＋ <span data-i18n="supplierAddBtn">Add Supplier</span>
+          </button>
         </div>
       </section>
 

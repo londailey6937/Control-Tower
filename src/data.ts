@@ -1537,7 +1537,6 @@ export const TEAM_MEMBERS: TeamMember[] = [
       en: "CEO, Company B",
       cn: "CEO，B公司",
     },
-    email: "lawrenceliu@enzhi.org",
     allocation: [
       { workstream: "Investor Relations (Asia)", pct: 40 },
       { workstream: "Business Strategy", pct: 35 },

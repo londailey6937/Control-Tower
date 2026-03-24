@@ -203,6 +203,33 @@ function setupEventDelegation(): void {
       case "logStakeholderInput":
         window._logStakeholderInput();
         break;
+      case "editBurnEntry":
+        window._editBurnEntry(Number(a.burnmonth!));
+        break;
+      case "addBurnEntry":
+        window._addBurnEntry();
+        break;
+      case "deleteBurnEntry":
+        window._deleteBurnEntry(Number(a.burnmonth!));
+        break;
+      case "addSupplier":
+        window._addSupplier();
+        break;
+      case "deleteSupplier":
+        window._deleteSupplier(a.supid!);
+        break;
+      case "openAddSupplierForm":
+        window._openAddSupplierForm();
+        break;
+      case "addBudgetCategory":
+        window._addBudgetCategory();
+        break;
+      case "deleteBudgetCategory":
+        window._deleteBudgetCategory(a.budgetid!);
+        break;
+      case "openAddBudgetForm":
+        window._openAddBudgetForm();
+        break;
     }
   });
   document.addEventListener("change", (e) => {
@@ -981,7 +1008,7 @@ function renderCashRunway(): void {
     </div>
   `;
 
-  // Burn history
+  // Burn history (editable for PMP/Business/Technology)
   const bhContainer = document.getElementById("burnHistoryContainer")!;
   const maxBurn = Math.max(...cr.burnHistory.map((b) => b.burn));
   bhContainer.innerHTML = cr.burnHistory
@@ -994,12 +1021,20 @@ function renderCashRunway(): void {
         <div class="burn-bar-wrap">
           <div class="burn-bar" style="width:${pct}%"></div>
         </div>
-        <span class="burn-amount">${fmtCurrency(b.burn)}</span>
+        <span class="burn-amount">${fmtCurrency(b.burn)}${canEditCash ? ` <button class="cash-edit-btn" data-action="editBurnEntry" data-burnmonth="${b.month}" title="${t("burnEditHint")}">✎</button>` : ""}</span>
         <span class="burn-note">${localizedText(b.note)}</span>
+        ${canEditCash ? `<button class="cash-edit-btn burn-delete-btn" data-action="deleteBurnEntry" data-burnmonth="${b.month}" title="✕">✕</button>` : ""}
       </div>
     `;
     })
     .join("");
+
+  if (canEditCash) {
+    bhContainer.innerHTML += `
+      <div class="burn-add-row">
+        <button class="btn-add-funding" data-action="addBurnEntry">${t("burnAddBtn")}</button>
+      </div>`;
+  }
 
   // Exchange rate note (CN only)
   const rateNote = t("exchangeRateNote");
@@ -1364,6 +1399,59 @@ window._editBudgetField = function (
   renderAll();
 };
 
+// ── Budget Category CRUD ───────────────────────
+window._openAddBudgetForm = function (): void {
+  const form = document.getElementById("budgetAddForm");
+  if (!form) return;
+  form.innerHTML = `
+    <div class="funding-form-row">
+      <input type="text" id="budgetFormLabel" placeholder="${t("budgetFormLabel")}" />
+      <input type="text" id="budgetFormLabelCn" placeholder="${t("budgetFormLabelCn")}" />
+      <input type="number" id="budgetFormPlanned" placeholder="${t("budgetFormPlanned")}" min="0" />
+      <input type="number" id="budgetFormActual" placeholder="${t("budgetFormActual")}" min="0" value="0" />
+      <button class="btn-add-funding" data-action="addBudgetCategory">${t("budgetFormAdd")}</button>
+      <button class="btn-secondary" onclick="document.getElementById('budgetAddForm').innerHTML=''">${t("budgetFormCancel")}</button>
+    </div>
+  `;
+};
+
+window._addBudgetCategory = function (): void {
+  if (!["pmp", "business", "technology"].includes(ACTIVE_ROLE)) return;
+  const labelEl = document.getElementById("budgetFormLabel") as HTMLInputElement;
+  const labelCnEl = document.getElementById("budgetFormLabelCn") as HTMLInputElement;
+  const plannedEl = document.getElementById("budgetFormPlanned") as HTMLInputElement;
+  const actualEl = document.getElementById("budgetFormActual") as HTMLInputElement;
+  const label = labelEl?.value?.trim();
+  if (!label) return;
+  const planned = parseFloat(plannedEl?.value || "0");
+  const actual = parseFloat(actualEl?.value || "0");
+  const id = "BUD-" + String(BUDGET_CATEGORIES.length + 1).padStart(3, "0");
+  BUDGET_CATEGORIES.push({
+    id,
+    label: { en: label, cn: labelCnEl?.value?.trim() || label },
+    planned: isNaN(planned) ? 0 : planned,
+    actual: isNaN(actual) ? 0 : actual,
+    notes: "",
+  });
+  logAudit("budget-add", id, "add", "", label, "");
+  const form = document.getElementById("budgetAddForm");
+  if (form) form.innerHTML = "";
+  renderBudget();
+  renderAll();
+};
+
+window._deleteBudgetCategory = function (budgetId: string): void {
+  if (!["pmp", "business", "technology"].includes(ACTIVE_ROLE)) return;
+  if (!confirm(t("budgetDeleteConfirm"))) return;
+  const idx = BUDGET_CATEGORIES.findIndex((b) => b.id === budgetId);
+  if (idx < 0) return;
+  const cat = BUDGET_CATEGORIES[idx];
+  BUDGET_CATEGORIES.splice(idx, 1);
+  logAudit("budget-delete", budgetId, "delete", localizedText(cat.label), "", "");
+  renderBudget();
+  renderAll();
+};
+
 window._addFundingRound = function (): void {
   const labelEl = document.getElementById(
     "newFundingLabel",
@@ -1429,6 +1517,78 @@ window._toggleFundingStatus = function (roundId: string): void {
 
   renderCashRunway();
   renderSummary();
+};
+
+// ── Burn History CRUD ───────────────────────────
+window._editBurnEntry = function (month: number): void {
+  if (!["pmp", "business", "technology"].includes(ACTIVE_ROLE)) return;
+  const entry = CASH_RUNWAY.burnHistory.find((b) => b.month === month);
+  if (!entry) return;
+  const input = prompt(
+    `${month < 0 ? `M${month}` : `M+${month}`} — ${t("burnFormAmount")}:`,
+    String(entry.burn),
+  );
+  if (input === null) return;
+  const val = parseFloat(input.replace(/[^0-9.]/g, ""));
+  if (isNaN(val) || val < 0) return;
+  const prev = entry.burn;
+  entry.burn = val;
+  logAudit(
+    "burn-edit",
+    `M${month}`,
+    "burn",
+    fmtCurrency(prev),
+    fmtCurrency(val),
+    "",
+  );
+  renderCashRunway();
+};
+
+window._addBurnEntry = function (): void {
+  if (!["pmp", "business", "technology"].includes(ACTIVE_ROLE)) return;
+  const monthStr = prompt(t("burnFormMonth"), "M+1");
+  if (!monthStr) return;
+  const m = parseInt(monthStr.replace(/[Mm+]/g, ""), 10);
+  if (isNaN(m)) return;
+  if (CASH_RUNWAY.burnHistory.some((b) => b.month === m)) return;
+  const amtStr = prompt(t("burnFormAmount"), "45000");
+  if (!amtStr) return;
+  const amt = parseFloat(amtStr.replace(/[^0-9.]/g, ""));
+  if (isNaN(amt) || amt < 0) return;
+  const note = prompt(t("burnFormNote"), "") || "";
+  CASH_RUNWAY.burnHistory.push({
+    month: m,
+    burn: amt,
+    note: { en: note, cn: note },
+  });
+  CASH_RUNWAY.burnHistory.sort((a, b) => a.month - b.month);
+  logAudit(
+    "burn-add",
+    `M${m >= 0 ? "+" : ""}${m}`,
+    "add",
+    "",
+    fmtCurrency(amt),
+    note,
+  );
+  renderCashRunway();
+};
+
+window._deleteBurnEntry = function (month: number): void {
+  if (!["pmp", "business", "technology"].includes(ACTIVE_ROLE)) return;
+  if (!confirm(t("burnDeleteConfirm"))) return;
+  const entry = CASH_RUNWAY.burnHistory.find((b) => b.month === month);
+  CASH_RUNWAY.burnHistory = CASH_RUNWAY.burnHistory.filter(
+    (b) => b.month !== month,
+  );
+  logAudit(
+    "burn-delete",
+    `M${month}`,
+    "delete",
+    entry ? fmtCurrency(entry.burn) : "",
+    "",
+    "",
+  );
+  renderCashRunway();
 };
 
 // ══════════════════════════════════════════════════
@@ -3177,6 +3337,7 @@ const QA_SETTINGS_KEY = "ctower_qa_settings";
 const QA_CUSTOM_TOPICS_KEY = "ctower_qa_custom_topics";
 let qaPostingRole: string = "pmp";
 let qaCollapsed: Set<number> = new Set();
+let qaTestMode = true; // Start in test mode — emails disabled until user turns off
 
 // ── Role display helpers ──────────────────────
 function qaRoleLabel(role: string): string {
@@ -3358,7 +3519,15 @@ function openQaSettings(): void {
     </div>
     <div class="qa-settings-actions">
       <button class="btn-primary" onclick="window._saveQaSettings()">${t("qaSettingsSave")}</button>
+      <span class="qa-settings-separator">|</span>
       <button class="btn-secondary" onclick="document.getElementById('qaSettingsPanel').style.display='none'">${t("qaSettingsCancel")}</button>
+    </div>
+    <div class="qa-test-mode-row">
+      <label class="qa-test-toggle">
+        <input type="checkbox" id="qaTestModeToggle" ${qaTestMode ? "checked" : ""} onchange="window._toggleQaTestMode(this.checked)" />
+        <span>${qaTestMode ? t("qaTestModeOn") : t("qaTestModeOff")}</span>
+      </label>
+      ${qaTestMode ? `<span class="qa-test-badge">${t("qaTestMode")}</span>` : ""}
     </div>
   `;
 }
@@ -3578,13 +3747,39 @@ function renderQaSheet(): void {
     business: qaSettings.businessEmail,
     accounting: qaSettings.accountingEmail,
   };
-  const otherEmails = Object.entries(roleEmails)
-    .filter(
-      ([role, email]) =>
-        normalizeRole(role) !== normalizeRole(qaPostingRole) && email,
-    )
-    .map(([, email]) => email);
+  const otherRoles = Object.entries(roleEmails).filter(
+    ([role, email]) =>
+      normalizeRole(role) !== normalizeRole(qaPostingRole) && email,
+  );
+  const otherEmails = otherRoles.map(([, email]) => email);
   const emailTargetStr = otherEmails.join(", ");
+
+  // Build recipient <select> options for each compose area
+  const recipientOptions = otherRoles
+    .map(
+      ([role, email]) =>
+        `<option value="${email}">${qaRoleIcon(role)} ${qaRoleLabel(role)}</option>`,
+    )
+    .join("");
+  const recipientSelectHtml =
+    otherRoles.length > 0
+      ? `<select class="qa-recipient-select" data-qarecipient>
+        <option value="all">${t("qaRecipientAll")} (${otherRoles.length})</option>
+        ${recipientOptions}
+       </select>`
+      : "";
+
+  function composeActionsHtml(qNum: number): string {
+    return `<div class="qa-compose-actions">
+      <span class="qa-compose-left">
+        ${emailTargetStr ? `<span class="qa-email-target" title="${t("qaSendViaEmail")}">\ud83d\udce7</span>` : `<span class="qa-email-target qa-no-email" title="${t("qaSettings")}">\ud83d\udce7 \u2014</span>`}
+        ${recipientSelectHtml}
+      </span>
+      <button class="qa-send-btn" onclick="window._sendQaMessage(${qNum})">
+        ${t("qaSend")} \u27a4
+      </button>
+    </div>`;
+  }
 
   // ── Custom Topics Section (renders first, above predefined) ──
   const customTopics = loadCustomTopics();
@@ -3624,12 +3819,7 @@ function renderQaSheet(): void {
                 rows="2"
                 placeholder="${t("qaAnswerPlaceholder")}"
               ></textarea>
-              <div class="qa-compose-actions">
-                ${emailTargetStr ? `<span class="qa-email-target" title="${t("qaSendViaEmail")}">\ud83d\udce7 ${emailTargetStr}</span>` : `<span class="qa-email-target qa-no-email" title="${t("qaSettings")}">\ud83d\udce7 \u2014</span>`}
-                <button class="qa-send-btn" onclick="window._sendQaMessage(${tp.qNum})">
-                  ${t("qaSend")} \u27a4
-                </button>
-              </div>
+              ${composeActionsHtml(tp.qNum)}
             </div>
           </div>
         </div>`;
@@ -3692,12 +3882,7 @@ function renderQaSheet(): void {
                 rows="2"
                 placeholder="${t("qaAnswerPlaceholder")}"
               ></textarea>
-              <div class="qa-compose-actions">
-                ${emailTargetStr ? `<span class="qa-email-target" title="${t("qaSendViaEmail")}">📧 ${emailTargetStr}</span>` : `<span class="qa-email-target qa-no-email" title="${t("qaSettings")}">📧 —</span>`}
-                <button class="qa-send-btn" onclick="window._sendQaMessage(${q.num})">
-                  ${t("qaSend")} \u27a4
-                </button>
-              </div>
+              ${composeActionsHtml(q.num)}
             </div>
           </div>
         </div>`;
@@ -4029,6 +4214,10 @@ function deleteQaTopic(qNum: number): void {
 (window as any)._autoMarkVisibleAsRead = autoMarkVisibleAsRead;
 (window as any)._createQaTopic = createQaTopic;
 (window as any)._deleteQaTopic = deleteQaTopic;
+(window as any)._toggleQaTestMode = function (checked: boolean): void {
+  qaTestMode = checked;
+  renderQaSheet();
+};
 
 // ── Supabase Realtime Subscription ────────────────────
 function setupRealtimeMessages(): void {
@@ -4337,7 +4526,7 @@ function renderBudget(): void {
       variance < 0 ? "budget-over" : variance === 0 ? "" : "budget-under";
     return `
       <tr>
-        <td>${localizedText(b.label)}</td>
+        <td>${localizedText(b.label)}${canEditBudget ? ` <button class="cash-edit-btn burn-delete-btn" data-action="deleteBudgetCategory" data-budgetid="${b.id}" title="✕">✕</button>` : ""}</td>
         <td>${fmtCurrency(b.planned)}${canEditBudget ? ` <button class="cash-edit-btn" data-action="editBudgetField" data-budgetid="${b.id}" data-field="planned" title="${t("budgetEditPlanned")}">✎</button>` : ""}</td>
         <td>${fmtCurrency(b.actual)}${canEditBudget ? ` <button class="cash-edit-btn" data-action="editBudgetField" data-budgetid="${b.id}" data-field="actual" title="${t("budgetEditActual")}">✎</button>` : ""}</td>
         <td class="${varianceClass}">${variance >= 0 ? "+" : ""}${fmtCurrency(variance)}</td>
@@ -4355,6 +4544,12 @@ function renderBudget(): void {
       <td><strong>${fmtCurrency(totalActual)}</strong></td>
       <td class="${totalVarClass}"><strong>${totalVar >= 0 ? "+" : ""}${fmtCurrency(totalVar)}</strong></td>
     </tr>`;
+
+  // Add budget form placeholder
+  const formEl = document.getElementById("budgetAddForm");
+  if (formEl && canEditBudget) {
+    formEl.style.display = "";
+  }
 }
 
 // ══════════════════════════════════════════════════
@@ -4405,6 +4600,8 @@ function renderSuppliers(): void {
   const tbody = document.getElementById("supplierBody");
   if (!tbody) return;
 
+  const canEdit = ["pmp", "business", "technology"].includes(ACTIVE_ROLE);
+
   tbody.innerHTML = SUPPLIERS.map((s) => {
     const statusLabels: Record<string, string> = {
       active: t("supplierActive"),
@@ -4428,6 +4625,7 @@ function renderSuppliers(): void {
         <td>${s.leadTimeDays} ${t("supplierDays")}</td>
         <td>${s.poStatus}</td>
         <td>${s.contractMfgMilestone}</td>
+        <td>${canEdit ? `<button class="doc-remove-btn" data-action="deleteSupplier" data-supid="${s.id}" title="✕">✕</button>` : ""}</td>
       </tr>
     `;
   }).join("");
@@ -4455,6 +4653,63 @@ window._cycleSupplierStatus = function (supplierId: string): void {
     sup.status,
     `Supplier ${sup.name} status changed`,
   );
+  renderSuppliers();
+};
+
+// ── Supplier CRUD ───────────────────────────
+window._openAddSupplierForm = function (): void {
+  const form = document.getElementById("supplierAddForm");
+  if (!form) return;
+  form.innerHTML = `
+    <h4>${t("supplierAddBtn")}</h4>
+    <div class="funding-form-row">
+      <input type="text" id="supFormName" placeholder="${t("supplierFormName")}" />
+      <input type="text" id="supFormComponent" placeholder="${t("supplierFormComponent")}" />
+      <input type="text" id="supFormComponentCn" placeholder="${t("supplierFormComponentCn")}" />
+      <input type="number" id="supFormLead" placeholder="${t("supplierFormLead")}" min="1" />
+      <input type="text" id="supFormPO" placeholder="${t("supplierFormPO")}" />
+      <input type="text" id="supFormMilestone" placeholder="${t("supplierFormMilestone")}" />
+      <button class="btn-add-funding" data-action="addSupplier">${t("supplierFormAdd")}</button>
+      <button class="btn-secondary" onclick="document.getElementById('supplierAddForm').innerHTML=''">${t("supplierFormCancel")}</button>
+    </div>
+  `;
+};
+
+window._addSupplier = function (): void {
+  if (!["pmp", "business", "technology"].includes(ACTIVE_ROLE)) return;
+  const nameEl = document.getElementById("supFormName") as HTMLInputElement;
+  const compEl = document.getElementById("supFormComponent") as HTMLInputElement;
+  const compCnEl = document.getElementById("supFormComponentCn") as HTMLInputElement;
+  const leadEl = document.getElementById("supFormLead") as HTMLInputElement;
+  const poEl = document.getElementById("supFormPO") as HTMLInputElement;
+  const msEl = document.getElementById("supFormMilestone") as HTMLInputElement;
+  const name = nameEl?.value?.trim();
+  if (!name) return;
+  const id = "SUP-" + String(SUPPLIERS.length + 1).padStart(3, "0");
+  SUPPLIERS.push({
+    id,
+    name,
+    component: { en: compEl?.value?.trim() || "", cn: compCnEl?.value?.trim() || compEl?.value?.trim() || "" },
+    status: "under-review",
+    leadTimeDays: parseInt(leadEl?.value || "30", 10) || 30,
+    poStatus: poEl?.value?.trim() || "—",
+    contractMfgMilestone: msEl?.value?.trim() || "—",
+    notes: "",
+  });
+  logAudit("supplier-add", id, "add", "", name, "");
+  const form = document.getElementById("supplierAddForm");
+  if (form) form.innerHTML = "";
+  renderSuppliers();
+};
+
+window._deleteSupplier = function (supplierId: string): void {
+  if (!["pmp", "business", "technology"].includes(ACTIVE_ROLE)) return;
+  if (!confirm(t("supplierDeleteConfirm"))) return;
+  const idx = SUPPLIERS.findIndex((s) => s.id === supplierId);
+  if (idx < 0) return;
+  const sup = SUPPLIERS[idx];
+  SUPPLIERS.splice(idx, 1);
+  logAudit("supplier-delete", supplierId, "delete", sup.name, "", "");
   renderSuppliers();
 };
 
