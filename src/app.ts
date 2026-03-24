@@ -3175,8 +3175,50 @@ function renderDocLibrary(): void {
 const QA_STORAGE_KEY = "ctower_qa_messages";
 const QA_SETTINGS_KEY = "ctower_qa_settings";
 const QA_CUSTOM_TOPICS_KEY = "ctower_qa_custom_topics";
-let qaPostingRole: "pmp" | "inventor" = "pmp";
+let qaPostingRole: string = "pmp";
 let qaCollapsed: Set<number> = new Set();
+
+// ── Role display helpers ──────────────────────
+function qaRoleLabel(role: string): string {
+  switch (role) {
+    case "pmp":
+      return t("qaPmp");
+    case "technology":
+    case "inventor":
+    case "tech":
+      return t("qaInventor");
+    case "business":
+      return t("qaBusiness");
+    case "accounting":
+      return t("qaAccounting");
+    default:
+      return role;
+  }
+}
+function qaRoleIcon(role: string): string {
+  switch (role) {
+    case "pmp":
+      return "\ud83c\udfaf";
+    case "technology":
+    case "inventor":
+    case "tech":
+      return "\ud83d\udd2c";
+    case "business":
+      return "\ud83d\udcbc";
+    case "accounting":
+      return "\ud83d\udcca";
+    default:
+      return "\ud83d\udcac";
+  }
+}
+/** Normalize legacy "inventor" to "technology" */
+function normalizeRole(role: string): string {
+  return role === "inventor"
+    ? "technology"
+    : role === "tech"
+      ? "technology"
+      : role;
+}
 
 // ── Custom topics ─────────────────────────────
 interface CustomTopic {
@@ -3260,11 +3302,32 @@ async function syncOfflineMessages(): Promise<void> {
 function loadQaSettings(): QASettings {
   try {
     const raw = localStorage.getItem(QA_SETTINGS_KEY);
-    return raw
-      ? JSON.parse(raw)
-      : { pmpEmail: "", inventorEmail: "uniquedai@gmail.com" };
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      // Migrate from old 2-field format
+      return {
+        pmpEmail: parsed.pmpEmail ?? "",
+        technologyEmail:
+          parsed.technologyEmail ??
+          parsed.inventorEmail ??
+          "uniquedai@gmail.com",
+        businessEmail: parsed.businessEmail ?? "lawrenceliu@enzhi.org",
+        accountingEmail: parsed.accountingEmail ?? "",
+      };
+    }
+    return {
+      pmpEmail: "",
+      technologyEmail: "uniquedai@gmail.com",
+      businessEmail: "lawrenceliu@enzhi.org",
+      accountingEmail: "",
+    };
   } catch {
-    return { pmpEmail: "", inventorEmail: "uniquedai@gmail.com" };
+    return {
+      pmpEmail: "",
+      technologyEmail: "uniquedai@gmail.com",
+      businessEmail: "lawrenceliu@enzhi.org",
+      accountingEmail: "",
+    };
   }
 }
 
@@ -3280,11 +3343,17 @@ function openQaSettings(): void {
   panel.innerHTML = `
     <h4 class="qa-settings-title">${t("qaSettingsTitle")}</h4>
     <div class="qa-settings-grid">
-      <label class="qa-settings-label">🎯 ${t("qaPmpEmail")}
+      <label class="qa-settings-label">\ud83c\udfaf ${t("qaPmpEmail")}
         <input type="email" id="qaSettingsPmpEmail" class="qa-settings-input" value="${settings.pmpEmail.replace(/"/g, "&quot;")}" placeholder="pmp@example.com" />
       </label>
-      <label class="qa-settings-label">🔬 ${t("qaInventorEmail")}
-        <input type="email" id="qaSettingsInventorEmail" class="qa-settings-input" value="${settings.inventorEmail.replace(/"/g, "&quot;")}" placeholder="uniquedai@gmail.com" />
+      <label class="qa-settings-label">\ud83d\udd2c ${t("qaTechnologyEmail")}
+        <input type="email" id="qaSettingsTechnologyEmail" class="qa-settings-input" value="${settings.technologyEmail.replace(/"/g, "&quot;")}" placeholder="uniquedai@gmail.com" />
+      </label>
+      <label class="qa-settings-label">\ud83d\udcbc ${t("qaBusinessEmail")}
+        <input type="email" id="qaSettingsBusinessEmail" class="qa-settings-input" value="${settings.businessEmail.replace(/"/g, "&quot;")}" placeholder="lawrenceliu@enzhi.org" />
+      </label>
+      <label class="qa-settings-label">\ud83d\udcca ${t("qaAccountingEmail")}
+        <input type="email" id="qaSettingsAccountingEmail" class="qa-settings-input" value="${settings.accountingEmail.replace(/"/g, "&quot;")}" placeholder="" />
       </label>
     </div>
     <div class="qa-settings-actions">
@@ -3298,13 +3367,21 @@ function saveQaSettingsUI(): void {
   const pmpEl = document.getElementById(
     "qaSettingsPmpEmail",
   ) as HTMLInputElement;
-  const invEl = document.getElementById(
-    "qaSettingsInventorEmail",
+  const techEl = document.getElementById(
+    "qaSettingsTechnologyEmail",
   ) as HTMLInputElement;
-  if (!pmpEl || !invEl) return;
+  const bizEl = document.getElementById(
+    "qaSettingsBusinessEmail",
+  ) as HTMLInputElement;
+  const acctEl = document.getElementById(
+    "qaSettingsAccountingEmail",
+  ) as HTMLInputElement;
+  if (!pmpEl || !techEl || !bizEl || !acctEl) return;
   const settings: QASettings = {
     pmpEmail: pmpEl.value.trim(),
-    inventorEmail: invEl.value.trim(),
+    technologyEmail: techEl.value.trim(),
+    businessEmail: bizEl.value.trim(),
+    accountingEmail: acctEl.value.trim(),
   };
   saveQaSettingsData(settings);
   const panel = document.getElementById("qaSettingsPanel");
@@ -3316,10 +3393,11 @@ function markQaRead(msgId: string): void {
   const msg = _qaCache.find((m) => m.id === msgId);
   if (!msg) return;
   if (!msg.readBy) msg.readBy = [];
-  if (!msg.readBy.includes(qaPostingRole)) {
-    msg.readBy.push(qaPostingRole);
+  const role = normalizeRole(qaPostingRole);
+  if (!msg.readBy.includes(role)) {
+    msg.readBy.push(role);
     saveQaMessagesLocal(_qaCache);
-    if (isOnline()) markMessageRead(msgId, qaPostingRole);
+    if (isOnline()) markMessageRead(msgId, role);
     renderQaThread(msg.qNum);
     updateQaUnreadBadge();
   }
@@ -3332,13 +3410,14 @@ function sendQaMessage(qNum: number): void {
   if (!input || !input.value.trim()) return;
 
   const text = input.value.trim();
+  const role = normalizeRole(qaPostingRole);
   const localMsg: QAMessage = {
     id: `qm-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
     qNum,
-    sender: qaPostingRole,
+    sender: role,
     text,
     timestamp: new Date().toISOString(),
-    readBy: [qaPostingRole],
+    readBy: [role],
   };
 
   // Optimistic local update
@@ -3353,9 +3432,9 @@ function sendQaMessage(qNum: number): void {
   if (isOnline()) {
     insertMessage({
       q_num: qNum,
-      sender: qaPostingRole,
+      sender: role,
       text,
-      read_by: [qaPostingRole],
+      read_by: [role],
     }).then((dbMsg) => {
       if (dbMsg) {
         // Replace local optimistic entry with the Supabase one (real ID + timestamp)
@@ -3407,30 +3486,35 @@ function renderQaThread(qNum: number): void {
 
   container.innerHTML = msgs
     .map((m) => {
-      const isSelf = m.sender === qaPostingRole;
-      const senderLabel = m.sender === "pmp" ? t("qaPmp") : t("qaInventor");
-      const icon = m.sender === "pmp" ? "\ud83c\udfaf" : "\ud83d\udd2c";
-      const isReadByViewer = m.readBy?.includes(qaPostingRole) ?? false;
-      const otherRole: "pmp" | "inventor" =
-        qaPostingRole === "pmp" ? "inventor" : "pmp";
-      const isReadByRecipient =
-        m.sender === qaPostingRole
-          ? (m.readBy?.includes(otherRole) ?? false)
+      const senderNorm = normalizeRole(m.sender);
+      const isSelf = senderNorm === normalizeRole(qaPostingRole);
+      const senderLabel = qaRoleLabel(m.sender);
+      const icon = qaRoleIcon(m.sender);
+      const isReadByViewer =
+        m.readBy?.includes(normalizeRole(qaPostingRole)) ?? false;
+      // Read receipt: show double-check if ANY other role has read it
+      const isReadBySomeone =
+        m.sender === normalizeRole(qaPostingRole)
+          ? (m.readBy ?? []).some(
+              (r) => normalizeRole(r) !== normalizeRole(qaPostingRole),
+            )
           : false;
       const readIndicator =
-        m.sender === qaPostingRole
-          ? isReadByRecipient
+        senderNorm === normalizeRole(qaPostingRole)
+          ? isReadBySomeone
             ? `<span class="qa-read-badge qa-read">\u2713\u2713 ${t("qaRead")}</span>`
             : `<span class="qa-read-badge qa-unread">\u2713 ${t("qaUnread")}</span>`
           : "";
       const unreadClass =
-        !isReadByViewer && m.sender !== qaPostingRole ? " qa-msg-unread" : "";
+        !isReadByViewer && senderNorm !== normalizeRole(qaPostingRole)
+          ? " qa-msg-unread"
+          : "";
       const markReadBtn =
-        !isReadByViewer && m.sender !== qaPostingRole
+        !isReadByViewer && senderNorm !== normalizeRole(qaPostingRole)
           ? `<button class="qa-mark-read-btn" onclick="window._markQaRead('${m.id}')" title="${t("qaMarkRead")}">&#x2709;</button>`
           : "";
       return `
-      <div class="qa-msg ${isSelf ? "qa-msg-self" : "qa-msg-other"} ${m.sender === "pmp" ? "qa-msg-pmp" : "qa-msg-inventor"}${unreadClass}">
+      <div class="qa-msg ${isSelf ? "qa-msg-self" : "qa-msg-other"} qa-msg-${senderNorm}${unreadClass}">
         <div class="qa-msg-header">
           <span class="qa-msg-sender">${icon} ${senderLabel}</span>
           <span class="qa-msg-meta">${readIndicator}${markReadBtn}<span class="qa-msg-time">${formatMsgTime(m.timestamp)}</span></span>
@@ -3487,8 +3571,20 @@ function renderQaSheet(): void {
 
   const allMsgs = _qaCache;
   const qaSettings = loadQaSettings();
-  const emailTarget =
-    qaPostingRole === "pmp" ? qaSettings.inventorEmail : qaSettings.pmpEmail;
+  // Build email list for all roles OTHER than the posting role
+  const roleEmails: Record<string, string> = {
+    pmp: qaSettings.pmpEmail,
+    technology: qaSettings.technologyEmail,
+    business: qaSettings.businessEmail,
+    accounting: qaSettings.accountingEmail,
+  };
+  const otherEmails = Object.entries(roleEmails)
+    .filter(
+      ([role, email]) =>
+        normalizeRole(role) !== normalizeRole(qaPostingRole) && email,
+    )
+    .map(([, email]) => email);
+  const emailTargetStr = otherEmails.join(", ");
 
   body.innerHTML = QA_SECTIONS.map((sec) => {
     const questionsHtml = sec.questions
@@ -3497,7 +3593,7 @@ function renderQaSheet(): void {
         const msgCount = qMsgs.length;
         const unreadCount = qMsgs.filter(
           (m) =>
-            m.sender !== qaPostingRole && !m.readBy?.includes(qaPostingRole),
+            normalizeRole(m.sender) !== normalizeRole(qaPostingRole) && !m.readBy?.includes(normalizeRole(qaPostingRole)),
         ).length;
         const isCollapsed = qaCollapsed.has(q.num);
 
@@ -3535,7 +3631,7 @@ function renderQaSheet(): void {
                 placeholder="${t("qaAnswerPlaceholder")}"
               ></textarea>
               <div class="qa-compose-actions">
-                ${emailTarget ? `<span class="qa-email-target" title="${t("qaSendViaEmail")}">📧 ${emailTarget}</span>` : `<span class="qa-email-target qa-no-email" title="${t("qaSettings")}">📧 —</span>`}
+                ${emailTargetStr ? `<span class="qa-email-target" title="${t("qaSendViaEmail")}">📧 ${emailTargetStr}</span>` : `<span class="qa-email-target qa-no-email" title="${t("qaSettings")}">📧 —</span>`}
                 <button class="qa-send-btn" onclick="window._sendQaMessage(${q.num})">
                   ${t("qaSend")} \u27a4
                 </button>
@@ -3565,7 +3661,7 @@ function renderQaSheet(): void {
         const msgCount = qMsgs.length;
         const unreadCount = qMsgs.filter(
           (m) =>
-            m.sender !== qaPostingRole && !m.readBy?.includes(qaPostingRole),
+            normalizeRole(m.sender) !== normalizeRole(qaPostingRole) && !m.readBy?.includes(normalizeRole(qaPostingRole)),
         ).length;
         const isCollapsed = qaCollapsed.has(tp.qNum);
 
@@ -3593,7 +3689,7 @@ function renderQaSheet(): void {
                 placeholder="${t("qaAnswerPlaceholder")}"
               ></textarea>
               <div class="qa-compose-actions">
-                ${emailTarget ? `<span class="qa-email-target" title="${t("qaSendViaEmail")}">📧 ${emailTarget}</span>` : `<span class="qa-email-target qa-no-email" title="${t("qaSettings")}">📧 —</span>`}
+                ${emailTargetStr ? `<span class="qa-email-target" title="${t("qaSendViaEmail")}">📧 ${emailTargetStr}</span>` : `<span class="qa-email-target qa-no-email" title="${t("qaSettings")}">📧 —</span>`}
                 <button class="qa-send-btn" onclick="window._sendQaMessage(${tp.qNum})">
                   ${t("qaSend")} \u27a4
                 </button>
@@ -3653,35 +3749,13 @@ function renderQaSheet(): void {
         "[data-qarole]",
       );
       if (!btn) return;
-      qaPostingRole = btn.dataset.qarole as "pmp" | "inventor";
+      qaPostingRole = btn.dataset.qarole!;
       toolbar
         .querySelectorAll(".qa-role-btn")
         .forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
-      // Re-render all threads so alignment, read receipts, and compose target flip
-      const qaSettings = loadQaSettings();
-      const emailTarget =
-        qaPostingRole === "pmp"
-          ? qaSettings.inventorEmail
-          : qaSettings.pmpEmail;
-      QA_SECTIONS.forEach((sec) =>
-        sec.questions.forEach((q) => {
-          renderQaThread(q.num);
-          // Update email target indicator
-          const emailEl = document.querySelector(
-            `#qa-wrap-${q.num} .qa-email-target`,
-          );
-          if (emailEl) {
-            if (emailTarget) {
-              emailEl.textContent = `📧 ${emailTarget}`;
-              emailEl.classList.remove("qa-no-email");
-            } else {
-              emailEl.textContent = "📧 —";
-              emailEl.classList.add("qa-no-email");
-            }
-          }
-        }),
-      );
+      // Re-render everything with updated posting role
+      renderQaSheet();
       updateQaUnreadBadge();
     });
   }
@@ -3815,8 +3889,9 @@ function updateQaUnreadBadge(): void {
   const tabBtn = document.querySelector('.tab-btn[data-tab="qa-sheet"]');
   if (!tabBtn) return;
   const msgs = _qaCache;
+  const myRole = normalizeRole(qaPostingRole);
   const unread = msgs.filter(
-    (m) => m.sender !== qaPostingRole && !m.readBy?.includes(qaPostingRole),
+    (m) => normalizeRole(m.sender) !== myRole && !m.readBy?.includes(myRole),
   ).length;
   let badge = tabBtn.querySelector(".qa-tab-badge") as HTMLElement | null;
   if (unread > 0) {
@@ -3851,7 +3926,7 @@ window.addEventListener("storage", (e: StorageEvent) => {
   const oldMsgs: QAMessage[] = e.oldValue ? JSON.parse(e.oldValue) : [];
   if (newMsgs.length > oldMsgs.length) {
     const latest = newMsgs[newMsgs.length - 1];
-    if (latest.sender !== qaPostingRole) {
+    if (latest.sender !== normalizeRole(qaPostingRole)) {
       showQaNotification(latest);
     }
   }
@@ -3859,8 +3934,8 @@ window.addEventListener("storage", (e: StorageEvent) => {
 
 // ── Toast notification for incoming messages ─────────────
 function showQaNotification(msg: QAMessage): void {
-  const senderLabel = msg.sender === "pmp" ? t("qaPmp") : t("qaInventor");
-  const icon = msg.sender === "pmp" ? "\ud83c\udfaf" : "\ud83d\udd2c";
+  const senderLabel = qaRoleLabel(msg.sender);
+  const icon = qaRoleIcon(msg.sender);
   const preview = msg.text.length > 60 ? msg.text.slice(0, 60) + "…" : msg.text;
 
   const toast = document.createElement("div");
@@ -3881,14 +3956,15 @@ function showQaNotification(msg: QAMessage): void {
 // ── Auto-mark messages read when thread is visible ──────
 function autoMarkVisibleAsRead(): void {
   const msgs = _qaCache;
+  const myRole = normalizeRole(qaPostingRole);
   let changed = false;
   msgs.forEach((m) => {
-    if (m.sender !== qaPostingRole && !m.readBy?.includes(qaPostingRole)) {
+    if (normalizeRole(m.sender) !== myRole && !m.readBy?.includes(myRole)) {
       const threadEl = document.getElementById(`qa-thread-${m.qNum}`);
       if (threadEl && threadEl.offsetParent !== null) {
         if (!m.readBy) m.readBy = [];
-        m.readBy.push(qaPostingRole);
-        if (isOnline()) markMessageRead(m.id, qaPostingRole);
+        m.readBy.push(myRole);
+        if (isOnline()) markMessageRead(m.id, myRole);
         changed = true;
       }
     }
@@ -3956,7 +4032,7 @@ function setupRealtimeMessages(): void {
         saveQaMessagesLocal(_qaCache);
         renderQaThread(msg.qNum);
         updateQaUnreadBadge();
-        if (msg.sender !== qaPostingRole) {
+        if (normalizeRole(msg.sender) !== normalizeRole(qaPostingRole)) {
           showQaNotification(msg);
         }
       }

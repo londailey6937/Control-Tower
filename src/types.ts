@@ -430,7 +430,7 @@ export interface QAQuestion {
 export interface QAMessage {
   id: string;
   qNum: number;
-  sender: "pmp" | "inventor";
+  sender: string;
   text: string;
   timestamp: string;
   readBy?: string[];
@@ -438,5 +438,7 @@ export interface QAMessage {
 
 export interface QASettings {
   pmpEmail: string;
-  inventorEmail: string;
+  technologyEmail: string;
+  businessEmail: string;
+  accountingEmail: string;
 }

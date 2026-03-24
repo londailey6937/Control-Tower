@@ -20,7 +20,7 @@ export const supabase: SupabaseClient = createClient(
 export interface DbMessage {
   id: string;
   q_num: number;
-  sender: "pmp" | "inventor";
+  sender: string;
   text: string;
   created_at: string;
   read_by: string[];

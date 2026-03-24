@@ -7,7 +7,7 @@
 CREATE TABLE IF NOT EXISTS messages (
   id         UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   q_num      INTEGER NOT NULL,
-  sender     TEXT NOT NULL CHECK (sender IN ('pmp', 'inventor')),
+  sender     TEXT NOT NULL CHECK (sender IN ('pmp', 'technology', 'business', 'accounting', 'inventor')),
   text       TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT now() NOT NULL,
   read_by    TEXT[] DEFAULT '{}'::TEXT[] NOT NULL
@@ -52,3 +52,11 @@ $$ LANGUAGE plpgsql;
 
 -- 4. Enable Realtime for the messages table
 ALTER PUBLICATION supabase_realtime ADD TABLE messages;
+
+-- ============================================================
+-- MIGRATION: Expand sender CHECK constraint for multi-role
+-- Run this if the table already exists with the old 2-role constraint
+-- ============================================================
+-- ALTER TABLE messages DROP CONSTRAINT IF EXISTS messages_sender_check;
+-- ALTER TABLE messages ADD CONSTRAINT messages_sender_check
+--   CHECK (sender IN ('pmp', 'technology', 'business', 'accounting', 'inventor'));
