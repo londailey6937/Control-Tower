@@ -212,7 +212,7 @@ def build_english():
     # 4. Navigation Tabs
     pdf.add_page()
     pdf.sec(4, "Navigation Tabs")
-    pdf.txt("Thirteen tabs provide access to the main dashboard panels. The active tab has a blue underline.")
+    pdf.txt("Fourteen tabs provide access to the main dashboard panels. The active tab has a blue underline.")
     pdf.ln(2)
     pdf.kv("Dual-Track", "Side-by-side view of Technical + Regulatory milestones")
     pdf.kv("Gate System", "Decision checkpoints with PMP authority controls")
@@ -227,6 +227,7 @@ def build_english():
     pdf.kv("Audit Trail", "Chronological log of all dashboard actions for DHF traceability")
     pdf.kv("US Investment", "North America fundraising pipeline, investor tracking, and IR activities")
     pdf.kv("Document Control", "ISO 13485-aligned document lifecycle, revision history, and review scheduling")
+    pdf.kv("Message Board", "Bi-directional threaded messaging for technical dialogue between PMP and stakeholders")
 
     # 5. Dual-Track
     pdf.add_page()
@@ -517,7 +518,7 @@ def build_english():
         "  - Proposed new value\n"
         "  - Justification (required) -- Why the change is warranted\n"
         "  - Evidence/Reference (optional) -- Link or document reference\n"
-        "  - Attached Documents (optional) -- File uploads stored locally\n\n"
+        "  - Attached Documents (optional) -- File uploads stored on the server\n\n"
         "The request is then queued for PMP review. The PMP can Approve (applies the change) "
         "or Reject (with a note explaining why).\n\n"
         "DIRECT EDIT PRIVILEGES:\n"
@@ -547,7 +548,7 @@ def build_english():
         "The Change Request (CR) system ensures that all status changes are verified before "
         "being applied. Only the PMP can make direct changes; Technology and Business teams "
         "must submit a CR that the PMP reviews.\n\n"
-        "All CR data is automatically saved to localStorage and persists across page reloads. "
+        "All CR data is automatically synced to the server (Supabase) with localStorage backup. "
         "Attached documents are stored separately in IndexedDB.")
 
     pdf.sub("14.1 Submitting a Change Request")
@@ -569,9 +570,9 @@ def build_english():
 
     pdf.sub("14.2 Document Storage")
     pdf.txt(
-        "Documents attached to change requests are stored locally in the browser using "
-        "IndexedDB. This means:\n\n"
-        "  - Files are stored on the user's machine, not uploaded to a server\n"
+        "Documents attached to change requests are stored on the server with local "
+        "IndexedDB backup. This means:\n\n"
+        "  - Files are synced to the server database and cached locally\n"
         "  - Documents persist across page reloads within the same browser\n"
         "  - Multiple files can be attached to a single CR\n"
         "  - Attached files can be removed before submission\n"
@@ -580,23 +581,20 @@ def build_english():
         "and any other file type the browser supports.\n\n"
         "File sizes are displayed in human-readable format (KB, MB).")
 
-    pdf.sub("14.3 Change Request Queue")
+    pdf.sub("14.3 Change Request Tracking")
     pdf.txt(
-        "The Change Request Queue appears below the status summary bar. The section header "
-        "displays a yellow pending-count badge (e.g., '2 pending') when there are CRs "
-        "awaiting review. When no CRs exist, the queue section is automatically hidden.\n\n"
-        "CR cards are color-coded by status:\n\n"
-        "  PENDING (yellow border) -- Awaiting PMP review. Shows Approve/Reject buttons "
-        "when viewed as PMP.\n"
-        "  APPROVED (green border) -- PMP approved; change has been applied to the data.\n"
-        "  REJECTED (red border) -- PMP rejected; includes a note explaining why.\n\n"
-        "Each CR card displays: CR ID, requester, date, field being changed, old value, "
+        "Pending change requests are tracked through the Audit Trail and the notification "
+        "system rather than a dedicated queue tab. When a non-PMP user submits a CR:\n\n"
+        "  - The CR is recorded in the Audit Trail with a PENDING status\n"
+        "  - The PMP receives a notification alerting them to the new CR\n"
+        "  - CR cards are color-coded: PENDING (yellow), APPROVED (green), REJECTED (red)\n\n"
+        "Each CR record displays: CR ID, requester, date, field being changed, old value, "
         "new value, justification, evidence, attached documents (with download links), "
         "and PMP response note (if any).")
 
     pdf.sub("14.4 PMP Review Process")
     pdf.txt(
-        "When the PMP reviews a pending CR:\n\n"
+        "The PMP reviews and acts on pending CRs through the notification system:\n\n"
         "  Approve: The proposed change is applied directly to the dashboard data. "
         "The CR is marked as 'Approved' with a PMP note and timestamp.\n\n"
         "  Reject: The change is NOT applied. The CR is marked as 'Rejected' with a "
@@ -640,7 +638,7 @@ def build_english():
         "Audit Trail.\n\n"
         "If any integrations have been removed, a 'Restore Removed Integrations' button appears "
         "at the bottom of the panel. Clicking it brings back all previously hidden cards. "
-        "Removed integrations are remembered across browser sessions via localStorage.")
+        "Removed integrations are remembered across sessions via the server database.")
 
     # 16. Action Items / Task Board
     pdf.add_page()
@@ -932,7 +930,7 @@ def build_english():
         "PMP, Business, and Technology roles can remove API cards they do not need by clicking "
         "the close button (X) on any card. Removed cards can be restored at any time using the "
         "'Restore Removed Integrations' button that appears when any cards have been removed.\n\n"
-        "Removals persist across sessions via localStorage and are recorded in the Audit Trail.")
+        "Removals persist across sessions via the server database and are recorded in the Audit Trail.")
 
     # 26. US Investment & Investor Relations Tab
     pdf.add_page()
@@ -1059,7 +1057,7 @@ def build_english():
         "The Message Board provides bi-directional, threaded messaging "
         "between the PMP and Dr. Dai. It enables structured technical dialogue "
         "organized around 30 pre-defined questions across 8 topic sections, with "
-        "messages stored locally in each user's browser.")
+        "messages synced in real-time via the server database.")
 
     pdf.sub("28.1 Bi-Directional Communication")
     pdf.txt(
@@ -1124,11 +1122,11 @@ def build_english():
 
     pdf.sub("28.7 Data Storage")
     pdf.txt(
-        "All messages are stored in browser localStorage under the key "
-        "'ctower_qa_messages'. Settings are stored under 'ctower_qa_settings'. "
-        "Archives are stored under 'ctower_qa_archive'. Data persists across "
-        "sessions but is local to each browser -- clearing browser data will "
-        "remove all messages.")
+        "All messages are synced in real-time to the server database (Supabase) with "
+        "localStorage as a fallback. Settings and archives are also stored on the server. "
+        "Data persists across sessions and is accessible from any browser. "
+        "localStorage keys ('ctower_qa_messages', 'ctower_qa_settings', 'ctower_qa_archive') "
+        "serve as local backup only.")
 
     # 29. Glossary
     pdf.add_page()
@@ -1153,7 +1151,7 @@ def build_english():
         ("CAPA", "Corrective and Preventive Action -- formal process for addressing nonconformities."),
         ("Kanban", "Visual task management board with columns representing work stages."),
         ("FAB", "Floating Action Button -- the circular button for quick access to stakeholder inputs."),
-        ("IndexedDB", "Browser-based local storage used to persist attached documents for change requests."),
+        ("IndexedDB", "Browser-based local storage used as a fallback for document persistence."),
         ("Runway", "Number of months the project can continue operating at current burn rate before funds run out."),
         ("NRE", "Non-Recurring Engineering -- one-time engineering costs for manufacturing setup."),
     ]
@@ -1381,7 +1379,7 @@ def build_chinese():
     pdf.add_page()
     pdf.sec(4, "\u5bfc\u822a\u9009\u9879\u5361")
     pdf.txt(
-        "\u4e94\u4e2a\u9009\u9879\u5361\u63d0\u4f9b\u4e3b\u8981\u4eea\u8868\u76d8\u9762\u677f\u7684\u8bbf\u95ee\u3002"
+        "\u5341\u56db\u4e2a\u9009\u9879\u5361\u63d0\u4f9b\u4e3b\u8981\u4eea\u8868\u76d8\u9762\u677f\u7684\u8bbf\u95ee\u3002"
         "\u6d3b\u52a8\u9009\u9879\u5361\u4ee5\u84dd\u8272\u4e0b\u5212\u7ebf\u9ad8\u4eae\u663e\u793a\u3002")
     pdf.ln(2)
     pdf.kv("\u53cc\u8f68\u89c6\u56fe", "\u6280\u672f+\u6cd5\u89c4\u91cc\u7a0b\u7891\u5e76\u6392\u663e\u793a")
@@ -1389,6 +1387,15 @@ def build_chinese():
     pdf.kv("\u98ce\u9669\u4eea\u8868\u76d8", "ISO 14971\u98ce\u9669\u767b\u8bb0\u8868\uff0c\u5e26\u7b5b\u9009\u548c\u524d5\u6392\u540d")
     pdf.kv("\u65f6\u95f4\u7ebf", "\u6280\u672f\u91cc\u7a0b\u7891\u7684\u5546\u4e1a\u8bed\u8a00\u7ffb\u8bd1")
     pdf.kv("\u6cd5\u89c4\u8ffd\u8e2a", "IEC/ISO/21 CFR\u5408\u89c4\u6807\u51c6\u77e9\u9635")
+    pdf.kv("\u8d44\u91d1/\u8dd1\u9053", "\u8d22\u52a1\u72b6\u51b5\u3001\u71c3\u70e7\u7387\u3001\u878d\u8d44\u91cc\u7a0b\u7891\u548cAPI\u96c6\u6210")
+    pdf.kv("\u884c\u52a8\u9879", "\u4efb\u52a1\u770b\u677f\u3001DHF\u6587\u6863\u8ffd\u8e2a\u548cCAPA\u65e5\u5fd7")
+    pdf.kv("\u9884\u7b97", "\u6309\u7c7b\u522b\u7684\u9884\u7b97\u4e0e\u5b9e\u9645\u652f\u51fa")
+    pdf.kv("\u8d44\u6e90", "\u56e2\u961f\u5206\u914d\u548c\u4ea7\u80fd\u5229\u7528")
+    pdf.kv("\u4f9b\u5e94\u5546", "\u786c\u4ef6\u7ec4\u4ef6\u4f9b\u5e94\u5546\u8ffd\u8e2a")
+    pdf.kv("\u5ba1\u8ba1\u8ffd\u8e2a", "\u6240\u6709\u4eea\u8868\u76d8\u64cd\u4f5c\u7684\u65f6\u95f4\u5e8f\u65e5\u5fd7")
+    pdf.kv("\u7f8e\u56fd\u6295\u8d44", "\u5317\u7f8e\u878d\u8d44\u7ba1\u9053\u3001\u6295\u8d44\u8005\u8ffd\u8e2a\u548cIR\u6d3b\u52a8")
+    pdf.kv("\u6587\u6863\u63a7\u5236", "ISO 13485\u5bf9\u9f50\u7684\u6587\u6863\u751f\u547d\u5468\u671f\u3001\u4fee\u8ba2\u5386\u53f2\u548c\u5ba1\u67e5\u8ba1\u5212")
+    pdf.kv("\u7559\u8a00\u677f", "PMP\u4e0e\u5229\u76ca\u76f8\u5173\u65b9\u4e4b\u95f4\u7684\u53cc\u5411\u7ebf\u7a0b\u5f0f\u6280\u672f\u5bf9\u8bdd\u6d88\u606f")
 
     # 5
     pdf.add_page()
@@ -1696,8 +1703,8 @@ def build_chinese():
     pdf.txt(
         "\u53d8\u66f4\u8bf7\u6c42(CR)\u7cfb\u7edf\u786e\u4fdd\u6240\u6709\u72b6\u6001\u53d8\u66f4\u5728\u5e94\u7528\u524d\u7ecf\u8fc7\u9a8c\u8bc1\u3002"
         "\u53ea\u6709PMP\u53ef\u4ee5\u76f4\u63a5\u4fee\u6539\uff1b\u6280\u672f\u548c\u5546\u4e1a\u56e2\u961f\u5fc5\u987b\u63d0\u4ea4CR\u7531PMP\u5ba1\u6838\u3002\n\n"
-        "\u6240\u6709CR\u6570\u636e\u81ea\u52a8\u4fdd\u5b58\u5230localStorage\uff0c\u9875\u9762\u5237\u65b0\u540e\u4ecd\u7136\u4fdd\u7559\u3002"
-        "\u9644\u4ef6\u6587\u6863\u5355\u72ec\u5b58\u50a8\u5728IndexedDB\u4e2d\u3002")
+        "\u6240\u6709CR\u6570\u636e\u81ea\u52a8\u540c\u6b65\u5230\u670d\u52a1\u5668\uff08Supabase\uff09\uff0c\u5e76\u4ee5localStorage\u4f5c\u4e3a\u5907\u4efd\u3002"
+        "\u9644\u4ef6\u6587\u6863\u5b58\u50a8\u5728\u670d\u52a1\u5668\u4e0a\u3002")
 
     pdf.sub("14.1 \u63d0\u4ea4\u53d8\u66f4\u8bf7\u6c42")
     pdf.txt(
@@ -1723,21 +1730,19 @@ def build_chinese():
         "\u652f\u6301\u7684\u6587\u4ef6\u7c7b\u578b\uff1aPDF\u3001\u56fe\u7247(PNG\u3001JPG)\u3001Word\u6587\u6863\u3001Excel\u7b49\u3002"
         "\u6587\u4ef6\u5927\u5c0f\u4ee5\u53ef\u8bfb\u683c\u5f0f\u663e\u793a(KB\u3001MB)\u3002")
 
-    pdf.sub("14.3 \u53d8\u66f4\u8bf7\u6c42\u961f\u5217")
+    pdf.sub("14.3 \u53d8\u66f4\u8bf7\u6c42\u8ffd\u8e2a")
     pdf.txt(
-        "\u53d8\u66f4\u8bf7\u6c42\u961f\u5217\u663e\u793a\u5728\u72b6\u6001\u6458\u8981\u680f\u4e0b\u65b9\u3002\u5f53\u6709\u5f85\u5ba1\u6279\u7684CR\u65f6\uff0c"
-        "\u533a\u57df\u6807\u9898\u663e\u793a\u9ec4\u8272\u5f85\u5904\u7406\u6570\u91cf\u5fbd\u7ae0\uff08\u5982\u201c2 pending\u201d\uff09\u3002"
-        "\u5f53\u6ca1\u6709\u4efb\u4f55CR\u65f6\uff0c\u961f\u5217\u533a\u57df\u81ea\u52a8\u9690\u85cf\u3002\n\n"
-        "CR\u5361\u7247\u6309\u72b6\u6001\u989c\u8272\u533a\u5206\uff1a\n\n"
-        "  \u5f85\u5ba1\u6279\uff08\u9ec4\u8272\u8fb9\u6846\uff09" + EM + " \u7b49\u5f85PMP\u5ba1\u6838\u3002PMP\u89c6\u56fe\u663e\u793a\u6279\u51c6/\u62d2\u7edd\u6309\u94ae\u3002\n"
-        "  \u5df2\u6279\u51c6\uff08\u7eff\u8272\u8fb9\u6846\uff09" + EM + " PMP\u5df2\u6279\u51c6\uff1b\u53d8\u66f4\u5df2\u5e94\u7528\u5230\u6570\u636e\u3002\n"
-        "  \u5df2\u62d2\u7edd\uff08\u7ea2\u8272\u8fb9\u6846\uff09" + EM + " PMP\u5df2\u62d2\u7edd\uff1b\u9644\u5e26\u8bf4\u660e\u539f\u56e0\u7684\u5907\u6ce8\u3002\n\n"
-        "\u6bcf\u5f20CR\u5361\u7247\u663e\u793a\uff1aCR\u7f16\u53f7\u3001\u8bf7\u6c42\u65b9\u3001\u65e5\u671f\u3001\u4fee\u6539\u5b57\u6bb5\u3001\u65e7\u503c\u3001\u65b0\u503c\u3001"
+        "\u5f85\u5904\u7406\u7684\u53d8\u66f4\u8bf7\u6c42\u901a\u8fc7\u5ba1\u8ba1\u8ffd\u8e2a\u548c\u901a\u77e5\u7cfb\u7edf\u8fdb\u884c\u8ddf\u8e2a\uff0c"
+        "\u800c\u975e\u4e13\u7528\u7684\u961f\u5217\u9009\u9879\u5361\u3002\u5f53\u975ePMP\u7528\u6237\u63d0\u4ea4CR\u65f6\uff1a\n\n"
+        "  - CR\u8bb0\u5f55\u5728\u5ba1\u8ba1\u8ffd\u8e2a\u4e2d\uff0c\u72b6\u6001\u4e3a\u5f85\u5904\u7406\n"
+        "  - PMP\u4f1a\u6536\u5230\u65b0CR\u7684\u901a\u77e5\u63d0\u9192\n"
+        "  - CR\u5361\u7247\u6309\u989c\u8272\u533a\u5206\uff1a\u5f85\u5ba1\u6279\uff08\u9ec4\u8272\uff09\u3001\u5df2\u6279\u51c6\uff08\u7eff\u8272\uff09\u3001\u5df2\u62d2\u7edd\uff08\u7ea2\u8272\uff09\n\n"
+        "\u6bcf\u6761CR\u8bb0\u5f55\u663e\u793a\uff1aCR\u7f16\u53f7\u3001\u8bf7\u6c42\u65b9\u3001\u65e5\u671f\u3001\u4fee\u6539\u5b57\u6bb5\u3001\u65e7\u503c\u3001\u65b0\u503c\u3001"
         "\u7406\u7531\u3001\u8bc1\u636e\u3001\u9644\u4ef6\u6587\u6863\uff08\u5e26\u4e0b\u8f7d\u94fe\u63a5\uff09\u548cPMP\u56de\u590d\u3002")
 
     pdf.sub("14.4 PMP\u5ba1\u6838\u6d41\u7a0b")
     pdf.txt(
-        "\u5f53PMP\u5ba1\u6838\u5f85\u5904\u7406\u7684CR\u65f6\uff1a\n\n"
+        "PMP\u901a\u8fc7\u901a\u77e5\u7cfb\u7edf\u5ba1\u6838\u548c\u5904\u7406\u5f85\u5904\u7406\u7684CR\uff1a\n\n"
         "  \u6279\u51c6\uff1a\u5efa\u8bae\u7684\u53d8\u66f4\u76f4\u63a5\u5e94\u7528\u5230\u4eea\u8868\u76d8\u6570\u636e\u3002"
         "CR\u6807\u8bb0\u4e3a" + LQ + "\u5df2\u6279\u51c6" + RQ + "\uff0c\u9644\u5e26PMP\u5907\u6ce8\u548c\u65f6\u95f4\u6233\u3002\n\n"
         "  \u62d2\u7edd\uff1a\u53d8\u66f4\u4e0d\u4f1a\u5e94\u7528\u3002"
@@ -1779,7 +1784,7 @@ def build_chinese():
         "\u6bcf\u5f20\u5361\u7247\u53f3\u4e0a\u89d2\u663e\u793a\u5173\u95ed\u6309\u94ae(\u2715)\u3002\u70b9\u51fb\u540e\u663e\u793a\u786e\u8ba4\u63d0\u793a\uff0c"
         "\u786e\u8ba4\u540e\u5361\u7247\u88ab\u9690\u85cf\uff0c\u64cd\u4f5c\u8bb0\u5f55\u5728\u5ba1\u8ba1\u8ffd\u8e2a\u4e2d\u3002\n\n"
         "\u5982\u6709\u96c6\u6210\u88ab\u79fb\u9664\uff0c\u9762\u677f\u5e95\u90e8\u4f1a\u51fa\u73b0\u201c\u6062\u590d\u5df2\u79fb\u9664\u7684\u96c6\u6210\u201d\u6309\u94ae\uff0c"
-        "\u70b9\u51fb\u53ef\u6062\u590d\u6240\u6709\u9690\u85cf\u7684\u5361\u7247\u3002\u79fb\u9664\u72b6\u6001\u901a\u8fc7localStorage\u8de8\u4f1a\u8bdd\u4fdd\u7559\u3002")
+        "\u70b9\u51fb\u53ef\u6062\u590d\u6240\u6709\u9690\u85cf\u7684\u5361\u7247\u3002\u79fb\u9664\u72b6\u6001\u901a\u8fc7\u670d\u52a1\u5668\u6570\u636e\u5e93\u8de8\u4f1a\u8bdd\u4fdd\u7559\u3002")
 
 
     # 16 行动项/任务看板
@@ -2059,7 +2064,7 @@ def build_chinese():
     pdf.txt(
         "PMP\u3001\u5546\u4e1a\u548c\u6280\u672f\u89d2\u8272\u53ef\u4ee5\u70b9\u51fb\u5361\u7247\u4e0a\u7684\u5173\u95ed\u6309\u94ae(\u2715)\u79fb\u9664\u4e0d\u9700\u8981\u7684API\u3002"
         "\u5df2\u79fb\u9664\u7684\u5361\u7247\u53ef\u4ee5\u968f\u65f6\u901a\u8fc7\u201c\u6062\u590d\u5df2\u79fb\u9664\u7684\u96c6\u6210\u201d\u6309\u94ae\u6062\u590d\u3002\n\n"
-        "\u79fb\u9664\u64cd\u4f5c\u901a\u8fc7localStorage\u8de8\u4f1a\u8bdd\u4fdd\u7559\uff0c\u5e76\u8bb0\u5f55\u5728\u5ba1\u8ba1\u8ffd\u8e2a\u4e2d\u3002")
+        "\u79fb\u9664\u64cd\u4f5c\u901a\u8fc7\u670d\u52a1\u5668\u6570\u636e\u5e93\u8de8\u4f1a\u8bdd\u4fdd\u7559\uff0c\u5e76\u8bb0\u5f55\u5728\u5ba1\u8ba1\u8ffd\u8e2a\u4e2d\u3002")
 
 
     # 26. 美国投资与投资者关系选项卡
@@ -2180,7 +2185,7 @@ def build_chinese():
         "\u7559\u8a00\u677f\u63d0\u4f9b\u9879\u76ee\u7ecf\u7406(PMP)\u4e0e\u6234\u535a\u58eb\u4e4b\u95f4\u7684"
         "\u53cc\u5411\u7ebf\u7a0b\u5f0f\u6d88\u606f\u529f\u80fd\u3002\u5b83\u652f\u6301\u56f4\u7ed530\u4e2a\u9884\u5b9a\u4e49"
         "\u95ee\u9898\uff088\u4e2a\u4e3b\u9898\u90e8\u5206\uff09\u7684\u7ed3\u6784\u5316\u6280\u672f\u5bf9\u8bdd\uff0c"
-        "\u6d88\u606f\u5b58\u50a8\u5728\u6bcf\u4e2a\u7528\u6237\u7684\u6d4f\u89c8\u5668\u672c\u5730\u3002")
+        "\u6d88\u606f\u901a\u8fc7\u670d\u52a1\u5668\u6570\u636e\u5e93\u5b9e\u65f6\u540c\u6b65\u3002")
 
     pdf.sub("28.1 \u53cc\u5411\u901a\u4fe1")
     pdf.txt(
@@ -2237,11 +2242,11 @@ def build_chinese():
 
     pdf.sub("28.7 \u6570\u636e\u5b58\u50a8")
     pdf.txt(
-        "\u6240\u6709\u6d88\u606f\u5b58\u50a8\u5728\u6d4f\u89c8\u5668localStorage\u4e2d\uff08\u952e\u540d\u2018ctower_qa_messages\u2019\uff09\u3002"
-        "\u8bbe\u7f6e\u5b58\u50a8\u5728\u2018ctower_qa_settings\u2019\u3002"
-        "\u5f52\u6863\u5b58\u50a8\u5728\u2018ctower_qa_archive\u2019\u3002"
-        "\u6570\u636e\u5728\u4f1a\u8bdd\u95f4\u6301\u4e45\u5316\uff0c\u4f46\u4ec5\u9650\u672c\u5730\u6d4f\u89c8\u5668 -- "
-        "\u6e05\u9664\u6d4f\u89c8\u5668\u6570\u636e\u5c06\u5220\u9664\u6240\u6709\u6d88\u606f\u3002")
+        "\u6240\u6709\u6d88\u606f\u5b9e\u65f6\u540c\u6b65\u5230\u670d\u52a1\u5668\u6570\u636e\u5e93\uff08Supabase\uff09\uff0c"
+        "localStorage\u4f5c\u4e3a\u672c\u5730\u5907\u4efd\u3002\u8bbe\u7f6e\u548c\u5f52\u6863\u4e5f\u5b58\u50a8\u5728\u670d\u52a1\u5668\u4e0a\u3002"
+        "\u6570\u636e\u5728\u4f1a\u8bdd\u95f4\u6301\u4e45\u5316\uff0c\u53ef\u4ece\u4efb\u4f55\u6d4f\u89c8\u5668\u8bbf\u95ee\u3002"
+        "localStorage\u952e\u540d\uff08\u2018ctower_qa_messages\u2019\u3001\u2018ctower_qa_settings\u2019\u3001\u2018ctower_qa_archive\u2019\uff09"
+        "\u4ec5\u7528\u4f5c\u672c\u5730\u5907\u4efd\u3002")
 
     # 29 关键术语表
     pdf.add_page()
@@ -2266,7 +2271,7 @@ def build_chinese():
         ("CAPA", "纠正和预防措施 " + EM + " 处理不合格项的正式流程。"),
         ("看板(Kanban)", "可视化任务管理面板，列代表工作阶段。"),
         ("FAB", "\u6d6e\u52a8\u64cd\u4f5c\u6309\u94ae " + EM + " \u53f3\u4e0b\u89d2\u7684\u5706\u5f62\u6309\u94ae\u3002"),
-        ("IndexedDB", "\u6d4f\u89c8\u5668\u672c\u5730\u5b58\u50a8\uff0c\u7528\u4e8e\u4fdd\u5b58\u53d8\u66f4\u8bf7\u6c42\u7684\u9644\u4ef6\u6587\u6863\u3002"),
+        ("IndexedDB", "\u6d4f\u89c8\u5668\u672c\u5730\u5b58\u50a8\uff0c\u7528\u4f5c\u6587\u6863\u6301\u4e45\u5316\u7684\u5907\u4efd\u3002"),
         ("\u8dd1\u9053", "\u6309\u5f53\u524d\u71c3\u70e7\u7387\uff0c\u9879\u76ee\u53ef\u7ee7\u7eed\u8fd0\u884c\u7684\u5269\u4f59\u6708\u6570\u3002"),
         ("NRE", "非经常性工程费用 " + EM + " 制造设置的一次性工程成本。"),
     ]

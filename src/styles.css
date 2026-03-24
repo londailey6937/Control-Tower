@@ -1552,6 +1552,22 @@ body {
   outline: 2px solid var(--accent);
   border-color: var(--accent);
 }
+.risk-readonly .readonly-value {
+  display: block;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-weight: 400;
+}
+.progress-text {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  min-width: 36px;
+  text-align: center;
+}
 
 /* Standards progress input */
 .progress-input {

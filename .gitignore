@@ -5,3 +5,4 @@ dist/
 __pycache__/
 .DS_Store
 .DS_Store
+_fix_cn_guide.py

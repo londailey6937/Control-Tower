@@ -334,7 +334,6 @@ function renderAll(): void {
   renderTimeline();
   renderStandards();
   renderCashRunway();
-  renderChangeRequestQueue();
   renderApiIntegrations();
   renderUsApiIntegrations();
   renderActionBoard();
@@ -408,19 +407,6 @@ function renderSummary(): void {
       : CASH_RUNWAY.runwayMonths <= 6
         ? "runway-warning"
         : "runway-ok");
-
-  // Make the pending CR summary card click to switch to CR tab
-  const crCard = document.getElementById("summaryPendingCr");
-  if (crCard && !crCard.dataset.bound) {
-    crCard.dataset.bound = "1";
-    crCard.style.cursor = "pointer";
-    crCard.addEventListener("click", () => {
-      const crTabBtn = document.querySelector<HTMLButtonElement>(
-        '.tab-btn[data-tab="change-requests"]',
-      );
-      if (crTabBtn) crTabBtn.click();
-    });
-  }
 }
 
 // ── DUAL-TRACK DASHBOARD ──────────────────────
@@ -915,9 +901,8 @@ function renderStandards(): void {
         <td>${localizedText(s.title)}</td>
         <td>${s.applies}</td>
         <td>
-          <span class="std-status-badge ${badgeClass} clickable-badge"
-                data-action="cycleStandardStatus" data-sid="${s.id}"
-                title="${t("clickToChangeStatus")}">
+          <span class="std-status-badge ${badgeClass}${ACTIVE_ROLE === "pmp" ? " clickable-badge" : ""}"
+                ${ACTIVE_ROLE === "pmp" ? `data-action="cycleStandardStatus" data-sid="${s.id}" title="${t("clickToChangeStatus")}"` : ""}>
             ${statusText}
           </span>
         </td>
@@ -926,9 +911,13 @@ function renderStandards(): void {
             <div class="progress-bar">
               <div class="progress-bar-fill" style="width:${s.progress}%"></div>
             </div>
-            <input type="number" class="progress-input" min="0" max="100" value="${s.progress}"
+            ${
+              ACTIVE_ROLE === "pmp"
+                ? `<input type="number" class="progress-input" min="0" max="100" value="${s.progress}"
                    data-change="setStandardProgress" data-sid="${s.id}"
-                   title="${t("progressLabel")}" />
+                   title="${t("progressLabel")}" />`
+                : `<span class="progress-text">${s.progress}%</span>`
+            }
           </div>
         </td>
       </tr>
@@ -1212,14 +1201,11 @@ window._openRiskEditor = function (riskId: string): void {
   const overlay = document.createElement("div");
   overlay.id = "riskEditorOverlay";
   overlay.className = "gate-detail-overlay open";
-  overlay.innerHTML = `
-    <div class="gate-detail-modal" style="max-width:500px">
-      <button class="modal-close" data-action="closeRiskEditor">&times;</button>
-      <div class="gate-detail-header">
-        <h2>${risk.id} — ${t("riskEditTitle")}</h2>
-        <div class="gate-detail-meta">${localizedText(risk.title)}</div>
-      </div>
-      <div class="risk-editor-fields">
+
+  const isPmp = ACTIVE_ROLE === "pmp";
+
+  const fieldsHtml = isPmp
+    ? `<div class="risk-editor-fields">
         <label>${t("riskFieldSeverity")}
           <select data-change="setRiskField" data-rid="${riskId}" data-rfield="severity">
             ${makeOptions(severities, risk.severity)}
@@ -1240,7 +1226,22 @@ window._openRiskEditor = function (riskId: string): void {
             ${makeOptions(mitigations, risk.mitigationStatus)}
           </select>
         </label>
+      </div>`
+    : `<div class="risk-editor-fields risk-readonly">
+        <label>${t("riskFieldSeverity")}<span class="readonly-value">${capitalize(risk.severity)}</span></label>
+        <label>${t("riskFieldProbability")}<span class="readonly-value">${capitalize(risk.probability)}</span></label>
+        <label>${t("riskFieldLevel")}<span class="readonly-value">${capitalize(risk.riskLevel)}</span></label>
+        <label>${t("riskMitigation")}<span class="readonly-value">${capitalize(risk.mitigationStatus)}</span></label>
+      </div>`;
+
+  overlay.innerHTML = `
+    <div class="gate-detail-modal" style="max-width:500px">
+      <button class="modal-close" data-action="closeRiskEditor">&times;</button>
+      <div class="gate-detail-header">
+        <h2>${risk.id} — ${isPmp ? t("riskEditTitle") : localizedText(risk.title)}</h2>
+        <div class="gate-detail-meta">${isPmp ? localizedText(risk.title) : risk.id}</div>
       </div>
+      ${fieldsHtml}
     </div>
   `;
   document.body.appendChild(overlay);
@@ -1417,10 +1418,18 @@ window._openAddBudgetForm = function (): void {
 
 window._addBudgetCategory = function (): void {
   if (!["pmp", "business", "technology"].includes(ACTIVE_ROLE)) return;
-  const labelEl = document.getElementById("budgetFormLabel") as HTMLInputElement;
-  const labelCnEl = document.getElementById("budgetFormLabelCn") as HTMLInputElement;
-  const plannedEl = document.getElementById("budgetFormPlanned") as HTMLInputElement;
-  const actualEl = document.getElementById("budgetFormActual") as HTMLInputElement;
+  const labelEl = document.getElementById(
+    "budgetFormLabel",
+  ) as HTMLInputElement;
+  const labelCnEl = document.getElementById(
+    "budgetFormLabelCn",
+  ) as HTMLInputElement;
+  const plannedEl = document.getElementById(
+    "budgetFormPlanned",
+  ) as HTMLInputElement;
+  const actualEl = document.getElementById(
+    "budgetFormActual",
+  ) as HTMLInputElement;
   const label = labelEl?.value?.trim();
   if (!label) return;
   const planned = parseFloat(plannedEl?.value || "0");
@@ -1447,7 +1456,14 @@ window._deleteBudgetCategory = function (budgetId: string): void {
   if (idx < 0) return;
   const cat = BUDGET_CATEGORIES[idx];
   BUDGET_CATEGORIES.splice(idx, 1);
-  logAudit("budget-delete", budgetId, "delete", localizedText(cat.label), "", "");
+  logAudit(
+    "budget-delete",
+    budgetId,
+    "delete",
+    localizedText(cat.label),
+    "",
+    "",
+  );
   renderBudget();
   renderAll();
 };
@@ -1701,6 +1717,58 @@ window._openChangeRequestForm = function (
       .map((o) => `<option value="${o.value}">${o.label}</option>`)
       .join("");
     proposedInput = `<select id="crNewValue" class="cr-select">${options}</select>`;
+  } else if (type === "action-status") {
+    const isCN = getLang() === "cn";
+    const opts = [
+      { value: "todo", label: isCN ? "待办" : "Todo" },
+      { value: "in-progress", label: isCN ? "进行中" : "In Progress" },
+      { value: "blocked", label: isCN ? "受阻" : "Blocked" },
+      { value: "done", label: isCN ? "完成" : "Done" },
+    ];
+    const options = opts
+      .filter((o) => o.value !== oldVal)
+      .map((o) => `<option value="${o.value}">${o.label}</option>`)
+      .join("");
+    proposedInput = `<select id="crNewValue" class="cr-select">${options}</select>`;
+  } else if (type === "dhf-status") {
+    const isCN = getLang() === "cn";
+    const opts = [
+      { value: "not-started", label: isCN ? "未开始" : "Not Started" },
+      { value: "draft", label: isCN ? "草稿" : "Draft" },
+      { value: "in-review", label: isCN ? "审核中" : "In Review" },
+      { value: "approved", label: isCN ? "已批准" : "Approved" },
+    ];
+    const options = opts
+      .filter((o) => o.value !== oldVal)
+      .map((o) => `<option value="${o.value}">${o.label}</option>`)
+      .join("");
+    proposedInput = `<select id="crNewValue" class="cr-select">${options}</select>`;
+  } else if (type === "capa-status") {
+    const isCN = getLang() === "cn";
+    const opts = [
+      { value: "open", label: isCN ? "开放" : "Open" },
+      { value: "in-progress", label: isCN ? "进行中" : "In Progress" },
+      { value: "closed", label: isCN ? "关闭" : "Closed" },
+      { value: "verified", label: isCN ? "已验证" : "Verified" },
+    ];
+    const options = opts
+      .filter((o) => o.value !== oldVal)
+      .map((o) => `<option value="${o.value}">${o.label}</option>`)
+      .join("");
+    proposedInput = `<select id="crNewValue" class="cr-select">${options}</select>`;
+  } else if (type === "supplier-status") {
+    const isCN = getLang() === "cn";
+    const opts = [
+      { value: "under-review", label: isCN ? "审核中" : "Under Review" },
+      { value: "qualified", label: isCN ? "合格" : "Qualified" },
+      { value: "active", label: isCN ? "活跃" : "Active" },
+      { value: "risk", label: isCN ? "风险" : "Risk" },
+    ];
+    const options = opts
+      .filter((o) => o.value !== oldVal)
+      .map((o) => `<option value="${o.value}">${o.label}</option>`)
+      .join("");
+    proposedInput = `<select id="crNewValue" class="cr-select">${options}</select>`;
   } else {
     proposedInput = `<input type="text" id="crNewValue" placeholder="${t("crNewValuePlaceholder")}" />`;
   }
@@ -1863,7 +1931,6 @@ window._submitChangeRequest = function (
   CHANGE_REQUESTS.push(cr);
   saveCRs();
   window._closeChangeRequestForm();
-  renderChangeRequestQueue();
   updateFabBadge();
   showCrToast(cr.id);
 };
@@ -1973,88 +2040,32 @@ function applyChangeRequest(cr: ChangeRequest): void {
       }
       break;
     }
-  }
-}
-
-function renderChangeRequestQueue(): void {
-  const container = document.getElementById("crQueueContainer");
-  if (!container) return;
-
-  const pendingCrs = CHANGE_REQUESTS.filter((c) => c.status === "pending");
-  const historyCrs = CHANGE_REQUESTS.filter((c) => c.status !== "pending");
-  const isPmp = ACTIVE_ROLE === "pmp";
-
-  // Update tab badge and summary card
-  const tabBadge = document.getElementById("crTabBadge");
-  if (tabBadge) {
-    if (pendingCrs.length > 0) {
-      tabBadge.textContent = String(pendingCrs.length);
-      tabBadge.style.display = "";
-    } else {
-      tabBadge.style.display = "none";
+    case "action-status": {
+      const act = ACTION_ITEMS.find((a) => a.id === cr.targetId);
+      if (act) act.status = cr.newValue as typeof act.status;
+      break;
+    }
+    case "dhf-status": {
+      const dhf = DHF_DOCUMENTS.find((d) => d.id === cr.targetId);
+      if (dhf) dhf.status = cr.newValue as typeof dhf.status;
+      break;
+    }
+    case "capa-status": {
+      const capa = CAPA_LOG.find((c) => c.id === cr.targetId);
+      if (capa) {
+        capa.status = cr.newValue as typeof capa.status;
+        if (capa.status === "closed" && !capa.closedDate) {
+          capa.closedDate = new Date().toISOString().split("T")[0];
+        }
+      }
+      break;
+    }
+    case "supplier-status": {
+      const sup = SUPPLIERS.find((s) => s.id === cr.targetId);
+      if (sup) sup.status = cr.newValue as typeof sup.status;
+      break;
     }
   }
-  const summaryCard = document.getElementById("summaryPendingCr");
-  const summaryCount = document.getElementById("pendingCrCount");
-  if (summaryCard && summaryCount) {
-    if (pendingCrs.length > 0) {
-      summaryCard.style.display = "";
-      summaryCount.textContent = String(pendingCrs.length);
-    } else {
-      summaryCard.style.display = "none";
-    }
-  }
-
-  if (pendingCrs.length === 0 && historyCrs.length === 0) {
-    container.innerHTML = `<p class="cr-empty">${t("crNoPending")}</p>`;
-    return;
-  }
-
-  const renderCr = (cr: ChangeRequest) => {
-    const fromLabel =
-      cr.from === "tech" ? t("inputFromTech") : t("inputFromBusiness");
-    const statusClass =
-      cr.status === "pending"
-        ? "cr-status-pending"
-        : cr.status === "approved"
-          ? "cr-status-approved"
-          : "cr-status-rejected";
-    const statusLabel =
-      cr.status === "pending"
-        ? t("crPending")
-        : cr.status === "approved"
-          ? t("crApproved")
-          : t("crRejected");
-    const actions =
-      isPmp && cr.status === "pending"
-        ? `<div class="cr-actions">
-            <button class="decision-btn btn-proceed" data-action="approveChangeRequest" data-crid="${cr.id}">${t("crApprove")}</button>
-            <button class="decision-btn btn-stop" data-action="rejectChangeRequest" data-crid="${cr.id}">${t("crReject")}</button>
-           </div>`
-        : "";
-
-    return `
-      <div class="cr-card ${statusClass}">
-        <div class="cr-card-header">
-          <span class="cr-id">${cr.id}</span>
-          <span class="cr-status-badge ${statusClass}">${statusLabel}</span>
-        </div>
-        <div class="cr-meta">${fromLabel} · ${cr.date}</div>
-        <div class="cr-detail"><strong>${cr.targetId}</strong> → ${cr.field}: <span class="cr-old">${capitalize(cr.oldValue)}</span> → <span class="cr-new">${capitalize(cr.newValue)}</span></div>
-        <div class="cr-justification"><em>${t("crJustification")}:</em> ${cr.justification}</div>
-        ${cr.evidence ? `<div class="cr-evidence"><em>${t("crEvidence")}:</em> ${cr.evidence}</div>` : ""}
-        ${cr.documents && cr.documents.length > 0 ? `<div class="cr-docs"><em>${t("crDocuments")}:</em> ${cr.documents.map((d) => `<a class="cr-doc-link" href="#" data-action="downloadDocument" data-dkey="${d.key}" data-dname="${d.name}">${d.name} (${formatFileSize(d.size)})</a>`).join(", ")}</div>` : ""}
-        ${cr.pmpNote ? `<div class="pmp-response">${cr.pmpNote}</div>` : ""}
-        ${actions}
-      </div>
-    `;
-  };
-
-  container.innerHTML =
-    (pendingCrs.length > 0
-      ? `<h4 class="cr-section-title">${t("crPendingTitle")} (${pendingCrs.length})</h4>` +
-        pendingCrs.map(renderCr).join("")
-      : "") + (historyCrs.length > 0 ? historyCrs.map(renderCr).join("") : "");
 }
 
 // ── HIDDEN API PERSISTENCE ─────────────────────
@@ -4357,6 +4368,15 @@ function renderActionBoard(): void {
 window._cycleActionStatus = function (actionId: string): void {
   const item = ACTION_ITEMS.find((a) => a.id === actionId);
   if (!item) return;
+  if (ACTIVE_ROLE !== "pmp") {
+    window._openChangeRequestForm(
+      "action-status",
+      actionId,
+      "status",
+      item.status,
+    );
+    return;
+  }
   const cycle: Record<string, "in-progress" | "done" | "todo" | "blocked"> = {
     todo: "in-progress",
     "in-progress": "done",
@@ -4420,6 +4440,10 @@ function renderDHFTable(): void {
 window._cycleDHFStatus = function (docId: string): void {
   const doc = DHF_DOCUMENTS.find((d) => d.id === docId);
   if (!doc) return;
+  if (ACTIVE_ROLE !== "pmp") {
+    window._openChangeRequestForm("dhf-status", docId, "status", doc.status);
+    return;
+  }
   const cycle: Record<
     string,
     "draft" | "in-review" | "approved" | "not-started"
@@ -4484,6 +4508,10 @@ function renderCAPALog(): void {
 window._cycleCAPAStatus = function (capaId: string): void {
   const capa = CAPA_LOG.find((c) => c.id === capaId);
   if (!capa) return;
+  if (ACTIVE_ROLE !== "pmp") {
+    window._openChangeRequestForm("capa-status", capaId, "status", capa.status);
+    return;
+  }
   const cycle: Record<string, "in-progress" | "closed" | "verified" | "open"> =
     {
       open: "in-progress",
@@ -4634,6 +4662,15 @@ function renderSuppliers(): void {
 window._cycleSupplierStatus = function (supplierId: string): void {
   const sup = SUPPLIERS.find((s) => s.id === supplierId);
   if (!sup) return;
+  if (ACTIVE_ROLE !== "pmp") {
+    window._openChangeRequestForm(
+      "supplier-status",
+      supplierId,
+      "status",
+      sup.status,
+    );
+    return;
+  }
   const cycle: Record<
     string,
     "qualified" | "active" | "under-review" | "risk"
@@ -4678,8 +4715,12 @@ window._openAddSupplierForm = function (): void {
 window._addSupplier = function (): void {
   if (!["pmp", "business", "technology"].includes(ACTIVE_ROLE)) return;
   const nameEl = document.getElementById("supFormName") as HTMLInputElement;
-  const compEl = document.getElementById("supFormComponent") as HTMLInputElement;
-  const compCnEl = document.getElementById("supFormComponentCn") as HTMLInputElement;
+  const compEl = document.getElementById(
+    "supFormComponent",
+  ) as HTMLInputElement;
+  const compCnEl = document.getElementById(
+    "supFormComponentCn",
+  ) as HTMLInputElement;
   const leadEl = document.getElementById("supFormLead") as HTMLInputElement;
   const poEl = document.getElementById("supFormPO") as HTMLInputElement;
   const msEl = document.getElementById("supFormMilestone") as HTMLInputElement;
@@ -4689,7 +4730,10 @@ window._addSupplier = function (): void {
   SUPPLIERS.push({
     id,
     name,
-    component: { en: compEl?.value?.trim() || "", cn: compCnEl?.value?.trim() || compEl?.value?.trim() || "" },
+    component: {
+      en: compEl?.value?.trim() || "",
+      cn: compCnEl?.value?.trim() || compEl?.value?.trim() || "",
+    },
     status: "under-review",
     leadTimeDays: parseInt(leadEl?.value || "30", 10) || 30,
     poStatus: poEl?.value?.trim() || "—",

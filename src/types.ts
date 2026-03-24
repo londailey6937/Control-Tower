@@ -162,7 +162,11 @@ export type ChangeRequestType =
   | "risk-field"
   | "standard-status"
   | "standard-progress"
-  | "funding-status";
+  | "funding-status"
+  | "action-status"
+  | "dhf-status"
+  | "capa-status"
+  | "supplier-status";
 export type ChangeRequestStatus = "pending" | "approved" | "rejected";
 
 export interface CRDocument {

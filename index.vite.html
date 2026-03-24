@@ -110,11 +110,7 @@
         <span class="tab-icon">🇺🇸</span>
         <span data-i18n="tabUsInvestment">US Investment</span>
       </button>
-      <button class="tab-btn" data-tab="change-requests">
-        <span class="tab-icon">📋</span>
-        <span data-i18n="tabChangeRequests">Change Requests</span>
-        <span class="tab-badge" id="crTabBadge" style="display: none"></span>
-      </button>
+
       <button class="tab-btn" data-tab="doc-library">
         <span class="tab-icon">📚</span>
         <span data-i18n="tabDocLibrary">Document Control</span>
@@ -162,14 +158,6 @@
         <div class="summary-card">
           <div class="summary-label" data-i18n="runwayLabel">Runway</div>
           <div class="summary-value" id="summaryRunway">—</div>
-        </div>
-        <div class="summary-card" id="summaryPendingCr" style="display: none">
-          <div class="summary-label" data-i18n="summaryPendingCr">
-            Pending CRs
-          </div>
-          <div class="summary-value cr-count-highlight" id="pendingCrCount">
-            0
-          </div>
         </div>
       </section>
 
@@ -415,9 +403,16 @@
             <tbody id="budgetBody"></tbody>
           </table>
         </div>
-        <div id="budgetAddForm" class="add-funding-form" style="display:none"></div>
+        <div
+          id="budgetAddForm"
+          class="add-funding-form"
+          style="display: none"
+        ></div>
         <div class="budget-toolbar">
-          <button class="btn-primary doc-lib-add-btn" data-action="openAddBudgetForm">
+          <button
+            class="btn-primary doc-lib-add-btn"
+            data-action="openAddBudgetForm"
+          >
             ＋ <span data-i18n="budgetAddBtn">Add Category</span>
           </button>
         </div>
@@ -460,7 +455,10 @@
         </div>
         <div id="supplierAddForm" class="add-funding-form"></div>
         <div class="budget-toolbar">
-          <button class="btn-primary doc-lib-add-btn" data-action="openAddSupplierForm">
+          <button
+            class="btn-primary doc-lib-add-btn"
+            data-action="openAddSupplierForm"
+          >
             ＋ <span data-i18n="supplierAddBtn">Add Supplier</span>
           </button>
         </div>
@@ -524,16 +522,6 @@
           <h3 data-i18n="usInvestIrTitle">Investor Relations Activities</h3>
           <div id="usInvestActivities"></div>
         </div>
-      </section>
-
-      <!-- ── TAB: CHANGE REQUESTS ────────────────── -->
-      <section class="tab-panel" id="panel-change-requests">
-        <section class="cr-queue-section" id="crQueueSection">
-          <div class="panel-header">
-            <h2 data-i18n="crBadge">Change Requests</h2>
-          </div>
-          <div id="crQueueContainer"></div>
-        </section>
       </section>
 
       <!-- ── TAB: DOCUMENT CONTROL ────────────────── -->
