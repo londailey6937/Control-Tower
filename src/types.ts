@@ -370,7 +370,7 @@ declare global {
     _cycleSupplierStatus: (supplierId: string) => void;
     _dismissNotification: (index: number) => void;
     _exportReport: () => void;
-    _sendQaMessage: (qNum: number) => void;
+    _sendQaMessage: (threadId: number) => void;
     _exportQaThread: () => void;
     _deleteDocLibItem: (id: string) => void;
     _openAddDocForm: () => void;
@@ -381,7 +381,7 @@ declare global {
     _openQaSettings: () => void;
     _saveQaSettings: () => void;
     _markQaRead: (msgId: string) => void;
-    _archiveQaMessages: (qNum: number) => void;
+    _archiveQaMessages: (threadId: number) => void;
     _viewQaArchive: () => void;
     _closeQaArchive: () => void;
     _deleteQaArchive: (idx: number) => void;
@@ -389,7 +389,17 @@ declare global {
     _logStakeholderInput: () => void;
     _editBudgetField: (budgetId: string, field: "planned" | "actual") => void;
     _createQaTopic: () => void;
-    _deleteQaTopic: (qNum: number) => void;
+    _deleteQaTopic: (threadId: number) => void;
+    _mbCreateThread: () => void;
+    _mbResolveThread: (threadId: number) => void;
+    _mbReopenThread: (threadId: number) => void;
+    _mbDeleteThread: (threadId: number) => void;
+    _mbSetView: (view: string) => void;
+    _mbSetWorkstreamFilter: (ws: string) => void;
+    _mbLogDecision: (threadId: number) => void;
+    _mbCreateAction: (threadId: number) => void;
+    _mbToggleActionStatus: (threadId: number) => void;
+    _mbLinkItem: (threadId: number) => void;
     _addSupplier: () => void;
     _deleteSupplier: (supplierId: string) => void;
     _openAddSupplierForm: () => void;
@@ -463,3 +473,57 @@ export interface QASettings {
   businessEmail: string;
   accountingEmail: string;
 }
+
+// ── Message Board v2 — Purpose-Driven Threads ────
+export type MBWorkstream =
+  | "project"
+  | "regulatory"
+  | "engineering"
+  | "clinical"
+  | "business"
+  | "operations";
+export type MBMessageIntent = "inform" | "decide" | "act";
+export type MBThreadLifecycle = "open" | "resolved" | "archived";
+export type MBPriority = "normal" | "urgent" | "escalated";
+export type MBActionStatus = "open" | "blocked" | "done";
+
+export interface MBLinkedItem {
+  type: "milestone" | "risk" | "task" | "document" | "gate" | "standard";
+  id: string;
+  label: string;
+}
+
+export interface MBThread {
+  id: number;
+  title: string;
+  workstream: MBWorkstream;
+  intent: MBMessageIntent;
+  owner: string;
+  objective: string;
+  lifecycle: MBThreadLifecycle;
+  priority: MBPriority;
+  assignee?: string;
+  dueDate?: string;
+  linkedItems: MBLinkedItem[];
+  createdAt: string;
+  resolvedAt?: string;
+  resolutionSummary?: string;
+}
+
+export interface MBDecision {
+  id: string;
+  threadId: number;
+  text: string;
+  rationale: string;
+  madeBy: string;
+  date: string;
+  linkedItems: MBLinkedItem[];
+  status: "active" | "superseded";
+}
+
+export type MBView =
+  | "all"
+  | "my-items"
+  | "decisions"
+  | "executive"
+  | "workstream";

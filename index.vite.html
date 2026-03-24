@@ -572,11 +572,58 @@
       <section class="tab-panel" id="panel-qa-sheet">
         <div class="panel-header">
           <h2 data-i18n="qaTitle">Message Board</h2>
-          <p class="panel-desc" data-i18n="qaDesc">
-            Team messaging board — synced across all users via server, with
-            local backup
+          <p class="panel-desc" data-i18n="mbDescNew">
+            Purpose-driven messaging — every thread tracks a decision, action,
+            or status update tied to project execution
           </p>
         </div>
+        <!-- View Switcher + Controls -->
+        <div class="mb-toolbar" id="mbToolbar">
+          <div class="mb-views" id="mbViews">
+            <button class="mb-view-btn active" data-mbview="all">
+              📋 <span data-i18n="mbViewAll">All Threads</span>
+            </button>
+            <button class="mb-view-btn" data-mbview="my-items">
+              👤 <span data-i18n="mbViewMyItems">My Items</span>
+            </button>
+            <button class="mb-view-btn" data-mbview="decisions">
+              ⚖️ <span data-i18n="mbViewDecisions">Decisions</span>
+            </button>
+            <button class="mb-view-btn" data-mbview="executive">
+              📊 <span data-i18n="mbViewExecutive">Executive</span>
+            </button>
+          </div>
+          <div class="mb-filters" id="mbFilters">
+            <select class="mb-ws-filter" id="mbWorkstreamFilter">
+              <option value="all" data-i18n="mbWsAll">All Workstreams</option>
+              <option value="project">Project</option>
+              <option value="regulatory">Regulatory</option>
+              <option value="engineering">Engineering</option>
+              <option value="clinical">Clinical</option>
+              <option value="business">Business</option>
+              <option value="operations">Operations</option>
+            </select>
+            <select class="mb-lifecycle-filter" id="mbLifecycleFilter">
+              <option value="open" data-i18n="mbFilterOpen">Open</option>
+              <option value="all" data-i18n="mbFilterAll">All</option>
+              <option value="resolved" data-i18n="mbFilterResolved">
+                Resolved
+              </option>
+            </select>
+          </div>
+          <div class="mb-actions">
+            <button class="btn-primary" onclick="window._mbCreateThread()">
+              ✚ <span data-i18n="mbNewThread">New Thread</span>
+            </button>
+            <button class="btn-secondary" id="qaExportBtn">
+              📤 <span data-i18n="qaExportAnswers">Export</span>
+            </button>
+            <button class="btn-secondary" onclick="window._openQaSettings()">
+              ⚙️ <span data-i18n="qaSettings">Settings</span>
+            </button>
+          </div>
+        </div>
+        <!-- Role Picker -->
         <div class="qa-toolbar" id="qaToolbar">
           <div class="qa-role-picker">
             <span class="qa-role-label" data-i18n="qaViewAs">Posting as</span>
@@ -593,29 +640,17 @@
               📊 <span data-i18n="qaAccounting">Accounting</span>
             </button>
           </div>
-          <button
-            class="btn-secondary"
-            id="qaSettingsBtn"
-            onclick="window._openQaSettings()"
-          >
-            ⚙️ <span data-i18n="qaSettings">Settings</span>
-          </button>
-          <button class="btn-secondary" id="qaExportBtn">
-            📤 <span data-i18n="qaExportAnswers">Export Thread</span>
-          </button>
-          <button class="btn-secondary" onclick="window._viewQaArchive()">
-            🗂️ <span data-i18n="qaViewArchive">View Archive</span>
-          </button>
-          <button class="btn-primary" onclick="window._createQaTopic()">
-            ✚ <span data-i18n="qaNewTopic">New Topic</span>
-          </button>
           <span class="qa-save-status" id="qaSaveStatus"></span>
         </div>
+        <!-- Summary Cards -->
+        <div class="mb-summary" id="mbSummary"></div>
+        <!-- Settings Panel -->
         <div
           id="qaSettingsPanel"
           class="qa-settings-panel"
           style="display: none"
         ></div>
+        <!-- Thread Body -->
         <div id="qaSheetBody"></div>
       </section>
       <!-- ── PMP INPUT PANEL (slide-in) ─────────── -->

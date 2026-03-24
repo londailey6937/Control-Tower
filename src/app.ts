@@ -36,6 +36,13 @@ import type {
   DocStatus,
   QAMessage,
   QASettings,
+  MBThread,
+  MBDecision,
+  MBView,
+  MBWorkstream,
+  MBMessageIntent,
+  MBLinkedItem,
+  MBPriority,
 } from "./types.ts";
 import { storeDocument, getDocument } from "./docstore.ts";
 import {
@@ -3339,16 +3346,21 @@ function renderDocLibrary(): void {
 (window as any)._closeDocHistory = closeDocHistory;
 
 // ══════════════════════════════════════════════════
-// MESSAGE BOARD — threaded messaging (PMP ↔ Dr. Dai)
+// MESSAGE BOARD — Purpose-Driven Messaging Layer
+// Threads with lifecycle, decisions, actions, accountability
 // Supabase Realtime primary, localStorage fallback
 // ══════════════════════════════════════════════════
 
 const QA_STORAGE_KEY = "ctower_qa_messages";
 const QA_SETTINGS_KEY = "ctower_qa_settings";
-const QA_CUSTOM_TOPICS_KEY = "ctower_qa_custom_topics";
+const MB_THREADS_KEY = "ctower_mb_threads";
+const MB_DECISIONS_KEY = "ctower_mb_decisions";
 let qaPostingRole: string = "pmp";
 let qaCollapsed: Set<number> = new Set();
-let qaTestMode = true; // Start in test mode — emails disabled until user turns off
+let qaTestMode = true;
+let mbActiveView: MBView = "all";
+let mbWorkstreamFilter: MBWorkstream | "all" = "all";
+let mbLifecycleFilter: "open" | "all" | "resolved" = "open";
 
 // ── Role display helpers ──────────────────────
 function qaRoleLabel(role: string): string {
@@ -3383,7 +3395,6 @@ function qaRoleIcon(role: string): string {
       return "\ud83d\udcac";
   }
 }
-/** Normalize legacy "inventor" to "technology" */
 function normalizeRole(role: string): string {
   return role === "inventor"
     ? "technology"
@@ -3392,24 +3403,90 @@ function normalizeRole(role: string): string {
       : role;
 }
 
-// ── Custom topics ─────────────────────────────
-interface CustomTopic {
-  qNum: number;
-  title: string;
-  createdAt: string;
-}
-
-function loadCustomTopics(): CustomTopic[] {
+// ── Thread persistence ────────────────────────
+function loadMBThreads(): MBThread[] {
   try {
-    const raw = localStorage.getItem(QA_CUSTOM_TOPICS_KEY);
+    const raw = localStorage.getItem(MB_THREADS_KEY);
     return raw ? JSON.parse(raw) : [];
   } catch {
     return [];
   }
 }
+function saveMBThreads(threads: MBThread[]): void {
+  localStorage.setItem(MB_THREADS_KEY, JSON.stringify(threads));
+}
 
-function saveCustomTopics(topics: CustomTopic[]): void {
-  localStorage.setItem(QA_CUSTOM_TOPICS_KEY, JSON.stringify(topics));
+function loadMBDecisions(): MBDecision[] {
+  try {
+    const raw = localStorage.getItem(MB_DECISIONS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+function saveMBDecisions(decisions: MBDecision[]): void {
+  localStorage.setItem(MB_DECISIONS_KEY, JSON.stringify(decisions));
+}
+
+// Migrate predefined Q1-Q30 + custom topics into threads if first run
+function ensureDefaultThreads(): void {
+  let threads = loadMBThreads();
+  if (threads.length > 0) return;
+
+  // Create default workstream threads from QA_SECTIONS
+  const wsMap: Record<number, MBWorkstream> = {
+    1: "engineering",
+    2: "engineering",
+    3: "business",
+    4: "regulatory",
+    5: "project",
+    6: "operations",
+    7: "clinical",
+    8: "business",
+  };
+  QA_SECTIONS.forEach((sec) => {
+    sec.questions.forEach((q) => {
+      threads.push({
+        id: q.num,
+        title: localizedText(q.question),
+        workstream: wsMap[sec.num] ?? "project",
+        intent: "inform",
+        owner: "pmp",
+        objective: q.why ? localizedText(q.why) : "",
+        lifecycle: "open",
+        priority: "normal",
+        linkedItems: [],
+        createdAt: new Date().toISOString(),
+      });
+    });
+  });
+
+  // Migrate custom topics
+  try {
+    const raw = localStorage.getItem("ctower_qa_custom_topics");
+    if (raw) {
+      const topics: Array<{ qNum: number; title: string; createdAt: string }> =
+        JSON.parse(raw);
+      topics.forEach((tp) => {
+        threads.push({
+          id: tp.qNum,
+          title: tp.title,
+          workstream: "project",
+          intent: "inform",
+          owner: qaPostingRole,
+          objective: "",
+          lifecycle: "open",
+          priority: "normal",
+          linkedItems: [],
+          createdAt: tp.createdAt,
+        });
+      });
+    }
+  } catch {
+    /* ignore */
+  }
+
+  saveMBThreads(threads);
 }
 
 // ── Supabase ↔ localStorage message cache ─────────────
@@ -3439,13 +3516,13 @@ function saveQaMessagesLocal(msgs: QAMessage[]): void {
   localStorage.setItem(QA_STORAGE_KEY, JSON.stringify(msgs));
 }
 
-/** Bootstrap: pull from Supabase if online, else localStorage */
 async function initQaMessages(): Promise<void> {
+  ensureDefaultThreads();
   if (isOnline()) {
     try {
       const rows = await fetchMessages();
       _qaCache = rows.map(dbToQa);
-      saveQaMessagesLocal(_qaCache); // update local cache
+      saveQaMessagesLocal(_qaCache);
     } catch {
       _qaCache = loadQaMessagesLocal();
     }
@@ -3454,7 +3531,6 @@ async function initQaMessages(): Promise<void> {
   }
 }
 
-/** Push any localStorage-only messages to Supabase (offline sync) */
 async function syncOfflineMessages(): Promise<void> {
   if (!isOnline()) return;
   const localMsgs = loadQaMessagesLocal();
@@ -3471,12 +3547,12 @@ async function syncOfflineMessages(): Promise<void> {
   }
 }
 
+// ── Settings ─────────────────────────────────
 function loadQaSettings(): QASettings {
   try {
     const raw = localStorage.getItem(QA_SETTINGS_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      // Migrate from old 2-field format
       return {
         pmpEmail: parsed.pmpEmail ?? "",
         technologyEmail:
@@ -3557,18 +3633,18 @@ function saveQaSettingsUI(): void {
     "qaSettingsAccountingEmail",
   ) as HTMLInputElement;
   if (!pmpEl || !techEl || !bizEl || !acctEl) return;
-  const settings: QASettings = {
+  saveQaSettingsData({
     pmpEmail: pmpEl.value.trim(),
     technologyEmail: techEl.value.trim(),
     businessEmail: bizEl.value.trim(),
     accountingEmail: acctEl.value.trim(),
-  };
-  saveQaSettingsData(settings);
+  });
   const panel = document.getElementById("qaSettingsPanel");
   if (panel) panel.style.display = "none";
   showQaSaveStatus();
 }
 
+// ── Message operations ───────────────────────
 function markQaRead(msgId: string): void {
   const msg = _qaCache.find((m) => m.id === msgId);
   if (!msg) return;
@@ -3583,46 +3659,73 @@ function markQaRead(msgId: string): void {
   }
 }
 
-function sendQaMessage(qNum: number): void {
+function sendQaMessage(threadId: number): void {
   const input = document.getElementById(
-    `qa-input-${qNum}`,
+    `qa-input-${threadId}`,
   ) as HTMLTextAreaElement | null;
   if (!input || !input.value.trim()) return;
 
   const text = input.value.trim();
   const role = normalizeRole(qaPostingRole);
+
+  // Detect intent markers: [DECISION] or [ACTION] prefix
+  let intentTag = "";
+  if (text.match(/^\[DECISION\]/i)) intentTag = "decision";
+  else if (text.match(/^\[ACTION\]/i)) intentTag = "action";
+
   const localMsg: QAMessage = {
     id: `qm-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-    qNum,
+    qNum: threadId,
     sender: role,
     text,
     timestamp: new Date().toISOString(),
     readBy: [role],
   };
 
-  // Optimistic local update
   _qaCache.push(localMsg);
   saveQaMessagesLocal(_qaCache);
   input.value = "";
-  renderQaThread(qNum);
+  renderQaThread(threadId);
   showQaSaveStatus();
   updateQaUnreadBadge();
 
-  // Push to Supabase
+  // Auto-log decision if tagged
+  if (intentTag === "decision") {
+    const decisions = loadMBDecisions();
+    decisions.push({
+      id: `dec-${Date.now()}`,
+      threadId,
+      text: text.replace(/^\[DECISION\]\s*/i, ""),
+      rationale: "",
+      madeBy: role,
+      date: new Date().toISOString(),
+      linkedItems: [],
+      status: "active",
+    });
+    saveMBDecisions(decisions);
+    logAudit(
+      "qa-topic",
+      String(threadId),
+      "decision",
+      "",
+      text.replace(/^\[DECISION\]\s*/i, ""),
+      `Decision logged in thread ${threadId}`,
+    );
+  }
+
   if (isOnline()) {
     insertMessage({
-      q_num: qNum,
+      q_num: threadId,
       sender: role,
       text,
       read_by: [role],
     }).then((dbMsg) => {
       if (dbMsg) {
-        // Replace local optimistic entry with the Supabase one (real ID + timestamp)
         const idx = _qaCache.findIndex((m) => m.id === localMsg.id);
         if (idx !== -1) {
           _qaCache[idx] = dbToQa(dbMsg);
           saveQaMessagesLocal(_qaCache);
-          renderQaThread(qNum);
+          renderQaThread(threadId);
         }
       }
     });
@@ -3653,12 +3756,12 @@ function formatMsgTime(iso: string): string {
   return `${date}, ${time}`;
 }
 
-function renderQaThread(qNum: number): void {
-  const container = document.getElementById(`qa-thread-${qNum}`);
+// ── Thread rendering ─────────────────────────
+function renderQaThread(threadId: number): void {
+  const container = document.getElementById(`qa-thread-${threadId}`);
   if (!container) return;
 
-  const msgs = _qaCache.filter((m) => m.qNum === qNum);
-
+  const msgs = _qaCache.filter((m) => m.qNum === threadId);
   if (msgs.length === 0) {
     container.innerHTML = `<div class="qa-no-messages">${t("qaNoMessages")}</div>`;
     return;
@@ -3672,9 +3775,8 @@ function renderQaThread(qNum: number): void {
       const icon = qaRoleIcon(m.sender);
       const isReadByViewer =
         m.readBy?.includes(normalizeRole(qaPostingRole)) ?? false;
-      // Read receipt: show double-check if ANY other role has read it
       const isReadBySomeone =
-        m.sender === normalizeRole(qaPostingRole)
+        senderNorm === normalizeRole(qaPostingRole)
           ? (m.readBy ?? []).some(
               (r) => normalizeRole(r) !== normalizeRole(qaPostingRole),
             )
@@ -3693,44 +3795,216 @@ function renderQaThread(qNum: number): void {
         !isReadByViewer && senderNorm !== normalizeRole(qaPostingRole)
           ? `<button class="qa-mark-read-btn" onclick="window._markQaRead('${m.id}')" title="${t("qaMarkRead")}">&#x2709;</button>`
           : "";
+
+      // Highlight decisions and actions
+      const isDecision = m.text.match(/^\[DECISION\]/i);
+      const isAction = m.text.match(/^\[ACTION\]/i);
+      const intentClass = isDecision
+        ? " qa-msg-decision"
+        : isAction
+          ? " qa-msg-action"
+          : "";
+      const intentBadge = isDecision
+        ? `<span class="mb-intent-badge mb-intent-decide">⚖️ ${t("mbDecision")}</span>`
+        : isAction
+          ? `<span class="mb-intent-badge mb-intent-act">⚡ ${t("mbAction")}</span>`
+          : "";
+
       return `
-      <div class="qa-msg ${isSelf ? "qa-msg-self" : "qa-msg-other"} qa-msg-${senderNorm}${unreadClass}">
-        <div class="qa-msg-header">
-          <span class="qa-msg-sender">${icon} ${senderLabel}</span>
-          <span class="qa-msg-meta">${readIndicator}${markReadBtn}<span class="qa-msg-time">${formatMsgTime(m.timestamp)}</span></span>
-        </div>
-        <div class="qa-msg-body">${m.text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>")}</div>
-      </div>`;
+    <div class="qa-msg ${isSelf ? "qa-msg-self" : "qa-msg-other"} qa-msg-${senderNorm}${unreadClass}${intentClass}">
+      <div class="qa-msg-header">
+        <span class="qa-msg-sender">${icon} ${senderLabel}</span>
+        ${intentBadge}
+        <span class="qa-msg-meta">${readIndicator}${markReadBtn}<span class="qa-msg-time">${formatMsgTime(m.timestamp)}</span></span>
+      </div>
+      <div class="qa-msg-body">${m.text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>")}</div>
+    </div>`;
     })
     .join("");
 
   container.scrollTop = container.scrollHeight;
 }
 
+// ── Thread card HTML ──────────────────────────
+function threadCardHtml(thread: MBThread): string {
+  const msgs = _qaCache.filter((m) => m.qNum === thread.id);
+  const msgCount = msgs.length;
+  const myRole = normalizeRole(qaPostingRole);
+  const unreadCount = msgs.filter(
+    (m) => normalizeRole(m.sender) !== myRole && !m.readBy?.includes(myRole),
+  ).length;
+  const isCollapsed = qaCollapsed.has(thread.id);
+  const decisions = loadMBDecisions().filter(
+    (d) => d.threadId === thread.id && d.status === "active",
+  );
+
+  const intentIcon =
+    thread.intent === "decide" ? "⚖️" : thread.intent === "act" ? "⚡" : "📢";
+  const priorityClass =
+    thread.priority === "urgent"
+      ? "mb-priority-urgent"
+      : thread.priority === "escalated"
+        ? "mb-priority-escalated"
+        : "";
+  const lifecycleClass = thread.lifecycle === "resolved" ? "mb-resolved" : "";
+  const ownerLabel = qaRoleLabel(thread.owner);
+
+  // Linked items badges
+  const linkedHtml =
+    thread.linkedItems.length > 0
+      ? `<div class="mb-linked">${thread.linkedItems.map((li) => `<span class="mb-linked-badge" title="${li.label}">${li.type === "milestone" ? "🏁" : li.type === "risk" ? "⚠️" : li.type === "gate" ? "🚦" : li.type === "document" ? "📄" : li.type === "standard" ? "📋" : "📌"} ${li.label}</span>`).join("")}</div>`
+      : "";
+
+  // Action status indicator
+  const actionHtml = thread.assignee
+    ? `<div class="mb-action-meta">
+        <span class="mb-assignee">👤 ${qaRoleLabel(thread.assignee)}</span>
+        ${thread.dueDate ? `<span class="mb-due">📅 ${thread.dueDate}</span>` : ""}
+      </div>`
+    : "";
+
+  // Decision summary
+  const decisionHtml =
+    decisions.length > 0
+      ? `<div class="mb-decisions-list">${decisions
+          .map(
+            (d) =>
+              `<div class="mb-decision-card"><span class="mb-decision-icon">⚖️</span> <strong>${d.text}</strong> <span class="mb-decision-by">— ${qaRoleLabel(d.madeBy)}, ${formatMsgTime(d.date)}</span></div>`,
+          )
+          .join("")}</div>`
+      : "";
+
+  // Thread actions row
+  const isPmp = qaPostingRole === "pmp";
+  const actionsHtml = `<div class="mb-thread-actions">
+    ${thread.lifecycle === "open" ? `<button class="mb-action-btn mb-btn-resolve" onclick="window._mbResolveThread(${thread.id})" title="${t("mbResolve")}">✅ ${t("mbResolve")}</button>` : ""}
+    ${thread.lifecycle === "resolved" ? `<button class="mb-action-btn" onclick="window._mbReopenThread(${thread.id})" title="${t("mbReopen")}">🔄 ${t("mbReopen")}</button>` : ""}
+    <button class="mb-action-btn" onclick="window._mbLogDecision(${thread.id})" title="${t("mbLogDecision")}">⚖️ ${t("mbLogDecision")}</button>
+    <button class="mb-action-btn" onclick="window._mbCreateAction(${thread.id})" title="${t("mbCreateAction")}">⚡ ${t("mbCreateAction")}</button>
+    <button class="mb-action-btn" onclick="window._mbLinkItem(${thread.id})" title="${t("mbLinkArtifact")}">🔗 ${t("mbLinkArtifact")}</button>
+    ${msgCount > 0 ? `<button class="mb-action-btn" onclick="window._archiveQaMessages(${thread.id})" title="${t("qaArchive")}">📦</button>` : ""}
+    ${isPmp ? `<button class="mb-action-btn mb-btn-delete" onclick="window._mbDeleteThread(${thread.id})" title="${t("mbDelete")}">🗑️</button>` : ""}
+  </div>`;
+
+  return `
+  <div class="mb-thread-card ${priorityClass} ${lifecycleClass}" id="qa-topic-${thread.id}">
+    <div class="mb-thread-header">
+      <div class="mb-thread-left">
+        <span class="mb-intent-icon">${intentIcon}</span>
+        <div class="mb-thread-title-group">
+          <span class="mb-thread-title">${thread.title}</span>
+          <div class="mb-thread-meta">
+            <span class="mb-ws-badge mb-ws-${thread.workstream}">${t("mbWs_" + thread.workstream)}</span>
+            <span class="mb-owner">${ownerLabel}</span>
+            ${thread.priority !== "normal" ? `<span class="mb-priority-badge ${priorityClass}">${thread.priority === "urgent" ? "🔴 " + t("mbUrgent") : "🚨 " + t("mbEscalated")}</span>` : ""}
+            ${thread.lifecycle === "resolved" ? `<span class="mb-lifecycle-badge mb-status-resolved">✅ ${t("mbResolved")}</span>` : `<span class="mb-lifecycle-badge mb-status-open">🟢 ${t("mbOpen")}</span>`}
+          </div>
+        </div>
+      </div>
+      <div class="mb-thread-right">
+        <span class="qa-msg-count">${msgCount > 0 ? `💬 ${msgCount}${unreadCount > 0 ? ` (${unreadCount} ${t("qaUnread")})` : ""}` : ""}</span>
+        <button class="qa-collapse-btn" data-qatoggle="${thread.id}">${isCollapsed ? t("qaExpand") : t("qaCollapse")}</button>
+      </div>
+    </div>
+    ${thread.objective ? `<div class="mb-thread-objective">${thread.objective}</div>` : ""}
+    ${linkedHtml}
+    ${actionHtml}
+    ${thread.resolutionSummary ? `<div class="mb-resolution">✅ <strong>${t("mbResolution")}:</strong> ${thread.resolutionSummary}</div>` : ""}
+    ${decisionHtml}
+    <div class="qa-thread-wrap${isCollapsed ? " collapsed" : ""}" id="qa-wrap-${thread.id}">
+      <div class="qa-thread" id="qa-thread-${thread.id}"></div>
+      ${
+        thread.lifecycle === "open"
+          ? `<div class="qa-compose">
+        <div class="mb-compose-hints">${t("mbComposeHint")}</div>
+        <textarea id="qa-input-${thread.id}" class="qa-compose-input" rows="2" placeholder="${t("qaAnswerPlaceholder")}"></textarea>
+        <div class="qa-compose-actions">
+          <button class="qa-send-btn" onclick="window._sendQaMessage(${thread.id})">${t("qaSend")} \u27a4</button>
+        </div>
+      </div>`
+          : ""
+      }
+    </div>
+    ${actionsHtml}
+  </div>`;
+}
+
+// ── Summary cards ─────────────────────────────
+function renderMBSummary(): void {
+  const el = document.getElementById("mbSummary");
+  if (!el) return;
+  const threads = loadMBThreads();
+  const decisions = loadMBDecisions();
+  const myRole = normalizeRole(qaPostingRole);
+
+  const openCount = threads.filter((th) => th.lifecycle === "open").length;
+  const urgentCount = threads.filter(
+    (th) => th.lifecycle === "open" && th.priority !== "normal",
+  ).length;
+  const decisionCount = decisions.filter((d) => d.status === "active").length;
+  const myItems = threads.filter(
+    (th) =>
+      th.lifecycle === "open" &&
+      (th.owner === myRole || th.assignee === myRole),
+  ).length;
+  const unreadMsgs = _qaCache.filter(
+    (m) => normalizeRole(m.sender) !== myRole && !m.readBy?.includes(myRole),
+  ).length;
+
+  el.innerHTML = `
+    <div class="mb-summary-card"><div class="mb-summary-value">${openCount}</div><div class="mb-summary-label">${t("mbOpen")} ${t("mbThreads")}</div></div>
+    <div class="mb-summary-card ${urgentCount > 0 ? "mb-summary-urgent" : ""}"><div class="mb-summary-value">${urgentCount}</div><div class="mb-summary-label">${t("mbUrgent")} / ${t("mbEscalated")}</div></div>
+    <div class="mb-summary-card"><div class="mb-summary-value">${decisionCount}</div><div class="mb-summary-label">${t("mbDecisions")}</div></div>
+    <div class="mb-summary-card"><div class="mb-summary-value">${myItems}</div><div class="mb-summary-label">${t("mbViewMyItems")}</div></div>
+    <div class="mb-summary-card ${unreadMsgs > 0 ? "mb-summary-unread" : ""}"><div class="mb-summary-value">${unreadMsgs}</div><div class="mb-summary-label">${t("qaUnread")}</div></div>
+  `;
+}
+
+// ── Export ─────────────────────────────────────
 function exportQaThread(): void {
-  const msgs = _qaCache;
+  const threads = loadMBThreads();
+  const decisions = loadMBDecisions();
   const lines: string[] = [
-    "ICU Respiratory Digital Twin \u2014 Message Board Thread",
+    "ICU Respiratory Digital Twin \u2014 Message Board Export",
     `Exported: ${new Date().toISOString().split("T")[0]}`,
     "=".repeat(60),
     "",
   ];
-  QA_SECTIONS.forEach((sec) => {
-    const secMsgs = msgs.filter((m) =>
-      sec.questions.some((q) => q.num === m.qNum),
-    );
-    if (secMsgs.length === 0) return;
-    lines.push(`SECTION ${sec.num}: ${localizedText(sec.title)}`);
-    lines.push("-".repeat(50));
-    sec.questions.forEach((q) => {
-      const qMsgs = msgs.filter((m) => m.qNum === q.num);
-      if (qMsgs.length === 0) return;
-      lines.push(`\nQ${q.num}. ${localizedText(q.question)}`);
-      qMsgs.forEach((m) => {
-        const sender = m.sender === "pmp" ? "PMP" : "Dr. Dai";
-        lines.push(`  [${sender} | ${formatMsgTime(m.timestamp)}] ${m.text}`);
-      });
+
+  // Decisions summary
+  const activeDecisions = decisions.filter((d) => d.status === "active");
+  if (activeDecisions.length > 0) {
+    lines.push("DECISIONS LOG", "-".repeat(50));
+    activeDecisions.forEach((d) => {
+      const thread = threads.find((th) => th.id === d.threadId);
+      lines.push(`  [${formatMsgTime(d.date)}] ${d.text}`);
+      lines.push(
+        `    Thread: ${thread?.title ?? "Unknown"} | By: ${qaRoleLabel(d.madeBy)}`,
+      );
+      if (d.rationale) lines.push(`    Rationale: ${d.rationale}`);
     });
+    lines.push("");
+  }
+
+  // Threads
+  threads.forEach((thread) => {
+    const msgs = _qaCache.filter((m) => m.qNum === thread.id);
+    if (msgs.length === 0) return;
+    lines.push(
+      `THREAD: ${thread.title} [${thread.workstream}] (${thread.lifecycle})`,
+    );
+    lines.push(
+      `  Owner: ${qaRoleLabel(thread.owner)} | Intent: ${thread.intent} | Priority: ${thread.priority}`,
+    );
+    if (thread.objective) lines.push(`  Objective: ${thread.objective}`);
+    lines.push("-".repeat(50));
+    msgs.forEach((m) => {
+      lines.push(
+        `  [${qaRoleLabel(m.sender)} | ${formatMsgTime(m.timestamp)}] ${m.text}`,
+      );
+    });
+    if (thread.resolutionSummary)
+      lines.push(`  RESOLUTION: ${thread.resolutionSummary}`);
     lines.push("");
   });
 
@@ -3738,211 +4012,105 @@ function exportQaThread(): void {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `Message_Board_Thread_${new Date().toISOString().split("T")[0]}.txt`;
+  a.download = `Message_Board_Export_${new Date().toISOString().split("T")[0]}.txt`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
 
+// ── Main render ───────────────────────────────
 function renderQaSheet(): void {
   const body = document.getElementById("qaSheetBody");
   if (!body) return;
 
-  const allMsgs = _qaCache;
-  const qaSettings = loadQaSettings();
-  // Build email list for all roles OTHER than the posting role
-  const roleEmails: Record<string, string> = {
-    pmp: qaSettings.pmpEmail,
-    technology: qaSettings.technologyEmail,
-    business: qaSettings.businessEmail,
-    accounting: qaSettings.accountingEmail,
-  };
-  const otherRoles = Object.entries(roleEmails).filter(
-    ([role, email]) =>
-      normalizeRole(role) !== normalizeRole(qaPostingRole) && email,
-  );
-  const otherEmails = otherRoles.map(([, email]) => email);
-  const emailTargetStr = otherEmails.join(", ");
+  renderMBSummary();
 
-  // Build recipient <select> options for each compose area
-  const recipientOptions = otherRoles
-    .map(
-      ([role, email]) =>
-        `<option value="${email}">${qaRoleIcon(role)} ${qaRoleLabel(role)}</option>`,
-    )
-    .join("");
-  const recipientSelectHtml =
-    otherRoles.length > 0
-      ? `<select class="qa-recipient-select" data-qarecipient>
-        <option value="all">${t("qaRecipientAll")} (${otherRoles.length})</option>
-        ${recipientOptions}
-       </select>`
-      : "";
+  let threads = loadMBThreads();
+  const myRole = normalizeRole(qaPostingRole);
 
-  function composeActionsHtml(qNum: number): string {
-    return `<div class="qa-compose-actions">
-      <span class="qa-compose-left">
-        ${emailTargetStr ? `<span class="qa-email-target" title="${t("qaSendViaEmail")}">\ud83d\udce7</span>` : `<span class="qa-email-target qa-no-email" title="${t("qaSettings")}">\ud83d\udce7 \u2014</span>`}
-        ${recipientSelectHtml}
-      </span>
-      <button class="qa-send-btn" onclick="window._sendQaMessage(${qNum})">
-        ${t("qaSend")} \u27a4
-      </button>
-    </div>`;
+  // Apply lifecycle filter
+  if (mbLifecycleFilter === "open") {
+    threads = threads.filter((th) => th.lifecycle === "open");
+  } else if (mbLifecycleFilter === "resolved") {
+    threads = threads.filter((th) => th.lifecycle === "resolved");
   }
 
-  // ── Custom Topics Section (renders first, above predefined) ──
-  const customTopics = loadCustomTopics();
-  let customSectionHtml = "";
-  if (customTopics.length > 0) {
-    const customHtml = customTopics
-      .map((tp) => {
-        const qMsgs = allMsgs.filter((m) => m.qNum === tp.qNum);
-        const msgCount = qMsgs.length;
-        const unreadCount = qMsgs.filter(
-          (m) =>
-            normalizeRole(m.sender) !== normalizeRole(qaPostingRole) &&
-            !m.readBy?.includes(normalizeRole(qaPostingRole)),
-        ).length;
-        const isCollapsed = qaCollapsed.has(tp.qNum);
-
-        return `
-        <div class="qa-question-block" id="qa-topic-${tp.qNum}">
-          <div class="qa-question-header">
-            <div class="qa-q-left">
-              <span class="qa-qnum">\ud83d\udcac</span>
-              <span class="qa-qtext">${tp.title}</span>
-            </div>
-            <div class="qa-q-right">
-              <span class="qa-msg-count">${msgCount > 0 ? `\ud83d\udcac ${msgCount} ${t("qaMessages")}${unreadCount > 0 ? ` (${unreadCount} ${t("qaUnread")})` : ""}` : ""}</span>
-              ${msgCount > 0 ? `<button class="qa-archive-btn" onclick="window._archiveQaMessages(${tp.qNum})" title="${t("qaArchive")}">\ud83d\udce6</button>` : ""}
-              <button class="qa-archive-btn" onclick="window._deleteQaTopic(${tp.qNum})" title="${t("qaDeleteTopic")}">\ud83d\uddd1\ufe0f</button>
-              <button class="qa-collapse-btn" data-qatoggle="${tp.qNum}">${isCollapsed ? t("qaExpand") : t("qaCollapse")}</button>
-            </div>
-          </div>
-          <div class="qa-thread-wrap${isCollapsed ? " collapsed" : ""}" id="qa-wrap-${tp.qNum}">
-            <div class="qa-thread" id="qa-thread-${tp.qNum}"></div>
-            <div class="qa-compose">
-              <textarea
-                id="qa-input-${tp.qNum}"
-                class="qa-compose-input"
-                rows="2"
-                placeholder="${t("qaAnswerPlaceholder")}"
-              ></textarea>
-              ${composeActionsHtml(tp.qNum)}
-            </div>
-          </div>
-        </div>`;
-      })
-      .join("");
-
-    customSectionHtml = `
-      <div class="qa-section">
-        <div class="qa-section-header">
-          <h3 class="qa-section-title">\ud83d\udcac ${t("qaCustomTopics")}</h3>
-        </div>
-        ${customHtml}
-      </div>`;
+  // Apply workstream filter
+  if (mbWorkstreamFilter !== "all") {
+    threads = threads.filter((th) => th.workstream === mbWorkstreamFilter);
   }
 
-  body.innerHTML =
-    customSectionHtml +
-    QA_SECTIONS.map((sec) => {
-      const questionsHtml = sec.questions
-        .map((q) => {
-          const qMsgs = allMsgs.filter((m) => m.qNum === q.num);
-          const msgCount = qMsgs.length;
-          const unreadCount = qMsgs.filter(
-            (m) =>
-              normalizeRole(m.sender) !== normalizeRole(qaPostingRole) &&
-              !m.readBy?.includes(normalizeRole(qaPostingRole)),
-          ).length;
-          const isCollapsed = qaCollapsed.has(q.num);
+  // Apply view filter
+  switch (mbActiveView) {
+    case "my-items":
+      threads = threads.filter(
+        (th) => th.owner === myRole || th.assignee === myRole,
+      );
+      break;
+    case "decisions": {
+      const decisionThreadIds = new Set(
+        loadMBDecisions()
+          .filter((d) => d.status === "active")
+          .map((d) => d.threadId),
+      );
+      threads = threads.filter((th) => decisionThreadIds.has(th.id));
+      break;
+    }
+    case "executive":
+      threads = threads.filter(
+        (th) =>
+          th.priority !== "normal" ||
+          th.intent === "decide" ||
+          th.lifecycle === "resolved",
+      );
+      break;
+  }
 
-          const whyHtml = q.why
-            ? `<div class="qa-why"><span class="qa-why-label">[${t("qaWhy")}]</span> ${localizedText(q.why)}</div>`
-            : "";
+  // Sort: escalated > urgent > normal, then by most recent message
+  threads.sort((a, b) => {
+    const prio = { escalated: 0, urgent: 1, normal: 2 };
+    const pa = prio[a.priority] ?? 2;
+    const pb = prio[b.priority] ?? 2;
+    if (pa !== pb) return pa - pb;
+    const aMsgs = _qaCache.filter((m) => m.qNum === a.id);
+    const bMsgs = _qaCache.filter((m) => m.qNum === b.id);
+    const aLast =
+      aMsgs.length > 0 ? aMsgs[aMsgs.length - 1].timestamp : a.createdAt;
+    const bLast =
+      bMsgs.length > 0 ? bMsgs[bMsgs.length - 1].timestamp : b.createdAt;
+    return bLast.localeCompare(aLast);
+  });
 
-          const fuHtml =
-            q.followUps && q.followUps.length > 0
-              ? `<div class="qa-followups"><span class="qa-fu-label">${t("qaFollowUps")}:</span><ul>${q.followUps.map((fu) => `<li>${localizedText(fu)}</li>`).join("")}</ul></div>`
-              : "";
-
-          return `
-        <div class="qa-question-block">
-          <div class="qa-question-header">
-            <div class="qa-q-left">
-              <span class="qa-qnum">Q${q.num}.</span>
-              <span class="qa-qtext">${localizedText(q.question)}</span>
-            </div>
-            <div class="qa-q-right">
-              <span class="qa-msg-count">${msgCount > 0 ? `\ud83d\udcac ${msgCount} ${t("qaMessages")}${unreadCount > 0 ? ` (${unreadCount} ${t("qaUnread")})` : ""}` : ""}</span>
-              ${msgCount > 0 ? `<button class="qa-archive-btn" onclick="window._archiveQaMessages(${q.num})" title="${t("qaArchive")}">\ud83d\udce6</button>` : ""}
-              <button class="qa-collapse-btn" data-qatoggle="${q.num}">${isCollapsed ? t("qaExpand") : t("qaCollapse")}</button>
-            </div>
-          </div>
-          ${whyHtml}
-          ${fuHtml}
-          <div class="qa-thread-wrap${isCollapsed ? " collapsed" : ""}" id="qa-wrap-${q.num}">
-            <div class="qa-thread" id="qa-thread-${q.num}"></div>
-            <div class="qa-compose">
-              <textarea
-                id="qa-input-${q.num}"
-                class="qa-compose-input"
-                rows="2"
-                placeholder="${t("qaAnswerPlaceholder")}"
-              ></textarea>
-              ${composeActionsHtml(q.num)}
-            </div>
-          </div>
-        </div>`;
-        })
-        .join("");
-
-      return `
-      <div class="qa-section">
-        <div class="qa-section-header">
-          <h3 class="qa-section-title">Section ${sec.num}: ${localizedText(sec.title)}</h3>
-        </div>
-        <p class="qa-section-context">${localizedText(sec.context)}</p>
-        ${questionsHtml}
-      </div>`;
-    }).join("");
+  if (threads.length === 0) {
+    body.innerHTML = `<div class="mb-empty">${t("mbNoThreads")}</div>`;
+  } else {
+    body.innerHTML = threads.map(threadCardHtml).join("");
+  }
 
   // Render all threads
-  QA_SECTIONS.forEach((sec) =>
-    sec.questions.forEach((q) => renderQaThread(q.num)),
-  );
-  customTopics.forEach((tp) => renderQaThread(tp.qNum));
-
-  // Update unread badge on tab
+  threads.forEach((th) => renderQaThread(th.id));
   updateQaUnreadBadge();
 
   // Wire export button
   const exportBtn = document.getElementById("qaExportBtn");
-  if (exportBtn) {
-    exportBtn.onclick = exportQaThread;
-  }
+  if (exportBtn) exportBtn.onclick = exportQaThread;
 
-  // Wire collapse/expand buttons
+  // Wire collapse/expand
   body.addEventListener("click", (e) => {
     const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(
       "[data-qatoggle]",
     );
     if (!btn) return;
-    const qNum = Number(btn.dataset.qatoggle);
-    if (qaCollapsed.has(qNum)) {
-      qaCollapsed.delete(qNum);
-    } else {
-      qaCollapsed.add(qNum);
-    }
-    const wrap = document.getElementById(`qa-wrap-${qNum}`);
+    const id = Number(btn.dataset.qatoggle);
+    if (qaCollapsed.has(id)) qaCollapsed.delete(id);
+    else qaCollapsed.add(id);
+    const wrap = document.getElementById(`qa-wrap-${id}`);
     if (wrap) wrap.classList.toggle("collapsed");
-    btn.textContent = qaCollapsed.has(qNum) ? t("qaExpand") : t("qaCollapse");
+    btn.textContent = qaCollapsed.has(id) ? t("qaExpand") : t("qaCollapse");
   });
 
-  // Wire role picker buttons
+  // Wire role picker
   const toolbar = document.getElementById("qaToolbar");
   if (toolbar) {
     toolbar.addEventListener("click", (e) => {
@@ -3955,13 +4123,52 @@ function renderQaSheet(): void {
         .querySelectorAll(".qa-role-btn")
         .forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
-      // Re-render everything with updated posting role
       renderQaSheet();
       updateQaUnreadBadge();
     });
   }
+
+  // Wire view switcher
+  const views = document.getElementById("mbViews");
+  if (views) {
+    views.addEventListener("click", (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(
+        "[data-mbview]",
+      );
+      if (!btn) return;
+      mbActiveView = btn.dataset.mbview as MBView;
+      views
+        .querySelectorAll(".mb-view-btn")
+        .forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderQaSheet();
+    });
+  }
+
+  // Wire filters
+  const wsFilter = document.getElementById(
+    "mbWorkstreamFilter",
+  ) as HTMLSelectElement;
+  if (wsFilter) {
+    wsFilter.value = mbWorkstreamFilter;
+    wsFilter.onchange = () => {
+      mbWorkstreamFilter = wsFilter.value as MBWorkstream | "all";
+      renderQaSheet();
+    };
+  }
+  const lcFilter = document.getElementById(
+    "mbLifecycleFilter",
+  ) as HTMLSelectElement;
+  if (lcFilter) {
+    lcFilter.value = mbLifecycleFilter;
+    lcFilter.onchange = () => {
+      mbLifecycleFilter = lcFilter.value as "open" | "all" | "resolved";
+      renderQaSheet();
+    };
+  }
 }
 
+// ── Archive ───────────────────────────────────
 const QA_ARCHIVE_KEY = "ctower_qa_archive";
 
 function loadQaArchive(): Array<{ archivedAt: string; messages: QAMessage[] }> {
@@ -3973,58 +4180,18 @@ function loadQaArchive(): Array<{ archivedAt: string; messages: QAMessage[] }> {
   }
 }
 
-function archiveQaMessages(qNum: number): void {
-  const allMsgs = _qaCache;
-  const threadMsgs = allMsgs.filter((m) => m.qNum === qNum);
+function archiveQaMessages(threadId: number): void {
+  const threadMsgs = _qaCache.filter((m) => m.qNum === threadId);
   if (threadMsgs.length === 0) return;
   if (!confirm(t("qaArchiveConfirm"))) return;
 
-  // Find question text for export
-  let qText = `Q${qNum}`;
-  for (const sec of QA_SECTIONS) {
-    const q = sec.questions.find((qq) => qq.num === qNum);
-    if (q) {
-      qText = `Q${qNum}. ${localizedText(q.question)}`;
-      break;
-    }
-  }
-
-  // Export as file
-  const lines: string[] = [
-    "ICU Respiratory Digital Twin \u2014 Message Board Archive",
-    `Archived: ${new Date().toISOString().split("T")[0]}`,
-    qText,
-    `Messages: ${threadMsgs.length}`,
-    "=".repeat(60),
-    "",
-  ];
-  threadMsgs.forEach((m) => {
-    const sender = m.sender === "pmp" ? "PMP" : "Dr. Dai";
-    const read = m.readBy?.length ? ` [Read by: ${m.readBy.join(", ")}]` : "";
-    lines.push(`[${sender} | ${formatMsgTime(m.timestamp)}]${read} ${m.text}`);
-  });
-
-  const blob = new Blob([lines.join("\n")], { type: "text/plain" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `MB_Q${qNum}_Archive_${new Date().toISOString().split("T")[0]}.txt`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-
-  // Save to archive storage
   const archive = loadQaArchive();
   archive.push({ archivedAt: new Date().toISOString(), messages: threadMsgs });
   localStorage.setItem(QA_ARCHIVE_KEY, JSON.stringify(archive));
 
-  // Remove archived messages from active storage
-  const remaining = allMsgs.filter((m) => m.qNum !== qNum);
-  _qaCache.length = 0;
-  remaining.forEach((m) => _qaCache.push(m));
+  _qaCache = _qaCache.filter((m) => m.qNum !== threadId);
   saveQaMessagesLocal(_qaCache);
-  if (isOnline()) deleteMessages(qNum);
+  if (isOnline()) deleteMessages(threadId);
   renderQaSheet();
   showQaSaveStatus();
 }
@@ -4037,7 +4204,6 @@ function viewQaArchive(): void {
     body.innerHTML = `<div class="qa-archive-empty">${t("qaNoArchives")}</div>`;
     return;
   }
-
   body.innerHTML = `
     <div class="qa-archive-header">
       <h3>${t("qaArchiveTitle")}</h3>
@@ -4045,14 +4211,11 @@ function viewQaArchive(): void {
     </div>
     ${archive
       .map((entry, idx) => {
-        const date = new Date(entry.archivedAt);
-        const dateStr = date.toLocaleDateString(undefined, {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        });
-        return `
-      <div class="qa-archive-entry">
+        const dateStr = new Date(entry.archivedAt).toLocaleDateString(
+          undefined,
+          { year: "numeric", month: "short", day: "numeric" },
+        );
+        return `<div class="qa-archive-entry">
         <div class="qa-archive-entry-header">
           <span class="qa-archive-date">📦 ${dateStr} — ${entry.messages.length} ${t("qaMessages")}</span>
           <button class="doc-remove-btn" onclick="window._deleteQaArchive(${idx})" title="${t("docLibRemove")}">✕</button>
@@ -4060,23 +4223,21 @@ function viewQaArchive(): void {
         <div class="qa-archive-messages">
           ${entry.messages
             .slice(0, 5)
-            .map((m) => {
-              const sender = m.sender === "pmp" ? t("qaPmp") : t("qaInventor");
-              return `<div class="qa-archive-msg">Q${m.qNum} · ${sender}: ${m.text.length > 80 ? m.text.slice(0, 80) + "…" : m.text}</div>`;
-            })
+            .map(
+              (m) =>
+                `<div class="qa-archive-msg">T${m.qNum} · ${qaRoleLabel(m.sender)}: ${m.text.length > 80 ? m.text.slice(0, 80) + "…" : m.text}</div>`,
+            )
             .join("")}
           ${entry.messages.length > 5 ? `<div class="qa-archive-more">+ ${entry.messages.length - 5} ${t("qaMessages")}…</div>` : ""}
         </div>
       </div>`;
       })
-      .join("")}
-  `;
+      .join("")}`;
 }
 
 function closeQaArchive(): void {
   renderQaSheet();
 }
-
 function deleteQaArchive(idx: number): void {
   if (!confirm(t("qaArchiveDeleteConfirm"))) return;
   const archive = loadQaArchive();
@@ -4085,13 +4246,12 @@ function deleteQaArchive(idx: number): void {
   viewQaArchive();
 }
 
-// ── Unread badge on Message Board tab button ──────────────
+// ── Unread badge ──────────────────────────────
 function updateQaUnreadBadge(): void {
   const tabBtn = document.querySelector('.tab-btn[data-tab="qa-sheet"]');
   if (!tabBtn) return;
-  const msgs = _qaCache;
   const myRole = normalizeRole(qaPostingRole);
-  const unread = msgs.filter(
+  const unread = _qaCache.filter(
     (m) => normalizeRole(m.sender) !== myRole && !m.readBy?.includes(myRole),
   ).length;
   let badge = tabBtn.querySelector(".qa-tab-badge") as HTMLElement | null;
@@ -4107,46 +4267,36 @@ function updateQaUnreadBadge(): void {
   }
 }
 
-// ── Cross-tab sync via StorageEvent (offline fallback) ───
+// ── Cross-tab sync ────────────────────────────
 window.addEventListener("storage", (e: StorageEvent) => {
   if (e.key !== QA_STORAGE_KEY) return;
-  // Update cache from localStorage changed in another tab
   const newMsgs: QAMessage[] = e.newValue ? JSON.parse(e.newValue) : [];
   _qaCache = newMsgs;
   const panel = document.getElementById("panel-qa-sheet");
-  if (
-    panel &&
-    !panel.classList.contains("hidden") &&
-    panel.style.display !== "none"
-  ) {
-    QA_SECTIONS.forEach((sec) =>
-      sec.questions.forEach((q) => renderQaThread(q.num)),
-    );
+  if (panel && panel.style.display !== "none") {
+    loadMBThreads().forEach((th) => renderQaThread(th.id));
   }
   updateQaUnreadBadge();
   const oldMsgs: QAMessage[] = e.oldValue ? JSON.parse(e.oldValue) : [];
   if (newMsgs.length > oldMsgs.length) {
     const latest = newMsgs[newMsgs.length - 1];
-    if (latest.sender !== normalizeRole(qaPostingRole)) {
+    if (latest.sender !== normalizeRole(qaPostingRole))
       showQaNotification(latest);
-    }
   }
 });
 
-// ── Toast notification for incoming messages ─────────────
+// ── Toast notifications ───────────────────────
 function showQaNotification(msg: QAMessage): void {
   const senderLabel = qaRoleLabel(msg.sender);
   const icon = qaRoleIcon(msg.sender);
   const preview = msg.text.length > 60 ? msg.text.slice(0, 60) + "…" : msg.text;
-
   const toast = document.createElement("div");
   toast.className = "qa-toast";
   toast.innerHTML = `
-    <div class="qa-toast-header">${icon} ${senderLabel} — Q${msg.qNum}</div>
+    <div class="qa-toast-header">${icon} ${senderLabel} — T${msg.qNum}</div>
     <div class="qa-toast-body">${preview.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
   `;
   document.body.appendChild(toast);
-  // Trigger animation
   requestAnimationFrame(() => toast.classList.add("qa-toast-show"));
   setTimeout(() => {
     toast.classList.remove("qa-toast-show");
@@ -4154,12 +4304,11 @@ function showQaNotification(msg: QAMessage): void {
   }, 4000);
 }
 
-// ── Auto-mark messages read when thread is visible ──────
+// ── Auto-mark read ────────────────────────────
 function autoMarkVisibleAsRead(): void {
-  const msgs = _qaCache;
   const myRole = normalizeRole(qaPostingRole);
   let changed = false;
-  msgs.forEach((m) => {
+  _qaCache.forEach((m) => {
     if (normalizeRole(m.sender) !== myRole && !m.readBy?.includes(myRole)) {
       const threadEl = document.getElementById(`qa-thread-${m.qNum}`);
       if (threadEl && threadEl.offsetParent !== null) {
@@ -4176,43 +4325,223 @@ function autoMarkVisibleAsRead(): void {
   }
 }
 
-function createQaTopic(): void {
-  const title = prompt(t("qaNewTopicPlaceholder"));
+// ── Thread CRUD ───────────────────────────────
+function mbCreateThread(): void {
+  const title = prompt(t("mbNewThreadTitle"));
   if (!title || !title.trim()) return;
-  const topics = loadCustomTopics();
-  // Assign qNum starting at 1000 to avoid collisions with predefined questions
-  const maxQ = topics.reduce((mx, tp) => Math.max(mx, tp.qNum), 999);
-  const qNum = maxQ + 1;
-  topics.push({
-    qNum,
+
+  const wsOptions: MBWorkstream[] = [
+    "project",
+    "regulatory",
+    "engineering",
+    "clinical",
+    "business",
+    "operations",
+  ];
+  const wsChoice = prompt(
+    `${t("mbWorkstream")} (${wsOptions.join(", ")})`,
+    "project",
+  );
+  const workstream: MBWorkstream = wsOptions.includes(wsChoice as MBWorkstream)
+    ? (wsChoice as MBWorkstream)
+    : "project";
+
+  const intentOptions: MBMessageIntent[] = ["inform", "decide", "act"];
+  const intentChoice = prompt(
+    `${t("mbIntent")} (${intentOptions.join(", ")})`,
+    "inform",
+  );
+  const intent: MBMessageIntent = intentOptions.includes(
+    intentChoice as MBMessageIntent,
+  )
+    ? (intentChoice as MBMessageIntent)
+    : "inform";
+
+  const objective = prompt(t("mbObjective")) || "";
+
+  const priorityOptions: MBPriority[] = ["normal", "urgent", "escalated"];
+  const prioChoice = prompt(
+    `${t("mbPriorityLabel")} (${priorityOptions.join(", ")})`,
+    "normal",
+  );
+  const priority: MBPriority = priorityOptions.includes(
+    prioChoice as MBPriority,
+  )
+    ? (prioChoice as MBPriority)
+    : "normal";
+
+  const threads = loadMBThreads();
+  const maxId = threads.reduce((mx, th) => Math.max(mx, th.id), 999);
+  const id = maxId + 1;
+
+  const thread: MBThread = {
+    id,
     title: title.trim(),
+    workstream,
+    intent,
+    owner: normalizeRole(qaPostingRole),
+    objective,
+    lifecycle: "open",
+    priority,
+    linkedItems: [],
     createdAt: new Date().toISOString(),
-  });
-  saveCustomTopics(topics);
-  logAudit("qa-topic", String(qNum), "create", "", title.trim(), "");
+  };
+  threads.push(thread);
+  saveMBThreads(threads);
+  logAudit(
+    "qa-topic",
+    String(id),
+    "create",
+    "",
+    title.trim(),
+    `Thread created: ${workstream}/${intent}`,
+  );
   renderQaSheet();
-  // Auto-scroll to the newly created topic
   setTimeout(() => {
-    const el = document.getElementById(`qa-topic-${qNum}`);
+    const el = document.getElementById(`qa-topic-${id}`);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   }, 100);
 }
 
-function deleteQaTopic(qNum: number): void {
-  if (!confirm(t("qaDeleteTopicConfirm"))) return;
-  let topics = loadCustomTopics();
-  const topic = topics.find((tp) => tp.qNum === qNum);
-  topics = topics.filter((tp) => tp.qNum !== qNum);
-  saveCustomTopics(topics);
-  // Remove associated messages from cache
-  _qaCache = _qaCache.filter((m) => m.qNum !== qNum);
-  saveQaMessagesLocal(_qaCache);
-  if (isOnline()) deleteMessages(qNum);
-  logAudit("qa-topic", String(qNum), "delete", topic?.title ?? "", "", "");
+function mbResolveThread(threadId: number): void {
+  const summary = prompt(t("mbResolutionPrompt"));
+  if (summary === null) return;
+  const threads = loadMBThreads();
+  const thread = threads.find((th) => th.id === threadId);
+  if (!thread) return;
+  thread.lifecycle = "resolved";
+  thread.resolvedAt = new Date().toISOString();
+  thread.resolutionSummary = summary || "Resolved";
+  saveMBThreads(threads);
+  logAudit(
+    "qa-topic",
+    String(threadId),
+    "resolve",
+    "open",
+    "resolved",
+    summary || "",
+  );
   renderQaSheet();
 }
 
-// Expose Q&A functions globally
+function mbReopenThread(threadId: number): void {
+  const threads = loadMBThreads();
+  const thread = threads.find((th) => th.id === threadId);
+  if (!thread) return;
+  thread.lifecycle = "open";
+  thread.resolvedAt = undefined;
+  thread.resolutionSummary = undefined;
+  saveMBThreads(threads);
+  logAudit("qa-topic", String(threadId), "reopen", "resolved", "open", "");
+  renderQaSheet();
+}
+
+function mbDeleteThread(threadId: number): void {
+  if (!confirm(t("mbDeleteConfirm"))) return;
+  let threads = loadMBThreads();
+  const thread = threads.find((th) => th.id === threadId);
+  threads = threads.filter((th) => th.id !== threadId);
+  saveMBThreads(threads);
+  // Remove decisions
+  let decisions = loadMBDecisions();
+  decisions = decisions.filter((d) => d.threadId !== threadId);
+  saveMBDecisions(decisions);
+  // Remove messages
+  _qaCache = _qaCache.filter((m) => m.qNum !== threadId);
+  saveQaMessagesLocal(_qaCache);
+  if (isOnline()) deleteMessages(threadId);
+  logAudit("qa-topic", String(threadId), "delete", thread?.title ?? "", "", "");
+  renderQaSheet();
+}
+
+function mbLogDecision(threadId: number): void {
+  const text = prompt(t("mbDecisionText"));
+  if (!text || !text.trim()) return;
+  const rationale = prompt(t("mbDecisionRationale")) || "";
+  const decisions = loadMBDecisions();
+  const decision: MBDecision = {
+    id: `dec-${Date.now()}`,
+    threadId,
+    text: text.trim(),
+    rationale,
+    madeBy: normalizeRole(qaPostingRole),
+    date: new Date().toISOString(),
+    linkedItems: [],
+    status: "active",
+  };
+  decisions.push(decision);
+  saveMBDecisions(decisions);
+  logAudit(
+    "qa-topic",
+    String(threadId),
+    "decision",
+    "",
+    text.trim(),
+    rationale,
+  );
+  renderQaSheet();
+}
+
+function mbCreateAction(threadId: number): void {
+  const threads = loadMBThreads();
+  const thread = threads.find((th) => th.id === threadId);
+  if (!thread) return;
+
+  const roles = ["pmp", "technology", "business", "accounting"];
+  const assignee = prompt(`${t("mbAssignee")} (${roles.join(", ")})`, "pmp");
+  if (!assignee) return;
+  const dueDate = prompt(
+    t("mbDueDate"),
+    new Date(Date.now() + 7 * 86400000).toISOString().split("T")[0],
+  );
+
+  thread.assignee = normalizeRole(assignee);
+  thread.dueDate = dueDate || undefined;
+  thread.intent = "act";
+  saveMBThreads(threads);
+  logAudit("qa-topic", String(threadId), "assign", "", assignee, dueDate || "");
+  renderQaSheet();
+}
+
+function mbToggleActionStatus(threadId: number): void {
+  const threads = loadMBThreads();
+  const thread = threads.find((th) => th.id === threadId);
+  if (!thread) return;
+  // Cycle through action states via resolve/reopen
+  if (thread.lifecycle === "open") {
+    mbResolveThread(threadId);
+  } else {
+    mbReopenThread(threadId);
+  }
+}
+
+function mbLinkItem(threadId: number): void {
+  const threads = loadMBThreads();
+  const thread = threads.find((th) => th.id === threadId);
+  if (!thread) return;
+
+  const types = ["milestone", "risk", "gate", "document", "standard", "task"];
+  const type = prompt(`${t("mbLinkType")} (${types.join(", ")})`, "milestone");
+  if (!type || !types.includes(type)) return;
+  const id = prompt(t("mbLinkId"));
+  if (!id) return;
+  const label = prompt(t("mbLinkLabel")) || id;
+
+  thread.linkedItems.push({ type: type as MBLinkedItem["type"], id, label });
+  saveMBThreads(threads);
+  logAudit("qa-topic", String(threadId), "link", "", `${type}:${id}`, label);
+  renderQaSheet();
+}
+
+// Legacy compat
+function createQaTopic(): void {
+  mbCreateThread();
+}
+function deleteQaTopic(threadId: number): void {
+  mbDeleteThread(threadId);
+}
+
+// ── Expose globals ────────────────────────────
 (window as any)._sendQaMessage = sendQaMessage;
 (window as any)._exportQaThread = exportQaThread;
 (window as any)._openQaSettings = openQaSettings;
@@ -4229,25 +4558,37 @@ function deleteQaTopic(qNum: number): void {
   qaTestMode = checked;
   renderQaSheet();
 };
+(window as any)._mbCreateThread = mbCreateThread;
+(window as any)._mbResolveThread = mbResolveThread;
+(window as any)._mbReopenThread = mbReopenThread;
+(window as any)._mbDeleteThread = mbDeleteThread;
+(window as any)._mbSetView = function (view: string): void {
+  mbActiveView = view as MBView;
+  renderQaSheet();
+};
+(window as any)._mbSetWorkstreamFilter = function (ws: string): void {
+  mbWorkstreamFilter = ws as MBWorkstream | "all";
+  renderQaSheet();
+};
+(window as any)._mbLogDecision = mbLogDecision;
+(window as any)._mbCreateAction = mbCreateAction;
+(window as any)._mbToggleActionStatus = mbToggleActionStatus;
+(window as any)._mbLinkItem = mbLinkItem;
 
 // ── Supabase Realtime Subscription ────────────────────
 function setupRealtimeMessages(): void {
   subscribeMessages(
-    // On INSERT: a new message arrived from another device/user
     (dbMsg) => {
       const msg = dbToQa(dbMsg);
-      // Avoid duplicates (optimistic local message already in cache)
       if (!_qaCache.some((m) => m.id === msg.id)) {
         _qaCache.push(msg);
         saveQaMessagesLocal(_qaCache);
         renderQaThread(msg.qNum);
         updateQaUnreadBadge();
-        if (normalizeRole(msg.sender) !== normalizeRole(qaPostingRole)) {
+        if (normalizeRole(msg.sender) !== normalizeRole(qaPostingRole))
           showQaNotification(msg);
-        }
       }
     },
-    // On UPDATE: read receipt updated from another device
     (dbMsg) => {
       const idx = _qaCache.findIndex((m) => m.id === dbMsg.id);
       if (idx !== -1) {
@@ -4268,9 +4609,7 @@ window.addEventListener("online", async () => {
   saveQaMessagesLocal(_qaCache);
   const panel = document.getElementById("panel-qa-sheet");
   if (panel && panel.style.display !== "none") {
-    QA_SECTIONS.forEach((sec) =>
-      sec.questions.forEach((q) => renderQaThread(q.num)),
-    );
+    loadMBThreads().forEach((th) => renderQaThread(th.id));
   }
   updateQaUnreadBadge();
 });
