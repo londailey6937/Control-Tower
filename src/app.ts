@@ -1697,7 +1697,12 @@ function initRoleSwitcher(): void {
       "margin-left:12px;padding:4px 12px;border-radius:6px;border:1px solid #475569;" +
       "background:#1e293b;color:#94a3b8;font-size:0.78rem;cursor:pointer;";
     btn.addEventListener("click", () => {
-      if (!confirm("Start a new project? This will clear all current project data.")) return;
+      if (
+        !confirm(
+          "Start a new project? This will clear all current project data.",
+        )
+      )
+        return;
       clearProjectData();
       location.reload();
     });
@@ -4129,10 +4134,16 @@ function renderFdaComms(): void {
 
   // DHF doc completion stats
   const dhfTotal = DHF_DOCUMENTS.length;
-  const dhfApproved = DHF_DOCUMENTS.filter((d) => d.status === "approved").length;
-  const dhfInReview = DHF_DOCUMENTS.filter((d) => d.status === "in-review").length;
+  const dhfApproved = DHF_DOCUMENTS.filter(
+    (d) => d.status === "approved",
+  ).length;
+  const dhfInReview = DHF_DOCUMENTS.filter(
+    (d) => d.status === "in-review",
+  ).length;
   const dhfDraft = DHF_DOCUMENTS.filter((d) => d.status === "draft").length;
-  const dhfNotStarted = DHF_DOCUMENTS.filter((d) => d.status === "not-started").length;
+  const dhfNotStarted = DHF_DOCUMENTS.filter(
+    (d) => d.status === "not-started",
+  ).length;
   const dhfPct = dhfTotal > 0 ? Math.round((dhfApproved / dhfTotal) * 100) : 0;
 
   // Gate status
@@ -4148,34 +4159,162 @@ function renderFdaComms(): void {
 
   // ── RTA Checklist ────────────────────────────
   const rtaItems = [
-    { key: "cover", en: "510(k) Cover Letter (FDA Form 3514)", cn: "510(k)附信 (FDA表格3514)", check: () => true },
-    { key: "indications", en: "Indications for Use Statement", cn: "适用范围声明", check: () => DHF_DOCUMENTS.some((d) => d.code === "DHF-DD" && d.status !== "not-started") },
-    { key: "truthful", en: "Truthful & Accuracy Statement", cn: "真实与准确性声明", check: () => true },
-    { key: "class3", en: "Class III Summary / Certification (if applicable)", cn: "III类摘要/认证（如适用）", check: () => pSub.includes("pma") },
-    { key: "summary", en: "510(k) Summary or 510(k) Statement", cn: "510(k)摘要或510(k)声明", check: () => DHF_DOCUMENTS.some((d) => d.code === "DHF-CL" && d.status !== "not-started") },
-    { key: "predicate", en: "Predicate Device Comparison", cn: "前置器械对比", check: () => DHF_DOCUMENTS.some((d) => d.code === "DHF-DD" && d.status === "approved") },
-    { key: "standards", en: "Standards Data (Declarations of Conformity)", cn: "标准数据（合格声明）", check: () => stdComplete === stdTotal && stdTotal > 0 },
-    { key: "labels", en: "Labeling (21 CFR 801)", cn: "标签 (21 CFR 801)", check: () => DHF_DOCUMENTS.some((d) => d.code === "DHF-LBL" && d.status === "approved") },
-    { key: "biocompat", en: "Biocompatibility (if applicable)", cn: "生物相容性（如适用）", check: () => DHF_DOCUMENTS.some((d) => d.code === "DHF-BIO" && d.status !== "not-started") },
-    { key: "software", en: "Software Documentation (IEC 62304)", cn: "软件文档 (IEC 62304)", check: () => DHF_DOCUMENTS.some((d) => d.code === "DHF-SW" && d.status === "approved") },
-    { key: "emc", en: "EMC / Electrical Safety (IEC 60601-1-2)", cn: "EMC / 电气安全 (IEC 60601-1-2)", check: () => DHF_DOCUMENTS.some((d) => d.code === "DHF-EMC" && d.status === "approved") },
-    { key: "sterility", en: "Sterilization (if applicable)", cn: "灭菌（如适用）", check: () => true },
-    { key: "risk", en: "Risk Analysis (ISO 14971)", cn: "风险分析 (ISO 14971)", check: () => DHF_DOCUMENTS.some((d) => d.code === "DHF-RA" && d.status === "approved") },
-    { key: "performance", en: "Performance Testing — Bench / Clinical", cn: "性能测试——台架/临床", check: () => DHF_DOCUMENTS.some((d) => d.code === "DHF-DV" && d.status === "approved") },
+    {
+      key: "cover",
+      en: "510(k) Cover Letter (FDA Form 3514)",
+      cn: "510(k)附信 (FDA表格3514)",
+      check: () => true,
+    },
+    {
+      key: "indications",
+      en: "Indications for Use Statement",
+      cn: "适用范围声明",
+      check: () =>
+        DHF_DOCUMENTS.some(
+          (d) => d.code === "DHF-DD" && d.status !== "not-started",
+        ),
+    },
+    {
+      key: "truthful",
+      en: "Truthful & Accuracy Statement",
+      cn: "真实与准确性声明",
+      check: () => true,
+    },
+    {
+      key: "class3",
+      en: "Class III Summary / Certification (if applicable)",
+      cn: "III类摘要/认证（如适用）",
+      check: () => pSub.includes("pma"),
+    },
+    {
+      key: "summary",
+      en: "510(k) Summary or 510(k) Statement",
+      cn: "510(k)摘要或510(k)声明",
+      check: () =>
+        DHF_DOCUMENTS.some(
+          (d) => d.code === "DHF-CL" && d.status !== "not-started",
+        ),
+    },
+    {
+      key: "predicate",
+      en: "Predicate Device Comparison",
+      cn: "前置器械对比",
+      check: () =>
+        DHF_DOCUMENTS.some(
+          (d) => d.code === "DHF-DD" && d.status === "approved",
+        ),
+    },
+    {
+      key: "standards",
+      en: "Standards Data (Declarations of Conformity)",
+      cn: "标准数据（合格声明）",
+      check: () => stdComplete === stdTotal && stdTotal > 0,
+    },
+    {
+      key: "labels",
+      en: "Labeling (21 CFR 801)",
+      cn: "标签 (21 CFR 801)",
+      check: () =>
+        DHF_DOCUMENTS.some(
+          (d) => d.code === "DHF-LBL" && d.status === "approved",
+        ),
+    },
+    {
+      key: "biocompat",
+      en: "Biocompatibility (if applicable)",
+      cn: "生物相容性（如适用）",
+      check: () =>
+        DHF_DOCUMENTS.some(
+          (d) => d.code === "DHF-BIO" && d.status !== "not-started",
+        ),
+    },
+    {
+      key: "software",
+      en: "Software Documentation (IEC 62304)",
+      cn: "软件文档 (IEC 62304)",
+      check: () =>
+        DHF_DOCUMENTS.some(
+          (d) => d.code === "DHF-SW" && d.status === "approved",
+        ),
+    },
+    {
+      key: "emc",
+      en: "EMC / Electrical Safety (IEC 60601-1-2)",
+      cn: "EMC / 电气安全 (IEC 60601-1-2)",
+      check: () =>
+        DHF_DOCUMENTS.some(
+          (d) => d.code === "DHF-EMC" && d.status === "approved",
+        ),
+    },
+    {
+      key: "sterility",
+      en: "Sterilization (if applicable)",
+      cn: "灭菌（如适用）",
+      check: () => true,
+    },
+    {
+      key: "risk",
+      en: "Risk Analysis (ISO 14971)",
+      cn: "风险分析 (ISO 14971)",
+      check: () =>
+        DHF_DOCUMENTS.some(
+          (d) => d.code === "DHF-RA" && d.status === "approved",
+        ),
+    },
+    {
+      key: "performance",
+      en: "Performance Testing — Bench / Clinical",
+      cn: "性能测试——台架/临床",
+      check: () =>
+        DHF_DOCUMENTS.some(
+          (d) => d.code === "DHF-DV" && d.status === "approved",
+        ),
+    },
   ];
   const rtaPassed = rtaItems.filter((r) => r.check()).length;
   const rtaPct = Math.round((rtaPassed / rtaItems.length) * 100);
 
   // ── FDA Timeline ─────────────────────────────
-  const totalDur = Number(TIMELINE_EVENTS[TIMELINE_EVENTS.length - 1]?.month) || 12;
+  const totalDur =
+    Number(TIMELINE_EVENTS[TIMELINE_EVENTS.length - 1]?.month) || 12;
   const fdaMilestones = [
-    { month: 1, label: isCN ? "Pre-Sub会议请求" : "Pre-Sub Meeting Request", status: pMonth >= 1 ? "done" : pMonth >= 0 ? "current" : "future" },
-    { month: 2, label: isCN ? "Pre-Sub包准备" : "Pre-Sub Package Prep", status: pMonth >= 2 ? "done" : pMonth >= 1 ? "current" : "future" },
-    { month: 3, label: isCN ? "Pre-Sub提交给FDA" : "Pre-Sub Filed to FDA", status: pMonth >= 3 ? "done" : pMonth >= 2 ? "current" : "future" },
-    { month: 4, label: isCN ? "FDA反馈（75天窗口开启）" : "FDA Feedback (75-Day Window Opens)", status: pMonth >= 4 ? "done" : pMonth >= 3 ? "current" : "future" },
-    { month: Math.round(totalDur * 0.6), label: isCN ? "510(k)准备完成" : "510(k) Preparation Complete", status: pMonth >= Math.round(totalDur * 0.6) ? "done" : "future" },
-    { month: Math.round(totalDur * 0.8), label: isCN ? "510(k)提交" : "510(k) Submission", status: pMonth >= Math.round(totalDur * 0.8) ? "done" : "future" },
-    { month: totalDur, label: isCN ? "预期FDA决定" : "Expected FDA Decision", status: pMonth >= totalDur ? "done" : "future" },
+    {
+      month: 1,
+      label: isCN ? "Pre-Sub会议请求" : "Pre-Sub Meeting Request",
+      status: pMonth >= 1 ? "done" : pMonth >= 0 ? "current" : "future",
+    },
+    {
+      month: 2,
+      label: isCN ? "Pre-Sub包准备" : "Pre-Sub Package Prep",
+      status: pMonth >= 2 ? "done" : pMonth >= 1 ? "current" : "future",
+    },
+    {
+      month: 3,
+      label: isCN ? "Pre-Sub提交给FDA" : "Pre-Sub Filed to FDA",
+      status: pMonth >= 3 ? "done" : pMonth >= 2 ? "current" : "future",
+    },
+    {
+      month: 4,
+      label: isCN
+        ? "FDA反馈（75天窗口开启）"
+        : "FDA Feedback (75-Day Window Opens)",
+      status: pMonth >= 4 ? "done" : pMonth >= 3 ? "current" : "future",
+    },
+    {
+      month: Math.round(totalDur * 0.6),
+      label: isCN ? "510(k)准备完成" : "510(k) Preparation Complete",
+      status: pMonth >= Math.round(totalDur * 0.6) ? "done" : "future",
+    },
+    {
+      month: Math.round(totalDur * 0.8),
+      label: isCN ? "510(k)提交" : "510(k) Submission",
+      status: pMonth >= Math.round(totalDur * 0.8) ? "done" : "future",
+    },
+    {
+      month: totalDur,
+      label: isCN ? "预期FDA决定" : "Expected FDA Decision",
+      status: pMonth >= totalDur ? "done" : "future",
+    },
   ];
 
   // ── Render ───────────────────────────────────
@@ -4199,9 +4338,11 @@ function renderFdaComms(): void {
     <!-- Q-Sub Cover Letter Generator -->
     <div class="fda-card">
       <h3>📋 ${isCN ? "Q-Sub附信生成器" : "Q-Sub Cover Letter Generator"}</h3>
-      <p class="fda-card-hint">${isCN
-        ? "按照FDA Q-Sub指南自动生成Pre-Sub会议请求附信"
-        : "Auto-generate a Pre-Sub meeting request cover letter per FDA Q-Sub guidance"}</p>
+      <p class="fda-card-hint">${
+        isCN
+          ? "按照FDA Q-Sub指南自动生成Pre-Sub会议请求附信"
+          : "Auto-generate a Pre-Sub meeting request cover letter per FDA Q-Sub guidance"
+      }</p>
       <div class="fda-preview">
         <div class="fda-letter">
           <p><strong>${isCN ? "致" : "To"}:</strong> Division of Industry and Consumer Education (DICE)<br>
@@ -4212,9 +4353,11 @@ function renderFdaComms(): void {
           <p><strong>${isCN ? "主题" : "Re"}:</strong> Pre-Submission Meeting Request — ${pName}</p>
           <hr>
           <p>${isCN ? "尊敬的先生/女士：" : "Dear Sir or Madam:"}</p>
-          <p>${isCN
-            ? `${pApplicant}谨请求一次Pre-Submission会议，讨论拟提交的${pSub === "510k-standard" ? "510(k)" : pSub}申请——${pName}。`
-            : `${pApplicant} respectfully requests a Pre-Submission meeting to discuss a planned ${pSub === "510k-standard" ? "510(k)" : pSub} submission for the ${pName}.`}</p>
+          <p>${
+            isCN
+              ? `${pApplicant}谨请求一次Pre-Submission会议，讨论拟提交的${pSub === "510k-standard" ? "510(k)" : pSub}申请——${pName}。`
+              : `${pApplicant} respectfully requests a Pre-Submission meeting to discuss a planned ${pSub === "510k-standard" ? "510(k)" : pSub} submission for the ${pName}.`
+          }</p>
 
           <p><strong>${isCN ? "设备描述" : "Device Description"}:</strong> ${localizedText(PROJECT.subtitle)}</p>
           <p><strong>${isCN ? "提交类型" : "Submission Type"}:</strong> ${pSub.replace(/-/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase())}</p>
@@ -4235,36 +4378,46 @@ function renderFdaComms(): void {
     <!-- RTA Checklist -->
     <div class="fda-card">
       <h3>✅ ${isCN ? "RTA自检清单" : "Refuse-to-Accept Checklist"}</h3>
-      <p class="fda-card-hint">${isCN
-        ? "FDA的RTA清单——提交前自检。绿色 = 从DHF/标准跟踪器自动检测。"
-        : "FDA's RTA checklist — self-check before filing. Green = auto-detected from DHF/Standards trackers."}</p>
+      <p class="fda-card-hint">${
+        isCN
+          ? "FDA的RTA清单——提交前自检。绿色 = 从DHF/标准跟踪器自动检测。"
+          : "FDA's RTA checklist — self-check before filing. Green = auto-detected from DHF/Standards trackers."
+      }</p>
       <div class="fda-progress-bar"><div class="fda-progress-fill" style="width:${rtaPct}%;background:${rtaPct >= 80 ? "#22c55e" : rtaPct >= 50 ? "#f59e0b" : "#ef4444"}"></div></div>
       <div style="text-align:right;font-size:0.8rem;color:#94a3b8;margin-bottom:8px">${rtaPassed}/${rtaItems.length} ${isCN ? "已通过" : "passed"}</div>
       <div class="fda-rta-list">
-        ${rtaItems.map((r) => {
-          const passed = r.check();
-          return `<div class="fda-rta-item ${passed ? "rta-pass" : "rta-fail"}">
+        ${rtaItems
+          .map((r) => {
+            const passed = r.check();
+            return `<div class="fda-rta-item ${passed ? "rta-pass" : "rta-fail"}">
             <span class="rta-icon">${passed ? "✅" : "⬜"}</span>
             <span>${isCN ? r.cn : r.en}</span>
           </div>`;
-        }).join("")}
+          })
+          .join("")}
       </div>
     </div>
 
     <!-- FDA Interaction Timeline -->
     <div class="fda-card fda-card-wide">
       <h3>📅 ${isCN ? "FDA互动时间线" : "FDA Interaction Timeline"}</h3>
-      <p class="fda-card-hint">${isCN
-        ? "关键FDA里程碑和截止日期。Pre-Sub反馈窗口为75天。"
-        : "Key FDA milestones and deadlines. Pre-Sub feedback window is 75 calendar days."}</p>
+      <p class="fda-card-hint">${
+        isCN
+          ? "关键FDA里程碑和截止日期。Pre-Sub反馈窗口为75天。"
+          : "Key FDA milestones and deadlines. Pre-Sub feedback window is 75 calendar days."
+      }</p>
       <div class="fda-timeline">
-        ${fdaMilestones.map((m) => `<div class="fda-tl-item fda-tl-${m.status}">
+        ${fdaMilestones
+          .map(
+            (m) => `<div class="fda-tl-item fda-tl-${m.status}">
           <div class="fda-tl-dot"></div>
           <div class="fda-tl-content">
             <span class="fda-tl-month">M+${m.month}</span>
             <span class="fda-tl-label">${m.label}</span>
           </div>
-        </div>`).join("")}
+        </div>`,
+          )
+          .join("")}
       </div>
     </div>
 
@@ -4308,37 +4461,39 @@ function renderFdaComms(): void {
     URL.revokeObjectURL(url);
   });
 
-  document.getElementById("fdaExportQuestions")?.addEventListener("click", () => {
-    const questions = QA_SECTIONS.flatMap((s) =>
-      s.questions.map((q) => ({
-        section: localizedText(s.title),
-        question: localizedText(q.question),
-        why: localizedText(q.why),
-      })),
-    );
-    let html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Pre-Sub Questions — ${pName}</title>
+  document
+    .getElementById("fdaExportQuestions")
+    ?.addEventListener("click", () => {
+      const questions = QA_SECTIONS.flatMap((s) =>
+        s.questions.map((q) => ({
+          section: localizedText(s.title),
+          question: localizedText(q.question),
+          why: localizedText(q.why),
+        })),
+      );
+      let html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Pre-Sub Questions — ${pName}</title>
     <style>body{font-family:Georgia,serif;max-width:700px;margin:40px auto;padding:20px;line-height:1.7;color:#1e293b}
     h1{color:#1e40af;border-bottom:2px solid #1e40af;padding-bottom:8px}
     h2{color:#334155;margin-top:28px} .q{margin:12px 0;padding:8px 0;border-bottom:1px solid #e2e8f0}
     .q-num{color:#1e40af;font-weight:bold} .q-why{color:#64748b;font-size:0.9em;font-style:italic}</style></head><body>
     <h1>Pre-Submission Questions — ${pName}</h1>
     <p><strong>Applicant:</strong> ${pApplicant}<br><strong>Date:</strong> ${pDate || new Date().toLocaleDateString()}</p>`;
-    let n = 1;
-    questions.forEach((q) => {
-      html += `<div class="q"><span class="q-num">Q${n}.</span> ${q.question}<br><span class="q-why">Context: ${q.why}</span></div>`;
-      n++;
+      let n = 1;
+      questions.forEach((q) => {
+        html += `<div class="q"><span class="q-num">Q${n}.</span> ${q.question}<br><span class="q-why">Context: ${q.why}</span></div>`;
+        n++;
+      });
+      html += `</body></html>`;
+      const blob = new Blob([html], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `PreSub_Questions_${pName.replace(/\s+/g, "_")}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     });
-    html += `</body></html>`;
-    const blob = new Blob([html], { type: "text/html" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `PreSub_Questions_${pName.replace(/\s+/g, "_")}.html`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  });
 }
 
 // ── Main render ───────────────────────────────

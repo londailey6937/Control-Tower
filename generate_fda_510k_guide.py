@@ -385,6 +385,8 @@ def build():
     pdf.bullet("Updated Testing Strategy (post-feedback)")
     pdf.bullet("Revised Intended Use Statement (if applicable)")
     pdf.bullet("Gate G1 review: all FDA feedback incorporated into project plan")
+    pdf.bullet("FDA Comms tab: auto-generated Q-Sub cover letter and question package export (PMP-only)")
+    pdf.bullet("FDA Comms tab: RTA self-check status updated from DHF/Standards trackers")
 
     # ════════════════════════════════════════════════════
     # PHASE 3: DESIGN CONTROLS
@@ -691,6 +693,7 @@ def build():
     pdf.bullet("Complete 510(k) submission package (eSTAR format)")
     pdf.bullet("Internal review checklist (all sections verified complete)")
     pdf.bullet("Submission readiness review (Gate G4)")
+    pdf.bullet("FDA Comms tab: DHF Readiness Snapshot confirms all sections complete")
 
     # ════════════════════════════════════════════════════
     # PHASE 6: SUBMIT TO FDA
@@ -742,6 +745,8 @@ def build():
     pdf.bullet("RTA self-check completed and documented")
     pdf.bullet("FDA acknowledgment letter received")
     pdf.bullet("Control Tower milestone M-SUBMIT marked complete")
+    pdf.bullet("FDA Comms tab: RTA self-check checklist verified (14-item cross-reference)")
+    pdf.bullet("FDA Comms tab: FDA Interaction Timeline updated with submission date")
 
     # ════════════════════════════════════════════════════
     # PHASE 7: FDA REVIEW PROCESS
@@ -806,6 +811,7 @@ def build():
     pdf.bullet("Updated test data (if additional testing required)")
     pdf.bullet("Communication log with FDA (all interactions documented)")
     pdf.bullet("Timeline tracker updated with actual vs. planned review dates")
+    pdf.bullet("FDA Comms tab: timeline tracker reflects review milestones and AI rounds")
 
     # ════════════════════════════════════════════════════
     # PHASE 8: CLEARANCE DECISION

@@ -1174,9 +1174,86 @@ def build_english():
         "'ctower_mb_decisions'. Message cache uses 'ctower_qa_messages' as local backup. "
         "Settings and archives also persist across sessions.")
 
-    # 29. Glossary
+    # 29. FDA Comms
     pdf.add_page()
-    pdf.sec(29, "Glossary of Key Terms")
+    pdf.sec(29, "Tab 15: FDA Communications Center (PMP-Only)")
+    pdf.txt(
+        "The FDA Communications Center is a PMP-exclusive tab providing automated tools "
+        "to prepare, track, and manage all FDA interactions. It is invisible to Tech, "
+        "Business, and Accounting roles -- the tab itself is hidden from the navigation bar.")
+
+    pdf.sub("29.1 Access Control")
+    pdf.txt(
+        "The tab is gated by role -- only users with PMP authority (admin URL parameter) "
+        "can see it. A purple 'PMP Eyes Only' badge is displayed at the top of the tab. "
+        "When switching to any non-PMP role, the tab disappears from the nav bar entirely.")
+
+    pdf.sub("29.2 Summary Metrics")
+    pdf.txt(
+        "Six metric cards provide an at-a-glance readiness assessment:\n\n"
+        "  RTA Ready %      -- Percentage of Refuse-to-Accept checklist items passed\n"
+        "  DHF Completion %  -- Percentage of Design History File documents approved\n"
+        "  Gates Passed      -- Completed gates vs. total gates\n"
+        "  Standards Met     -- Compliant standards vs. total tracked\n"
+        "  Red Risks         -- Count of red-level risks (blocks submission)\n"
+        "  Yellow Risks      -- Count of yellow-level risks (requires mitigation plan)")
+
+    pdf.sub("29.3 Q-Sub Cover Letter Generator")
+    pdf.txt(
+        "Generates a Pre-Submission meeting request cover letter following FDA Q-Sub guidance. "
+        "The letter auto-populates from project data:\n\n"
+        "  Addressed to     -- Division of Industry & Consumer Education (DICE), CDRH\n"
+        "  Applicant        -- From project setup wizard\n"
+        "  Device name      -- Project name from wizard/data\n"
+        "  Submission type   -- 510(k), De Novo, PMA as configured\n"
+        "  Manufacturer     -- From project setup\n"
+        "  Meeting preference -- Defaults to Teleconference\n\n"
+        "The letter is rendered in a print-style preview and can be exported as a "
+        "standalone HTML file via the 'Export Cover Letter (HTML)' button.")
+
+    pdf.sub("29.4 Question Package Export")
+    pdf.txt(
+        "Pulls all questions from the Message Board's Q&A sections and formats them "
+        "per FDA Pre-Sub structure: numbered questions with section headings and context. "
+        "Export generates a clean HTML document suitable for inclusion in the Q-Sub package.")
+
+    pdf.sub("29.5 Refuse-to-Accept (RTA) Checklist")
+    pdf.txt(
+        "A 14-item self-check based on FDA's published RTA checklist for 510(k) submissions. "
+        "Items automatically cross-reference the DHF Document Tracker and Standards Tracker "
+        "to detect readiness status:\n\n"
+        "  Green check  -- Auto-detected as ready (document approved or standard met)\n"
+        "  Empty box    -- Not yet ready (document not started or standard incomplete)\n\n"
+        "A progress bar shows overall RTA readiness percentage. Items include:\n"
+        "cover letter, indications for use, truthful & accuracy statement, 510(k) summary, "
+        "predicate comparison, standards data, labeling, biocompatibility, software docs, "
+        "EMC/electrical safety, sterilization, risk analysis, and performance testing.")
+
+    pdf.sub("29.6 FDA Interaction Timeline")
+    pdf.txt(
+        "A visual timeline showing key FDA milestones mapped to project months:\n\n"
+        "  M+1  Pre-Sub Meeting Request\n"
+        "  M+2  Pre-Sub Package Preparation\n"
+        "  M+3  Pre-Sub Filed to FDA\n"
+        "  M+4  FDA Feedback (75-Day Window Opens)\n"
+        "  M+N  510(k) Preparation Complete\n"
+        "  M+N  510(k) Submission\n"
+        "  M+N  Expected FDA Decision\n\n"
+        "Milestones are color-coded: green (done), blue (current), gray (future). "
+        "The 75-day FDA feedback window is highlighted as a key planning constraint.")
+
+    pdf.sub("29.7 DHF Readiness Snapshot")
+    pdf.txt(
+        "A stacked bar chart showing Design History File document status distribution:\n\n"
+        "  Green  -- Approved\n"
+        "  Blue   -- In Review\n"
+        "  Amber  -- Draft\n"
+        "  Gray   -- Not Started\n\n"
+        "Provides a quick visual of how close the documentation package is to submission-ready.")
+
+    # 30. Glossary
+    pdf.add_page()
+    pdf.sec(30, "Glossary of Key Terms")
     pdf.ln(2)
     terms = [
         ("M+N", "Month notation. M+0 = project start (March 2026). M+6 = six months later (Sep 2026). Used throughout for all scheduling."),
@@ -1200,6 +1277,9 @@ def build_english():
         ("IndexedDB", "Browser-based local storage used as a fallback for document persistence."),
         ("Runway", "Number of months the project can continue operating at current burn rate before funds run out."),
         ("NRE", "Non-Recurring Engineering -- one-time engineering costs for manufacturing setup."),
+        ("RTA", "Refuse to Accept -- FDA's initial screening checklist before substantive review of a 510(k). Failure triggers an immediate rejection."),
+        ("Q-Sub", "Q-Submission -- the formal process for requesting a Pre-Submission meeting with FDA to discuss regulatory strategy before filing."),
+        ("DICE", "Division of Industry and Consumer Education -- FDA division that handles Q-Sub logistics and communication."),
     ]
     for k, v in terms:
         pdf.kv(k, v)
@@ -2344,9 +2424,73 @@ def build_chinese():
         "\u6d88\u606f\u7f13\u5b58\u4f7f\u7528\u2018ctower_qa_messages\u2019\u4f5c\u4e3a\u672c\u5730\u5907\u4efd\u3002"
         "\u8bbe\u7f6e\u548c\u5f52\u6863\u4e5f\u5728\u4f1a\u8bdd\u95f4\u6301\u4e45\u5316\u3002")
 
-    # 29 关键术语表
+    # 29 FDA通信中心
     pdf.add_page()
-    pdf.sec(29, "\u5173\u952e\u672f\u8bed\u8868")
+    pdf.sec(29, "选项卡15：FDA通信中心（仅PMP）")
+    pdf.txt(
+        "FDA通信中心是PMP专属选项卡，提供自动化工具来准备、"
+        "跟踪和管理所有FDA交互。对技术、商务和会计角色不可见——"
+        "选项卡本身从导航栏中隐藏。")
+
+    pdf.sub("29.1 访问控制")
+    pdf.txt(
+        "该选项卡按角色限制——只有拥有PMP权限（管理员URL参数）的用户才能看到。"
+        "选项卡顶部显示紫色'PMP专属'徽章。"
+        "切换到任何非PMP角色时，该选项卡从导航栏中完全消失。")
+
+    pdf.sub("29.2 摘要指标")
+    pdf.txt(
+        "六个指标卡提供快速就绪评估：\n\n"
+        "  RTA就绪%       -- RTA清单通过项的百分比\n"
+        "  DHF完成度%    -- 设计历史文件已批准文档的百分比\n"
+        "  门控通过       -- 已完成门控与总门控数\n"
+        "  标准合规       -- 已合规标准与总跟踪数\n"
+        "  红色风险       -- 红色级别风险数量\n"
+        "  黄色风险       -- 黄色级别风险数量")
+
+    pdf.sub("29.3 Q-Sub附信生成器")
+    pdf.txt(
+        "按照FDA Q-Sub指南自动生成Pre-Sub会议请求附信。"
+        "附信从项目数据自动填充：\n\n"
+        "  收件人          -- CDRH DICE部门\n"
+        "  申请人          -- 来自项目设置向导\n"
+        "  设备名称        -- 项目名称\n"
+        "  提交类型        -- 510(k)、De Novo、PMA\n"
+        "  制造商          -- 来自项目设置\n"
+        "  会议形式        -- 默认电话会议\n\n"
+        "附信以打印样式预览，可通过'导出附信(HTML)'按钮导出为独立HTML文件。")
+
+    pdf.sub("29.4 问题包导出")
+    pdf.txt(
+        "从留言板的问答部分提取所有问题并按FDA Pre-Sub格式整理："
+        "编号问题、章节标题和上下文。"
+        "导出生成适合纳入Q-Sub包的清洁HTML文档。")
+
+    pdf.sub("29.5 RTA自检清单")
+    pdf.txt(
+        "基于FDA发布的510(k) RTA清单的14项自检。"
+        "项目自动交叉引用DHF文档跟踪器和标准跟踪器来检测就绪状态：\n\n"
+        "  绿色勾选  -- 自动检测为就绪（文档已批准或标准已满足）\n"
+        "  空框      -- 尚未就绪（文档未开始或标准不完整）\n\n"
+        "进度条显示整体RTA就绪百分比。")
+
+    pdf.sub("29.6 FDA交互时间线")
+    pdf.txt(
+        "显示关键FDA里程碑映射到项目月份的可视化时间线。"
+        "里程碑颜色编码：绿色（已完成）、蓝色（当前）、灰色（未来）。"
+        "75天FDA反馈窗口作为关键规划约束突出显示。")
+
+    pdf.sub("29.7 DHF就绪快照")
+    pdf.txt(
+        "堆叠条形图显示设计历史文件文档状态分布：\n\n"
+        "  绿色 -- 已批准\n"
+        "  蓝色 -- 审查中\n"
+        "  琥珀 -- 草稿\n"
+        "  灰色 -- 未开始")
+
+    # 30 关键术语表
+    pdf.add_page()
+    pdf.sec(30, "\u5173\u952e\u672f\u8bed\u8868")
     pdf.ln(2)
     terms = [
         ("M+N", "\u6708\u4efd\u6807\u8bb0\u3002M+0 = \u9879\u76ee\u542f\u52a8\uff082026\u5e743\u6708\uff09\u3002M+6 = \u542f\u52a8\u540e6\u4e2a\u6708\u3002\u8d2f\u7a7f\u6240\u6709\u8ba1\u5212\u4f7f\u7528\u3002"),
@@ -2370,6 +2514,9 @@ def build_chinese():
         ("IndexedDB", "\u6d4f\u89c8\u5668\u672c\u5730\u5b58\u50a8\uff0c\u7528\u4f5c\u6587\u6863\u6301\u4e45\u5316\u7684\u5907\u4efd\u3002"),
         ("\u8dd1\u9053", "\u6309\u5f53\u524d\u71c3\u70e7\u7387\uff0c\u9879\u76ee\u53ef\u7ee7\u7eed\u8fd0\u884c\u7684\u5269\u4f59\u6708\u6570\u3002"),
         ("NRE", "非经常性工程费用 " + EM + " 制造设置的一次性工程成本。"),
+        ("RTA", "拒绝接受 " + EM + " FDA在实质性审查510(k)之前的初始筛查清单。未通过会被立即拒绝。"),
+        ("Q-Sub", "Q提交 " + EM + " 向FDA请求Pre-Sub会议的正式流程，用于在提交前讨论法规策略。"),
+        ("DICE", "行业与消费者教育部门 " + EM + " 处理Q-Sub后勤和通信的FDA部门。"),
     ]
     for k, v in terms:
         pdf.kv(k, v)
