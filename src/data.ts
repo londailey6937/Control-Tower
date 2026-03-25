@@ -2476,7 +2476,11 @@ export const QA_SECTIONS: QASection[] = [
 // ACTIVE ROLE — Controls UI permissions
 // ============================================================
 
-export let ACTIVE_ROLE: UserRole = "pmp";
+const ADMIN_KEY = "arch2026";
+export const IS_ADMIN: boolean =
+  new URLSearchParams(window.location.search).get("admin") === ADMIN_KEY;
+
+export let ACTIVE_ROLE: UserRole = IS_ADMIN ? "pmp" : "business";
 
 export function setActiveRole(role: UserRole): void {
   ACTIVE_ROLE = role;

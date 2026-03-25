@@ -14,6 +14,7 @@ import {
   CASH_RUNWAY,
   CHANGE_REQUESTS,
   ACTIVE_ROLE,
+  IS_ADMIN,
   setActiveRole,
   AUDIT_LOG,
   DHF_DOCUMENTS,
@@ -1630,10 +1631,27 @@ window._deleteBurnEntry = function (month: number): void {
 function initRoleSwitcher(): void {
   const container = document.getElementById("roleSwitcher");
   if (!container) return;
+
+  // Lock out PMP for non-admin visitors
+  const select = document.getElementById(
+    "roleSelect",
+  ) as HTMLSelectElement | null;
+  if (select) {
+    if (!IS_ADMIN) {
+      const pmpOpt = select.querySelector<HTMLOptionElement>(
+        'option[value="pmp"]',
+      );
+      if (pmpOpt) pmpOpt.remove();
+      select.value = "business";
+    } else {
+      select.value = "pmp";
+    }
+  }
+
   container.addEventListener("change", (e) => {
-    const select = e.target as HTMLSelectElement;
-    if (select?.id === "roleSelect") {
-      window._setRole(select.value);
+    const sel = e.target as HTMLSelectElement;
+    if (sel?.id === "roleSelect") {
+      window._setRole(sel.value);
     }
   });
 }
