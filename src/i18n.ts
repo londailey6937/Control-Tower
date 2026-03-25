@@ -7,7 +7,7 @@ import type { Lang, I18nMessages, I18nKey, LocalizedString } from "./types.ts";
 export const I18N: I18nMessages = {
   en: {
     appTitle: "Control Tower",
-    appSubtitle: "ICU Respiratory Digital Twin",
+    appSubtitle: "TiO₂ Medical Air Purification System",
     masterQuestion:
       "Are we still on track to FDA clearance — and what is at risk?",
     pmpBadge: "PMP Authority",
@@ -543,7 +543,7 @@ export const I18N: I18nMessages = {
 
   cn: {
     appTitle: "控制塔",
-    appSubtitle: "ICU呼吸数字孪生",
+    appSubtitle: "TiO₂医用空气净化系统",
     masterQuestion: "我们是否仍在FDA批准的正轨上——有什么风险？",
     pmpBadge: "PMP权限",
     currentMonth: "当前",
