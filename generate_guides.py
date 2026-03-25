@@ -216,17 +216,17 @@ def build_english():
     pdf.ln(2)
     pdf.kv("Dual-Track", "Side-by-side view of Technical + Regulatory milestones")
     pdf.kv("Gate System", "Decision checkpoints with PMP authority controls")
-    pdf.kv("Risk Dashboard", "ISO 14971 risk register with filtering and top-5 ranking")
-    pdf.kv("Timeline", "Business-language translation of technical milestones")
     pdf.kv("Regulatory Tracker", "IEC/ISO/21 CFR compliance standards matrix")
-    pdf.kv("Cash / Runway", "Financial position, burn rate, funding milestones, and API integrations")
+    pdf.kv("Risk Dashboard", "ISO 14971 risk register with filtering and top-5 ranking")
+    pdf.kv("Audit Trail", "Server-persisted chronological log of all dashboard actions for DHF traceability")
+    pdf.kv("Document Control", "ISO 13485-aligned document lifecycle, revision history, and review scheduling")
     pdf.kv("Actions", "Task board, DHF Document Tracker, and CAPA Log")
+    pdf.kv("Timeline", "Business-language translation of technical milestones")
     pdf.kv("Budget", "Budget vs. Actual spending per category")
+    pdf.kv("Cash / Runway", "Financial position, burn rate, funding milestones, and API integrations")
+    pdf.kv("US Investment", "North America fundraising pipeline, investor tracking, and IR activities")
     pdf.kv("Resources", "Team allocation and capacity utilization")
     pdf.kv("Suppliers", "Hardware component vendor tracking")
-    pdf.kv("Audit Trail", "Server-persisted chronological log of all dashboard actions for DHF traceability")
-    pdf.kv("US Investment", "North America fundraising pipeline, investor tracking, and IR activities")
-    pdf.kv("Document Control", "ISO 13485-aligned document lifecycle, revision history, and review scheduling")
     pdf.kv("Message Board", "Purpose-driven messaging with structured threads, decision logging, workstream filtering, and accountability")
 
     # 5. Dual-Track
@@ -262,6 +262,15 @@ def build_english():
         "  'tech'       -- Engineering / R&D team responsibility\n"
         "  'regulatory' -- Regulatory affairs team responsibility\n"
         "  'business'   -- Business / legal / investor team responsibility")
+
+    pdf.sub("5.3 Milestone Detail Modal")
+    pdf.txt(
+        "Clicking any milestone card opens a detail modal showing the track (Technical "
+        "or Regulatory), target month, current status, and a detailed description of the "
+        "milestone's scope and requirements.\n\n"
+        "To close the modal, click anywhere outside it (on the dimmed overlay). "
+        "There is no close button -- the overlay-click pattern keeps the interface clean "
+        "and consistent.")
 
     # 6. Gate System
     pdf.add_page()
@@ -1421,18 +1430,18 @@ def build_chinese():
     pdf.ln(2)
     pdf.kv("\u53cc\u8f68\u89c6\u56fe", "\u6280\u672f+\u6cd5\u89c4\u91cc\u7a0b\u7891\u5e76\u6392\u663e\u793a")
     pdf.kv("\u95e8\u63a7\u7cfb\u7edf", "\u5e26PMP\u6743\u9650\u63a7\u5236\u7684\u51b3\u7b56\u68c0\u67e5\u70b9")
-    pdf.kv("\u98ce\u9669\u4eea\u8868\u76d8", "ISO 14971\u98ce\u9669\u767b\u8bb0\u8868\uff0c\u5e26\u7b5b\u9009\u548c\u524d5\u6392\u540d")
-    pdf.kv("\u65f6\u95f4\u7ebf", "\u6280\u672f\u91cc\u7a0b\u7891\u7684\u5546\u4e1a\u8bed\u8a00\u7ffb\u8bd1")
     pdf.kv("\u6cd5\u89c4\u8ffd\u8e2a", "IEC/ISO/21 CFR\u5408\u89c4\u6807\u51c6\u77e9\u9635")
-    pdf.kv("\u8d44\u91d1/\u8dd1\u9053", "\u8d22\u52a1\u72b6\u51b5\u3001\u71c3\u70e7\u7387\u3001\u878d\u8d44\u91cc\u7a0b\u7891\u548cAPI\u96c6\u6210")
+    pdf.kv("\u98ce\u9669\u4eea\u8868\u76d8", "ISO 14971\u98ce\u9669\u767b\u8bb0\u8868\uff0c\u5e26\u7b5b\u9009\u548c\u524d5\u6392\u540d")
+    pdf.kv("\u5ba1\u8ba1\u8ffd\u8e2a", "\u670d\u52a1\u5668\u7aef\u6301\u4e45\u5316\u7684\u6240\u6709\u4eea\u8868\u76d8\u64cd\u4f5c\u65f6\u95f4\u5e8f\u65e5\u5fd7")
+    pdf.kv("\u6587\u6863\u63a7\u5236", "ISO 13485\u5bf9\u9f50\u7684\u6587\u6863\u751f\u547d\u5468\u671f\u3001\u4fee\u8ba2\u5386\u53f2\u548c\u5ba1\u67e5\u8ba1\u5212")
     pdf.kv("\u884c\u52a8\u9879", "\u4efb\u52a1\u770b\u677f\u3001DHF\u6587\u6863\u8ffd\u8e2a\u548cCAPA\u65e5\u5fd7")
+    pdf.kv("\u65f6\u95f4\u7ebf", "\u6280\u672f\u91cc\u7a0b\u7891\u7684\u5546\u4e1a\u8bed\u8a00\u7ffb\u8bd1")
     pdf.kv("\u9884\u7b97", "\u6309\u7c7b\u522b\u7684\u9884\u7b97\u4e0e\u5b9e\u9645\u652f\u51fa")
+    pdf.kv("\u8d44\u91d1/\u8dd1\u9053", "\u8d22\u52a1\u72b6\u51b5\u3001\u71c3\u70e7\u7387\u3001\u878d\u8d44\u91cc\u7a0b\u7891\u548cAPI\u96c6\u6210")
+    pdf.kv("\u7f8e\u56fd\u6295\u8d44", "\u5317\u7f8e\u878d\u8d44\u7ba1\u9053\u3001\u6295\u8d44\u8005\u8ffd\u8e2a\u548cIR\u6d3b\u52a8")
     pdf.kv("\u8d44\u6e90", "\u56e2\u961f\u5206\u914d\u548c\u4ea7\u80fd\u5229\u7528")
     pdf.kv("\u4f9b\u5e94\u5546", "\u786c\u4ef6\u7ec4\u4ef6\u4f9b\u5e94\u5546\u8ffd\u8e2a")
-    pdf.kv("\u5ba1\u8ba1\u8ffd\u8e2a", "\u6240\u6709\u4eea\u8868\u76d8\u64cd\u4f5c\u7684\u65f6\u95f4\u5e8f\u65e5\u5fd7")
-    pdf.kv("\u7f8e\u56fd\u6295\u8d44", "\u5317\u7f8e\u878d\u8d44\u7ba1\u9053\u3001\u6295\u8d44\u8005\u8ffd\u8e2a\u548cIR\u6d3b\u52a8")
-    pdf.kv("\u6587\u6863\u63a7\u5236", "ISO 13485\u5bf9\u9f50\u7684\u6587\u6863\u751f\u547d\u5468\u671f\u3001\u4fee\u8ba2\u5386\u53f2\u548c\u5ba1\u67e5\u8ba1\u5212")
-    pdf.kv("\u7559\u8a00\u677f", "PMP\u4e0e\u5229\u76ca\u76f8\u5173\u65b9\u4e4b\u95f4\u7684\u53cc\u5411\u7ebf\u7a0b\u5f0f\u6280\u672f\u5bf9\u8bdd\u6d88\u606f")
+    pdf.kv("\u7559\u8a00\u677f", "\u76ee\u6807\u9a71\u52a8\u7684\u7ed3\u6784\u5316\u7ebf\u7a0b\u6d88\u606f\u3001\u51b3\u7b56\u8bb0\u5f55\u3001\u5de5\u4f5c\u6d41\u7b5b\u9009\u548c\u8d23\u4efb\u5236")
 
     # 5
     pdf.add_page()
@@ -1468,6 +1477,13 @@ def build_chinese():
         "  regulatory " + EM + " \u6cd5\u89c4\u4e8b\u52a1\u56e2\u961f\u8d1f\u8d23\n"
         "  business " + EM + " \u5546\u4e1a/\u6cd5\u5f8b/\u6295\u8d44\u56e2\u961f\u8d1f\u8d23")
 
+
+    pdf.sub("5.3 \u91cc\u7a0b\u7891\u8be6\u60c5\u5f39\u7a97")
+    pdf.txt(
+        "\u70b9\u51fb\u4efb\u4f55\u91cc\u7a0b\u7891\u5361\u7247\u4f1a\u6253\u5f00\u8be6\u60c5\u5f39\u7a97\uff0c\u663e\u793a\u8def\u5f84\uff08\u6280\u672f\u6216\u6cd5\u89c4\uff09\u3001"
+        "\u76ee\u6807\u6708\u4efd\u3001\u5f53\u524d\u72b6\u6001\uff0c\u4ee5\u53ca\u91cc\u7a0b\u7891\u8303\u56f4\u548c\u8981\u6c42\u7684\u8be6\u7ec6\u63cf\u8ff0\u3002\n\n"
+        "\u8981\u5173\u95ed\u5f39\u7a97\uff0c\u70b9\u51fb\u5f39\u7a97\u5916\u90e8\u4efb\u4f55\u4f4d\u7f6e\uff08\u53d8\u6697\u7684\u906e\u7f69\u5c42\uff09\u5373\u53ef\u3002"
+        "\u6ca1\u6709\u5173\u95ed\u6309\u94ae\uff0c\u906e\u7f69\u5c42\u70b9\u51fb\u6a21\u5f0f\u4fdd\u6301\u754c\u9762\u7b80\u6d01\u4e00\u81f4\u3002")
     # 6
     pdf.add_page()
     pdf.sec(6, "\u9009\u9879\u53612\uff1a\u95e8\u63a7\u7cfb\u7edf")
