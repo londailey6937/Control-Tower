@@ -383,7 +383,7 @@ Resources:`;for(let t of c){if(!t||typeof t!=`string`)throw Error(`@supabase/aut
       <div class="gate-detail-meta">${c} · M+${r.month} · <span class="ms-status-badge ${s}" style="font-size:0.75rem;">${o}</span></div>
     </div>
     <div class="milestone-detail-body">${l}</div>
-  `,i.classList.add(`open`),document.getElementById(`milestoneModalClose`).onclick=()=>i.classList.remove(`open`),i.onclick=e=>{e.target===i&&i.classList.remove(`open`)}},window._cycleMilestoneStatus=function(e,n){let r=(e===`technical`?t.technical:t.regulatory).milestones.find(e=>e.id===n);if(!r)return;let i={"not-started":`in-progress`,"in-progress":`complete`,complete:`not-started`}[r.status];if(_!==`pmp`){window._openChangeRequestForm(`milestone-status`,n,`status`,r.status);return}r.status=i,$(`milestone-status`,n,`status`,r.status===`in-progress`?`not-started`:r.status===`complete`?`in-progress`:`complete`,i,`Milestone ${n} status changed`),W()};function Da(){document.querySelectorAll(`.filter-btn`).forEach(e=>{e.classList.toggle(`active`,e.dataset.filter===la),e.onclick=()=>{la=e.dataset.filter||`all`,Da()}});let e=la===`all`?r:r.filter(e=>e.riskLevel===la),t=document.getElementById(`riskGrid`);t.innerHTML=e.map(e=>{let t=`mitigation-`+e.mitigationStatus.replace(` `,`-`),n=e.mitigationStatus===`complete`?y(`complete`):e.mitigationStatus===`in-progress`?y(`inProgress`):y(`notStarted`);return`
+  `,i.classList.add(`open`),i.onclick=e=>{e.target===i&&i.classList.remove(`open`)}},window._cycleMilestoneStatus=function(e,n){let r=(e===`technical`?t.technical:t.regulatory).milestones.find(e=>e.id===n);if(!r)return;let i={"not-started":`in-progress`,"in-progress":`complete`,complete:`not-started`}[r.status];if(_!==`pmp`){window._openChangeRequestForm(`milestone-status`,n,`status`,r.status);return}r.status=i,$(`milestone-status`,n,`status`,r.status===`in-progress`?`not-started`:r.status===`complete`?`in-progress`:`complete`,i,`Milestone ${n} status changed`),W()};function Da(){document.querySelectorAll(`.filter-btn`).forEach(e=>{e.classList.toggle(`active`,e.dataset.filter===la),e.onclick=()=>{la=e.dataset.filter||`all`,Da()}});let e=la===`all`?r:r.filter(e=>e.riskLevel===la),t=document.getElementById(`riskGrid`);t.innerHTML=e.map(e=>{let t=`mitigation-`+e.mitigationStatus.replace(` `,`-`),n=e.mitigationStatus===`complete`?y(`complete`):e.mitigationStatus===`in-progress`?y(`inProgress`):y(`notStarted`);return`
         <div class="risk-card risk-level-${e.riskLevel}" data-action="openRiskEditor" data-rid="${e.id}" style="cursor:pointer">
           <div class="risk-card-header">
             <span class="risk-id">${e.id}</span>
@@ -1203,29 +1203,41 @@ ${_e?`${be(i?`待办行动项`:`Open Action Items`)}
         <span class="tab-icon">🚦</span>
         <span data-i18n="tabGates">Gate System</span>
       </button>
-      <button class="tab-btn" data-tab="risks">
-        <span class="tab-icon">⚠️</span>
-        <span data-i18n="tabRisks">Risk Dashboard</span>
-      </button>
-      <button class="tab-btn" data-tab="timeline">
-        <span class="tab-icon">📅</span>
-        <span data-i18n="tabTimeline">Timeline</span>
-      </button>
       <button class="tab-btn" data-tab="regulatory">
         <span class="tab-icon">📑</span>
         <span data-i18n="tabRegulatory">Regulatory Tracker</span>
       </button>
-      <button class="tab-btn" data-tab="cash-runway">
-        <span class="tab-icon">💰</span>
-        <span data-i18n="tabCashRunway">Cash / Runway</span>
+      <button class="tab-btn" data-tab="risks">
+        <span class="tab-icon">⚠️</span>
+        <span data-i18n="tabRisks">Risk Dashboard</span>
+      </button>
+      <button class="tab-btn" data-tab="audit">
+        <span class="tab-icon">📋</span>
+        <span data-i18n="tabAudit">Audit Trail</span>
+      </button>
+      <button class="tab-btn" data-tab="doc-library">
+        <span class="tab-icon">📚</span>
+        <span data-i18n="tabDocLibrary">Document Control</span>
       </button>
       <button class="tab-btn" data-tab="actions">
         <span class="tab-icon">✅</span>
         <span data-i18n="tabActions">Actions</span>
       </button>
+      <button class="tab-btn" data-tab="timeline">
+        <span class="tab-icon">📅</span>
+        <span data-i18n="tabTimeline">Timeline</span>
+      </button>
       <button class="tab-btn" data-tab="budget">
         <span class="tab-icon">📈</span>
         <span data-i18n="tabBudget">Budget</span>
+      </button>
+      <button class="tab-btn" data-tab="cash-runway">
+        <span class="tab-icon">💰</span>
+        <span data-i18n="tabCashRunway">Cash / Runway</span>
+      </button>
+      <button class="tab-btn" data-tab="us-investment">
+        <span class="tab-icon">🇺🇸</span>
+        <span data-i18n="tabUsInvestment">US Investment</span>
       </button>
       <button class="tab-btn" data-tab="resources">
         <span class="tab-icon">👥</span>
@@ -1234,19 +1246,6 @@ ${_e?`${be(i?`待办行动项`:`Open Action Items`)}
       <button class="tab-btn" data-tab="suppliers">
         <span class="tab-icon">🏭</span>
         <span data-i18n="tabSuppliers">Suppliers</span>
-      </button>
-      <button class="tab-btn" data-tab="audit">
-        <span class="tab-icon">�</span>
-        <span data-i18n="tabAudit">Audit Trail</span>
-      </button>
-      <button class="tab-btn" data-tab="us-investment">
-        <span class="tab-icon">🇺🇸</span>
-        <span data-i18n="tabUsInvestment">US Investment</span>
-      </button>
-
-      <button class="tab-btn" data-tab="doc-library">
-        <span class="tab-icon">📚</span>
-        <span data-i18n="tabDocLibrary">Document Control</span>
       </button>
       <button class="tab-btn" data-tab="qa-sheet">
         <span class="tab-icon">📝</span>
@@ -1345,9 +1344,6 @@ ${_e?`${be(i?`待办行动项`:`Open Action Items`)}
         <!-- Milestone Detail Modal -->
         <div class="gate-detail-overlay" id="milestoneDetailOverlay">
           <div class="gate-detail-modal" id="milestoneDetailModal">
-            <button class="modal-close" id="milestoneModalClose">
-              &times;
-            </button>
             <div id="milestoneDetailContent"></div>
           </div>
         </div>

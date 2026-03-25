@@ -742,8 +742,6 @@ window._openMilestone = function (trackKey: string, milestoneId: string): void {
   `;
 
   overlay.classList.add("open");
-  document.getElementById("milestoneModalClose")!.onclick = () =>
-    overlay.classList.remove("open");
   overlay.onclick = (e) => {
     if (e.target === overlay) overlay.classList.remove("open");
   };
