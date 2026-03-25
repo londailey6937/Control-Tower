@@ -26,13 +26,6 @@ import {
   QA_SECTIONS,
 } from "./data.ts";
 import { t, localizedText, getLang, setLang, applyLanguage } from "./i18n.ts";
-import {
-  hasProjectData,
-  getSavedAnswers,
-  showWizard,
-  applyProjectData,
-  clearProjectData,
-} from "./wizard.ts";
 import type {
   Gate,
   Milestone,
@@ -278,31 +271,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initRoleSwitcher();
   applyLanguage(getLang());
 
-  // Check for saved wizard data — if found, apply it before rendering
-  const saved = getSavedAnswers();
-  if (saved) {
-    applyProjectData(saved);
-    bootDashboard();
-  } else if (!hasProjectData()) {
-    // No project data — show the setup wizard
-    showWizard((answers) => {
-      if (answers) {
-        // Wizard completed with answers
-        applyProjectData(answers);
-      }
-      // else: user clicked "Load Demo Data" — use hardcoded defaults
-      bootDashboard();
-    });
-  } else {
-    bootDashboard();
-  }
-});
-
-function bootDashboard(): void {
-  // Update the header subtitle to match project
-  const subEl = document.querySelector(".logo-subtitle");
-  if (subEl) subEl.textContent = localizedText(PROJECT.subtitle);
-
   // Bootstrap Supabase data, then render
   Promise.all([initQaMessages(), initAuditLog()]).then(() => {
     renderAll();
@@ -315,7 +283,7 @@ function bootDashboard(): void {
       initAuditLog().then(renderAuditTrail);
     });
   });
-}
+});
 
 // ── TAB NAVIGATION ────────────────────────────
 function initTabs(): void {
@@ -1686,22 +1654,6 @@ function initRoleSwitcher(): void {
       window._setRole(sel.value);
     }
   });
-
-  // Admin: add "New Project" button
-  if (IS_ADMIN) {
-    const btn = document.createElement("button");
-    btn.textContent = "⊕ New Project";
-    btn.title = "Start a new project (clears current data)";
-    btn.style.cssText =
-      "margin-left:12px;padding:4px 12px;border-radius:6px;border:1px solid #475569;" +
-      "background:#1e293b;color:#94a3b8;font-size:0.78rem;cursor:pointer;";
-    btn.addEventListener("click", () => {
-      if (!confirm("Start a new project? This will clear all current project data.")) return;
-      clearProjectData();
-      location.reload();
-    });
-    container.appendChild(btn);
-  }
 }
 
 window._setRole = function (role: string): void {
