@@ -3341,6 +3341,8 @@ body {
 .qa-toast.qa-toast-show {
   opacity: 1;
   transform: translateY(0);
+  pointer-events: auto;
+  cursor: pointer;
 }
 .qa-toast-header {
   font-size: 0.78rem;

@@ -4335,9 +4335,10 @@ function showQaNotification(msg: QAMessage): void {
   `;
   document.body.appendChild(toast);
   requestAnimationFrame(() => toast.classList.add("qa-toast-show"));
+  toast.addEventListener("click", () => toast.remove());
   setTimeout(() => {
     toast.classList.remove("qa-toast-show");
-    toast.addEventListener("transitionend", () => toast.remove());
+    setTimeout(() => toast.remove(), 500);
   }, 4000);
 }
 
