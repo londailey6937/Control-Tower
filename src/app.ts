@@ -3578,21 +3578,21 @@ function loadQaSettings(): QASettings {
           parsed.technologyEmail ??
           parsed.inventorEmail ??
           "uniquedai@gmail.com",
-        businessEmail: parsed.businessEmail ?? "lawrenceliu@enzhi.org",
+        businessEmail: parsed.businessEmail ?? "Lawrenceliu@soterea.cn",
         accountingEmail: parsed.accountingEmail ?? "",
       };
     }
     return {
       pmpEmail: "",
       technologyEmail: "uniquedai@gmail.com",
-      businessEmail: "lawrenceliu@enzhi.org",
+      businessEmail: "Lawrenceliu@soterea.cn",
       accountingEmail: "",
     };
   } catch {
     return {
       pmpEmail: "",
       technologyEmail: "uniquedai@gmail.com",
-      businessEmail: "lawrenceliu@enzhi.org",
+      businessEmail: "Lawrenceliu@soterea.cn",
       accountingEmail: "",
     };
   }
