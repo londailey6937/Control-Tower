@@ -454,7 +454,8 @@ function collectSuppliers(ov: HTMLElement, d: WizData): void {
     const f = e.dataset.sup!;
     if (f === "leadTimeDays")
       suppliers[i].leadTimeDays = parseInt(e.value) || 0;
-    else (suppliers[i] as Record<string, unknown>)[f] = e.value.trim();
+    else if (f === "name") suppliers[i].name = e.value.trim();
+    else if (f === "component") suppliers[i].component = e.value.trim();
   });
 }
 

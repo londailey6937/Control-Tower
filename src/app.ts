@@ -398,6 +398,7 @@ function renderAll(): void {
   renderUsInvestment();
   renderDocLibrary();
   renderQaSheet();
+  renderFdaComms();
   renderNotifications();
   updateFabBadge();
 }
@@ -1723,7 +1724,11 @@ function applyRoleRestrictions(): void {
 
   tabs.forEach((btn) => {
     const tab = btn.dataset.tab || "";
-    if (role === "accounting") {
+    if (tab === "fda-comms") {
+      const hidden = role !== "pmp";
+      btn.style.display = hidden ? "none" : "";
+      btn.disabled = hidden;
+    } else if (role === "accounting") {
       const allowed = accountingTabs.has(tab);
       btn.classList.toggle("tab-restricted", !allowed);
       btn.disabled = !allowed;
@@ -4102,6 +4107,238 @@ function exportQaThread(): void {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+// ══════════════════════════════════════════════════
+// FDA COMMUNICATIONS CENTER (PMP-Only)
+// ══════════════════════════════════════════════════
+
+function renderFdaComms(): void {
+  if (ACTIVE_ROLE !== "pmp") return;
+  const body = document.getElementById("fdaCommsBody");
+  if (!body) return;
+  const isCN = getLang() === "cn";
+
+  // ── Gather project data ──────────────────────
+  const pName = localizedText(PROJECT.name);
+  const pApplicant = localizedText(PROJECT.applicant);
+  const pMfr = localizedText(PROJECT.manufacturer);
+  const pSub = PROJECT.submissionType || "510k-standard";
+  const pDate = PROJECT.preparedDate || "";
+  const pMonth = PROJECT.currentMonth;
+
+  // DHF doc completion stats
+  const dhfTotal = DHF_DOCUMENTS.length;
+  const dhfApproved = DHF_DOCUMENTS.filter((d) => d.status === "approved").length;
+  const dhfInReview = DHF_DOCUMENTS.filter((d) => d.status === "in-review").length;
+  const dhfDraft = DHF_DOCUMENTS.filter((d) => d.status === "draft").length;
+  const dhfNotStarted = DHF_DOCUMENTS.filter((d) => d.status === "not-started").length;
+  const dhfPct = dhfTotal > 0 ? Math.round((dhfApproved / dhfTotal) * 100) : 0;
+
+  // Gate status
+  const completedGates = GATES.filter((g) => g.status === "approved").length;
+
+  // Standards compliance
+  const stdTotal = STANDARDS.length;
+  const stdComplete = STANDARDS.filter((s) => s.status === "complete").length;
+
+  // Open risks
+  const redRisks = RISKS.filter((r) => r.riskLevel === "red").length;
+  const yellowRisks = RISKS.filter((r) => r.riskLevel === "yellow").length;
+
+  // ── RTA Checklist ────────────────────────────
+  const rtaItems = [
+    { key: "cover", en: "510(k) Cover Letter (FDA Form 3514)", cn: "510(k)附信 (FDA表格3514)", check: () => true },
+    { key: "indications", en: "Indications for Use Statement", cn: "适用范围声明", check: () => DHF_DOCUMENTS.some((d) => d.code === "DHF-DD" && d.status !== "not-started") },
+    { key: "truthful", en: "Truthful & Accuracy Statement", cn: "真实与准确性声明", check: () => true },
+    { key: "class3", en: "Class III Summary / Certification (if applicable)", cn: "III类摘要/认证（如适用）", check: () => pSub.includes("pma") },
+    { key: "summary", en: "510(k) Summary or 510(k) Statement", cn: "510(k)摘要或510(k)声明", check: () => DHF_DOCUMENTS.some((d) => d.code === "DHF-CL" && d.status !== "not-started") },
+    { key: "predicate", en: "Predicate Device Comparison", cn: "前置器械对比", check: () => DHF_DOCUMENTS.some((d) => d.code === "DHF-DD" && d.status === "approved") },
+    { key: "standards", en: "Standards Data (Declarations of Conformity)", cn: "标准数据（合格声明）", check: () => stdComplete === stdTotal && stdTotal > 0 },
+    { key: "labels", en: "Labeling (21 CFR 801)", cn: "标签 (21 CFR 801)", check: () => DHF_DOCUMENTS.some((d) => d.code === "DHF-LBL" && d.status === "approved") },
+    { key: "biocompat", en: "Biocompatibility (if applicable)", cn: "生物相容性（如适用）", check: () => DHF_DOCUMENTS.some((d) => d.code === "DHF-BIO" && d.status !== "not-started") },
+    { key: "software", en: "Software Documentation (IEC 62304)", cn: "软件文档 (IEC 62304)", check: () => DHF_DOCUMENTS.some((d) => d.code === "DHF-SW" && d.status === "approved") },
+    { key: "emc", en: "EMC / Electrical Safety (IEC 60601-1-2)", cn: "EMC / 电气安全 (IEC 60601-1-2)", check: () => DHF_DOCUMENTS.some((d) => d.code === "DHF-EMC" && d.status === "approved") },
+    { key: "sterility", en: "Sterilization (if applicable)", cn: "灭菌（如适用）", check: () => true },
+    { key: "risk", en: "Risk Analysis (ISO 14971)", cn: "风险分析 (ISO 14971)", check: () => DHF_DOCUMENTS.some((d) => d.code === "DHF-RA" && d.status === "approved") },
+    { key: "performance", en: "Performance Testing — Bench / Clinical", cn: "性能测试——台架/临床", check: () => DHF_DOCUMENTS.some((d) => d.code === "DHF-DV" && d.status === "approved") },
+  ];
+  const rtaPassed = rtaItems.filter((r) => r.check()).length;
+  const rtaPct = Math.round((rtaPassed / rtaItems.length) * 100);
+
+  // ── FDA Timeline ─────────────────────────────
+  const totalDur = Number(TIMELINE_EVENTS[TIMELINE_EVENTS.length - 1]?.month) || 12;
+  const fdaMilestones = [
+    { month: 1, label: isCN ? "Pre-Sub会议请求" : "Pre-Sub Meeting Request", status: pMonth >= 1 ? "done" : pMonth >= 0 ? "current" : "future" },
+    { month: 2, label: isCN ? "Pre-Sub包准备" : "Pre-Sub Package Prep", status: pMonth >= 2 ? "done" : pMonth >= 1 ? "current" : "future" },
+    { month: 3, label: isCN ? "Pre-Sub提交给FDA" : "Pre-Sub Filed to FDA", status: pMonth >= 3 ? "done" : pMonth >= 2 ? "current" : "future" },
+    { month: 4, label: isCN ? "FDA反馈（75天窗口开启）" : "FDA Feedback (75-Day Window Opens)", status: pMonth >= 4 ? "done" : pMonth >= 3 ? "current" : "future" },
+    { month: Math.round(totalDur * 0.6), label: isCN ? "510(k)准备完成" : "510(k) Preparation Complete", status: pMonth >= Math.round(totalDur * 0.6) ? "done" : "future" },
+    { month: Math.round(totalDur * 0.8), label: isCN ? "510(k)提交" : "510(k) Submission", status: pMonth >= Math.round(totalDur * 0.8) ? "done" : "future" },
+    { month: totalDur, label: isCN ? "预期FDA决定" : "Expected FDA Decision", status: pMonth >= totalDur ? "done" : "future" },
+  ];
+
+  // ── Render ───────────────────────────────────
+  const mc = (label: string, val: string, color: string) =>
+    `<div class="fda-metric"><div class="fda-metric-val" style="color:${color}">${val}</div><div class="fda-metric-lbl">${label}</div></div>`;
+
+  body.innerHTML = `
+  <div class="fda-pmp-badge">🔒 ${isCN ? "PMP专属 — 对技术/商务角色不可见" : "PMP Eyes Only — Not visible to Tech/Business roles"}</div>
+
+  <!-- Summary Metrics -->
+  <div class="fda-metrics">
+    ${mc(isCN ? "RTA就绪" : "RTA Ready", `${rtaPct}%`, rtaPct >= 80 ? "#22c55e" : rtaPct >= 50 ? "#f59e0b" : "#ef4444")}
+    ${mc(isCN ? "DHF完成度" : "DHF Completion", `${dhfPct}%`, dhfPct >= 80 ? "#22c55e" : dhfPct >= 50 ? "#f59e0b" : "#ef4444")}
+    ${mc(isCN ? "门控通过" : "Gates Passed", `${completedGates}/${GATES.length}`, completedGates === GATES.length ? "#22c55e" : "#38bdf8")}
+    ${mc(isCN ? "标准合规" : "Standards Met", `${stdComplete}/${stdTotal}`, stdComplete === stdTotal ? "#22c55e" : "#f59e0b")}
+    ${mc(isCN ? "红色风险" : "Red Risks", String(redRisks), redRisks > 0 ? "#ef4444" : "#22c55e")}
+    ${mc(isCN ? "黄色风险" : "Yellow Risks", String(yellowRisks), yellowRisks > 0 ? "#f59e0b" : "#22c55e")}
+  </div>
+
+  <div class="fda-grid">
+    <!-- Q-Sub Cover Letter Generator -->
+    <div class="fda-card">
+      <h3>📋 ${isCN ? "Q-Sub附信生成器" : "Q-Sub Cover Letter Generator"}</h3>
+      <p class="fda-card-hint">${isCN
+        ? "按照FDA Q-Sub指南自动生成Pre-Sub会议请求附信"
+        : "Auto-generate a Pre-Sub meeting request cover letter per FDA Q-Sub guidance"}</p>
+      <div class="fda-preview">
+        <div class="fda-letter">
+          <p><strong>${isCN ? "致" : "To"}:</strong> Division of Industry and Consumer Education (DICE)<br>
+          Center for Devices and Radiological Health<br>
+          Food and Drug Administration</p>
+          <p><strong>${isCN ? "发件人" : "From"}:</strong> ${pApplicant}</p>
+          <p><strong>${isCN ? "日期" : "Date"}:</strong> ${pDate || new Date().toLocaleDateString()}</p>
+          <p><strong>${isCN ? "主题" : "Re"}:</strong> Pre-Submission Meeting Request — ${pName}</p>
+          <hr>
+          <p>${isCN ? "尊敬的先生/女士：" : "Dear Sir or Madam:"}</p>
+          <p>${isCN
+            ? `${pApplicant}谨请求一次Pre-Submission会议，讨论拟提交的${pSub === "510k-standard" ? "510(k)" : pSub}申请——${pName}。`
+            : `${pApplicant} respectfully requests a Pre-Submission meeting to discuss a planned ${pSub === "510k-standard" ? "510(k)" : pSub} submission for the ${pName}.`}</p>
+
+          <p><strong>${isCN ? "设备描述" : "Device Description"}:</strong> ${localizedText(PROJECT.subtitle)}</p>
+          <p><strong>${isCN ? "提交类型" : "Submission Type"}:</strong> ${pSub.replace(/-/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase())}</p>
+          <p><strong>${isCN ? "制造商" : "Manufacturer"}:</strong> ${pMfr}</p>
+
+          <p><strong>${isCN ? "希望的会议形式" : "Preferred Meeting Type"}:</strong> ${isCN ? "电话会议" : "Teleconference"}</p>
+
+          <p><strong>${isCN ? "具体问题见附件" : "Specific questions are attached herewith"}.</strong></p>
+          <p>${isCN ? "此致敬礼" : "Sincerely"},<br>${pApplicant}</p>
+        </div>
+      </div>
+      <div class="fda-card-actions">
+        <button class="fda-btn" id="fdaExportLetter">📥 ${isCN ? "导出附信 (HTML)" : "Export Cover Letter (HTML)"}</button>
+        <button class="fda-btn fda-btn-secondary" id="fdaExportQuestions">📋 ${isCN ? "导出问题包" : "Export Question Package"}</button>
+      </div>
+    </div>
+
+    <!-- RTA Checklist -->
+    <div class="fda-card">
+      <h3>✅ ${isCN ? "RTA自检清单" : "Refuse-to-Accept Checklist"}</h3>
+      <p class="fda-card-hint">${isCN
+        ? "FDA的RTA清单——提交前自检。绿色 = 从DHF/标准跟踪器自动检测。"
+        : "FDA's RTA checklist — self-check before filing. Green = auto-detected from DHF/Standards trackers."}</p>
+      <div class="fda-progress-bar"><div class="fda-progress-fill" style="width:${rtaPct}%;background:${rtaPct >= 80 ? "#22c55e" : rtaPct >= 50 ? "#f59e0b" : "#ef4444"}"></div></div>
+      <div style="text-align:right;font-size:0.8rem;color:#94a3b8;margin-bottom:8px">${rtaPassed}/${rtaItems.length} ${isCN ? "已通过" : "passed"}</div>
+      <div class="fda-rta-list">
+        ${rtaItems.map((r) => {
+          const passed = r.check();
+          return `<div class="fda-rta-item ${passed ? "rta-pass" : "rta-fail"}">
+            <span class="rta-icon">${passed ? "✅" : "⬜"}</span>
+            <span>${isCN ? r.cn : r.en}</span>
+          </div>`;
+        }).join("")}
+      </div>
+    </div>
+
+    <!-- FDA Interaction Timeline -->
+    <div class="fda-card fda-card-wide">
+      <h3>📅 ${isCN ? "FDA互动时间线" : "FDA Interaction Timeline"}</h3>
+      <p class="fda-card-hint">${isCN
+        ? "关键FDA里程碑和截止日期。Pre-Sub反馈窗口为75天。"
+        : "Key FDA milestones and deadlines. Pre-Sub feedback window is 75 calendar days."}</p>
+      <div class="fda-timeline">
+        ${fdaMilestones.map((m) => `<div class="fda-tl-item fda-tl-${m.status}">
+          <div class="fda-tl-dot"></div>
+          <div class="fda-tl-content">
+            <span class="fda-tl-month">M+${m.month}</span>
+            <span class="fda-tl-label">${m.label}</span>
+          </div>
+        </div>`).join("")}
+      </div>
+    </div>
+
+    <!-- DHF Readiness Snapshot -->
+    <div class="fda-card">
+      <h3>📁 ${isCN ? "DHF就绪快照" : "DHF Readiness Snapshot"}</h3>
+      <div class="fda-dhf-stats">
+        <div class="fda-dhf-bar">
+          <div class="fda-dhf-seg" style="width:${dhfTotal ? (dhfApproved / dhfTotal) * 100 : 0}%;background:#22c55e" title="${isCN ? "已批准" : "Approved"}"></div>
+          <div class="fda-dhf-seg" style="width:${dhfTotal ? (dhfInReview / dhfTotal) * 100 : 0}%;background:#3b82f6" title="${isCN ? "审核中" : "In Review"}"></div>
+          <div class="fda-dhf-seg" style="width:${dhfTotal ? (dhfDraft / dhfTotal) * 100 : 0}%;background:#f59e0b" title="${isCN ? "草稿" : "Draft"}"></div>
+          <div class="fda-dhf-seg" style="width:${dhfTotal ? (dhfNotStarted / dhfTotal) * 100 : 0}%;background:#475569" title="${isCN ? "未开始" : "Not Started"}"></div>
+        </div>
+        <div class="fda-dhf-legend">
+          <span><i style="background:#22c55e"></i> ${isCN ? "已批准" : "Approved"} (${dhfApproved})</span>
+          <span><i style="background:#3b82f6"></i> ${isCN ? "审核中" : "In Review"} (${dhfInReview})</span>
+          <span><i style="background:#f59e0b"></i> ${isCN ? "草稿" : "Draft"} (${dhfDraft})</span>
+          <span><i style="background:#475569"></i> ${isCN ? "未开始" : "Not Started"} (${dhfNotStarted})</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  `;
+
+  // ── Event handlers ─────────────────────────
+  document.getElementById("fdaExportLetter")?.addEventListener("click", () => {
+    const letter = body.querySelector(".fda-letter");
+    if (!letter) return;
+    const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Q-Sub Cover Letter — ${pName}</title>
+    <style>body{font-family:Georgia,serif;max-width:700px;margin:40px auto;padding:20px;line-height:1.7;color:#1e293b}
+    hr{border:none;border-top:1px solid #ccc;margin:16px 0} strong{color:#0f172a}</style></head>
+    <body>${letter.innerHTML}</body></html>`;
+    const blob = new Blob([html], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `QSub_Cover_Letter_${pName.replace(/\s+/g, "_")}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  document.getElementById("fdaExportQuestions")?.addEventListener("click", () => {
+    const questions = QA_SECTIONS.flatMap((s) =>
+      s.questions.map((q) => ({
+        section: localizedText(s.title),
+        question: localizedText(q.question),
+        why: localizedText(q.why),
+      })),
+    );
+    let html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Pre-Sub Questions — ${pName}</title>
+    <style>body{font-family:Georgia,serif;max-width:700px;margin:40px auto;padding:20px;line-height:1.7;color:#1e293b}
+    h1{color:#1e40af;border-bottom:2px solid #1e40af;padding-bottom:8px}
+    h2{color:#334155;margin-top:28px} .q{margin:12px 0;padding:8px 0;border-bottom:1px solid #e2e8f0}
+    .q-num{color:#1e40af;font-weight:bold} .q-why{color:#64748b;font-size:0.9em;font-style:italic}</style></head><body>
+    <h1>Pre-Submission Questions — ${pName}</h1>
+    <p><strong>Applicant:</strong> ${pApplicant}<br><strong>Date:</strong> ${pDate || new Date().toLocaleDateString()}</p>`;
+    let n = 1;
+    questions.forEach((q) => {
+      html += `<div class="q"><span class="q-num">Q${n}.</span> ${q.question}<br><span class="q-why">Context: ${q.why}</span></div>`;
+      n++;
+    });
+    html += `</body></html>`;
+    const blob = new Blob([html], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `PreSub_Questions_${pName.replace(/\s+/g, "_")}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
 }
 
 // ── Main render ───────────────────────────────

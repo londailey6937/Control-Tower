@@ -418,6 +418,10 @@ export const I18N: I18nMessages = {
     docLibTotal: "Total",
     docLibOverdue: "Overdue Review",
     tabQaSheet: "Message Board",
+    tabFdaComms: "FDA Comms",
+    fdaTitle: "FDA Communications Center",
+    fdaDesc:
+      "Q-Sub package generation, RTA checklist, and FDA interaction timeline \u2014 PMP eyes only",
     qaTitle: "Message Board",
     qaDesc:
       "Purpose-driven messaging — every thread tracks a decision, action, or status update tied to project execution",
@@ -932,6 +936,9 @@ export const I18N: I18nMessages = {
     docLibTotal: "总计",
     docLibOverdue: "逾期审核",
     tabQaSheet: "留言板",
+    tabFdaComms: "FDA通信",
+    fdaTitle: "FDA通信中心",
+    fdaDesc: "Q-Sub包生成、RTA清单和FDA交互时间线 — 仅PMP可见",
     qaTitle: "留言板",
     qaDesc: "目标驱动型消息——每条线程追踪与项目执行相关的决策、行动或状态更新",
     qaAnswerPlaceholder: "输入消息...",

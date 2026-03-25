@@ -118,6 +118,10 @@
         <span class="tab-icon">📝</span>
         <span data-i18n="tabQaSheet">Message Board</span>
       </button>
+      <button class="tab-btn" data-tab="fda-comms" id="tabFdaComms">
+        <span class="tab-icon">🏛️</span>
+        <span data-i18n="tabFdaComms">FDA Comms</span>
+      </button>
     </nav>
 
     <!-- ============================================ -->
@@ -650,6 +654,17 @@
         ></div>
         <!-- Thread Body -->
         <div id="qaSheetBody"></div>
+      </section>
+      <!-- ── FDA COMMUNICATIONS (PMP-Only) ────── -->
+      <section class="tab-panel" id="panel-fda-comms">
+        <div class="panel-header">
+          <h2 data-i18n="fdaTitle">FDA Communications Center</h2>
+          <p class="panel-desc" data-i18n="fdaDesc">
+            Q-Sub package generation, RTA checklist, and FDA interaction
+            timeline — PMP eyes only
+          </p>
+        </div>
+        <div id="fdaCommsBody"></div>
       </section>
       <!-- ── PMP INPUT PANEL (slide-in) ─────────── -->
       <div class="input-panel-overlay" id="inputPanelOverlay">
