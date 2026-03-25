@@ -1,12 +1,22 @@
 # Arch Medical Management — Business Strategy (March 2026)
 
-## Company
+## Corporate Structure
 
-- **Name**: Arch Medical Management
-- **Entity**: Oregon LLC (already formed)
+- **Operating Entity**: Pilot Software LLC (Oregon LLC, active)
+- **Trade Name / DBA**: Arch Medical Management (to be filed under Pilot Software LLC — $50 Oregon Assumed Business Name)
+- **Arch Medical Management LLC**: Oregon LLC (currently dissolved — not needed if DBA route used)
+- **Client-Facing Brand**: Arch Medical Management
+- **Contracts & Invoices**: "Pilot Software LLC dba Arch Medical Management"
 - **Target Market**: Chinese entrepreneurs seeking FDA pathway for medical devices
 - **Core Asset**: Control Tower PM Dashboard (Vite+TS, Supabase, CloudFlare Pages)
 - **Demo URL**: control-tower-bmx.pages.dev
+
+## DBA Filing Checklist
+
+- [ ] File Assumed Business Name "Arch Medical Management" at Oregon Secretary of State ($50)
+- [ ] Update Pilot Software LLC registered agent if needed
+- [ ] Open business bank account (or add DBA to existing Pilot Software account)
+- [ ] Verify Pilot Software LLC annual report is current
 
 ## Lead Magnets
 
