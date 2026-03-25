@@ -3319,11 +3319,20 @@ function renderDocLibrary(): void {
         "[data-docfilter]",
       );
       if (!btn) return;
+      const clicked = btn.dataset.docfilter!;
+      // Toggle: clicking the active filter resets to "all"
+      if (clicked === docActiveFilter && clicked !== "all") {
+        docActiveFilter = "all";
+      } else {
+        docActiveFilter = clicked;
+      }
       filters
         .querySelectorAll(".filter-btn")
         .forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      docActiveFilter = btn.dataset.docfilter!;
+      const activeBtn = filters.querySelector(
+        `[data-docfilter="${docActiveFilter}"]`,
+      );
+      if (activeBtn) activeBtn.classList.add("active");
       const rows =
         document.querySelectorAll<HTMLTableRowElement>("#docLibBody tr");
       rows.forEach((row) => {
