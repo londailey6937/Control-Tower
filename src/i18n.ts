@@ -420,7 +420,7 @@ export const I18N: I18nMessages = {
     tabQaSheet: "Message Board",
     qaTitle: "Message Board",
     qaDesc:
-      "Team messaging board — synced across all users via server, with local backup",
+      "Purpose-driven messaging — every thread tracks a decision, action, or status update tied to project execution",
     qaAnswerPlaceholder: "Type your message...",
     qaSaveAll: "Save All Answers",
     qaSaved: "Saved",
@@ -931,7 +931,7 @@ export const I18N: I18nMessages = {
     docLibOverdue: "逾期审核",
     tabQaSheet: "留言板",
     qaTitle: "留言板",
-    qaDesc: "团队留言板——通过服务器同步所有用户，本地备份",
+    qaDesc: "目标驱动型消息——每条线程追踪与项目执行相关的决策、行动或状态更新",
     qaAnswerPlaceholder: "输入消息...",
     qaSaveAll: "保存所有答案",
     qaSaved: "已保存",
