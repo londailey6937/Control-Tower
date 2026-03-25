@@ -3450,6 +3450,13 @@ body {
   display: flex;
   gap: 0.4rem;
   margin-left: auto;
+  align-items: center;
+}
+.action-sep {
+  color: var(--dim);
+  font-size: 0.85rem;
+  user-select: none;
+  opacity: 0.5;
 }
 
 /* Summary cards */
