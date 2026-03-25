@@ -472,6 +472,8 @@ export const I18N: I18nMessages = {
     qaTestModeOff: "Test Mode OFF",
     mbDecision: "Decision",
     mbAction: "Action",
+    mbDescNew:
+      "Purpose-driven messaging — every thread tracks a decision, action, or status update tied to project execution",
     mbViewAll: "All Threads",
     mbViewMyItems: "My Items",
     mbViewDecisions: "Decisions",
@@ -982,6 +984,8 @@ export const I18N: I18nMessages = {
     qaTestModeOff: "测试模式 关",
     mbDecision: "决策",
     mbAction: "行动",
+    mbDescNew:
+      "目标驱动型消息——每条线程追踪与项目执行相关的决策、行动或状态更新",
     mbViewAll: "所有主题",
     mbViewMyItems: "我的事项",
     mbViewDecisions: "决策记录",
