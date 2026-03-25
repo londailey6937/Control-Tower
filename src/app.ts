@@ -52,7 +52,11 @@ import {
   markMessageRead,
   deleteMessages,
   subscribeMessages,
+  fetchAuditLog,
+  insertAuditEntry,
+  insertAuditBatch,
   type DbMessage,
+  type DbAuditEntry,
 } from "./supabase.ts";
 
 // ── STATE ─────────────────────────────────────
@@ -70,6 +74,7 @@ let dismissedNotifs: Set<string> = new Set();
 
 const CR_STORAGE_KEY = "ctower_change_requests";
 const INPUT_STORAGE_KEY = "ctower_stakeholder_inputs";
+const AUDIT_QUEUE_KEY = "ctower_audit_queue";
 
 function loadCRs(): void {
   try {
@@ -265,10 +270,17 @@ document.addEventListener("DOMContentLoaded", () => {
   initRoleSwitcher();
   applyLanguage(getLang());
 
-  // Bootstrap Supabase messages, then render
-  initQaMessages().then(() => {
+  // Bootstrap Supabase data, then render
+  Promise.all([initQaMessages(), initAuditLog()]).then(() => {
     renderAll();
     setupRealtimeMessages();
+  });
+
+  // When connection restored, flush queued audit entries
+  window.addEventListener("online", () => {
+    flushAuditQueue().then(() => {
+      initAuditLog().then(renderAuditTrail);
+    });
   });
 });
 
@@ -4626,6 +4638,29 @@ window.addEventListener("online", async () => {
 // ══════════════════════════════════════════════════
 // AUDIT TRAIL HELPER
 // ══════════════════════════════════════════════════
+
+/** Queue of audit entries waiting to be sent to Supabase (offline buffer) */
+function loadAuditQueue(): Omit<DbAuditEntry, "id">[] {
+  try {
+    const raw = localStorage.getItem(AUDIT_QUEUE_KEY);
+    return raw ? (JSON.parse(raw) as Omit<DbAuditEntry, "id">[]) : [];
+  } catch {
+    return [];
+  }
+}
+function saveAuditQueue(q: Omit<DbAuditEntry, "id">[]): void {
+  localStorage.setItem(AUDIT_QUEUE_KEY, JSON.stringify(q));
+}
+
+async function flushAuditQueue(): Promise<void> {
+  const q = loadAuditQueue();
+  if (q.length === 0) return;
+  const ok = await insertAuditBatch(q);
+  if (ok) {
+    localStorage.removeItem(AUDIT_QUEUE_KEY);
+  }
+}
+
 function logAudit(
   action: AuditEntry["action"],
   targetId: string,
@@ -4634,24 +4669,48 @@ function logAudit(
   newValue: string,
   detail: string,
 ): void {
-  const id = "AUD-" + String(AUDIT_LOG.length + 1).padStart(3, "0");
   const roleLabels: Record<string, string> = {
     pmp: "PMP",
     tech: "Tech",
     business: "Business",
     accounting: "Accounting",
   };
-  AUDIT_LOG.unshift({
-    id,
+  const entry: Omit<DbAuditEntry, "id"> = {
     timestamp: new Date().toISOString(),
-    user: roleLabels[ACTIVE_ROLE] || ACTIVE_ROLE,
+    user_role: roleLabels[ACTIVE_ROLE] || ACTIVE_ROLE,
     action,
+    target_id: targetId,
+    field,
+    old_value: oldValue,
+    new_value: newValue,
+    detail,
+  };
+
+  // Push to in-memory cache for instant UI update
+  AUDIT_LOG.unshift({
+    id: "AUD-" + String(AUDIT_LOG.length + 1).padStart(3, "0"),
+    timestamp: entry.timestamp,
+    user: entry.user_role,
+    action: action,
     targetId,
     field,
     oldValue,
     newValue,
     detail,
   });
+
+  // Persist to Supabase (or queue offline)
+  if (isOnline()) {
+    insertAuditEntry(entry).catch(() => {
+      const q = loadAuditQueue();
+      q.push(entry);
+      saveAuditQueue(q);
+    });
+  } else {
+    const q = loadAuditQueue();
+    q.push(entry);
+    saveAuditQueue(q);
+  }
 }
 
 // ══════════════════════════════════════════════════
@@ -5108,6 +5167,37 @@ window._deleteSupplier = function (supplierId: string): void {
 // ══════════════════════════════════════════════════
 // AUDIT TRAIL TABLE
 // ══════════════════════════════════════════════════
+
+/** Fetch audit log from Supabase on startup, merge with seed data */
+async function initAuditLog(): Promise<void> {
+  try {
+    // First flush any queued offline entries
+    await flushAuditQueue();
+
+    const rows = await fetchAuditLog(200);
+    if (rows.length > 0) {
+      // Replace seed data with server data
+      AUDIT_LOG.length = 0;
+      rows.forEach((r) =>
+        AUDIT_LOG.push({
+          id: r.id ?? "",
+          timestamp: r.timestamp,
+          user: r.user_role,
+          action: r.action as AuditEntry["action"],
+          targetId: r.target_id,
+          field: r.field,
+          oldValue: r.old_value,
+          newValue: r.new_value,
+          detail: r.detail,
+        }),
+      );
+    }
+    // If no rows returned, keep the seed data for display
+  } catch (err) {
+    console.error("initAuditLog failed, using seed data:", err);
+  }
+}
+
 function renderAuditTrail(): void {
   const tbody = document.getElementById("auditBody");
   if (!tbody) return;

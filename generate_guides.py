@@ -224,7 +224,7 @@ def build_english():
     pdf.kv("Budget", "Budget vs. Actual spending per category")
     pdf.kv("Resources", "Team allocation and capacity utilization")
     pdf.kv("Suppliers", "Hardware component vendor tracking")
-    pdf.kv("Audit Trail", "Chronological log of all dashboard actions for DHF traceability")
+    pdf.kv("Audit Trail", "Server-persisted chronological log of all dashboard actions for DHF traceability")
     pdf.kv("US Investment", "North America fundraising pipeline, investor tracking, and IR activities")
     pdf.kv("Document Control", "ISO 13485-aligned document lifecycle, revision history, and review scheduling")
     pdf.kv("Message Board", "Purpose-driven messaging with structured threads, decision logging, workstream filtering, and accountability")
@@ -824,14 +824,32 @@ def build_english():
     pdf.sec(22, "Tab 11: Audit Trail")
     pdf.txt(
         "The Audit Trail tab provides a complete log of every status change, decision, "
-        "and action taken in the dashboard. This supports 21 CFR Part 11 traceability "
-        "requirements for medical device development.")
+        "and action taken in the dashboard. All entries are stored on the Supabase server "
+        "so they persist across sessions and are accessible from any geography (China and "
+        "the US). This supports 21 CFR Part 11 traceability requirements for medical "
+        "device development.")
 
-    pdf.sub("22.1 Audit Table")
+    pdf.sub("22.1 Server-Side Storage")
+    pdf.txt(
+        "Every audit entry is written to the 'audit_log' table on the Supabase server "
+        "in real time. On dashboard load the most recent 200 entries are fetched from the "
+        "server and displayed locally. This ensures:\n\n"
+        "  - Data survives page refreshes and browser clears\n"
+        "  - Teams in China and the US see the same audit history\n"
+        "  - A single source of truth for DHF traceability")
+
+    pdf.sub("22.2 Offline Queue & Sync")
+    pdf.txt(
+        "If the browser loses connectivity, new audit entries are buffered in a "
+        "localStorage queue ('ctower_audit_queue'). When the connection is restored "
+        "the queue is automatically flushed to the server and the display is refreshed. "
+        "This means no audit data is lost even during network outages.")
+
+    pdf.sub("22.3 Audit Table")
     pdf.txt(
         "Each entry shows:\n\n"
         "  Timestamp: Date and time of the action\n"
-        "  User: Who performed the action (PMP, Tech, Business)\n"
+        "  User: Who performed the action (PMP, Tech, Business, Accounting)\n"
         "  Action: Type of action (e.g., milestone-status, gate-decision, cr-approved)\n"
         "  Target: Which item was affected (e.g., T1.1, G3, RISK-004)\n"
         "  Old Value: Previous state\n"
@@ -841,7 +859,7 @@ def build_english():
         "are automatically logged, including milestone status changes, gate decisions, "
         "criteria toggles, CR approvals/rejections, and all new feature interactions.")
 
-    pdf.sub("22.2 Tracked Actions")
+    pdf.sub("22.4 Tracked Actions")
     pdf.txt(
         "The following action types are captured:\n\n"
         "  milestone-status   -- Milestone state changes (Not Started/In Progress/Complete)\n"
@@ -1989,13 +2007,28 @@ def build_chinese():
     pdf.sec(22, "选项卡11：审计追踪")
     pdf.txt(
         "审计追踪选项卡提供仪表盘中每一次状态变更、决策和操作的完整日志。"
+        "所有记录存储在Supabase服务器上，跨会话持久保存，中国和美国均可访问。"
         "这支持21 CFR Part 11对医疗器械开发的可追溯性要求。")
 
-    pdf.sub("22.1 审计表格")
+    pdf.sub("22.1 服务器端存储")
+    pdf.txt(
+        "每条审计记录实时写入Supabase服务器的'audit_log'表。"
+        "仪表盘加载时从服务器获取最近200条记录并在本地显示。这确保：\n\n"
+        "  " + EM + " 数据在页面刷新和浏览器清除后仍然保留\n"
+        "  " + EM + " 中国和美国的团队看到相同的审计历史\n"
+        "  " + EM + " DHF可追溯性的单一数据源")
+
+    pdf.sub("22.2 离线队列与同步")
+    pdf.txt(
+        "如果浏览器失去网络连接，新的审计记录会缓存在本地存储队列"
+        "（'ctower_audit_queue'）中。连接恢复后，队列自动发送到服务器，"
+        "显示刷新。这意味着即使在网络中断期间也不会丢失审计数据。")
+
+    pdf.sub("22.3 审计表格")
     pdf.txt(
         "每条记录显示：\n\n"
         "  时间戳：操作的日期和时间\n"
-        "  用户：谁执行了操作（PMP、技术、商业）\n"
+        "  用户：谁执行了操作（PMP、技术、商业、会计）\n"
         "  操作：操作类型（如里程碑状态、门控决策、CR批准）\n"
         "  目标：受影响的项目（如T1.1、G3、RISK-004）\n"
         "  旧值：之前的状态\n"
@@ -2005,7 +2038,7 @@ def build_chinese():
         "包括里程碑状态变更、门控决策、标准切换、CR审批/拒绝、"
         "以及所有新功能的交互。")
 
-    pdf.sub("22.2 追踪的操作类型")
+    pdf.sub("22.4 追踪的操作类型")
     pdf.txt(
         "捕获以下操作类型：\n\n"
         "  milestone-status   " + EM + " 里程碑状态变更\n"
