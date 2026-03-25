@@ -227,7 +227,7 @@ def build_english():
     pdf.kv("Audit Trail", "Chronological log of all dashboard actions for DHF traceability")
     pdf.kv("US Investment", "North America fundraising pipeline, investor tracking, and IR activities")
     pdf.kv("Document Control", "ISO 13485-aligned document lifecycle, revision history, and review scheduling")
-    pdf.kv("Message Board", "Bi-directional threaded messaging for technical dialogue between PMP and stakeholders")
+    pdf.kv("Message Board", "Purpose-driven messaging with structured threads, decision logging, workstream filtering, and accountability")
 
     # 5. Dual-Track
     pdf.add_page()
@@ -1054,79 +1054,98 @@ def build_english():
     pdf.add_page()
     pdf.sec(28, "Tab 14: Message Board")
     pdf.txt(
-        "The Message Board provides bi-directional, threaded messaging "
-        "between the PMP and Dr. Dai. It enables structured technical dialogue "
-        "organized around 30 pre-defined questions across 8 topic sections, with "
-        "messages synced in real-time via the server database.")
+        "The Message Board is the dashboard's purpose-driven internal messaging "
+        "layer. Every thread maps to one of three intents -- inform, decide, or act "
+        "-- and is organized by workstream with an owner, objective, lifecycle, and "
+        "priority. Messages are synced in real-time via the server database (Supabase) "
+        "with localStorage as a fallback.")
 
-    pdf.sub("28.1 Bi-Directional Communication")
+    pdf.sub("28.1 Structured Threads")
     pdf.txt(
-        "The board supports true two-way conversation:\n\n"
-        "  Role Picker    -- Toggle 'Posting as' between PMP and Dr. Dai\n"
-        "  Message Alignment -- Your messages align RIGHT, the other party's LEFT\n"
-        "  Bubble Styling  -- Self messages have a bottom-right corner notch;\n"
-        "                     incoming messages have a bottom-left corner notch\n"
-        "  Live Re-render  -- Switching roles instantly flips alignment, read\n"
-        "                     receipts, and the email target for all threads")
+        "Each thread has:\n\n"
+        "  Title       -- Descriptive name for the conversation\n"
+        "  Workstream  -- project / regulatory / engineering / clinical / business / operations\n"
+        "  Intent      -- inform (share info), decide (log a decision), act (assign action)\n"
+        "  Owner       -- The role that created the thread\n"
+        "  Objective   -- Optional statement of purpose\n"
+        "  Priority    -- normal / urgent / escalated (visual indicators)\n"
+        "  Lifecycle   -- open or resolved (with resolution summary)\n\n"
+        "The original Q1-Q30 predefined questions auto-migrate to threads on first "
+        "load. Existing messages are preserved via Supabase. New threads can be created "
+        "at any time using the 'New Thread' button.")
 
-    pdf.sub("28.2 Threaded Questions (Q1-Q30)")
+    pdf.sub("28.2 Decision Visibility")
     pdf.txt(
-        "Messages are organized under 30 questions in 8 sections:\n\n"
-        "  Section 1: Device Architecture & Design Decisions (Q1-Q6)\n"
-        "  Section 2: Regulatory & Standards Strategy (Q7-Q10)\n"
-        "  Section 3: Clinical & Human Factors (Q11-Q13)\n"
-        "  Section 4: Risk Management & Safety (Q14-Q17)\n"
-        "  Section 5: Manufacturing & Supply Chain (Q18-Q20)\n"
-        "  Section 6: Software & Algorithms (Q21-Q23)\n"
-        "  Section 7: Project Management & Timeline (Q24-Q26)\n"
-        "  Section 8: Inventor Relationship & Ongoing Role (Q27-Q30)\n\n"
-        "Each question shows a message count, unread indicator, and a collapse/expand "
-        "toggle. Context notes explain why each question matters, and follow-up "
-        "prompts are provided where relevant.")
+        "Decisions are first-class objects, not buried in chat:\n\n"
+        "  [DECISION] prefix -- Prefix any message with [DECISION] to auto-log it\n"
+        "  Log Decision btn  -- Manually log a decision via the thread action bar\n"
+        "  Decisions view    -- A dedicated view surfaces all threads with active decisions\n"
+        "  Decision cards    -- Each decision shows text, rationale, who made it, and date\n"
+        "  Audit trail       -- All decisions are recorded in the audit log")
 
-    pdf.sub("28.3 Read Receipts & Unread Indicators")
+    pdf.sub("28.3 Four Views")
     pdf.txt(
-        "Every message tracks who has read it:\n\n"
-        "  Sent messages   -- Show a single check (Unread) or double check (Read)\n"
-        "                     indicating whether the other party has seen it\n"
-        "  Received messages -- Highlighted with a blue left border when unread\n"
-        "  Mark as Read     -- Click the envelope icon to mark a message as read\n"
-        "  Tab Badge        -- A red count badge on the Q&A tab shows total\n"
-        "                     unread messages for the current role")
+        "The view switcher provides four perspectives:\n\n"
+        "  All Threads  -- Every thread matching current filters\n"
+        "  My Items     -- Threads you own or are assigned to\n"
+        "  Decisions    -- Threads that have active logged decisions\n"
+        "  Executive    -- High-signal view: urgent, escalated, decisions, and resolved threads")
 
-    pdf.sub("28.4 Cross-Tab Sync")
+    pdf.sub("28.4 Filters & Summary Dashboard")
     pdf.txt(
-        "Open two browser windows -- one as PMP, one as Inventor. Messages sent in "
-        "one window appear in the other automatically via browser StorageEvent sync. "
-        "When a new message arrives from the other party, a toast notification slides "
-        "up showing the sender, question number, and a message preview.")
+        "  Workstream Filter  -- Dropdown to show only one workstream or all\n"
+        "  Lifecycle Filter   -- Show open, resolved, or all threads\n"
+        "  Sort Order         -- Escalated > urgent > normal, then by most recent message\n\n"
+        "Five summary cards at the top:\n\n"
+        "  Open Threads       -- Count of open threads\n"
+        "  Urgent/Escalated   -- Count of high-priority open threads\n"
+        "  Decisions          -- Count of active decisions logged\n"
+        "  My Items           -- Threads owned or assigned to current role\n"
+        "  Unread Messages    -- Messages not yet read by current role")
 
-    pdf.sub("28.5 Email Notification")
+    pdf.sub("28.5 Accountability & Actions")
     pdf.txt(
-        "Click the Settings (gear) icon to configure PMP and Dr. Dai email addresses. "
-        "When configured, sending a message triggers a notification email to the "
-        "recipient. The email subject line identifies who posted and the question "
-        "number (e.g. '[Control Tower] New message from PMP on Q5'). The actual "
-        "message body is NOT included in the email -- the recipient is directed to "
-        "open the Control Tower to read the full post. This keeps sensitive content "
-        "within the dashboard and encourages direct engagement with the board.")
+        "  Create Action   -- Assigns a thread to a specific role with a due date\n"
+        "  Assignee badge  -- Shows who is responsible on the thread card\n"
+        "  Due date        -- Displayed alongside the assignee\n"
+        "  Intent tagging  -- Prefix [ACTION] on a message for visual highlighting")
 
-    pdf.sub("28.6 Export & Archive")
+    pdf.sub("28.6 Linked Artifacts")
     pdf.txt(
-        "  Export Thread  -- Downloads all active messages as a .txt file organized\n"
-        "                    by section and question\n"
-        "  Archive Thread -- Exports a single question's thread to a file, saves it\n"
-        "                    to archive storage, and clears it from the active board\n"
-        "  View Archive   -- Browse previously archived threads with message previews\n"
-        "  Delete Archive -- Permanently remove an archived thread entry")
+        "Threads can be connected to other dashboard items:\n\n"
+        "  Link types: milestone, risk, gate, document, standard, task\n"
+        "  Each linked artifact appears as a badge on the thread card\n"
+        "  Links are stored as part of the thread metadata")
 
-    pdf.sub("28.7 Data Storage")
+    pdf.sub("28.7 Lifecycle Management")
     pdf.txt(
-        "All messages are synced in real-time to the server database (Supabase) with "
-        "localStorage as a fallback. Settings and archives are also stored on the server. "
-        "Data persists across sessions and is accessible from any browser. "
-        "localStorage keys ('ctower_qa_messages', 'ctower_qa_settings', 'ctower_qa_archive') "
-        "serve as local backup only.")
+        "  Resolve       -- Mark a thread as resolved with a summary\n"
+        "  Reopen        -- Reopen a previously resolved thread\n"
+        "  Resolution    -- Displayed on resolved thread cards\n"
+        "  Audit trail   -- All lifecycle changes are logged")
+
+    pdf.sub("28.8 Read Receipts & Notifications")
+    pdf.txt(
+        "  Sent messages   -- Show single check (Unread) or double check (Read)\n"
+        "  Received        -- Highlighted with a blue left border when unread\n"
+        "  Mark as Read    -- Click the envelope icon to mark a message as read\n"
+        "  Tab Badge       -- Red count badge shows total unread for current role\n"
+        "  Toast           -- New messages from other parties trigger a slide-up toast\n"
+        "  Cross-Tab Sync  -- Messages sync across browser tabs via StorageEvent")
+
+    pdf.sub("28.9 Export & Archive")
+    pdf.txt(
+        "  Export  -- Downloads all threads and decisions as a .txt file\n"
+        "  Archive -- Saves a thread's messages to archive storage and clears them\n"
+        "  View Archive / Delete Archive -- Browse or remove archived entries")
+
+    pdf.sub("28.10 Data Storage")
+    pdf.txt(
+        "Messages sync in real-time to the server database (Supabase). Thread metadata "
+        "(title, workstream, intent, owner, lifecycle, linked items) is stored locally "
+        "in localStorage under 'ctower_mb_threads'. Decisions are stored under "
+        "'ctower_mb_decisions'. Message cache uses 'ctower_qa_messages' as local backup. "
+        "Settings and archives also persist across sessions.")
 
     # 29. Glossary
     pdf.add_page()
@@ -2182,71 +2201,99 @@ def build_chinese():
     pdf.add_page()
     pdf.sec(28, "\u9009\u9879\u530114\uff1a\u7559\u8a00\u677f")
     pdf.txt(
-        "\u7559\u8a00\u677f\u63d0\u4f9b\u9879\u76ee\u7ecf\u7406(PMP)\u4e0e\u6234\u535a\u58eb\u4e4b\u95f4\u7684"
-        "\u53cc\u5411\u7ebf\u7a0b\u5f0f\u6d88\u606f\u529f\u80fd\u3002\u5b83\u652f\u6301\u56f4\u7ed530\u4e2a\u9884\u5b9a\u4e49"
-        "\u95ee\u9898\uff088\u4e2a\u4e3b\u9898\u90e8\u5206\uff09\u7684\u7ed3\u6784\u5316\u6280\u672f\u5bf9\u8bdd\uff0c"
-        "\u6d88\u606f\u901a\u8fc7\u670d\u52a1\u5668\u6570\u636e\u5e93\u5b9e\u65f6\u540c\u6b65\u3002")
+        "\u7559\u8a00\u677f\u662f\u4eea\u8868\u76d8\u7684\u76ee\u7684\u9a71\u52a8\u5185\u90e8\u6d88\u606f\u5c42\u3002"
+        "\u6bcf\u4e2a\u4e3b\u9898\u5bf9\u5e94\u4e09\u79cd\u610f\u56fe\u4e4b\u4e00\u2014\u2014\u544a\u77e5\u3001\u51b3\u7b56\u6216\u884c\u52a8\u2014\u2014"
+        "\u5e76\u6309\u5de5\u4f5c\u6d41\u7ec4\u7ec7\uff0c\u5177\u6709\u62e5\u6709\u8005\u3001\u76ee\u6807\u3001\u751f\u547d\u5468\u671f\u548c\u4f18\u5148\u7ea7\u3002"
+        "\u6d88\u606f\u901a\u8fc7\u670d\u52a1\u5668\u6570\u636e\u5e93\uff08Supabase\uff09\u5b9e\u65f6\u540c\u6b65\uff0c"
+        "localStorage\u4f5c\u4e3a\u5907\u4efd\u3002")
 
-    pdf.sub("28.1 \u53cc\u5411\u901a\u4fe1")
+    pdf.sub("28.1 \u7ed3\u6784\u5316\u4e3b\u9898")
     pdf.txt(
-        "\u7559\u8a00\u677f\u652f\u6301\u771f\u6b63\u7684\u53cc\u5411\u5bf9\u8bdd\uff1a\n\n"
-        "  \u89d2\u8272\u9009\u62e9\u5668  -- \u5728PMP\u548c\u6234\u535a\u58eb\u4e4b\u95f4\u5207\u6362\u201c\u53d1\u5e03\u8eab\u4efd\u201d\n"
-        "  \u6d88\u606f\u5bf9\u9f50    -- \u60a8\u7684\u6d88\u606f\u9760\u53f3\u5bf9\u9f50\uff0c\u5bf9\u65b9\u6d88\u606f\u9760\u5de6\u5bf9\u9f50\n"
-        "  \u6c14\u6ce1\u6837\u5f0f    -- \u81ea\u5df1\u7684\u6d88\u606f\u53f3\u4e0b\u89d2\u5706\u89d2\uff0c\u5bf9\u65b9\u6d88\u606f\u5de6\u4e0b\u89d2\u5706\u89d2\n"
-        "  \u5b9e\u65f6\u91cd\u65b0\u6e32\u67d3 -- \u5207\u6362\u89d2\u8272\u540e\u7acb\u5373\u7ffb\u8f6c\u5bf9\u9f50\u3001\u5df2\u8bfb\u56de\u6267\u548c\u90ae\u4ef6\u76ee\u6807")
+        "\u6bcf\u4e2a\u4e3b\u9898\u5305\u542b\uff1a\n\n"
+        "  \u6807\u9898       -- \u5bf9\u8bdd\u7684\u63cf\u8ff0\u6027\u540d\u79f0\n"
+        "  \u5de5\u4f5c\u6d41     -- \u9879\u76ee / \u6cd5\u89c4 / \u5de5\u7a0b / \u4e34\u5e8a / \u5546\u52a1 / \u8fd0\u8425\n"
+        "  \u610f\u56fe       -- \u544a\u77e5\uff08\u5206\u4eab\u4fe1\u606f\uff09\u3001\u51b3\u7b56\uff08\u8bb0\u5f55\u51b3\u5b9a\uff09\u3001\u884c\u52a8\uff08\u5206\u914d\u4efb\u52a1\uff09\n"
+        "  \u62e5\u6709\u8005     -- \u521b\u5efa\u4e3b\u9898\u7684\u89d2\u8272\n"
+        "  \u76ee\u6807       -- \u53ef\u9009\u7684\u76ee\u7684\u8bf4\u660e\n"
+        "  \u4f18\u5148\u7ea7     -- \u6b63\u5e38 / \u7d27\u6025 / \u5347\u7ea7\uff08\u89c6\u89c9\u6307\u793a\u5668\uff09\n"
+        "  \u751f\u547d\u5468\u671f   -- \u8fdb\u884c\u4e2d\u6216\u5df2\u89e3\u51b3\uff08\u542b\u89e3\u51b3\u65b9\u6848\u6458\u8981\uff09\n\n"
+        "\u539f\u59cbQ1-Q30\u9884\u5b9a\u4e49\u95ee\u9898\u5728\u9996\u6b21\u52a0\u8f7d\u65f6\u81ea\u52a8\u8fc1\u79fb\u4e3a\u4e3b\u9898\u3002"
+        "\u73b0\u6709\u6d88\u606f\u901a\u8fc7Supabase\u4fdd\u7559\u3002"
+        "\u53ef\u968f\u65f6\u4f7f\u7528\u201c\u65b0\u4e3b\u9898\u201d\u6309\u94ae\u521b\u5efa\u65b0\u4e3b\u9898\u3002")
 
-    pdf.sub("28.2 \u7ebf\u7a0b\u5f0f\u95ee\u9898\uff08Q1-Q30\uff09")
+    pdf.sub("28.2 \u51b3\u7b56\u53ef\u89c1\u6027")
     pdf.txt(
-        "\u6d88\u606f\u630930\u4e2a\u95ee\u9898\u5206\u5e038\u4e2a\u90e8\u5206\u7ec4\u7ec7\uff1a\n\n"
-        "  \u7b2c1\u90e8\u5206\uff1a\u8bbe\u5907\u67b6\u6784\u4e0e\u8bbe\u8ba1\u51b3\u7b56\uff08Q1-Q6\uff09\n"
-        "  \u7b2c2\u90e8\u5206\uff1a\u6cd5\u89c4\u4e0e\u6807\u51c6\u7b56\u7565\uff08Q7-Q10\uff09\n"
-        "  \u7b2c3\u90e8\u5206\uff1a\u4e34\u5e8a\u4e0e\u4eba\u56e0\u5de5\u7a0b\uff08Q11-Q13\uff09\n"
-        "  \u7b2c4\u90e8\u5206\uff1a\u98ce\u9669\u7ba1\u7406\u4e0e\u5b89\u5168\uff08Q14-Q17\uff09\n"
-        "  \u7b2c5\u90e8\u5206\uff1a\u5236\u9020\u4e0e\u4f9b\u5e94\u94fe\uff08Q18-Q20\uff09\n"
-        "  \u7b2c6\u90e8\u5206\uff1a\u8f6f\u4ef6\u4e0e\u7b97\u6cd5\uff08Q21-Q23\uff09\n"
-        "  \u7b2c7\u90e8\u5206\uff1a\u9879\u76ee\u7ba1\u7406\u4e0e\u65f6\u95f4\u8868\uff08Q24-Q26\uff09\n"
-        "  \u7b2c8\u90e8\u5206\uff1a\u53d1\u660e\u4eba\u5173\u7cfb\u4e0e\u6301\u7eed\u89d2\u8272\uff08Q27-Q30\uff09\n\n"
-        "\u6bcf\u4e2a\u95ee\u9898\u663e\u793a\u6d88\u606f\u8ba1\u6570\u3001\u672a\u8bfb\u6307\u793a\u5668\u548c\u6298\u53e0/\u5c55\u5f00\u5207\u6362\u3002"
-        "\u80cc\u666f\u6ce8\u91ca\u89e3\u91ca\u6bcf\u4e2a\u95ee\u9898\u7684\u91cd\u8981\u6027\uff0c\u5e76\u5728\u76f8\u5173\u5904\u63d0\u4f9b\u540e\u7eed\u63d0\u793a\u3002")
+        "\u51b3\u7b56\u662f\u4e00\u7b49\u5bf9\u8c61\uff0c\u4e0d\u4f1a\u57cb\u6ca1\u5728\u804a\u5929\u4e2d\uff1a\n\n"
+        "  [DECISION]\u524d\u7f00 -- \u5728\u6d88\u606f\u524d\u52a0[DECISION]\u81ea\u52a8\u8bb0\u5f55\n"
+        "  \u8bb0\u5f55\u51b3\u7b56\u6309\u94ae -- \u901a\u8fc7\u4e3b\u9898\u64cd\u4f5c\u680f\u624b\u52a8\u8bb0\u5f55\u51b3\u7b56\n"
+        "  \u51b3\u7b56\u89c6\u56fe     -- \u4e13\u7528\u89c6\u56fe\u5c55\u793a\u6240\u6709\u6709\u6d3b\u52a8\u51b3\u7b56\u7684\u4e3b\u9898\n"
+        "  \u51b3\u7b56\u5361\u7247     -- \u663e\u793a\u6587\u672c\u3001\u7406\u7531\u3001\u51b3\u7b56\u8005\u548c\u65e5\u671f\n"
+        "  \u5ba1\u8ba1\u8ddf\u8e2a     -- \u6240\u6709\u51b3\u7b56\u8bb0\u5f55\u5728\u5ba1\u8ba1\u65e5\u5fd7\u4e2d")
 
-    pdf.sub("28.3 \u5df2\u8bfb\u56de\u6267\u4e0e\u672a\u8bfb\u6307\u793a\u5668")
+    pdf.sub("28.3 \u56db\u4e2a\u89c6\u56fe")
     pdf.txt(
-        "\u6bcf\u6761\u6d88\u606f\u90fd\u8ddf\u8e2a\u8c01\u5df2\u8bfb\uff1a\n\n"
-        "  \u5df2\u53d1\u6d88\u606f -- \u663e\u793a\u5355\u52fe\uff08\u672a\u8bfb\uff09\u6216\u53cc\u52fe\uff08\u5df2\u8bfb\uff09\n"
-        "  \u6536\u5230\u7684\u6d88\u606f -- \u672a\u8bfb\u65f6\u5de6\u4fa7\u663e\u793a\u84dd\u8272\u8fb9\u6846\u9ad8\u4eae\n"
+        "\u89c6\u56fe\u5207\u6362\u5668\u63d0\u4f9b\u56db\u4e2a\u89c6\u89d2\uff1a\n\n"
+        "  \u6240\u6709\u4e3b\u9898   -- \u5339\u914d\u5f53\u524d\u8fc7\u6ee4\u6761\u4ef6\u7684\u6240\u6709\u4e3b\u9898\n"
+        "  \u6211\u7684\u4e8b\u9879   -- \u60a8\u62e5\u6709\u6216\u88ab\u5206\u914d\u7684\u4e3b\u9898\n"
+        "  \u51b3\u7b56\u8bb0\u5f55   -- \u6709\u6d3b\u52a8\u51b3\u7b56\u7684\u4e3b\u9898\n"
+        "  \u7ba1\u7406\u89c6\u56fe   -- \u9ad8\u4fe1\u53f7\u89c6\u56fe\uff1a\u7d27\u6025\u3001\u5347\u7ea7\u3001\u51b3\u7b56\u548c\u5df2\u89e3\u51b3\u7684\u4e3b\u9898")
+
+    pdf.sub("28.4 \u8fc7\u6ee4\u5668\u4e0e\u6458\u8981\u4eea\u8868\u76d8")
+    pdf.txt(
+        "  \u5de5\u4f5c\u6d41\u8fc7\u6ee4   -- \u4e0b\u62c9\u83dc\u5355\u663e\u793a\u5355\u4e2a\u5de5\u4f5c\u6d41\u6216\u5168\u90e8\n"
+        "  \u751f\u547d\u5468\u671f\u8fc7\u6ee4 -- \u663e\u793a\u8fdb\u884c\u4e2d\u3001\u5df2\u89e3\u51b3\u6216\u5168\u90e8\u4e3b\u9898\n"
+        "  \u6392\u5e8f\u987a\u5e8f       -- \u5347\u7ea7 > \u7d27\u6025 > \u6b63\u5e38\uff0c\u7136\u540e\u6309\u6700\u65b0\u6d88\u606f\u6392\u5e8f\n\n"
+        "\u9876\u90e8\u4e94\u4e2a\u6458\u8981\u5361\u7247\uff1a\n\n"
+        "  \u8fdb\u884c\u4e2d\u4e3b\u9898     -- \u8fdb\u884c\u4e2d\u7684\u4e3b\u9898\u6570\u91cf\n"
+        "  \u7d27\u6025/\u5347\u7ea7     -- \u9ad8\u4f18\u5148\u7ea7\u8fdb\u884c\u4e2d\u4e3b\u9898\u6570\u91cf\n"
+        "  \u51b3\u7b56           -- \u5df2\u8bb0\u5f55\u7684\u6d3b\u52a8\u51b3\u7b56\u6570\u91cf\n"
+        "  \u6211\u7684\u4e8b\u9879       -- \u5f53\u524d\u89d2\u8272\u62e5\u6709\u6216\u88ab\u5206\u914d\u7684\u4e3b\u9898\n"
+        "  \u672a\u8bfb\u6d88\u606f       -- \u5f53\u524d\u89d2\u8272\u5c1a\u672a\u8bfb\u53d6\u7684\u6d88\u606f")
+
+    pdf.sub("28.5 \u8d23\u4efb\u4e0e\u884c\u52a8")
+    pdf.txt(
+        "  \u521b\u5efa\u884c\u52a8   -- \u5c06\u4e3b\u9898\u5206\u914d\u7ed9\u7279\u5b9a\u89d2\u8272\u5e76\u8bbe\u5b9a\u622a\u6b62\u65e5\u671f\n"
+        "  \u8d1f\u8d23\u4eba\u5fbd\u7ae0 -- \u5728\u4e3b\u9898\u5361\u7247\u4e0a\u663e\u793a\u8d1f\u8d23\u4eba\n"
+        "  \u622a\u6b62\u65e5\u671f   -- \u4e0e\u8d1f\u8d23\u4eba\u4e00\u8d77\u663e\u793a\n"
+        "  \u610f\u56fe\u6807\u8bb0   -- \u6d88\u606f\u524d\u7f00[ACTION]\u8fdb\u884c\u89c6\u89c9\u9ad8\u4eae")
+
+    pdf.sub("28.6 \u5173\u8054\u5de5\u4ef6")
+    pdf.txt(
+        "\u4e3b\u9898\u53ef\u4ee5\u8fde\u63a5\u5230\u5176\u4ed6\u4eea\u8868\u76d8\u9879\u76ee\uff1a\n\n"
+        "  \u5173\u8054\u7c7b\u578b\uff1a\u91cc\u7a0b\u7891\u3001\u98ce\u9669\u3001\u95e8\u63a7\u3001\u6587\u6863\u3001\u6807\u51c6\u3001\u4efb\u52a1\n"
+        "  \u6bcf\u4e2a\u5173\u8054\u5de5\u4ef6\u5728\u4e3b\u9898\u5361\u7247\u4e0a\u663e\u793a\u4e3a\u5fbd\u7ae0\n"
+        "  \u5173\u8054\u5b58\u50a8\u4e3a\u4e3b\u9898\u5143\u6570\u636e\u7684\u4e00\u90e8\u5206")
+
+    pdf.sub("28.7 \u751f\u547d\u5468\u671f\u7ba1\u7406")
+    pdf.txt(
+        "  \u89e3\u51b3       -- \u5c06\u4e3b\u9898\u6807\u8bb0\u4e3a\u5df2\u89e3\u51b3\u5e76\u9644\u6458\u8981\n"
+        "  \u91cd\u65b0\u6253\u5f00   -- \u91cd\u65b0\u6253\u5f00\u5df2\u89e3\u51b3\u7684\u4e3b\u9898\n"
+        "  \u89e3\u51b3\u65b9\u6848   -- \u5728\u5df2\u89e3\u51b3\u7684\u4e3b\u9898\u5361\u7247\u4e0a\u663e\u793a\n"
+        "  \u5ba1\u8ba1\u8ddf\u8e2a   -- \u6240\u6709\u751f\u547d\u5468\u671f\u53d8\u66f4\u5747\u88ab\u8bb0\u5f55")
+
+    pdf.sub("28.8 \u5df2\u8bfb\u56de\u6267\u4e0e\u901a\u77e5")
+    pdf.txt(
+        "  \u5df2\u53d1\u6d88\u606f   -- \u663e\u793a\u5355\u52fe\uff08\u672a\u8bfb\uff09\u6216\u53cc\u52fe\uff08\u5df2\u8bfb\uff09\n"
+        "  \u6536\u5230\u7684\u6d88\u606f -- \u672a\u8bfb\u65f6\u5de6\u4fa7\u84dd\u8272\u8fb9\u6846\u9ad8\u4eae\n"
         "  \u6807\u8bb0\u5df2\u8bfb   -- \u70b9\u51fb\u4fe1\u5c01\u56fe\u6807\u6807\u8bb0\u4e3a\u5df2\u8bfb\n"
-        "  \u6807\u7b7e\u5fbd\u7ae0   -- Q&A\u9009\u9879\u5361\u4e0a\u7684\u7ea2\u8272\u8ba1\u6570\u5fbd\u7ae0\u663e\u793a\u5f53\u524d\u89d2\u8272\u7684\u672a\u8bfb\u603b\u6570")
+        "  \u6807\u7b7e\u5fbd\u7ae0   -- \u7ea2\u8272\u8ba1\u6570\u5fbd\u7ae0\u663e\u793a\u5f53\u524d\u89d2\u8272\u7684\u672a\u8bfb\u603b\u6570\n"
+        "  \u5f39\u51fa\u901a\u77e5   -- \u5176\u4ed6\u89d2\u8272\u7684\u65b0\u6d88\u606f\u89e6\u53d1\u5f39\u51fa\u63d0\u793a\n"
+        "  \u8de8\u6807\u7b7e\u540c\u6b65 -- \u6d88\u606f\u901a\u8fc7StorageEvent\u5728\u6d4f\u89c8\u5668\u6807\u7b7e\u95f4\u540c\u6b65")
 
-    pdf.sub("28.4 \u8de8\u9009\u9879\u5361\u540c\u6b65")
+    pdf.sub("28.9 \u5bfc\u51fa\u4e0e\u5f52\u6863")
     pdf.txt(
-        "\u6253\u5f00\u4e24\u4e2a\u6d4f\u89c8\u5668\u7a97\u53e3 -- \u4e00\u4e2a\u4f5cPMP\uff0c\u4e00\u4e2a\u4f5c\u6234\u535a\u58eb\u3002"
-        "\u5728\u4e00\u4e2a\u7a97\u53e3\u53d1\u9001\u7684\u6d88\u606f\u4f1a\u901a\u8fc7\u6d4f\u89c8\u5668StorageEvent\u540c\u6b65\u81ea\u52a8\u5728\u53e6\u4e00\u4e2a\u7a97\u53e3\u663e\u793a\u3002"
-        "\u5f53\u5bf9\u65b9\u6709\u65b0\u6d88\u606f\u65f6\uff0c\u4f1a\u5f39\u51fa\u901a\u77e5\u63d0\u793a\uff0c\u663e\u793a\u53d1\u9001\u8005\u3001\u95ee\u9898\u7f16\u53f7\u548c\u6d88\u606f\u9884\u89c8\u3002")
+        "  \u5bfc\u51fa  -- \u5c06\u6240\u6709\u4e3b\u9898\u548c\u51b3\u7b56\u4e0b\u8f7d\u4e3a.txt\u6587\u4ef6\n"
+        "  \u5f52\u6863  -- \u5c06\u4e3b\u9898\u6d88\u606f\u4fdd\u5b58\u5230\u5f52\u6863\u5b58\u50a8\u5e76\u6e05\u9664\n"
+        "  \u67e5\u770b\u5f52\u6863 / \u5220\u9664\u5f52\u6863 -- \u6d4f\u89c8\u6216\u5220\u9664\u5f52\u6863\u6761\u76ee")
 
-    pdf.sub("28.5 \u90ae\u4ef6\u901a\u77e5")
+    pdf.sub("28.10 \u6570\u636e\u5b58\u50a8")
     pdf.txt(
-        "\u70b9\u51fb\u8bbe\u7f6e\uff08\u9f7f\u8f6e\uff09\u56fe\u6807\u914d\u7f6ePMP\u548c\u6234\u535a\u58eb\u90ae\u7bb1\u3002"
-        "\u914d\u7f6e\u540e\uff0c\u53d1\u9001\u6d88\u606f\u4f1a\u89e6\u53d1\u5411\u6536\u4ef6\u4eba\u7684\u901a\u77e5\u90ae\u4ef6\u3002"
-        "\u90ae\u4ef6\u4e3b\u9898\u884c\u6807\u8bc6\u53d1\u5e03\u8005\u548c\u95ee\u9898\u7f16\u53f7"
-        "\uff08\u4f8b\u5982\u2018[Control Tower] PMP\u5728Q5\u53d1\u5e03\u4e86\u65b0\u6d88\u606f\u2019\uff09\u3002"
-        "\u5b9e\u9645\u6d88\u606f\u5185\u5bb9\u4e0d\u4f1a\u5305\u542b\u5728\u90ae\u4ef6\u4e2d -- "
-        "\u6536\u4ef6\u4eba\u88ab\u5f15\u5bfc\u6253\u5f00\u63a7\u5236\u5854\u67e5\u770b\u5b8c\u6574\u5e16\u5b50\u3002"
-        "\u8fd9\u786e\u4fdd\u654f\u611f\u5185\u5bb9\u59cb\u7ec8\u4fdd\u7559\u5728\u4eea\u8868\u76d8\u5185\u3002")
-
-    pdf.sub("28.6 \u5bfc\u51fa\u4e0e\u5f52\u6863")
-    pdf.txt(
-        "  \u5bfc\u51fa\u7ebf\u7a0b  -- \u5c06\u6240\u6709\u6d3b\u52a8\u6d88\u606f\u4e0b\u8f7d\u4e3a.txt\u6587\u4ef6\n"
-        "  \u5f52\u6863\u7ebf\u7a0b  -- \u5c06\u5355\u4e2a\u95ee\u9898\u7684\u7ebf\u7a0b\u5bfc\u51fa\u5e76\u4ece\u6d3b\u52a8\u677f\u6e05\u9664\n"
-        "  \u67e5\u770b\u5f52\u6863  -- \u6d4f\u89c8\u5df2\u5f52\u6863\u7684\u7ebf\u7a0b\u548c\u6d88\u606f\u9884\u89c8\n"
-        "  \u5220\u9664\u5f52\u6863  -- \u6c38\u4e45\u5220\u9664\u5df2\u5f52\u6863\u7684\u7ebf\u7a0b\u6761\u76ee")
-
-    pdf.sub("28.7 \u6570\u636e\u5b58\u50a8")
-    pdf.txt(
-        "\u6240\u6709\u6d88\u606f\u5b9e\u65f6\u540c\u6b65\u5230\u670d\u52a1\u5668\u6570\u636e\u5e93\uff08Supabase\uff09\uff0c"
-        "localStorage\u4f5c\u4e3a\u672c\u5730\u5907\u4efd\u3002\u8bbe\u7f6e\u548c\u5f52\u6863\u4e5f\u5b58\u50a8\u5728\u670d\u52a1\u5668\u4e0a\u3002"
-        "\u6570\u636e\u5728\u4f1a\u8bdd\u95f4\u6301\u4e45\u5316\uff0c\u53ef\u4ece\u4efb\u4f55\u6d4f\u89c8\u5668\u8bbf\u95ee\u3002"
-        "localStorage\u952e\u540d\uff08\u2018ctower_qa_messages\u2019\u3001\u2018ctower_qa_settings\u2019\u3001\u2018ctower_qa_archive\u2019\uff09"
-        "\u4ec5\u7528\u4f5c\u672c\u5730\u5907\u4efd\u3002")
+        "\u6d88\u606f\u5b9e\u65f6\u540c\u6b65\u5230\u670d\u52a1\u5668\u6570\u636e\u5e93\uff08Supabase\uff09\u3002"
+        "\u4e3b\u9898\u5143\u6570\u636e\uff08\u6807\u9898\u3001\u5de5\u4f5c\u6d41\u3001\u610f\u56fe\u3001\u62e5\u6709\u8005\u3001\u751f\u547d\u5468\u671f\u3001\u5173\u8054\u5de5\u4ef6\uff09"
+        "\u5b58\u50a8\u5728localStorage\u7684\u2018ctower_mb_threads\u2019\u4e2d\u3002"
+        "\u51b3\u7b56\u5b58\u50a8\u5728\u2018ctower_mb_decisions\u2019\u4e2d\u3002"
+        "\u6d88\u606f\u7f13\u5b58\u4f7f\u7528\u2018ctower_qa_messages\u2019\u4f5c\u4e3a\u672c\u5730\u5907\u4efd\u3002"
+        "\u8bbe\u7f6e\u548c\u5f52\u6863\u4e5f\u5728\u4f1a\u8bdd\u95f4\u6301\u4e45\u5316\u3002")
 
     # 29 关键术语表
     pdf.add_page()
