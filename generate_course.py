@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Stanford-Style Certificate Course in Project Management
+510k Bridge Certificate Course in Project Management
 ========================================================
 Uses the ICU Respiratory Digital Twin System as the central case study.
 Generates a comprehensive PDF suitable for a certificate-level program.
@@ -13,7 +13,7 @@ OUT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Color palette
 NAVY = (10, 40, 100)
-STANFORD = (140, 21, 21)   # Cardinal red
+PRIMARY = (140, 21, 21)   # Cardinal red
 BLUE = (30, 90, 200)
 DARK = (25, 25, 30)
 TEXT = (40, 40, 45)
@@ -32,7 +32,7 @@ class CoursePDF(FPDF):
             return
         self.set_font("Helvetica", "I", 8)
         self.set_text_color(*GRAY)
-        self.cell(0, 5, "Stanford Certificate in Project Management  |  ICU Digital Twin Case Study", align="L")
+        self.cell(0, 5, "510k Bridge Certificate in Project Management  |  ICU Digital Twin Case Study", align="L")
         self.ln(8)
 
     def footer(self):
@@ -48,12 +48,12 @@ class CoursePDF(FPDF):
         self.add_page()
         self.ln(25)
         self.set_font("Helvetica", "B", 13)
-        self.set_text_color(*STANFORD)
+        self.set_text_color(*PRIMARY)
         self.cell(0, 8, f"MODULE {num}", align="C", new_x="LMARGIN", new_y="NEXT")
         self.set_font("Helvetica", "B", 22)
         self.set_text_color(*NAVY)
         self.cell(0, 12, title, align="C", new_x="LMARGIN", new_y="NEXT")
-        self.set_draw_color(*STANFORD)
+        self.set_draw_color(*PRIMARY)
         mid = self.w / 2
         self.line(mid - 40, self.get_y() + 3, mid + 40, self.get_y() + 3)
         self.ln(12)
@@ -93,7 +93,7 @@ class CoursePDF(FPDF):
         self.set_draw_color(*BLUE)
         y_start = self.get_y()
         self.set_font("Helvetica", "B", 9)
-        self.set_text_color(*STANFORD)
+        self.set_text_color(*PRIMARY)
         self.set_x(x + 3)
         self.cell(0, 5, "CASE STUDY: ICU Respiratory Digital Twin", new_x="LMARGIN", new_y="NEXT")
         self.set_font("Helvetica", "", 9.5)
@@ -105,7 +105,7 @@ class CoursePDF(FPDF):
         # Re-draw text over the rect
         self.set_y(y_start)
         self.set_font("Helvetica", "B", 9)
-        self.set_text_color(*STANFORD)
+        self.set_text_color(*PRIMARY)
         self.set_x(x + 3)
         self.cell(0, 5, "CASE STUDY: ICU Respiratory Digital Twin", new_x="LMARGIN", new_y="NEXT")
         self.set_font("Helvetica", "", 9.5)
@@ -126,7 +126,7 @@ class CoursePDF(FPDF):
 
     def key_concept(self, text):
         self.set_font("Helvetica", "B", 10)
-        self.set_text_color(*STANFORD)
+        self.set_text_color(*PRIMARY)
         self.cell(0, 6, "KEY CONCEPT: " + text, new_x="LMARGIN", new_y="NEXT")
         self.ln(1)
 
@@ -150,15 +150,15 @@ def build():
     pdf.add_page()
     pdf.ln(35)
     pdf.set_font("Helvetica", "B", 32)
-    pdf.set_text_color(*STANFORD)
+    pdf.set_text_color(*PRIMARY)
     pdf.cell(0, 14, "Certificate in", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 14, "Project Management", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(6)
     pdf.set_font("Helvetica", "", 14)
     pdf.set_text_color(*NAVY)
-    pdf.cell(0, 8, "Stanford School of Engineering  |  Professional Education", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 8, "510k Bridge  |  Professional Education", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(10)
-    pdf.set_draw_color(*STANFORD)
+    pdf.set_draw_color(*PRIMARY)
     mid = pdf.w / 2
     pdf.line(mid - 50, pdf.get_y(), mid + 50, pdf.get_y())
     pdf.ln(10)
@@ -208,7 +208,7 @@ def build():
             pdf.ln(3)
             continue
         pdf.set_font("Helvetica", "B", 11)
-        pdf.set_text_color(*STANFORD)
+        pdf.set_text_color(*PRIMARY)
         pdf.cell(30, 7, mod, new_x="END", new_y="LAST")
         pdf.set_font("Helvetica", "", 11)
         pdf.set_text_color(*TEXT)
