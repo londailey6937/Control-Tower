@@ -7,6 +7,35 @@
   </head>
   <body>
     <!-- ============================================ -->
+    <!-- LOGIN GATE                                   -->
+    <!-- ============================================ -->
+    <div id="loginGate" class="login-overlay">
+      <div class="login-card">
+        <div class="login-logo">
+          <span class="login-logo-icon">⚕</span>
+          <h1 class="login-title">Control Tower</h1>
+          <p class="login-subtitle">Medical Device Development</p>
+        </div>
+        <form id="loginForm" autocomplete="off">
+          <label for="loginPassword" class="login-label">Password</label>
+          <input
+            type="password"
+            id="loginPassword"
+            class="login-input"
+            placeholder="Enter access code"
+            autofocus
+            required
+          />
+          <p id="loginError" class="login-error" style="display: none">
+            Invalid password
+          </p>
+          <button type="submit" class="login-btn">Sign In</button>
+        </form>
+        <p class="login-footer">Authorized personnel only</p>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
     <!-- TOP BAR                                      -->
     <!-- ============================================ -->
     <header class="top-bar">
@@ -117,6 +146,10 @@
       <button class="tab-btn" data-tab="qa-sheet">
         <span class="tab-icon">📝</span>
         <span data-i18n="tabQaSheet">Message Board</span>
+      </button>
+      <button class="tab-btn" data-tab="fda-comms" id="tabFdaComms">
+        <span class="tab-icon">🏛️</span>
+        <span data-i18n="tabFdaComms">FDA Comms</span>
       </button>
     </nav>
 
@@ -297,11 +330,13 @@
                 <th data-i18n="colApplies">Applies To</th>
                 <th data-i18n="colStatus">Status</th>
                 <th data-i18n="colProgress">Progress</th>
+                <th data-i18n="colClauses">Compliance Checklist</th>
               </tr>
             </thead>
             <tbody id="standardsBody"></tbody>
           </table>
         </div>
+        <div id="guardrailsPanel"></div>
       </section>
 
       <!-- ── TAB: CASH / RUNWAY ─────────────────── -->
@@ -555,6 +590,7 @@
                 <th data-i18n="docLibDate">Last Updated</th>
                 <th data-i18n="docLibOwner">Owner</th>
                 <th data-i18n="docLibLinked">Linked</th>
+                <th data-i18n="docLibSourceRef">Data Source Ref</th>
                 <th data-i18n="docLibStatus">Status</th>
                 <th></th>
               </tr>
@@ -611,9 +647,11 @@
             <button class="btn-primary" onclick="window._mbCreateThread()">
               ✚ <span data-i18n="mbNewThread">New Thread</span>
             </button>
+            <span class="action-sep">│</span>
             <button class="btn-secondary" id="qaExportBtn">
               📤 <span data-i18n="qaExportAnswers">Export</span>
             </button>
+            <span class="action-sep">│</span>
             <button class="btn-secondary" onclick="window._openQaSettings()">
               ⚙️ <span data-i18n="qaSettings">Settings</span>
             </button>
@@ -648,6 +686,17 @@
         ></div>
         <!-- Thread Body -->
         <div id="qaSheetBody"></div>
+      </section>
+      <!-- ── FDA COMMUNICATIONS (PMP-Only) ────── -->
+      <section class="tab-panel" id="panel-fda-comms">
+        <div class="panel-header">
+          <h2 data-i18n="fdaTitle">FDA Communications Center</h2>
+          <p class="panel-desc" data-i18n="fdaDesc">
+            Q-Sub package generation, RTA checklist, and FDA interaction
+            timeline — PMP eyes only
+          </p>
+        </div>
+        <div id="fdaCommsBody"></div>
       </section>
       <!-- ── PMP INPUT PANEL (slide-in) ─────────── -->
       <div class="input-panel-overlay" id="inputPanelOverlay">

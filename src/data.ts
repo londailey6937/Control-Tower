@@ -755,6 +755,54 @@ export const STANDARDS: Standard[] = [
     applies: "Both",
     status: "in-progress",
     progress: 30,
+    clauses: [
+      {
+        id: "STD-01-C1",
+        clause: "§4.7",
+        title: { en: "ME Equipment classification", cn: "ME设备分类" },
+        checked: false,
+      },
+      {
+        id: "STD-01-C2",
+        clause: "§8.4",
+        title: { en: "Protective earth continuity", cn: "保护接地连续性" },
+        checked: true,
+      },
+      {
+        id: "STD-01-C3",
+        clause: "§8.7",
+        title: { en: "Leakage current measurements", cn: "漏电流测量" },
+        checked: false,
+        evidenceDoc: "DHF-DV",
+      },
+      {
+        id: "STD-01-C4",
+        clause: "§8.8",
+        title: { en: "Dielectric strength test", cn: "介电强度测试" },
+        checked: false,
+      },
+      {
+        id: "STD-01-C5",
+        clause: "§11",
+        title: { en: "Temperature limits & controls", cn: "温度限制与控制" },
+        checked: true,
+      },
+      {
+        id: "STD-01-C6",
+        clause: "§13",
+        title: {
+          en: "Hazardous situations & fault conditions",
+          cn: "危险情况与故障条件",
+        },
+        checked: false,
+      },
+      {
+        id: "STD-01-C7",
+        clause: "§15",
+        title: { en: "Construction requirements", cn: "结构要求" },
+        checked: false,
+      },
+    ],
   },
   {
     id: "STD-02",
@@ -763,6 +811,45 @@ export const STANDARDS: Standard[] = [
     applies: "Both",
     status: "not-started",
     progress: 0,
+    clauses: [
+      {
+        id: "STD-02-C1",
+        clause: "§4",
+        title: { en: "General EMC requirements", cn: "通用EMC要求" },
+        checked: false,
+      },
+      {
+        id: "STD-02-C2",
+        clause: "§7",
+        title: { en: "Immunity test configuration", cn: "抗扰度测试配置" },
+        checked: false,
+        evidenceDoc: "DHF-EMC",
+      },
+      {
+        id: "STD-02-C3",
+        clause: "§8",
+        title: { en: "Emissions requirements", cn: "发射要求" },
+        checked: false,
+      },
+      {
+        id: "STD-02-C4",
+        clause: "§9",
+        title: { en: "Immunity requirements", cn: "抗扰度要求" },
+        checked: false,
+      },
+      {
+        id: "STD-02-C5",
+        clause: "§10",
+        title: { en: "Rationale for test levels", cn: "测试水平依据" },
+        checked: false,
+      },
+      {
+        id: "STD-02-C6",
+        clause: "§11",
+        title: { en: "Test plan documentation", cn: "测试计划文档" },
+        checked: false,
+      },
+    ],
   },
   {
     id: "STD-03",
@@ -771,6 +858,38 @@ export const STANDARDS: Standard[] = [
     applies: "Both",
     status: "not-started",
     progress: 0,
+    clauses: [
+      {
+        id: "STD-03-C1",
+        clause: "§5.1",
+        title: { en: "Use specification", cn: "使用规范" },
+        checked: false,
+      },
+      {
+        id: "STD-03-C2",
+        clause: "§5.3",
+        title: { en: "User interface specification", cn: "用户界面规范" },
+        checked: false,
+      },
+      {
+        id: "STD-03-C3",
+        clause: "§5.7",
+        title: { en: "Formative evaluation", cn: "形成性评估" },
+        checked: false,
+      },
+      {
+        id: "STD-03-C4",
+        clause: "§5.8",
+        title: { en: "Summative evaluation", cn: "总结性评估" },
+        checked: false,
+      },
+      {
+        id: "STD-03-C5",
+        clause: "§5.9",
+        title: { en: "Residual use risk assessment", cn: "残余使用风险评估" },
+        checked: false,
+      },
+    ],
   },
   {
     id: "STD-04",
@@ -782,6 +901,55 @@ export const STANDARDS: Standard[] = [
     applies: "Both",
     status: "in-progress",
     progress: 45,
+    clauses: [
+      {
+        id: "STD-04-C1",
+        clause: "§4.1",
+        title: { en: "Risk management plan", cn: "风险管理计划" },
+        checked: true,
+        evidenceDoc: "DHF-RA",
+      },
+      {
+        id: "STD-04-C2",
+        clause: "§5.2",
+        title: {
+          en: "Hazard identification (FTA/FMEA)",
+          cn: "危害识别(FTA/FMEA)",
+        },
+        checked: true,
+      },
+      {
+        id: "STD-04-C3",
+        clause: "§5.4",
+        title: { en: "Risk estimation", cn: "风险估计" },
+        checked: true,
+      },
+      {
+        id: "STD-04-C4",
+        clause: "§5.5",
+        title: { en: "Risk evaluation", cn: "风险评价" },
+        checked: false,
+      },
+      {
+        id: "STD-04-C5",
+        clause: "§6",
+        title: { en: "Risk control measures", cn: "风险控制措施" },
+        checked: false,
+        evidenceDoc: "DHF-RA",
+      },
+      {
+        id: "STD-04-C6",
+        clause: "§7",
+        title: { en: "Residual risk evaluation", cn: "残余风险评价" },
+        checked: false,
+      },
+      {
+        id: "STD-04-C7",
+        clause: "§8",
+        title: { en: "Risk management report", cn: "风险管理报告" },
+        checked: false,
+      },
+    ],
   },
   {
     id: "STD-05",
@@ -793,6 +961,39 @@ export const STANDARDS: Standard[] = [
     applies: "sEMG Electrodes",
     status: "not-started",
     progress: 0,
+    clauses: [
+      {
+        id: "STD-05-C1",
+        clause: "§4",
+        title: { en: "General principles for evaluation", cn: "评价通用原则" },
+        checked: false,
+      },
+      {
+        id: "STD-05-C2",
+        clause: "§5",
+        title: { en: "Material characterization", cn: "材料表征" },
+        checked: false,
+      },
+      {
+        id: "STD-05-C3",
+        clause: "§6",
+        title: { en: "Biological evaluation plan", cn: "生物学评价计划" },
+        checked: false,
+        evidenceDoc: "DHF-BIO",
+      },
+      {
+        id: "STD-05-C4",
+        clause: "§7",
+        title: { en: "Endpoints selection", cn: "终点选择" },
+        checked: false,
+      },
+      {
+        id: "STD-05-C5",
+        clause: "§8",
+        title: { en: "Risk assessment integration", cn: "风险评估整合" },
+        checked: false,
+      },
+    ],
   },
   {
     id: "STD-06",
@@ -801,6 +1002,26 @@ export const STANDARDS: Standard[] = [
     applies: "sEMG Electrodes",
     status: "not-started",
     progress: 0,
+    clauses: [
+      {
+        id: "STD-06-C1",
+        clause: "§5",
+        title: { en: "Test methods", cn: "测试方法" },
+        checked: false,
+      },
+      {
+        id: "STD-06-C2",
+        clause: "§6",
+        title: { en: "Extract preparation", cn: "提取物制备" },
+        checked: false,
+      },
+      {
+        id: "STD-06-C3",
+        clause: "§8",
+        title: { en: "Results interpretation", cn: "结果解读" },
+        checked: false,
+      },
+    ],
   },
   {
     id: "STD-07",
@@ -809,6 +1030,26 @@ export const STANDARDS: Standard[] = [
     applies: "sEMG + EIT Belt",
     status: "not-started",
     progress: 0,
+    clauses: [
+      {
+        id: "STD-07-C1",
+        clause: "§5",
+        title: { en: "Irritation tests", cn: "刺激测试" },
+        checked: false,
+      },
+      {
+        id: "STD-07-C2",
+        clause: "§6",
+        title: { en: "Sensitization tests", cn: "致敏测试" },
+        checked: false,
+      },
+      {
+        id: "STD-07-C3",
+        clause: "§7",
+        title: { en: "Results documentation", cn: "结果文档化" },
+        checked: false,
+      },
+    ],
   },
   {
     id: "STD-08",
@@ -817,6 +1058,38 @@ export const STANDARDS: Standard[] = [
     applies: "Both",
     status: "in-progress",
     progress: 25,
+    clauses: [
+      {
+        id: "STD-08-C1",
+        clause: "SBOM",
+        title: { en: "Software Bill of Materials", cn: "软件物料清单" },
+        checked: true,
+      },
+      {
+        id: "STD-08-C2",
+        clause: "TM",
+        title: { en: "Threat modeling", cn: "威胁建模" },
+        checked: false,
+      },
+      {
+        id: "STD-08-C3",
+        clause: "SA",
+        title: { en: "Security architecture review", cn: "安全架构审查" },
+        checked: false,
+      },
+      {
+        id: "STD-08-C4",
+        clause: "VT",
+        title: { en: "Vulnerability testing", cn: "漏洞测试" },
+        checked: false,
+      },
+      {
+        id: "STD-08-C5",
+        clause: "PM",
+        title: { en: "Patch/update mechanism", cn: "补丁/更新机制" },
+        checked: false,
+      },
+    ],
   },
   {
     id: "STD-09",
@@ -825,6 +1098,45 @@ export const STANDARDS: Standard[] = [
     applies: "Both",
     status: "in-progress",
     progress: 40,
+    clauses: [
+      {
+        id: "STD-09-C1",
+        clause: "§820.30",
+        title: { en: "Design Controls", cn: "设计控制" },
+        checked: true,
+        evidenceDoc: "DHF-DP",
+      },
+      {
+        id: "STD-09-C2",
+        clause: "§820.40",
+        title: { en: "Document Controls", cn: "文件控制" },
+        checked: true,
+      },
+      {
+        id: "STD-09-C3",
+        clause: "§820.50",
+        title: { en: "Purchasing Controls", cn: "采购控制" },
+        checked: false,
+      },
+      {
+        id: "STD-09-C4",
+        clause: "§820.75",
+        title: { en: "Process Validation", cn: "过程确认" },
+        checked: false,
+      },
+      {
+        id: "STD-09-C5",
+        clause: "§820.90",
+        title: { en: "Nonconforming Product", cn: "不合格品" },
+        checked: false,
+      },
+      {
+        id: "STD-09-C6",
+        clause: "§820.184",
+        title: { en: "Device History Record", cn: "设备历史记录" },
+        checked: false,
+      },
+    ],
   },
   {
     id: "STD-10",
@@ -833,6 +1145,32 @@ export const STANDARDS: Standard[] = [
     applies: "Software",
     status: "not-started",
     progress: 0,
+    clauses: [
+      {
+        id: "STD-10-C1",
+        clause: "§11.10",
+        title: { en: "Closed system controls", cn: "封闭系统控制" },
+        checked: false,
+      },
+      {
+        id: "STD-10-C2",
+        clause: "§11.30",
+        title: { en: "Open system controls", cn: "开放系统控制" },
+        checked: false,
+      },
+      {
+        id: "STD-10-C3",
+        clause: "§11.50",
+        title: { en: "Signature manifestation", cn: "签名表现形式" },
+        checked: false,
+      },
+      {
+        id: "STD-10-C4",
+        clause: "§11.70",
+        title: { en: "Signature linking", cn: "签名关联" },
+        checked: false,
+      },
+    ],
   },
   {
     id: "STD-11",
@@ -844,6 +1182,45 @@ export const STANDARDS: Standard[] = [
     applies: "Software",
     status: "in-progress",
     progress: 20,
+    clauses: [
+      {
+        id: "STD-11-C1",
+        clause: "§4",
+        title: { en: "General requirements", cn: "通用要求" },
+        checked: true,
+      },
+      {
+        id: "STD-11-C2",
+        clause: "§5.1",
+        title: { en: "Software development planning", cn: "软件开发计划" },
+        checked: false,
+        evidenceDoc: "DHF-SW",
+      },
+      {
+        id: "STD-11-C3",
+        clause: "§5.3",
+        title: { en: "Software architecture design", cn: "软件架构设计" },
+        checked: false,
+      },
+      {
+        id: "STD-11-C4",
+        clause: "§5.5",
+        title: { en: "Software integration & testing", cn: "软件集成与测试" },
+        checked: false,
+      },
+      {
+        id: "STD-11-C5",
+        clause: "§6",
+        title: { en: "Software maintenance process", cn: "软件维护过程" },
+        checked: false,
+      },
+      {
+        id: "STD-11-C6",
+        clause: "§7",
+        title: { en: "Software risk management", cn: "软件风险管理" },
+        checked: false,
+      },
+    ],
   },
   {
     id: "STD-12",
@@ -852,6 +1229,38 @@ export const STANDARDS: Standard[] = [
     applies: "Silan Manufacturing",
     status: "in-progress",
     progress: 60,
+    clauses: [
+      {
+        id: "STD-12-C1",
+        clause: "§4.2",
+        title: { en: "Documentation requirements", cn: "文件要求" },
+        checked: true,
+      },
+      {
+        id: "STD-12-C2",
+        clause: "§7.1",
+        title: { en: "Planning of product realization", cn: "产品实现策划" },
+        checked: true,
+      },
+      {
+        id: "STD-12-C3",
+        clause: "§7.3",
+        title: { en: "Design and development", cn: "设计和开发" },
+        checked: true,
+      },
+      {
+        id: "STD-12-C4",
+        clause: "§8.2",
+        title: { en: "Monitoring and measurement", cn: "监视和测量" },
+        checked: false,
+      },
+      {
+        id: "STD-12-C5",
+        clause: "§8.5",
+        title: { en: "Improvement", cn: "改进" },
+        checked: false,
+      },
+    ],
   },
 ];
 
@@ -2476,11 +2885,22 @@ export const QA_SECTIONS: QASection[] = [
 // ACTIVE ROLE — Controls UI permissions
 // ============================================================
 
-const ADMIN_KEY = "arch2026";
-export const IS_ADMIN: boolean =
-  new URLSearchParams(window.location.search).get("admin") === ADMIN_KEY;
+// Password-based auth: password determines role at login
+export let IS_ADMIN: boolean = false;
+export let ACTIVE_ROLE: UserRole = "business";
 
-export let ACTIVE_ROLE: UserRole = IS_ADMIN ? "pmp" : "business";
+const CREDENTIALS: Record<string, { role: UserRole; admin: boolean }> = {
+  arch2026: { role: "pmp", admin: true },
+  REDACTED: { role: "business", admin: false },
+};
+
+export function authenticatePassword(password: string): boolean {
+  const cred = CREDENTIALS[password];
+  if (!cred) return false;
+  IS_ADMIN = cred.admin;
+  ACTIVE_ROLE = cred.role;
+  return true;
+}
 
 export function setActiveRole(role: UserRole): void {
   ACTIVE_ROLE = role;

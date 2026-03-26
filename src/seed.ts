@@ -1,0 +1,500 @@
+// ============================================================
+// SEED — Takes wizard answers → populates data.ts structures
+// ============================================================
+
+import {
+  PROJECT,
+  TRACKS,
+  GATES,
+  RISKS,
+  STANDARDS,
+  TIMELINE_EVENTS,
+  CASH_RUNWAY,
+  STAKEHOLDER_INPUTS,
+  CHANGE_REQUESTS,
+  AUDIT_LOG,
+  DHF_DOCUMENTS,
+  CAPA_LOG,
+  ACTION_ITEMS,
+  BUDGET_CATEGORIES,
+  TEAM_MEMBERS,
+  SUPPLIERS,
+  QA_SECTIONS,
+} from "./data.ts";
+
+import { DEFAULT_DHF_DOCS } from "./wizard.ts";
+
+// ── Public types ─────────────────────────────────
+export interface TeamEntry {
+  name: string;
+  role: string;
+  email: string;
+  workstreams: string;
+}
+export interface BudgetEntry {
+  label: string;
+  planned: number;
+}
+export interface SupplierEntry {
+  name: string;
+  component: string;
+  leadTimeDays: number;
+}
+
+export interface WizardAnswers {
+  lang: string;
+  projectName: string;
+  projectNameCn?: string;
+  subtitle?: string;
+  preparedDate?: string;
+  contactEmail?: string;
+  submissionType?: string;
+  deviceClass?: string;
+  productCode?: string;
+  regulationSection?: string;
+  predicateDevices?: string;
+  applicantName?: string;
+  applicantNameCn?: string;
+  manufacturerName?: string;
+  manufacturerNameCn?: string;
+  team?: TeamEntry[];
+  budgets?: BudgetEntry[];
+  cashOnHand?: number | string;
+  currency?: string;
+  projectDurationMonths?: number | string;
+  currentMonth?: number | string;
+  techAreas?: string;
+  suppliers?: SupplierEntry[];
+  docFlags?: boolean[];
+}
+
+// Helper to create offset dates from today
+function offsetDate(days: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
+function ls(en: string, cn?: string): { en: string; cn: string } {
+  return { en, cn: cn || en };
+}
+
+// ── Main seed function ──────────────────────────
+export function seed(a: WizardAnswers): void {
+  const lang = (a.lang as "en" | "cn") || "en";
+  const isCn = lang === "cn";
+  const nm = a.projectName || "Untitled Project";
+  const nmCn = a.projectNameCn || nm;
+  const sub = a.subtitle || "";
+  const subCn = sub; // user can overwrite later
+
+  // ── PROJECT ──────────────────────────────────
+  Object.assign(PROJECT, {
+    name: ls(nm, nmCn),
+    subtitle: ls(sub, subCn),
+    submissionType: a.submissionType || "510k-standard",
+    applicant: ls(
+      a.applicantName || "TBD",
+      a.applicantNameCn || a.applicantName || "TBD",
+    ),
+    manufacturer: ls(
+      a.manufacturerName || "TBD",
+      a.manufacturerNameCn || a.manufacturerName || "TBD",
+    ),
+    preparedDate:
+      a.preparedDate ||
+      new Date().toLocaleDateString("en-US", {
+        month: "long",
+        year: "numeric",
+      }),
+    currentMonth: Number(a.currentMonth) || 0,
+  });
+
+  const dur = Number(a.projectDurationMonths) || 12;
+
+  // ── TRACKS ───────────────────────────────────
+  // Parse tech areas for technical milestones
+  const techLines = (a.techAreas || "")
+    .split("\n")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const techMilestones = techLines.map((line, i) => ({
+    id: `MS-T-${String(i + 1).padStart(3, "0")}`,
+    month: Math.round(((i + 1) * dur) / (techLines.length + 1)),
+    title: ls(line),
+    description: ls(`Technical workstream: ${line}`),
+    status: "not-started" as const,
+    owner: "tech" as const,
+    category: "Engineering",
+  }));
+  if (!techMilestones.length) {
+    techMilestones.push({
+      id: "MS-T-001",
+      month: 1,
+      title: ls(isCn ? "设计冻结" : "Design Freeze"),
+      description: ls(isCn ? "锁定设计规格" : "Lock design specifications"),
+      status: "not-started",
+      owner: "tech",
+      category: "Engineering",
+    });
+  }
+
+  const regMilestones = [
+    {
+      id: "MS-R-001",
+      month: 1,
+      title: ls("Pre-Sub Meeting", "Pre-Sub会议"),
+      description: ls("FDA Pre-Submission meeting", "FDA预提交会议"),
+      status: "not-started" as const,
+      owner: "regulatory" as const,
+      category: "Regulatory",
+    },
+    {
+      id: "MS-R-002",
+      month: Math.round(dur * 0.5),
+      title: ls("510(k) Preparation", "510(k)准备"),
+      description: ls("Prepare submission package", "准备提交包"),
+      status: "not-started" as const,
+      owner: "regulatory" as const,
+      category: "Regulatory",
+    },
+    {
+      id: "MS-R-003",
+      month: Math.round(dur * 0.8),
+      title: ls("510(k) Submitted", "510(k)已提交"),
+      description: ls("File with FDA", "向FDA提交"),
+      status: "not-started" as const,
+      owner: "regulatory" as const,
+      category: "Regulatory",
+    },
+  ];
+
+  TRACKS.technical.milestones.length = 0;
+  techMilestones.forEach((m) => TRACKS.technical.milestones.push(m));
+  TRACKS.regulatory.milestones.length = 0;
+  regMilestones.forEach((m) => TRACKS.regulatory.milestones.push(m));
+
+  // ── GATES ────────────────────────────────────
+  GATES.length = 0;
+  const gateCount = Math.min(Math.max(Math.floor(dur / 3), 2), 6);
+  for (let i = 0; i < gateCount; i++) {
+    GATES.push({
+      id: `G${i + 1}`,
+      number: i + 1,
+      title: ls(
+        `Gate ${i + 1}: ${i === 0 ? "Feasibility" : i === gateCount - 1 ? "Launch Readiness" : `Phase ${i + 1} Review`}`,
+      ),
+      month: Math.round(((i + 1) * dur) / (gateCount + 1)),
+      status: "not-started",
+      criteria: [
+        {
+          en: "Technical deliverables complete",
+          cn: "技术交付物完成",
+          met: false,
+        },
+        { en: "Budget on track", cn: "预算正常", met: false },
+        { en: "Risk mitigations confirmed", cn: "风险缓解已确认", met: false },
+      ],
+      decision: null,
+      decisionBy: null,
+      decisionDate: null,
+      notes: [],
+      inputBusiness: [],
+      inputTech: [],
+    });
+  }
+
+  // ── RISKS ────────────────────────────────────
+  RISKS.length = 0;
+  RISKS.push(
+    {
+      id: "RISK-001",
+      title: ls("Schedule Delay", "进度延迟"),
+      severity: "high",
+      probability: "medium",
+      riskLevel: "yellow",
+      controls: ls("Weekly tracking, buffer time", "每周跟踪，缓冲时间"),
+      residual: ls("Moderate", "中等"),
+      mitigationStatus: "in-progress",
+      module: "PM",
+      standard: "ISO 14971",
+    },
+    {
+      id: "RISK-002",
+      title: ls("Regulatory Gap", "法规差距"),
+      severity: "high",
+      probability: "low",
+      riskLevel: "yellow",
+      controls: ls("Pre-Sub feedback, RA consultant", "Pre-Sub反馈，RA顾问"),
+      residual: ls("Low", "低"),
+      mitigationStatus: "not-started",
+      module: "Regulatory",
+      standard: "21 CFR 820",
+    },
+    {
+      id: "RISK-003",
+      title: ls("Budget Overrun", "预算超支"),
+      severity: "medium",
+      probability: "medium",
+      riskLevel: "yellow",
+      controls: ls("Monthly reviews, contingency", "每月审查，应急储备"),
+      residual: ls("Moderate", "中等"),
+      mitigationStatus: "not-started",
+      module: "Finance",
+      standard: "",
+    },
+  );
+
+  // ── STANDARDS ─────────────────────────────────
+  STANDARDS.length = 0;
+  const stdList = [
+    {
+      code: "IEC 60601-1",
+      title: ls("Medical Electrical Equipment — General", "医用电气设备——通用"),
+    },
+    {
+      code: "IEC 62304",
+      title: ls(
+        "Medical Device Software — Lifecycle",
+        "医疗器械软件——生命周期",
+      ),
+    },
+    {
+      code: "ISO 14971",
+      title: ls("Risk Management for Medical Devices", "医疗器械风险管理"),
+    },
+    {
+      code: "21 CFR 820",
+      title: ls("Quality System Regulation", "质量体系法规"),
+    },
+    {
+      code: "ISO 13485",
+      title: ls("Quality Management Systems", "质量管理体系"),
+    },
+  ];
+  stdList.forEach((s, i) => {
+    STANDARDS.push({
+      id: `STD-${String(i + 1).padStart(3, "0")}`,
+      code: s.code,
+      title: s.title,
+      applies: "All",
+      status: "not-started",
+      progress: 0,
+      clauses: [],
+    });
+  });
+
+  // ── TIMELINE_EVENTS ──────────────────────────
+  TIMELINE_EVENTS.length = 0;
+  for (let m = 0; m <= dur; m += 3) {
+    TIMELINE_EVENTS.push({
+      month: m,
+      technical: ls(m === 0 ? "Project Kickoff" : `Technical Review M+${m}`),
+      business: ls(
+        m === 0 ? "Team Mobilization" : `Business Checkpoint M+${m}`,
+      ),
+      impact: "neutral",
+    });
+  }
+
+  // ── CASH_RUNWAY ──────────────────────────────
+  const cash = Number(a.cashOnHand) || 0;
+  const totalBudget = (a.budgets || []).reduce(
+    (s, b) => s + (b.planned || 0),
+    0,
+  );
+  const monthlyBurn = totalBudget > 0 ? Math.round(totalBudget / dur) : 0;
+  Object.assign(CASH_RUNWAY, {
+    cashOnHand: cash,
+    monthlyBurn,
+    runwayMonths: monthlyBurn > 0 ? Math.round(cash / monthlyBurn) : 0,
+    currency: a.currency || "USD",
+    fundingRounds:
+      cash > 0
+        ? [
+            {
+              id: "FR-001",
+              label: ls("Initial Funding", "初始资金"),
+              amount: cash,
+              date: offsetDate(0),
+              status: "received" as const,
+            },
+          ]
+        : [],
+    burnHistory: [
+      { month: 0, burn: monthlyBurn, note: ls("Project start", "项目启动") },
+    ],
+  });
+
+  // ── STAKEHOLDER_INPUTS ───────────────────────
+  STAKEHOLDER_INPUTS.length = 0;
+
+  // ── CHANGE_REQUESTS ──────────────────────────
+  CHANGE_REQUESTS.length = 0;
+
+  // ── AUDIT_LOG ────────────────────────────────
+  AUDIT_LOG.length = 0;
+  AUDIT_LOG.push({
+    id: "AUD-001",
+    timestamp: new Date().toISOString(),
+    user: "Wizard",
+    action: "milestone-status",
+    targetId: "SYSTEM",
+    field: "init",
+    oldValue: "",
+    newValue: "Project created via Setup Wizard",
+    detail: `Project "${nm}" initialized`,
+  });
+
+  // ── DHF_DOCUMENTS ────────────────────────────
+  DHF_DOCUMENTS.length = 0;
+  const flags = a.docFlags || DEFAULT_DHF_DOCS.map(() => true);
+  DEFAULT_DHF_DOCS.forEach((doc, i) => {
+    if (flags[i] === false) return;
+    DHF_DOCUMENTS.push({
+      id: `DHF-${String(i + 1).padStart(3, "0")}`,
+      code: doc.code,
+      title: ls(doc.en, doc.cn),
+      category: "Design Control",
+      owner: "regulatory",
+      status: "not-started",
+      dueMonth: Math.round(((i + 1) * dur) / (DEFAULT_DHF_DOCS.length + 1)),
+      notes: "",
+    });
+  });
+
+  // ── CAPA_LOG ─────────────────────────────────
+  CAPA_LOG.length = 0;
+
+  // ── ACTION_ITEMS ─────────────────────────────
+  ACTION_ITEMS.length = 0;
+  ACTION_ITEMS.push(
+    {
+      id: "ACT-001",
+      title: ls("Define Design Inputs", "定义设计输入"),
+      assignee: a.team?.[0]?.name || "PM",
+      owner: "tech",
+      priority: "high",
+      status: "todo",
+      dueDate: offsetDate(14),
+      linkedGate: "G1",
+      notes: "",
+    },
+    {
+      id: "ACT-002",
+      title: ls("Draft Risk Analysis", "起草风险分析"),
+      assignee: a.team?.[0]?.name || "PM",
+      owner: "regulatory",
+      priority: "high",
+      status: "todo",
+      dueDate: offsetDate(30),
+      linkedGate: "G1",
+      notes: "",
+    },
+    {
+      id: "ACT-003",
+      title: ls("Identify Predicate Devices", "识别前置器械"),
+      assignee: a.team?.[0]?.name || "PM",
+      owner: "regulatory",
+      priority: "medium",
+      status: "todo",
+      dueDate: offsetDate(21),
+      linkedGate: "G1",
+      notes: "",
+    },
+  );
+
+  // ── BUDGET_CATEGORIES ────────────────────────
+  BUDGET_CATEGORIES.length = 0;
+  const budgets = a.budgets || [];
+  if (budgets.length) {
+    budgets.forEach((b, i) => {
+      if (!b.label) return;
+      BUDGET_CATEGORIES.push({
+        id: `BUD-${String(i + 1).padStart(3, "0")}`,
+        label: ls(b.label),
+        planned: b.planned || 0,
+        actual: 0,
+        notes: "",
+      });
+    });
+  } else {
+    BUDGET_CATEGORIES.push({
+      id: "BUD-001",
+      label: ls("General", "一般"),
+      planned: 0,
+      actual: 0,
+      notes: "",
+    });
+  }
+
+  // ── TEAM_MEMBERS ─────────────────────────────
+  TEAM_MEMBERS.length = 0;
+  const team = a.team || [];
+  team.forEach((m, i) => {
+    if (!m.name) return;
+    const alloc = m.workstreams
+      .split("\n")
+      .map((line) => {
+        const parts = line.split(":");
+        if (parts.length < 2) return null;
+        return { workstream: parts[0].trim(), pct: parseInt(parts[1]) || 0 };
+      })
+      .filter(Boolean) as { workstream: string; pct: number }[];
+    TEAM_MEMBERS.push({
+      id: `TM-${String(i + 1).padStart(3, "0")}`,
+      name: m.name,
+      role: ls(m.role),
+      email: m.email || undefined,
+      allocation: alloc.length
+        ? alloc
+        : [{ workstream: m.role || "General", pct: 100 }],
+      capacity: 100,
+    });
+  });
+  if (!TEAM_MEMBERS.length) {
+    TEAM_MEMBERS.push({
+      id: "TM-001",
+      name: "Project Lead",
+      role: ls("Project Manager", "项目经理"),
+      allocation: [{ workstream: "Project Management", pct: 100 }],
+      capacity: 100,
+    });
+  }
+
+  // ── SUPPLIERS ────────────────────────────────
+  SUPPLIERS.length = 0;
+  const suppliers = a.suppliers || [];
+  suppliers.forEach((s, i) => {
+    if (!s.name) return;
+    SUPPLIERS.push({
+      id: `SUP-${String(i + 1).padStart(3, "0")}`,
+      name: s.name,
+      component: ls(s.component),
+      status: "under-review",
+      leadTimeDays: s.leadTimeDays || 0,
+      poStatus: "Pending",
+      contractMfgMilestone: "TBD",
+      notes: "",
+    });
+  });
+
+  // ── QA_SECTIONS ──────────────────────────────
+  QA_SECTIONS.length = 0;
+  QA_SECTIONS.push({
+    num: 1,
+    title: ls("General Discussion", "综合讨论"),
+    context: ls(`Discussion thread for ${nm}`, `${nmCn}讨论线程`),
+    questions: [
+      {
+        num: 1,
+        question: ls(
+          "What are the immediate priorities?",
+          "当前的优先事项是什么？",
+        ),
+        why: ls("Align team on first actions", "统一团队首要行动"),
+        followUps: [],
+      },
+    ],
+  });
+}

@@ -16,6 +16,7 @@ import {
   ACTIVE_ROLE,
   IS_ADMIN,
   setActiveRole,
+  authenticatePassword,
   AUDIT_LOG,
   DHF_DOCUMENTS,
   CAPA_LOG,
@@ -26,6 +27,13 @@ import {
   QA_SECTIONS,
 } from "./data.ts";
 import { t, localizedText, getLang, setLang, applyLanguage } from "./i18n.ts";
+import {
+  hasProjectData,
+  getSavedAnswers,
+  showWizard,
+  applyProjectData,
+  clearProjectData,
+} from "./wizard.ts";
 import type {
   Gate,
   Milestone,
@@ -145,6 +153,14 @@ function setupEventDelegation(): void {
       case "cycleStandardStatus":
         window._cycleStandardStatus(a.sid!);
         break;
+      case "toggleClauses":
+        e.stopPropagation();
+        window._toggleStandardClauses(a.sid!);
+        break;
+      case "toggleClause":
+        e.stopPropagation();
+        window._toggleClause(a.sid!, a.cid!);
+        break;
       case "editCashField":
         window._editCashField(a.field! as "cashOnHand" | "monthlyBurn");
         break;
@@ -260,8 +276,30 @@ function setupEventDelegation(): void {
   });
 }
 
-// ── INIT ──────────────────────────────────────
-document.addEventListener("DOMContentLoaded", () => {
+// ── LOGIN GATE ────────────────────────────────
+function initLoginGate(): void {
+  const gate = document.getElementById("loginGate");
+  const form = document.getElementById("loginForm") as HTMLFormElement | null;
+  const input = document.getElementById(
+    "loginPassword",
+  ) as HTMLInputElement | null;
+  const error = document.getElementById("loginError");
+  if (!gate || !form || !input) return;
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (authenticatePassword(input.value)) {
+      gate.style.display = "none";
+      initAfterLogin();
+    } else {
+      if (error) error.style.display = "block";
+      input.value = "";
+      input.focus();
+    }
+  });
+}
+
+function initAfterLogin(): void {
   setupEventDelegation();
   loadCRs();
   loadInputs();
@@ -270,6 +308,30 @@ document.addEventListener("DOMContentLoaded", () => {
   initFab();
   initRoleSwitcher();
   applyLanguage(getLang());
+
+  const saved = getSavedAnswers();
+  if (saved) {
+    applyProjectData(saved);
+    bootDashboard();
+  } else if (!hasProjectData()) {
+    showWizard((answers) => {
+      if (answers) applyProjectData(answers);
+      bootDashboard();
+    });
+  } else {
+    bootDashboard();
+  }
+}
+
+// ── INIT ──────────────────────────────────────
+document.addEventListener("DOMContentLoaded", () => {
+  initLoginGate();
+});
+
+function bootDashboard(): void {
+  // Update the header subtitle to match project
+  const subEl = document.querySelector(".logo-subtitle");
+  if (subEl) subEl.textContent = localizedText(PROJECT.subtitle);
 
   // Bootstrap Supabase data, then render
   Promise.all([initQaMessages(), initAuditLog()]).then(() => {
@@ -283,7 +345,7 @@ document.addEventListener("DOMContentLoaded", () => {
       initAuditLog().then(renderAuditTrail);
     });
   });
-});
+}
 
 // ── TAB NAVIGATION ────────────────────────────
 function initTabs(): void {
@@ -366,6 +428,7 @@ function renderAll(): void {
   renderUsInvestment();
   renderDocLibrary();
   renderQaSheet();
+  renderFdaComms();
   renderNotifications();
   updateFabBadge();
 }
@@ -913,6 +976,30 @@ function renderStandards(): void {
           ? t("inProgress")
           : t("notStarted");
 
+    const checkedCount = s.clauses.filter((c) => c.checked).length;
+    const totalClauses = s.clauses.length;
+    const clausePct =
+      totalClauses > 0 ? Math.round((checkedCount / totalClauses) * 100) : 0;
+
+    const clauseRows = s.clauses
+      .map((c) => {
+        const chk = c.checked ? "checked" : "";
+        const evidBadge = c.evidenceDoc
+          ? `<span class="clause-evidence-badge" title="${c.evidenceDoc}">${c.evidenceDoc}</span>`
+          : "";
+        return `<div class="clause-row">
+        <label class="clause-label">
+          <input type="checkbox" ${chk}
+            data-action="toggleClause" data-sid="${s.id}" data-cid="${c.id}"
+            ${ACTIVE_ROLE !== "pmp" ? "disabled" : ""} />
+          <span class="clause-ref">${c.clause}</span>
+          <span class="clause-title">${localizedText(c.title)}</span>
+        </label>
+        ${evidBadge}
+      </div>`;
+      })
+      .join("");
+
     return `
       <tr>
         <td><span class="std-code">${s.code}</span></td>
@@ -938,9 +1025,29 @@ function renderStandards(): void {
             }
           </div>
         </td>
+        <td class="clause-toggle-cell">
+          <button class="clause-toggle-btn" data-action="toggleClauses" data-sid="${s.id}" title="${t("expandClauses")}">
+            <span class="clause-count">${checkedCount}/${totalClauses}</span>
+            <span class="clause-arrow">&#9654;</span>
+          </button>
+        </td>
+      </tr>
+      <tr class="clause-detail-row" id="clauses-${s.id}" style="display:none">
+        <td colspan="6">
+          <div class="clause-panel">
+            <div class="clause-progress-mini">
+              <div class="clause-progress-fill" style="width:${clausePct}%"></div>
+            </div>
+            <div class="clause-count-label">${checkedCount}/${totalClauses} ${t("clauseChecked")}</div>
+            ${clauseRows}
+          </div>
+        </td>
       </tr>
     `;
   }).join("");
+
+  // Render guardrails panel
+  renderGuardrails();
 }
 
 // ── CASH / RUNWAY ─────────────────────────────
@@ -1354,6 +1461,220 @@ window._setStandardProgress = function (
   renderSummary();
 };
 
+// ── CLAUSE TOGGLE & GUARDRAILS ────────────────
+window._toggleStandardClauses = function (standardId: string): void {
+  const row = document.getElementById(`clauses-${standardId}`);
+  if (!row) return;
+  const isHidden = row.style.display === "none";
+  row.style.display = isHidden ? "table-row" : "none";
+  const btn = document.querySelector(
+    `[data-action="toggleClauses"][data-sid="${standardId}"] .clause-arrow`,
+  ) as HTMLElement;
+  if (btn) btn.style.transform = isHidden ? "rotate(90deg)" : "";
+};
+
+window._toggleClause = function (standardId: string, clauseId: string): void {
+  const std = STANDARDS.find((s) => s.id === standardId);
+  if (!std) return;
+  const clause = std.clauses.find((c) => c.id === clauseId);
+  if (!clause) return;
+  if (ACTIVE_ROLE !== "pmp") return;
+
+  clause.checked = !clause.checked;
+
+  // Auto-recalculate progress from clauses
+  const checked = std.clauses.filter((c) => c.checked).length;
+  const total = std.clauses.length;
+  std.progress = total > 0 ? Math.round((checked / total) * 100) : 0;
+  if (std.progress === 100) std.status = "complete";
+  else if (std.progress === 0) std.status = "not-started";
+  else std.status = "in-progress";
+
+  renderStandards();
+  renderSummary();
+};
+
+function renderGuardrails(): void {
+  const panel = document.getElementById("guardrailsPanel");
+  if (!panel) return;
+  const isCN = getLang() === "cn";
+
+  // ── Predicate Selection Guardrails ──
+  const hasPredicate =
+    !!(PROJECT as any).predicateDevices?.length ||
+    DHF_DOCUMENTS.some(
+      (d) => d.code === "DHF-DD" && d.status !== "not-started",
+    );
+  const predicateDocApproved = DHF_DOCUMENTS.some(
+    (d) => d.code === "DHF-DD" && d.status === "approved",
+  );
+  const predicateChecks = [
+    {
+      label: isCN
+        ? "等效器械已在向导中定义"
+        : "Predicate device(s) identified in wizard",
+      pass: hasPredicate,
+    },
+    {
+      label: isCN
+        ? "设备描述文档已完成"
+        : "Device Description document completed",
+      pass: predicateDocApproved,
+    },
+    {
+      label: isCN
+        ? "Pre-Sub(Q-Sub)已提交以确认等效器械"
+        : "Pre-Sub (Q-Sub) filed to confirm predicate with FDA",
+      pass: (PROJECT as any).currentMonth >= 3,
+    },
+  ];
+  const predPassed = predicateChecks.filter((c) => c.pass).length;
+  const predLevel =
+    predPassed === predicateChecks.length
+      ? "pass"
+      : predPassed >= 1
+        ? "warn"
+        : "fail";
+
+  // ── Testing Gap Analysis ──
+  const testingChecks = [
+    {
+      label: isCN
+        ? "IEC 60601-1 安全测试进行中"
+        : "IEC 60601-1 safety testing underway",
+      pass: STANDARDS.find((s) => s.id === "STD-01")!.status !== "not-started",
+    },
+    {
+      label: isCN
+        ? "EMC测试(IEC 60601-1-2)已规划"
+        : "EMC testing (IEC 60601-1-2) planned or in progress",
+      pass:
+        STANDARDS.find((s) => s.id === "STD-02")!.status !== "not-started" ||
+        DHF_DOCUMENTS.some(
+          (d) => d.code === "DHF-EMC" && d.status !== "not-started",
+        ),
+    },
+    {
+      label: isCN
+        ? "软件验证(IEC 62304)匹配分类要求"
+        : "Software validation (IEC 62304) matches classification rigor",
+      pass: STANDARDS.find((s) => s.id === "STD-11")!.progress >= 20,
+    },
+    {
+      label: isCN ? "设计验证报告已启动" : "Design Verification Report started",
+      pass: DHF_DOCUMENTS.some(
+        (d) => d.code === "DHF-DV" && d.status !== "not-started",
+      ),
+    },
+    {
+      label: isCN
+        ? "风险分析(ISO 14971)活跃"
+        : "Risk Analysis (ISO 14971) active",
+      pass: DHF_DOCUMENTS.some(
+        (d) => d.code === "DHF-RA" && d.status !== "not-started",
+      ),
+    },
+  ];
+  const testPassed = testingChecks.filter((c) => c.pass).length;
+  const testLevel =
+    testPassed === testingChecks.length
+      ? "pass"
+      : testPassed >= 3
+        ? "warn"
+        : "fail";
+
+  // ── Translation Readiness ──
+  const dhfTotal = DHF_DOCUMENTS.length;
+  const dhfWithContent = DHF_DOCUMENTS.filter(
+    (d) => d.status !== "not-started",
+  ).length;
+  const translationChecks = [
+    {
+      label: isCN
+        ? "DHF文档使用英文编写或翻译"
+        : "DHF documents authored or translated in English",
+      pass: dhfWithContent > 0,
+    },
+    {
+      label: isCN
+        ? "标签(21 CFR 801)使用英文"
+        : "Labeling (21 CFR 801) in English",
+      pass: DHF_DOCUMENTS.some(
+        (d) => d.code === "DHF-LBL" && d.status !== "not-started",
+      ),
+    },
+    {
+      label: isCN
+        ? "术语一致性——双语术语表可用"
+        : "Terminology consistency — bilingual glossary available",
+      pass: dhfWithContent >= Math.floor(dhfTotal * 0.5),
+    },
+  ];
+  const transPassed = translationChecks.filter((c) => c.pass).length;
+  const transLevel =
+    transPassed === translationChecks.length
+      ? "pass"
+      : transPassed >= 1
+        ? "warn"
+        : "fail";
+
+  const levelBadge = (level: string) => {
+    const cls =
+      level === "pass"
+        ? "gr-badge-pass"
+        : level === "warn"
+          ? "gr-badge-warn"
+          : "gr-badge-fail";
+    const txt =
+      level === "pass"
+        ? t("grPass")
+        : level === "warn"
+          ? t("grWarn")
+          : t("grFail");
+    return `<span class="gr-badge ${cls}">${txt}</span>`;
+  };
+
+  const checkList = (items: { label: string; pass: boolean }[]) =>
+    items
+      .map(
+        (c) => `<div class="gr-check-item ${c.pass ? "gr-pass" : "gr-fail"}">
+      <span class="gr-icon">${c.pass ? "✅" : "⚠️"}</span>
+      <span>${c.label}</span>
+    </div>`,
+      )
+      .join("");
+
+  panel.innerHTML = `
+    <div class="guardrails-header">
+      <h3>${t("guardrailsTitle")}</h3>
+      <p class="panel-desc">${t("guardrailsDesc")}</p>
+    </div>
+    <div class="guardrails-grid">
+      <div class="gr-card">
+        <div class="gr-card-header">
+          <h4>🎯 ${t("grPredicateTitle")}</h4>
+          ${levelBadge(predLevel)}
+        </div>
+        ${checkList(predicateChecks)}
+      </div>
+      <div class="gr-card">
+        <div class="gr-card-header">
+          <h4>🔬 ${t("grTestingTitle")}</h4>
+          ${levelBadge(testLevel)}
+        </div>
+        ${checkList(testingChecks)}
+      </div>
+      <div class="gr-card">
+        <div class="gr-card-header">
+          <h4>🌐 ${t("grTranslationTitle")}</h4>
+          ${levelBadge(transLevel)}
+        </div>
+        ${checkList(translationChecks)}
+      </div>
+    </div>
+  `;
+}
+
 // ── FUNDING MANAGEMENT ────────────────────────
 window._editCashField = function (field: "cashOnHand" | "monthlyBurn"): void {
   if (!["pmp", "business", "technology"].includes(ACTIVE_ROLE)) return;
@@ -1654,6 +1975,27 @@ function initRoleSwitcher(): void {
       window._setRole(sel.value);
     }
   });
+
+  // Admin: add "New Project" button
+  if (IS_ADMIN) {
+    const btn = document.createElement("button");
+    btn.textContent = "⊕ New Project";
+    btn.title = "Start a new project (clears current data)";
+    btn.style.cssText =
+      "margin-left:12px;padding:4px 12px;border-radius:6px;border:1px solid #475569;" +
+      "background:#1e293b;color:#94a3b8;font-size:0.78rem;cursor:pointer;";
+    btn.addEventListener("click", () => {
+      if (
+        !confirm(
+          "Start a new project? This will clear all current project data.",
+        )
+      )
+        return;
+      clearProjectData();
+      location.reload();
+    });
+    container.appendChild(btn);
+  }
 }
 
 window._setRole = function (role: string): void {
@@ -1675,7 +2017,11 @@ function applyRoleRestrictions(): void {
 
   tabs.forEach((btn) => {
     const tab = btn.dataset.tab || "";
-    if (role === "accounting") {
+    if (tab === "fda-comms") {
+      const hidden = role !== "pmp";
+      btn.style.display = hidden ? "none" : "";
+      btn.disabled = hidden;
+    } else if (role === "accounting") {
       const allowed = accountingTabs.has(tab);
       btn.classList.toggle("tab-restricted", !allowed);
       btn.disabled = !allowed;
@@ -2976,6 +3322,7 @@ function loadDocLibDocs(): DocLibItem[] {
         effectiveDate: "",
         nextReview: "",
         linkedMilestone: "",
+        sourceRef: "",
         revisions: [] as any[],
       },
       ...d,
@@ -3048,6 +3395,7 @@ function openDocHistory(id: string): void {
         <div><strong>${t("docLibEffective")}:</strong> ${doc.effectiveDate || "—"}</div>
         <div><strong>${t("docLibNextReview")}:</strong> ${doc.nextReview || "—"}</div>
         <div><strong>${t("docLibLinked")}:</strong> ${doc.linkedMilestone || "—"}</div>
+        <div><strong>${t("docLibSourceRef")}:</strong> ${doc.sourceRef || "—"}</div>
       </div>
       <h4 class="doc-history-subtitle">${t("docLibRevHistory")}</h4>
       <table class="standards-table doc-rev-table">
@@ -3129,6 +3477,9 @@ function openAddDocForm(): void {
       <label>${t("docLibLinked")}
         <input type="text" id="docFormLinked" class="doc-form-input" placeholder="e.g. R8, T2" />
       </label>
+      <label>${t("docLibSourceRef")}
+        <input type="text" id="docFormSourceRef" class="doc-form-input" placeholder="e.g. GitHub:repo@commit, SVN rev 123" />
+      </label>
     </div>
     <div class="doc-form-actions">
       <button class="btn-primary" onclick="window._addDocLibItem()">${t("docLibFormAdd")}</button>
@@ -3146,6 +3497,9 @@ function addDocLibItem(): void {
   ) as HTMLInputElement;
   const ownerEl = document.getElementById("docFormOwner") as HTMLInputElement;
   const linkedEl = document.getElementById("docFormLinked") as HTMLInputElement;
+  const sourceRefEl = document.getElementById(
+    "docFormSourceRef",
+  ) as HTMLInputElement;
 
   if (!nameEl?.value.trim()) return;
 
@@ -3180,6 +3534,7 @@ function addDocLibItem(): void {
     effectiveDate: "",
     nextReview: "",
     linkedMilestone: linkedEl?.value.trim() || "",
+    sourceRef: sourceRefEl?.value.trim() || "",
     revisions: [
       {
         rev: ver,
@@ -3275,6 +3630,7 @@ function renderDocLibTable(): void {
       <td>${d.date}</td>
       <td>${d.owner}</td>
       <td>${d.linkedMilestone || "—"}</td>
+      <td class="doc-sourceref-cell" title="${d.sourceRef || ""}">${d.sourceRef ? `<span class="doc-sourceref-badge">🔗 ${d.sourceRef}</span>` : "—"}</td>
       <td>
         <button class="doc-status-btn ${docStatusClass(d.status)}" onclick="window._cycleDocStatus('${d.id}')" title="${ACTIVE_ROLE === "pmp" ? t("clickToChangeStatus") : ""}">${docStatusLabel(d.status)}</button>
         ${overdue ? `<span class="doc-overdue-badge" title="${t("docLibOverdue")}">⚠</span>` : ""}
@@ -3944,6 +4300,7 @@ function threadCardHtml(thread: MBThread): string {
       </div>
     </div>
     ${thread.objective ? `<div class="mb-thread-objective">${thread.objective}</div>` : ""}
+    ${thread.sourceRef ? `<div class="mb-thread-sourceref">🔗 <strong>${t("docLibSourceRef")}:</strong> <code>${thread.sourceRef}</code></div>` : ""}
     ${linkedHtml}
     ${actionHtml}
     ${thread.resolutionSummary ? `<div class="mb-resolution">✅ <strong>${t("mbResolution")}:</strong> ${thread.resolutionSummary}</div>` : ""}
@@ -4054,6 +4411,388 @@ function exportQaThread(): void {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+// ══════════════════════════════════════════════════
+// FDA COMMUNICATIONS CENTER (PMP-Only)
+// ══════════════════════════════════════════════════
+
+function renderFdaComms(): void {
+  if (ACTIVE_ROLE !== "pmp") return;
+  const body = document.getElementById("fdaCommsBody");
+  if (!body) return;
+  const isCN = getLang() === "cn";
+
+  // ── Gather project data ──────────────────────
+  const pName = localizedText(PROJECT.name);
+  const pApplicant = localizedText(PROJECT.applicant);
+  const pMfr = localizedText(PROJECT.manufacturer);
+  const pSub = PROJECT.submissionType || "510k-standard";
+  const pDate = PROJECT.preparedDate || "";
+  const pMonth = PROJECT.currentMonth;
+
+  // DHF doc completion stats
+  const dhfTotal = DHF_DOCUMENTS.length;
+  const dhfApproved = DHF_DOCUMENTS.filter(
+    (d) => d.status === "approved",
+  ).length;
+  const dhfInReview = DHF_DOCUMENTS.filter(
+    (d) => d.status === "in-review",
+  ).length;
+  const dhfDraft = DHF_DOCUMENTS.filter((d) => d.status === "draft").length;
+  const dhfNotStarted = DHF_DOCUMENTS.filter(
+    (d) => d.status === "not-started",
+  ).length;
+  const dhfPct = dhfTotal > 0 ? Math.round((dhfApproved / dhfTotal) * 100) : 0;
+
+  // Gate status
+  const completedGates = GATES.filter((g) => g.status === "approved").length;
+
+  // Standards compliance
+  const stdTotal = STANDARDS.length;
+  const stdComplete = STANDARDS.filter((s) => s.status === "complete").length;
+
+  // Open risks
+  const redRisks = RISKS.filter((r) => r.riskLevel === "red").length;
+  const yellowRisks = RISKS.filter((r) => r.riskLevel === "yellow").length;
+
+  // ── RTA Checklist ────────────────────────────
+  const rtaItems = [
+    {
+      key: "cover",
+      en: "510(k) Cover Letter (FDA Form 3514)",
+      cn: "510(k)附信 (FDA表格3514)",
+      check: () => true,
+    },
+    {
+      key: "indications",
+      en: "Indications for Use Statement",
+      cn: "适用范围声明",
+      check: () =>
+        DHF_DOCUMENTS.some(
+          (d) => d.code === "DHF-DD" && d.status !== "not-started",
+        ),
+    },
+    {
+      key: "truthful",
+      en: "Truthful & Accuracy Statement",
+      cn: "真实与准确性声明",
+      check: () => true,
+    },
+    {
+      key: "class3",
+      en: "Class III Summary / Certification (if applicable)",
+      cn: "III类摘要/认证（如适用）",
+      check: () => pSub.includes("pma"),
+    },
+    {
+      key: "summary",
+      en: "510(k) Summary or 510(k) Statement",
+      cn: "510(k)摘要或510(k)声明",
+      check: () =>
+        DHF_DOCUMENTS.some(
+          (d) => d.code === "DHF-CL" && d.status !== "not-started",
+        ),
+    },
+    {
+      key: "predicate",
+      en: "Predicate Device Comparison",
+      cn: "前置器械对比",
+      check: () =>
+        DHF_DOCUMENTS.some(
+          (d) => d.code === "DHF-DD" && d.status === "approved",
+        ),
+    },
+    {
+      key: "standards",
+      en: "Standards Data (Declarations of Conformity)",
+      cn: "标准数据（合格声明）",
+      check: () => stdComplete === stdTotal && stdTotal > 0,
+    },
+    {
+      key: "labels",
+      en: "Labeling (21 CFR 801)",
+      cn: "标签 (21 CFR 801)",
+      check: () =>
+        DHF_DOCUMENTS.some(
+          (d) => d.code === "DHF-LBL" && d.status === "approved",
+        ),
+    },
+    {
+      key: "biocompat",
+      en: "Biocompatibility (if applicable)",
+      cn: "生物相容性（如适用）",
+      check: () =>
+        DHF_DOCUMENTS.some(
+          (d) => d.code === "DHF-BIO" && d.status !== "not-started",
+        ),
+    },
+    {
+      key: "software",
+      en: "Software Documentation (IEC 62304)",
+      cn: "软件文档 (IEC 62304)",
+      check: () =>
+        DHF_DOCUMENTS.some(
+          (d) => d.code === "DHF-SW" && d.status === "approved",
+        ),
+    },
+    {
+      key: "emc",
+      en: "EMC / Electrical Safety (IEC 60601-1-2)",
+      cn: "EMC / 电气安全 (IEC 60601-1-2)",
+      check: () =>
+        DHF_DOCUMENTS.some(
+          (d) => d.code === "DHF-EMC" && d.status === "approved",
+        ),
+    },
+    {
+      key: "sterility",
+      en: "Sterilization (if applicable)",
+      cn: "灭菌（如适用）",
+      check: () => true,
+    },
+    {
+      key: "risk",
+      en: "Risk Analysis (ISO 14971)",
+      cn: "风险分析 (ISO 14971)",
+      check: () =>
+        DHF_DOCUMENTS.some(
+          (d) => d.code === "DHF-RA" && d.status === "approved",
+        ),
+    },
+    {
+      key: "performance",
+      en: "Performance Testing — Bench / Clinical",
+      cn: "性能测试——台架/临床",
+      check: () =>
+        DHF_DOCUMENTS.some(
+          (d) => d.code === "DHF-DV" && d.status === "approved",
+        ),
+    },
+  ];
+  const rtaPassed = rtaItems.filter((r) => r.check()).length;
+  const rtaPct = Math.round((rtaPassed / rtaItems.length) * 100);
+
+  // ── FDA Timeline ─────────────────────────────
+  const totalDur =
+    Number(TIMELINE_EVENTS[TIMELINE_EVENTS.length - 1]?.month) || 12;
+  const fdaMilestones = [
+    {
+      month: 1,
+      label: isCN ? "Pre-Sub会议请求" : "Pre-Sub Meeting Request",
+      status: pMonth >= 1 ? "done" : pMonth >= 0 ? "current" : "future",
+    },
+    {
+      month: 2,
+      label: isCN ? "Pre-Sub包准备" : "Pre-Sub Package Prep",
+      status: pMonth >= 2 ? "done" : pMonth >= 1 ? "current" : "future",
+    },
+    {
+      month: 3,
+      label: isCN ? "Pre-Sub提交给FDA" : "Pre-Sub Filed to FDA",
+      status: pMonth >= 3 ? "done" : pMonth >= 2 ? "current" : "future",
+    },
+    {
+      month: 4,
+      label: isCN
+        ? "FDA反馈（75天窗口开启）"
+        : "FDA Feedback (75-Day Window Opens)",
+      status: pMonth >= 4 ? "done" : pMonth >= 3 ? "current" : "future",
+    },
+    {
+      month: Math.round(totalDur * 0.6),
+      label: isCN ? "510(k)准备完成" : "510(k) Preparation Complete",
+      status: pMonth >= Math.round(totalDur * 0.6) ? "done" : "future",
+    },
+    {
+      month: Math.round(totalDur * 0.8),
+      label: isCN ? "510(k)提交" : "510(k) Submission",
+      status: pMonth >= Math.round(totalDur * 0.8) ? "done" : "future",
+    },
+    {
+      month: totalDur,
+      label: isCN ? "预期FDA决定" : "Expected FDA Decision",
+      status: pMonth >= totalDur ? "done" : "future",
+    },
+  ];
+
+  // ── Render ───────────────────────────────────
+  const mc = (label: string, val: string, color: string) =>
+    `<div class="fda-metric"><div class="fda-metric-val" style="color:${color}">${val}</div><div class="fda-metric-lbl">${label}</div></div>`;
+
+  body.innerHTML = `
+  <div class="fda-pmp-badge">🔒 ${isCN ? "PMP专属 — 对技术/商务角色不可见" : "PMP Eyes Only — Not visible to Tech/Business roles"}</div>
+
+  <!-- Summary Metrics -->
+  <div class="fda-metrics">
+    ${mc(isCN ? "RTA就绪" : "RTA Ready", `${rtaPct}%`, rtaPct >= 80 ? "#22c55e" : rtaPct >= 50 ? "#f59e0b" : "#ef4444")}
+    ${mc(isCN ? "DHF完成度" : "DHF Completion", `${dhfPct}%`, dhfPct >= 80 ? "#22c55e" : dhfPct >= 50 ? "#f59e0b" : "#ef4444")}
+    ${mc(isCN ? "门控通过" : "Gates Passed", `${completedGates}/${GATES.length}`, completedGates === GATES.length ? "#22c55e" : "#38bdf8")}
+    ${mc(isCN ? "标准合规" : "Standards Met", `${stdComplete}/${stdTotal}`, stdComplete === stdTotal ? "#22c55e" : "#f59e0b")}
+    ${mc(isCN ? "红色风险" : "Red Risks", String(redRisks), redRisks > 0 ? "#ef4444" : "#22c55e")}
+    ${mc(isCN ? "黄色风险" : "Yellow Risks", String(yellowRisks), yellowRisks > 0 ? "#f59e0b" : "#22c55e")}
+  </div>
+
+  <div class="fda-grid">
+    <!-- Q-Sub Cover Letter Generator -->
+    <div class="fda-card">
+      <h3>📋 ${isCN ? "Q-Sub附信生成器" : "Q-Sub Cover Letter Generator"}</h3>
+      <p class="fda-card-hint">${
+        isCN
+          ? "按照FDA Q-Sub指南自动生成Pre-Sub会议请求附信"
+          : "Auto-generate a Pre-Sub meeting request cover letter per FDA Q-Sub guidance"
+      }</p>
+      <div class="fda-preview">
+        <div class="fda-letter">
+          <p><strong>${isCN ? "致" : "To"}:</strong> Division of Industry and Consumer Education (DICE)<br>
+          Center for Devices and Radiological Health<br>
+          Food and Drug Administration</p>
+          <p><strong>${isCN ? "发件人" : "From"}:</strong> ${pApplicant}</p>
+          <p><strong>${isCN ? "日期" : "Date"}:</strong> ${pDate || new Date().toLocaleDateString()}</p>
+          <p><strong>${isCN ? "主题" : "Re"}:</strong> Pre-Submission Meeting Request — ${pName}</p>
+          <hr>
+          <p>${isCN ? "尊敬的先生/女士：" : "Dear Sir or Madam:"}</p>
+          <p>${
+            isCN
+              ? `${pApplicant}谨请求一次Pre-Submission会议，讨论拟提交的${pSub === "510k-standard" ? "510(k)" : pSub}申请——${pName}。`
+              : `${pApplicant} respectfully requests a Pre-Submission meeting to discuss a planned ${pSub === "510k-standard" ? "510(k)" : pSub} submission for the ${pName}.`
+          }</p>
+
+          <p><strong>${isCN ? "设备描述" : "Device Description"}:</strong> ${localizedText(PROJECT.subtitle)}</p>
+          <p><strong>${isCN ? "提交类型" : "Submission Type"}:</strong> ${pSub.replace(/-/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase())}</p>
+          <p><strong>${isCN ? "制造商" : "Manufacturer"}:</strong> ${pMfr}</p>
+
+          <p><strong>${isCN ? "希望的会议形式" : "Preferred Meeting Type"}:</strong> ${isCN ? "电话会议" : "Teleconference"}</p>
+
+          <p><strong>${isCN ? "具体问题见附件" : "Specific questions are attached herewith"}.</strong></p>
+          <p>${isCN ? "此致敬礼" : "Sincerely"},<br>${pApplicant}</p>
+        </div>
+      </div>
+      <div class="fda-card-actions">
+        <button class="fda-btn" id="fdaExportLetter">📥 ${isCN ? "导出附信 (HTML)" : "Export Cover Letter (HTML)"}</button>
+        <button class="fda-btn fda-btn-secondary" id="fdaExportQuestions">📋 ${isCN ? "导出问题包" : "Export Question Package"}</button>
+      </div>
+    </div>
+
+    <!-- RTA Checklist -->
+    <div class="fda-card">
+      <h3>✅ ${isCN ? "RTA自检清单" : "Refuse-to-Accept Checklist"}</h3>
+      <p class="fda-card-hint">${
+        isCN
+          ? "FDA的RTA清单——提交前自检。绿色 = 从DHF/标准跟踪器自动检测。"
+          : "FDA's RTA checklist — self-check before filing. Green = auto-detected from DHF/Standards trackers."
+      }</p>
+      <div class="fda-progress-bar"><div class="fda-progress-fill" style="width:${rtaPct}%;background:${rtaPct >= 80 ? "#22c55e" : rtaPct >= 50 ? "#f59e0b" : "#ef4444"}"></div></div>
+      <div style="text-align:right;font-size:0.8rem;color:#94a3b8;margin-bottom:8px">${rtaPassed}/${rtaItems.length} ${isCN ? "已通过" : "passed"}</div>
+      <div class="fda-rta-list">
+        ${rtaItems
+          .map((r) => {
+            const passed = r.check();
+            return `<div class="fda-rta-item ${passed ? "rta-pass" : "rta-fail"}">
+            <span class="rta-icon">${passed ? "✅" : "⬜"}</span>
+            <span>${isCN ? r.cn : r.en}</span>
+          </div>`;
+          })
+          .join("")}
+      </div>
+    </div>
+
+    <!-- FDA Interaction Timeline -->
+    <div class="fda-card fda-card-wide">
+      <h3>📅 ${isCN ? "FDA互动时间线" : "FDA Interaction Timeline"}</h3>
+      <p class="fda-card-hint">${
+        isCN
+          ? "关键FDA里程碑和截止日期。Pre-Sub反馈窗口为75天。"
+          : "Key FDA milestones and deadlines. Pre-Sub feedback window is 75 calendar days."
+      }</p>
+      <div class="fda-timeline">
+        ${fdaMilestones
+          .map(
+            (m) => `<div class="fda-tl-item fda-tl-${m.status}">
+          <div class="fda-tl-dot"></div>
+          <div class="fda-tl-content">
+            <span class="fda-tl-month">M+${m.month}</span>
+            <span class="fda-tl-label">${m.label}</span>
+          </div>
+        </div>`,
+          )
+          .join("")}
+      </div>
+    </div>
+
+    <!-- DHF Readiness Snapshot -->
+    <div class="fda-card">
+      <h3>📁 ${isCN ? "DHF就绪快照" : "DHF Readiness Snapshot"}</h3>
+      <div class="fda-dhf-stats">
+        <div class="fda-dhf-bar">
+          <div class="fda-dhf-seg" style="width:${dhfTotal ? (dhfApproved / dhfTotal) * 100 : 0}%;background:#22c55e" title="${isCN ? "已批准" : "Approved"}"></div>
+          <div class="fda-dhf-seg" style="width:${dhfTotal ? (dhfInReview / dhfTotal) * 100 : 0}%;background:#3b82f6" title="${isCN ? "审核中" : "In Review"}"></div>
+          <div class="fda-dhf-seg" style="width:${dhfTotal ? (dhfDraft / dhfTotal) * 100 : 0}%;background:#f59e0b" title="${isCN ? "草稿" : "Draft"}"></div>
+          <div class="fda-dhf-seg" style="width:${dhfTotal ? (dhfNotStarted / dhfTotal) * 100 : 0}%;background:#475569" title="${isCN ? "未开始" : "Not Started"}"></div>
+        </div>
+        <div class="fda-dhf-legend">
+          <span><i style="background:#22c55e"></i> ${isCN ? "已批准" : "Approved"} (${dhfApproved})</span>
+          <span><i style="background:#3b82f6"></i> ${isCN ? "审核中" : "In Review"} (${dhfInReview})</span>
+          <span><i style="background:#f59e0b"></i> ${isCN ? "草稿" : "Draft"} (${dhfDraft})</span>
+          <span><i style="background:#475569"></i> ${isCN ? "未开始" : "Not Started"} (${dhfNotStarted})</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  `;
+
+  // ── Event handlers ─────────────────────────
+  document.getElementById("fdaExportLetter")?.addEventListener("click", () => {
+    const letter = body.querySelector(".fda-letter");
+    if (!letter) return;
+    const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Q-Sub Cover Letter — ${pName}</title>
+    <style>body{font-family:Georgia,serif;max-width:700px;margin:40px auto;padding:20px;line-height:1.7;color:#1e293b}
+    hr{border:none;border-top:1px solid #ccc;margin:16px 0} strong{color:#0f172a}</style></head>
+    <body>${letter.innerHTML}</body></html>`;
+    const blob = new Blob([html], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `QSub_Cover_Letter_${pName.replace(/\s+/g, "_")}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  document
+    .getElementById("fdaExportQuestions")
+    ?.addEventListener("click", () => {
+      const questions = QA_SECTIONS.flatMap((s) =>
+        s.questions.map((q) => ({
+          section: localizedText(s.title),
+          question: localizedText(q.question),
+          why: localizedText(q.why),
+        })),
+      );
+      let html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Pre-Sub Questions — ${pName}</title>
+    <style>body{font-family:Georgia,serif;max-width:700px;margin:40px auto;padding:20px;line-height:1.7;color:#1e293b}
+    h1{color:#1e40af;border-bottom:2px solid #1e40af;padding-bottom:8px}
+    h2{color:#334155;margin-top:28px} .q{margin:12px 0;padding:8px 0;border-bottom:1px solid #e2e8f0}
+    .q-num{color:#1e40af;font-weight:bold} .q-why{color:#64748b;font-size:0.9em;font-style:italic}</style></head><body>
+    <h1>Pre-Submission Questions — ${pName}</h1>
+    <p><strong>Applicant:</strong> ${pApplicant}<br><strong>Date:</strong> ${pDate || new Date().toLocaleDateString()}</p>`;
+      let n = 1;
+      questions.forEach((q) => {
+        html += `<div class="q"><span class="q-num">Q${n}.</span> ${q.question}<br><span class="q-why">Context: ${q.why}</span></div>`;
+        n++;
+      });
+      html += `</body></html>`;
+      const blob = new Blob([html], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `PreSub_Questions_${pName.replace(/\s+/g, "_")}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
 }
 
 // ── Main render ───────────────────────────────
@@ -4396,6 +5135,7 @@ function mbCreateThread(): void {
     : "inform";
 
   const objective = prompt(t("mbObjective")) || "";
+  const sourceRef = prompt(t("mbSourceRef")) || "";
 
   const priorityOptions: MBPriority[] = ["normal", "urgent", "escalated"];
   const prioChoice = prompt(
@@ -4419,6 +5159,7 @@ function mbCreateThread(): void {
     intent,
     owner: normalizeRole(qaPostingRole),
     objective,
+    sourceRef: sourceRef || undefined,
     lifecycle: "open",
     priority,
     linkedItems: [],

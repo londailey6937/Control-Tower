@@ -109,6 +109,14 @@ export interface TimelineEvent {
 }
 
 // ── Standards ───────────────────────────────────
+export interface StandardClause {
+  id: string;
+  clause: string;
+  title: LocalizedString;
+  checked: boolean;
+  evidenceDoc?: string;
+}
+
 export interface Standard {
   id: string;
   code: string;
@@ -116,6 +124,7 @@ export interface Standard {
   applies: string;
   status: MilestoneStatus;
   progress: number;
+  clauses: StandardClause[];
 }
 
 // ── Cash / Runway ───────────────────────────────
@@ -410,6 +419,8 @@ declare global {
     _addBurnEntry: () => void;
     _deleteBurnEntry: (month: number) => void;
     _toggleQaTestMode: (checked: boolean) => void;
+    _toggleStandardClauses: (standardId: string) => void;
+    _toggleClause: (standardId: string, clauseId: string) => void;
   }
 }
 
@@ -440,6 +451,7 @@ export interface DocLibItem {
   effectiveDate: string;
   nextReview: string;
   linkedMilestone: string;
+  sourceRef?: string;
   revisions: DocRevision[];
 }
 
@@ -505,6 +517,7 @@ export interface MBThread {
   assignee?: string;
   dueDate?: string;
   linkedItems: MBLinkedItem[];
+  sourceRef?: string;
   createdAt: string;
   resolvedAt?: string;
   resolutionSummary?: string;
