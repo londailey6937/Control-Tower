@@ -280,6 +280,7 @@ export function seed(a: WizardAnswers): void {
       applies: "All",
       status: "not-started",
       progress: 0,
+      clauses: [],
     });
   });
 

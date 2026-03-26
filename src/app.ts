@@ -152,6 +152,14 @@ function setupEventDelegation(): void {
       case "cycleStandardStatus":
         window._cycleStandardStatus(a.sid!);
         break;
+      case "toggleClauses":
+        e.stopPropagation();
+        window._toggleStandardClauses(a.sid!);
+        break;
+      case "toggleClause":
+        e.stopPropagation();
+        window._toggleClause(a.sid!, a.cid!);
+        break;
       case "editCashField":
         window._editCashField(a.field! as "cashOnHand" | "monthlyBurn");
         break;
@@ -946,6 +954,30 @@ function renderStandards(): void {
           ? t("inProgress")
           : t("notStarted");
 
+    const checkedCount = s.clauses.filter((c) => c.checked).length;
+    const totalClauses = s.clauses.length;
+    const clausePct =
+      totalClauses > 0 ? Math.round((checkedCount / totalClauses) * 100) : 0;
+
+    const clauseRows = s.clauses
+      .map((c) => {
+        const chk = c.checked ? "checked" : "";
+        const evidBadge = c.evidenceDoc
+          ? `<span class="clause-evidence-badge" title="${c.evidenceDoc}">${c.evidenceDoc}</span>`
+          : "";
+        return `<div class="clause-row">
+        <label class="clause-label">
+          <input type="checkbox" ${chk}
+            data-action="toggleClause" data-sid="${s.id}" data-cid="${c.id}"
+            ${ACTIVE_ROLE !== "pmp" ? "disabled" : ""} />
+          <span class="clause-ref">${c.clause}</span>
+          <span class="clause-title">${localizedText(c.title)}</span>
+        </label>
+        ${evidBadge}
+      </div>`;
+      })
+      .join("");
+
     return `
       <tr>
         <td><span class="std-code">${s.code}</span></td>
@@ -971,9 +1003,29 @@ function renderStandards(): void {
             }
           </div>
         </td>
+        <td class="clause-toggle-cell">
+          <button class="clause-toggle-btn" data-action="toggleClauses" data-sid="${s.id}" title="${t("expandClauses")}">
+            <span class="clause-count">${checkedCount}/${totalClauses}</span>
+            <span class="clause-arrow">&#9654;</span>
+          </button>
+        </td>
+      </tr>
+      <tr class="clause-detail-row" id="clauses-${s.id}" style="display:none">
+        <td colspan="6">
+          <div class="clause-panel">
+            <div class="clause-progress-mini">
+              <div class="clause-progress-fill" style="width:${clausePct}%"></div>
+            </div>
+            <div class="clause-count-label">${checkedCount}/${totalClauses} ${t("clauseChecked")}</div>
+            ${clauseRows}
+          </div>
+        </td>
       </tr>
     `;
   }).join("");
+
+  // Render guardrails panel
+  renderGuardrails();
 }
 
 // ── CASH / RUNWAY ─────────────────────────────
@@ -1386,6 +1438,220 @@ window._setStandardProgress = function (
   renderStandards();
   renderSummary();
 };
+
+// ── CLAUSE TOGGLE & GUARDRAILS ────────────────
+window._toggleStandardClauses = function (standardId: string): void {
+  const row = document.getElementById(`clauses-${standardId}`);
+  if (!row) return;
+  const isHidden = row.style.display === "none";
+  row.style.display = isHidden ? "table-row" : "none";
+  const btn = document.querySelector(
+    `[data-action="toggleClauses"][data-sid="${standardId}"] .clause-arrow`,
+  ) as HTMLElement;
+  if (btn) btn.style.transform = isHidden ? "rotate(90deg)" : "";
+};
+
+window._toggleClause = function (standardId: string, clauseId: string): void {
+  const std = STANDARDS.find((s) => s.id === standardId);
+  if (!std) return;
+  const clause = std.clauses.find((c) => c.id === clauseId);
+  if (!clause) return;
+  if (ACTIVE_ROLE !== "pmp") return;
+
+  clause.checked = !clause.checked;
+
+  // Auto-recalculate progress from clauses
+  const checked = std.clauses.filter((c) => c.checked).length;
+  const total = std.clauses.length;
+  std.progress = total > 0 ? Math.round((checked / total) * 100) : 0;
+  if (std.progress === 100) std.status = "complete";
+  else if (std.progress === 0) std.status = "not-started";
+  else std.status = "in-progress";
+
+  renderStandards();
+  renderSummary();
+};
+
+function renderGuardrails(): void {
+  const panel = document.getElementById("guardrailsPanel");
+  if (!panel) return;
+  const isCN = getLang() === "cn";
+
+  // ── Predicate Selection Guardrails ──
+  const hasPredicate =
+    !!(PROJECT as any).predicateDevices?.length ||
+    DHF_DOCUMENTS.some(
+      (d) => d.code === "DHF-DD" && d.status !== "not-started",
+    );
+  const predicateDocApproved = DHF_DOCUMENTS.some(
+    (d) => d.code === "DHF-DD" && d.status === "approved",
+  );
+  const predicateChecks = [
+    {
+      label: isCN
+        ? "等效器械已在向导中定义"
+        : "Predicate device(s) identified in wizard",
+      pass: hasPredicate,
+    },
+    {
+      label: isCN
+        ? "设备描述文档已完成"
+        : "Device Description document completed",
+      pass: predicateDocApproved,
+    },
+    {
+      label: isCN
+        ? "Pre-Sub(Q-Sub)已提交以确认等效器械"
+        : "Pre-Sub (Q-Sub) filed to confirm predicate with FDA",
+      pass: (PROJECT as any).currentMonth >= 3,
+    },
+  ];
+  const predPassed = predicateChecks.filter((c) => c.pass).length;
+  const predLevel =
+    predPassed === predicateChecks.length
+      ? "pass"
+      : predPassed >= 1
+        ? "warn"
+        : "fail";
+
+  // ── Testing Gap Analysis ──
+  const testingChecks = [
+    {
+      label: isCN
+        ? "IEC 60601-1 安全测试进行中"
+        : "IEC 60601-1 safety testing underway",
+      pass: STANDARDS.find((s) => s.id === "STD-01")!.status !== "not-started",
+    },
+    {
+      label: isCN
+        ? "EMC测试(IEC 60601-1-2)已规划"
+        : "EMC testing (IEC 60601-1-2) planned or in progress",
+      pass:
+        STANDARDS.find((s) => s.id === "STD-02")!.status !== "not-started" ||
+        DHF_DOCUMENTS.some(
+          (d) => d.code === "DHF-EMC" && d.status !== "not-started",
+        ),
+    },
+    {
+      label: isCN
+        ? "软件验证(IEC 62304)匹配分类要求"
+        : "Software validation (IEC 62304) matches classification rigor",
+      pass: STANDARDS.find((s) => s.id === "STD-11")!.progress >= 20,
+    },
+    {
+      label: isCN ? "设计验证报告已启动" : "Design Verification Report started",
+      pass: DHF_DOCUMENTS.some(
+        (d) => d.code === "DHF-DV" && d.status !== "not-started",
+      ),
+    },
+    {
+      label: isCN
+        ? "风险分析(ISO 14971)活跃"
+        : "Risk Analysis (ISO 14971) active",
+      pass: DHF_DOCUMENTS.some(
+        (d) => d.code === "DHF-RA" && d.status !== "not-started",
+      ),
+    },
+  ];
+  const testPassed = testingChecks.filter((c) => c.pass).length;
+  const testLevel =
+    testPassed === testingChecks.length
+      ? "pass"
+      : testPassed >= 3
+        ? "warn"
+        : "fail";
+
+  // ── Translation Readiness ──
+  const dhfTotal = DHF_DOCUMENTS.length;
+  const dhfWithContent = DHF_DOCUMENTS.filter(
+    (d) => d.status !== "not-started",
+  ).length;
+  const translationChecks = [
+    {
+      label: isCN
+        ? "DHF文档使用英文编写或翻译"
+        : "DHF documents authored or translated in English",
+      pass: dhfWithContent > 0,
+    },
+    {
+      label: isCN
+        ? "标签(21 CFR 801)使用英文"
+        : "Labeling (21 CFR 801) in English",
+      pass: DHF_DOCUMENTS.some(
+        (d) => d.code === "DHF-LBL" && d.status !== "not-started",
+      ),
+    },
+    {
+      label: isCN
+        ? "术语一致性——双语术语表可用"
+        : "Terminology consistency — bilingual glossary available",
+      pass: dhfWithContent >= Math.floor(dhfTotal * 0.5),
+    },
+  ];
+  const transPassed = translationChecks.filter((c) => c.pass).length;
+  const transLevel =
+    transPassed === translationChecks.length
+      ? "pass"
+      : transPassed >= 1
+        ? "warn"
+        : "fail";
+
+  const levelBadge = (level: string) => {
+    const cls =
+      level === "pass"
+        ? "gr-badge-pass"
+        : level === "warn"
+          ? "gr-badge-warn"
+          : "gr-badge-fail";
+    const txt =
+      level === "pass"
+        ? t("grPass")
+        : level === "warn"
+          ? t("grWarn")
+          : t("grFail");
+    return `<span class="gr-badge ${cls}">${txt}</span>`;
+  };
+
+  const checkList = (items: { label: string; pass: boolean }[]) =>
+    items
+      .map(
+        (c) => `<div class="gr-check-item ${c.pass ? "gr-pass" : "gr-fail"}">
+      <span class="gr-icon">${c.pass ? "✅" : "⚠️"}</span>
+      <span>${c.label}</span>
+    </div>`,
+      )
+      .join("");
+
+  panel.innerHTML = `
+    <div class="guardrails-header">
+      <h3>${t("guardrailsTitle")}</h3>
+      <p class="panel-desc">${t("guardrailsDesc")}</p>
+    </div>
+    <div class="guardrails-grid">
+      <div class="gr-card">
+        <div class="gr-card-header">
+          <h4>🎯 ${t("grPredicateTitle")}</h4>
+          ${levelBadge(predLevel)}
+        </div>
+        ${checkList(predicateChecks)}
+      </div>
+      <div class="gr-card">
+        <div class="gr-card-header">
+          <h4>🔬 ${t("grTestingTitle")}</h4>
+          ${levelBadge(testLevel)}
+        </div>
+        ${checkList(testingChecks)}
+      </div>
+      <div class="gr-card">
+        <div class="gr-card-header">
+          <h4>🌐 ${t("grTranslationTitle")}</h4>
+          ${levelBadge(transLevel)}
+        </div>
+        ${checkList(translationChecks)}
+      </div>
+    </div>
+  `;
+}
 
 // ── FUNDING MANAGEMENT ────────────────────────
 window._editCashField = function (field: "cashOnHand" | "monthlyBurn"): void {
