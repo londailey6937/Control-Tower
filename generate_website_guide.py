@@ -341,6 +341,7 @@ def build_en():
     pdf.sub("Professional PM -- $10-25K/mo")
     pdf.bul("Everything in SaaS, plus dedicated PMP project manager")
     pdf.bul("FDA Communications Center with Q-Sub automation")
+    pdf.bul("US Agent representation (required for all foreign manufacturers)")
     pdf.bul("Gate review management and regulatory submission oversight")
     pdf.bul("Supplier coordination and stakeholder management")
 
@@ -348,6 +349,7 @@ def build_en():
     pdf.bul("Everything in Professional, plus end-to-end 510(k) management")
     pdf.bul("Regulatory strategy and pathway development")
     pdf.bul("Automated RTA self-check and DHF readiness assessment")
+    pdf.bul("US Agent representation (required for all foreign manufacturers)")
     pdf.bul("US entity formation assistance")
     pdf.bul("Investor-ready documentation")
 
@@ -678,6 +680,7 @@ def build_cn():
     pdf.sub("专业PM服务 -- $10,000-$25,000/月")
     pdf.bul("SaaS全部功能，外加专属PMP项目经理")
     pdf.bul("FDA通信中心及Q-Sub自动化")
+    pdf.bul("美国代理人服务（所有外国制造商强制要求）")
     pdf.bul("门控评审管理和法规提交监督")
     pdf.bul("供应商协调和利益相关者管理")
 
@@ -685,6 +688,7 @@ def build_cn():
     pdf.bul("专业版全部功能，外加端到端510(k)管理")
     pdf.bul("法规策略和路径开发")
     pdf.bul("自动化RTA自检和DHF就绪评估")
+    pdf.bul("美国代理人服务（所有外国制造商强制要求）")
     pdf.bul("美国实体设立协助")
     pdf.bul("面向投资者的文档支持")
 

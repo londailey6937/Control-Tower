@@ -172,10 +172,12 @@ def build_factsheet_en():
           "Document control", "Team messaging", "Risk & budget tracking"]),
         ("Professional PM", "$10-25K/mo",
          ["All SaaS features", "Dedicated PMP project manager", "FDA Comms Center",
-          "Gate review management", "Submission oversight", "Supplier coordination"]),
+          "US Agent representation", "Gate review management", "Submission oversight",
+          "Supplier coordination"]),
         ("Enterprise", "Project-Based",
          ["All Professional features", "End-to-end 510(k) management", "Regulatory strategy",
-          "RTA self-check & DHF readiness", "US entity formation", "Investor documentation"]),
+          "RTA self-check & DHF readiness", "US Agent representation",
+          "US entity formation", "Investor documentation"]),
     ]
     col_w = (pdf.w - pdf.l_margin - pdf.r_margin - 6) / 3
     y0 = pdf.get_y()
@@ -366,10 +368,12 @@ def build_factsheet_cn():
           "文档控制", "团队消息", "风险与预算跟踪"]),
         ("专业PM服务", "$10,000-$25,000/月",
          ["SaaS全部功能", "专属PMP项目经理", "FDA通信中心",
-          "门控评审管理", "提交监督", "供应商协调"]),
+          "美国代理人服务", "门控评审管理", "提交监督",
+          "供应商协调"]),
         ("企业级服务", "按项目定价",
          ["专业版全部功能", "端到端510(k)管理", "法规策略",
-          "RTA自检与DHF就绪", "美国实体设立", "投资者文档"]),
+          "RTA自检与DHF就绪", "美国代理人服务",
+          "美国实体设立", "投资者文档"]),
     ]
     col_w = (pdf.w - pdf.l_margin - pdf.r_margin - 6) / 3
     y0 = pdf.get_y()
