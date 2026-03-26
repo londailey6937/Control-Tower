@@ -4456,18 +4456,30 @@ function renderFdaComms(): void {
   const redRisks = RISKS.filter((r) => r.riskLevel === "red").length;
   const yellowRisks = RISKS.filter((r) => r.riskLevel === "yellow").length;
 
-  // ── RTA Checklist ────────────────────────────
+  // ── RTA Checklist (expanded per FDA CDRH 510(k) guidance §11-12) ──
   const rtaItems = [
     {
+      key: "ecopy",
+      en: "eCopy (exact electronic duplicate of paper submission)",
+      cn: "eCopy（纸质提交的完整电子副本）",
+      check: () => true,
+    },
+    {
+      key: "userfee",
+      en: "User Fee Payment (received before submission)",
+      cn: "用户费已支付（提交前到账）",
+      check: () => true,
+    },
+    {
       key: "cover",
-      en: "510(k) Cover Letter (FDA Form 3514)",
-      cn: "510(k)附信 (FDA表格3514)",
+      en: "510(k) Cover Letter (signed, FDA Form 3514)",
+      cn: "510(k)附信（已签署, FDA表格3514）",
       check: () => true,
     },
     {
       key: "indications",
-      en: "Indications for Use Statement",
-      cn: "适用范围声明",
+      en: "Indications for Use Statement (FDA Form 3881)",
+      cn: "适用范围声明（FDA表格3881）",
       check: () =>
         DHF_DOCUMENTS.some(
           (d) => d.code === "DHF-DD" && d.status !== "not-started",
@@ -4487,17 +4499,26 @@ function renderFdaComms(): void {
     },
     {
       key: "summary",
-      en: "510(k) Summary or 510(k) Statement",
-      cn: "510(k)摘要或510(k)声明",
+      en: "510(k) Summary or Statement (21 CFR 807.92)",
+      cn: "510(k)摘要或声明 (21 CFR 807.92)",
       check: () =>
         DHF_DOCUMENTS.some(
           (d) => d.code === "DHF-CL" && d.status !== "not-started",
         ),
     },
     {
+      key: "devicedesc",
+      en: "Device Description (design, materials, energy sources, diagrams)",
+      cn: "器械描述（设计、材料、能源、图示）",
+      check: () =>
+        DHF_DOCUMENTS.some(
+          (d) => d.code === "DHF-DD" && d.status !== "not-started",
+        ),
+    },
+    {
       key: "predicate",
-      en: "Predicate Device Comparison",
-      cn: "前置器械对比",
+      en: "Predicate Comparison & SE Discussion (decision flow chart)",
+      cn: "前置器械对比与实质等效性论证（决策流程图）",
       check: () =>
         DHF_DOCUMENTS.some(
           (d) => d.code === "DHF-DD" && d.status === "approved",
@@ -4505,14 +4526,14 @@ function renderFdaComms(): void {
     },
     {
       key: "standards",
-      en: "Standards Data (Declarations of Conformity)",
-      cn: "标准数据（合格声明）",
+      en: "Standards Data & Declarations (FDA Form 3654)",
+      cn: "标准数据与合格声明（FDA表格3654）",
       check: () => stdComplete === stdTotal && stdTotal > 0,
     },
     {
       key: "labels",
-      en: "Labeling (21 CFR 801)",
-      cn: "标签 (21 CFR 801)",
+      en: "Proposed Labeling — final draft (21 CFR 801)",
+      cn: "拟定标签——终稿 (21 CFR 801)",
       check: () =>
         DHF_DOCUMENTS.some(
           (d) => d.code === "DHF-LBL" && d.status === "approved",
@@ -4520,8 +4541,8 @@ function renderFdaComms(): void {
     },
     {
       key: "biocompat",
-      en: "Biocompatibility (if applicable)",
-      cn: "生物相容性（如适用）",
+      en: "Biocompatibility (ISO 10993, if patient-contacting)",
+      cn: "生物相容性（ISO 10993, 如有患者接触）",
       check: () =>
         DHF_DOCUMENTS.some(
           (d) => d.code === "DHF-BIO" && d.status !== "not-started",
@@ -4529,8 +4550,8 @@ function renderFdaComms(): void {
     },
     {
       key: "software",
-      en: "Software Documentation (IEC 62304)",
-      cn: "软件文档 (IEC 62304)",
+      en: "Software Documentation (IEC 62304 lifecycle)",
+      cn: "软件文档 (IEC 62304生命周期)",
       check: () =>
         DHF_DOCUMENTS.some(
           (d) => d.code === "DHF-SW" && d.status === "approved",
@@ -4547,14 +4568,14 @@ function renderFdaComms(): void {
     },
     {
       key: "sterility",
-      en: "Sterilization (if applicable)",
-      cn: "灭菌（如适用）",
+      en: "Sterilization Validation (if applicable)",
+      cn: "灭菌验证（如适用）",
       check: () => true,
     },
     {
       key: "risk",
-      en: "Risk Analysis (ISO 14971)",
-      cn: "风险分析 (ISO 14971)",
+      en: "Risk Analysis (ISO 14971 — full risk management file)",
+      cn: "风险分析（ISO 14971——完整风险管理文件）",
       check: () =>
         DHF_DOCUMENTS.some(
           (d) => d.code === "DHF-RA" && d.status === "approved",
@@ -4562,8 +4583,8 @@ function renderFdaComms(): void {
     },
     {
       key: "performance",
-      en: "Performance Testing — Bench / Clinical",
-      cn: "性能测试——台架/临床",
+      en: "Performance Testing — Bench / Animal / Clinical",
+      cn: "性能测试——台架/动物/临床",
       check: () =>
         DHF_DOCUMENTS.some(
           (d) => d.code === "DHF-DV" && d.status === "approved",
@@ -4573,46 +4594,184 @@ function renderFdaComms(): void {
   const rtaPassed = rtaItems.filter((r) => r.check()).length;
   const rtaPct = Math.round((rtaPassed / rtaItems.length) * 100);
 
-  // ── FDA Timeline ─────────────────────────────
+  // ── FDA Timelines (per MDUFA & CDRH guidance) ──
   const totalDur =
     Number(TIMELINE_EVENTS[TIMELINE_EVENTS.length - 1]?.month) || 12;
-  const fdaMilestones = [
+
+  // Pre-Submission timeline milestones
+  const preSubMilestones = [
     {
-      month: 1,
-      label: isCN ? "Pre-Sub会议请求" : "Pre-Sub Meeting Request",
-      status: pMonth >= 1 ? "done" : pMonth >= 0 ? "current" : "future",
+      day: 0,
+      label: isCN ? "Pre-Sub包提交" : "Pre-Sub Package Submitted",
+      detail: isCN
+        ? "Q-Sub附信 + 议题/问题 + 器械描述"
+        : "Q-Sub cover letter + agenda/questions + device description",
+      status: pMonth >= 1 ? "done" : "future",
     },
     {
-      month: 2,
-      label: isCN ? "Pre-Sub包准备" : "Pre-Sub Package Prep",
-      status: pMonth >= 2 ? "done" : pMonth >= 1 ? "current" : "future",
+      day: 15,
+      label: isCN ? "FDA确认接收" : "FDA Acknowledgment & Acceptance",
+      detail: isCN
+        ? "FDA确认Pre-Sub完整性并指定审核团队"
+        : "FDA confirms completeness & assigns review team",
+      status: pMonth >= 2 ? "done" : "future",
     },
     {
-      month: 3,
-      label: isCN ? "Pre-Sub提交给FDA" : "Pre-Sub Filed to FDA",
-      status: pMonth >= 3 ? "done" : pMonth >= 2 ? "current" : "future",
+      day: 30,
+      label: isCN ? "会议日期确认" : "Meeting Date Communicated",
+      detail: isCN
+        ? "通常在第60-75天之间"
+        : "Typically scheduled for Day 60–75",
+      status: pMonth >= 2 ? "done" : "future",
     },
     {
-      month: 4,
-      label: isCN
-        ? "FDA反馈（75天窗口开启）"
-        : "FDA Feedback (75-Day Window Opens)",
-      status: pMonth >= 4 ? "done" : pMonth >= 3 ? "current" : "future",
+      day: 70,
+      label: isCN ? "书面反馈/会议" : "Written Feedback / Meeting",
+      detail: isCN
+        ? "FDA提供书面回复或召开Pre-Sub会议"
+        : "FDA provides written response or holds Pre-Sub meeting",
+      status: pMonth >= 3 ? "done" : "future",
     },
     {
-      month: Math.round(totalDur * 0.6),
-      label: isCN ? "510(k)准备完成" : "510(k) Preparation Complete",
-      status: pMonth >= Math.round(totalDur * 0.6) ? "done" : "future",
+      day: 75,
+      label: isCN ? "最终会议纪要" : "Final Meeting Minutes",
+      detail: isCN
+        ? "FDA发送正式的会议纪要（如有会议）"
+        : "FDA sends official meeting minutes (if meeting held)",
+      status: pMonth >= 4 ? "done" : "future",
     },
+  ];
+
+  // 510(k) MDUFA review timeline milestones
+  const mdufaMilestones = [
     {
-      month: Math.round(totalDur * 0.8),
-      label: isCN ? "510(k)提交" : "510(k) Submission",
+      day: 1,
+      label: isCN ? "提交接收" : "Submission Received",
+      detail: isCN
+        ? "FDA Document Control Center接收510(k)"
+        : "FDA Document Control Center receives 510(k)",
       status: pMonth >= Math.round(totalDur * 0.8) ? "done" : "future",
     },
     {
-      month: totalDur,
-      label: isCN ? "预期FDA决定" : "Expected FDA Decision",
+      day: 7,
+      label: isCN ? "接收确认" : "Receipt Acknowledgment",
+      detail: isCN
+        ? "分配K编号并发送确认函"
+        : "K-number assigned & acknowledgment letter sent",
+      status: pMonth >= Math.round(totalDur * 0.8) ? "done" : "future",
+    },
+    {
+      day: 15,
+      label: isCN ? "RTA筛查完成" : "RTA Screening Complete",
+      detail: isCN
+        ? "FDA完成行政审查——接受或拒绝"
+        : "FDA completes administrative review — accept or refuse",
+      status: pMonth >= Math.round(totalDur * 0.85) ? "done" : "future",
+    },
+    {
+      day: 60,
+      label: isCN
+        ? "实质性审查/互动审查"
+        : "Substantive Review / Interactive Review",
+      detail: isCN
+        ? "技术评审；可能发出AI信函（额外180天）"
+        : "Technical evaluation; may issue AI letter (+180 days)",
+      status: pMonth >= Math.round(totalDur * 0.9) ? "done" : "future",
+    },
+    {
+      day: 90,
+      label: isCN ? "MDUFA决定目标" : "MDUFA Decision Goal",
+      detail: isCN
+        ? "SE/NSE/MDUFA目标日期（如无AI）"
+        : "SE/NSE determination — MDUFA goal date (if no AI)",
       status: pMonth >= totalDur ? "done" : "future",
+    },
+    {
+      day: 100,
+      label: isCN ? "MDUFA逾期追踪" : "MDUFA Overdue Tracking",
+      detail: isCN
+        ? "超出MDUFA目标——上报至部门主管"
+        : "Past MDUFA goal — escalate to division director",
+      status: "future" as const,
+    },
+  ];
+
+  // Q-Sub types reference data (per FDA CDRH guidance §4)
+  const qsubTypes = [
+    {
+      type: "Pre-Sub (Meeting)",
+      typeCN: "Pre-Sub（会议）",
+      desc: "Request feedback meeting with FDA review division",
+      descCN: "请求与FDA审评部门进行反馈会议",
+      timeline: isCN ? "75天窗口" : "75-day window",
+    },
+    {
+      type: "Pre-Sub (Written Only)",
+      typeCN: "Pre-Sub（仅书面）",
+      desc: "Written-only feedback, no meeting requested",
+      descCN: "仅书面反馈，不要求会议",
+      timeline: isCN ? "75天窗口" : "75-day window",
+    },
+    {
+      type: "Submission Issue Request (SIR)",
+      typeCN: "提交问题请求 (SIR)",
+      desc: "Clarification on pending 510(k) after AI letter",
+      descCN: "AI信函后对待审510(k)的澄清",
+      timeline: isCN
+        ? "提交后≤60天: 21天; >60天: 70天"
+        : "≤60 days post-sub: 21 days; >60 days: 70 days",
+    },
+    {
+      type: "Informational Meeting",
+      typeCN: "信息会议",
+      desc: "General discussion, no binding feedback",
+      descCN: "一般性讨论，无约束力反馈",
+      timeline: isCN ? "时间协商" : "Timing negotiated",
+    },
+    {
+      type: "Study Risk Determination",
+      typeCN: "研究风险判定",
+      desc: "Determine if clinical study is significant risk (SR) or non-significant risk (NSR)",
+      descCN: "确定临床研究是显著风险(SR)还是非显著风险(NSR)",
+      timeline: isCN ? "75天窗口" : "75-day window",
+    },
+  ];
+
+  // SE Decision Points (per FDA 510(k) guidance Appendix A)
+  const seDecisionPoints = [
+    {
+      q: "Is the device legally marketed (predicate identified)?",
+      qCN: "器械是否已合法上市（已确定前置器械）？",
+      yes: isCN ? "继续" : "Continue",
+      no: isCN
+        ? "不能走510(k)通路，考虑De Novo或PMA"
+        : "Cannot use 510(k) pathway — consider De Novo or PMA",
+    },
+    {
+      q: "Same intended use as predicate?",
+      qCN: "与前置器械预期用途相同？",
+      yes: isCN ? "继续" : "Continue",
+      no: isCN ? "不是实质等效 (NSE)" : "Not Substantially Equivalent (NSE)",
+    },
+    {
+      q: "Same technological characteristics?",
+      qCN: "技术特征相同？",
+      yes: isCN ? "实质等效 (SE)" : "Substantially Equivalent (SE)",
+      no: isCN ? "继续评估差异" : "Continue — evaluate differences",
+    },
+    {
+      q: "Do different characteristics raise new questions of safety/effectiveness?",
+      qCN: "不同特征是否引发新的安全性/有效性问题？",
+      yes: isCN
+        ? "需要额外数据证明"
+        : "Additional data required to demonstrate equivalence",
+      no: isCN ? "实质等效 (SE)" : "Substantially Equivalent (SE)",
+    },
+    {
+      q: "Do accepted test methods exist and does data demonstrate SE?",
+      qCN: "是否存在公认的测试方法且数据证明SE？",
+      yes: isCN ? "实质等效 (SE)" : "Substantially Equivalent (SE)",
+      no: isCN ? "不是实质等效 (NSE)" : "Not Substantially Equivalent (NSE)",
     },
   ];
 
@@ -4674,13 +4833,50 @@ function renderFdaComms(): void {
       </div>
     </div>
 
+    <!-- Q-Sub Reference Guide -->
+    <div class="fda-card">
+      <h3>📚 ${isCN ? "Q-Sub类型参考" : "Q-Submission Types Reference"}</h3>
+      <p class="fda-card-hint">${
+        isCN
+          ? "FDA CDRH五种Q-Sub类型概览——选择最适合您项目阶段的类型"
+          : "Overview of 5 FDA CDRH Q-Sub types — choose the right one for your project stage"
+      }</p>
+      <table class="fda-qsub-table">
+        <thead>
+          <tr>
+            <th>${isCN ? "类型" : "Type"}</th>
+            <th>${isCN ? "用途" : "Purpose"}</th>
+            <th>${isCN ? "时间线" : "Timeline"}</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${qsubTypes
+            .map(
+              (q) =>
+                `<tr><td><strong>${isCN ? q.typeCN : q.type}</strong></td><td>${isCN ? q.descCN : q.desc}</td><td>${q.timeline}</td></tr>`,
+            )
+            .join("")}
+        </tbody>
+      </table>
+      <div class="fda-tips">
+        <h4>💡 ${isCN ? "Pre-Sub实用贴士" : "Pre-Sub Practical Tips"}</h4>
+        <ul>
+          <li>${isCN ? "始终请求会议——即使FDA建议仅书面回复，也比不请求好" : "Always request a meeting upfront — even if FDA offers written-only, it's better than not asking"}</li>
+          <li>${isCN ? "每次Pre-Sub限制3-4个议题——FDA对每个议题有更充分的时间" : "Limit to 3–4 focused topics per Pre-Sub — FDA has more time per question that way"}</li>
+          <li>${isCN ? "Pre-Sub没有费用——可以提交多次Pre-Sub" : "No user fee for Pre-Subs — you can file multiple Pre-Subs over the project lifecycle"}</li>
+          <li>${isCN ? 'Pre-Sub反馈构成"承诺"——FDA在后续510(k)审查中会参考' : 'Pre-Sub feedback constitutes a "commitment" — FDA will reference it during subsequent 510(k) review'}</li>
+          <li>${isCN ? "提交后75天内获得反馈/会议" : "Feedback/meeting within 75 calendar days of submission"}</li>
+        </ul>
+      </div>
+    </div>
+
     <!-- RTA Checklist -->
     <div class="fda-card">
       <h3>✅ ${isCN ? "RTA自检清单" : "Refuse-to-Accept Checklist"}</h3>
       <p class="fda-card-hint">${
         isCN
-          ? "FDA的RTA清单——提交前自检。绿色 = 从DHF/标准跟踪器自动检测。"
-          : "FDA's RTA checklist — self-check before filing. Green = auto-detected from DHF/Standards trackers."
+          ? "FDA的RTA清单 (21 CFR 807)——提交前自检。绿色 = 从DHF/标准跟踪器自动检测。Day 15前FDA依此决定接受或拒绝。"
+          : "FDA's RTA checklist (21 CFR 807) — self-check before filing. Green = auto-detected from DHF/Standards trackers. FDA uses this by Day 15 to accept or refuse your 510(k)."
       }</p>
       <div class="fda-progress-bar"><div class="fda-progress-fill" style="width:${rtaPct}%;background:${rtaPct >= 80 ? "#22c55e" : rtaPct >= 50 ? "#f59e0b" : "#ef4444"}"></div></div>
       <div style="text-align:right;font-size:0.8rem;color:#94a3b8;margin-bottom:8px">${rtaPassed}/${rtaItems.length} ${isCN ? "已通过" : "passed"}</div>
@@ -4697,26 +4893,120 @@ function renderFdaComms(): void {
       </div>
     </div>
 
-    <!-- FDA Interaction Timeline -->
-    <div class="fda-card fda-card-wide">
-      <h3>📅 ${isCN ? "FDA互动时间线" : "FDA Interaction Timeline"}</h3>
+    <!-- SE Decision Flowchart -->
+    <div class="fda-card">
+      <h3>🔀 ${isCN ? "实质等效性(SE)决策流程" : "Substantial Equivalence Decision Flow"}</h3>
       <p class="fda-card-hint">${
         isCN
-          ? "关键FDA里程碑和截止日期。Pre-Sub反馈窗口为75天。"
-          : "Key FDA milestones and deadlines. Pre-Sub feedback window is 75 calendar days."
+          ? "FDA 510(k)审查的5个关键决策点（基于FDA附录A流程图）"
+          : "5 key decision points in FDA's 510(k) review (based on FDA Appendix A flowchart)"
       }</p>
-      <div class="fda-timeline">
-        ${fdaMilestones
+      <div class="fda-se-flow">
+        ${seDecisionPoints
           .map(
-            (m) => `<div class="fda-tl-item fda-tl-${m.status}">
-          <div class="fda-tl-dot"></div>
-          <div class="fda-tl-content">
-            <span class="fda-tl-month">M+${m.month}</span>
-            <span class="fda-tl-label">${m.label}</span>
+            (pt, i) => `<div class="fda-se-step">
+          <div class="fda-se-num">${i + 1}</div>
+          <div class="fda-se-body">
+            <div class="fda-se-question">${isCN ? pt.qCN : pt.q}</div>
+            <div class="fda-se-paths">
+              <span class="fda-se-yes">✅ ${isCN ? "是" : "Yes"}: ${pt.yes}</span>
+              <span class="fda-se-no">❌ ${isCN ? "否" : "No"}: ${pt.no}</span>
+            </div>
           </div>
         </div>`,
           )
           .join("")}
+      </div>
+    </div>
+
+    <!-- Pre-Sub Timeline -->
+    <div class="fda-card fda-card-wide">
+      <h3>📅 ${isCN ? "Pre-Sub互动时间线" : "Pre-Submission Timeline"}</h3>
+      <p class="fda-card-hint">${
+        isCN
+          ? "FDA Pre-Sub流程里程碑（75天窗口）。可提交多次Pre-Sub，每次无费用。"
+          : "FDA Pre-Sub process milestones (75-day window). Multiple Pre-Subs allowed, no user fee."
+      }</p>
+      <div class="fda-timeline">
+        ${preSubMilestones
+          .map(
+            (m) => `<div class="fda-tl-item fda-tl-${m.status}">
+          <div class="fda-tl-dot"></div>
+          <div class="fda-tl-content">
+            <span class="fda-tl-month">${isCN ? "第" : "Day "}${m.day}${isCN ? "天" : ""}</span>
+            <span class="fda-tl-label">${m.label}</span>
+            <span class="fda-tl-detail">${m.detail}</span>
+          </div>
+        </div>`,
+          )
+          .join("")}
+      </div>
+    </div>
+
+    <!-- 510(k) MDUFA Review Timeline -->
+    <div class="fda-card fda-card-wide">
+      <h3>⏱️ ${isCN ? "510(k) MDUFA审查时间线" : "510(k) MDUFA Review Timeline"}</h3>
+      <p class="fda-card-hint">${
+        isCN
+          ? "MDUFA V审查目标：标准510(k)为90天。AI通知增加180天。"
+          : "MDUFA V review goals: 90 calendar days for standard 510(k). AI letter adds 180 days."
+      }</p>
+      <div class="fda-timeline">
+        ${mdufaMilestones
+          .map(
+            (m) => `<div class="fda-tl-item fda-tl-${m.status}">
+          <div class="fda-tl-dot"></div>
+          <div class="fda-tl-content">
+            <span class="fda-tl-month">${isCN ? "第" : "Day "}${m.day}${isCN ? "天" : ""}</span>
+            <span class="fda-tl-label">${m.label}</span>
+            <span class="fda-tl-detail">${m.detail}</span>
+          </div>
+        </div>`,
+          )
+          .join("")}
+      </div>
+    </div>
+
+    <!-- Disagreement Escalation -->
+    <div class="fda-card">
+      <h3>⚖️ ${isCN ? "分歧升级路径" : "Disagreement Escalation Path"}</h3>
+      <p class="fda-card-hint">${
+        isCN
+          ? "当您不同意FDA审查决定时的正式升级路径（仅在收到AI信函后）"
+          : "Formal escalation path when you disagree with FDA review decisions (only after AI letter received)"
+      }</p>
+      <div class="fda-escalation">
+        <div class="fda-esc-step">
+          <div class="fda-esc-icon">1️⃣</div>
+          <div>
+            <strong>${isCN ? "主审评员" : "Lead Reviewer"}</strong>
+            <p>${isCN ? "通过互动审查（电话/邮件）直接沟通解决" : "Resolve via interactive review (phone/email) directly"}</p>
+          </div>
+        </div>
+        <div class="fda-esc-arrow">↓</div>
+        <div class="fda-esc-step">
+          <div class="fda-esc-icon">2️⃣</div>
+          <div>
+            <strong>${isCN ? "副主任" : "Assistant Director"}</strong>
+            <p>${isCN ? "如与审评员无法达成一致，可请求副主任审查" : "If unresolved with reviewer, request assistant director review"}</p>
+          </div>
+        </div>
+        <div class="fda-esc-arrow">↓</div>
+        <div class="fda-esc-step">
+          <div class="fda-esc-icon">3️⃣</div>
+          <div>
+            <strong>${isCN ? "部门主管" : "Division Director"}</strong>
+            <p>${isCN ? "最终升级——部门主管做出最终决定" : "Final escalation — division director makes final determination"}</p>
+          </div>
+        </div>
+      </div>
+      <div class="fda-tips">
+        <h4>⚠️ ${isCN ? "重要提示" : "Important Notes"}</h4>
+        <ul>
+          <li>${isCN ? "仅在收到AI信函（Additional Information letter）后才能启动正式分歧流程" : "Formal disagreement process can only start after receiving an AI (Additional Information) letter"}</li>
+          <li>${isCN ? '引用"least burdensome"原则——FDA有义务使用最少负担的方法' : 'Invoke "least burdensome" principle — FDA is required to use the least burdensome approach'}</li>
+          <li>${isCN ? "SIR (Submission Issue Request) 时间线：提交后≤60天内提出→21天回复；>60天→70天回复" : "SIR timeline: filed ≤60 days post-submission → 21-day response; >60 days → 70-day response"}</li>
+        </ul>
       </div>
     </div>
 
