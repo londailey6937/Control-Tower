@@ -466,6 +466,7 @@ def build():
     pdf.bullet("One DHF per product (or per module if they are separate devices)")
     pdf.bullet("Must be maintained under document control with revision history")
     pdf.bullet("Must demonstrate traceability: need -> input -> output -> V&V -> review")
+    pdf.bullet("Use the Data Source Ref field to link documents to external repositories (GitHub, SVN) for split-storage audit trails")
 
     pdf.sub_heading("Control Tower Deliverables")
     pdf.bullet("Design Input Document (approved and under revision control)")

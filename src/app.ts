@@ -3034,6 +3034,7 @@ function loadDocLibDocs(): DocLibItem[] {
         effectiveDate: "",
         nextReview: "",
         linkedMilestone: "",
+        sourceRef: "",
         revisions: [] as any[],
       },
       ...d,
@@ -3106,6 +3107,7 @@ function openDocHistory(id: string): void {
         <div><strong>${t("docLibEffective")}:</strong> ${doc.effectiveDate || "—"}</div>
         <div><strong>${t("docLibNextReview")}:</strong> ${doc.nextReview || "—"}</div>
         <div><strong>${t("docLibLinked")}:</strong> ${doc.linkedMilestone || "—"}</div>
+        <div><strong>${t("docLibSourceRef")}:</strong> ${doc.sourceRef || "—"}</div>
       </div>
       <h4 class="doc-history-subtitle">${t("docLibRevHistory")}</h4>
       <table class="standards-table doc-rev-table">
@@ -3187,6 +3189,9 @@ function openAddDocForm(): void {
       <label>${t("docLibLinked")}
         <input type="text" id="docFormLinked" class="doc-form-input" placeholder="e.g. R8, T2" />
       </label>
+      <label>${t("docLibSourceRef")}
+        <input type="text" id="docFormSourceRef" class="doc-form-input" placeholder="e.g. GitHub:repo@commit, SVN rev 123" />
+      </label>
     </div>
     <div class="doc-form-actions">
       <button class="btn-primary" onclick="window._addDocLibItem()">${t("docLibFormAdd")}</button>
@@ -3204,6 +3209,9 @@ function addDocLibItem(): void {
   ) as HTMLInputElement;
   const ownerEl = document.getElementById("docFormOwner") as HTMLInputElement;
   const linkedEl = document.getElementById("docFormLinked") as HTMLInputElement;
+  const sourceRefEl = document.getElementById(
+    "docFormSourceRef",
+  ) as HTMLInputElement;
 
   if (!nameEl?.value.trim()) return;
 
@@ -3238,6 +3246,7 @@ function addDocLibItem(): void {
     effectiveDate: "",
     nextReview: "",
     linkedMilestone: linkedEl?.value.trim() || "",
+    sourceRef: sourceRefEl?.value.trim() || "",
     revisions: [
       {
         rev: ver,
@@ -3333,6 +3342,7 @@ function renderDocLibTable(): void {
       <td>${d.date}</td>
       <td>${d.owner}</td>
       <td>${d.linkedMilestone || "—"}</td>
+      <td class="doc-sourceref-cell" title="${d.sourceRef || ""}">${d.sourceRef ? `<span class="doc-sourceref-badge">🔗 ${d.sourceRef}</span>` : "—"}</td>
       <td>
         <button class="doc-status-btn ${docStatusClass(d.status)}" onclick="window._cycleDocStatus('${d.id}')" title="${ACTIVE_ROLE === "pmp" ? t("clickToChangeStatus") : ""}">${docStatusLabel(d.status)}</button>
         ${overdue ? `<span class="doc-overdue-badge" title="${t("docLibOverdue")}">⚠</span>` : ""}
@@ -4002,6 +4012,7 @@ function threadCardHtml(thread: MBThread): string {
       </div>
     </div>
     ${thread.objective ? `<div class="mb-thread-objective">${thread.objective}</div>` : ""}
+    ${thread.sourceRef ? `<div class="mb-thread-sourceref">🔗 <strong>${t("docLibSourceRef")}:</strong> <code>${thread.sourceRef}</code></div>` : ""}
     ${linkedHtml}
     ${actionHtml}
     ${thread.resolutionSummary ? `<div class="mb-resolution">✅ <strong>${t("mbResolution")}:</strong> ${thread.resolutionSummary}</div>` : ""}
@@ -4836,6 +4847,7 @@ function mbCreateThread(): void {
     : "inform";
 
   const objective = prompt(t("mbObjective")) || "";
+  const sourceRef = prompt(t("mbSourceRef")) || "";
 
   const priorityOptions: MBPriority[] = ["normal", "urgent", "escalated"];
   const prioChoice = prompt(
@@ -4859,6 +4871,7 @@ function mbCreateThread(): void {
     intent,
     owner: normalizeRole(qaPostingRole),
     objective,
+    sourceRef: sourceRef || undefined,
     lifecycle: "open",
     priority,
     linkedItems: [],

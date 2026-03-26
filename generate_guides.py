@@ -1044,6 +1044,7 @@ def build_english():
         "  Last Updated     -- Date of most recent edit\n"
         "  Owner            -- Team member responsible for the document\n"
         "  Linked Milestone -- Associated R-number or T-number milestone\n"
+        "  Data Source Ref  -- External data origin (e.g., GitHub:repo@commit, SVN rev 123)\n"
         "  Status           -- Clickable badge (PMP only) to advance the workflow\n\n"
         "The status badge cycles through five lifecycle stages:\n\n"
         "  Draft -> In Review -> Approved -> Effective -> Obsolete\n\n"
@@ -1052,7 +1053,7 @@ def build_english():
     pdf.sub("27.4 Revision History")
     pdf.txt(
         "Click any document name to open a modal panel showing:\n\n"
-        "  Document metadata  -- Owner, version, effective date, next review, linked milestone\n"
+        "  Document metadata  -- Owner, version, effective date, next review, linked milestone, data source ref\n"
         "  Revision table     -- Every revision with rev number, date, author, and change description\n\n"
         "This provides full traceability for design control documentation.")
 
@@ -1095,6 +1096,7 @@ def build_english():
         "  Intent      -- inform (share info), decide (log a decision), act (assign action)\n"
         "  Owner       -- The role that created the thread\n"
         "  Objective   -- Optional statement of purpose\n"
+        "  Source Ref  -- Optional external data source (e.g., GitHub commit, SVN revision)\n"
         "  Priority    -- normal / urgent / escalated (visual indicators)\n"
         "  Lifecycle   -- open or resolved (with resolution summary)\n\n"
         "The original Q1-Q30 predefined questions auto-migrate to threads on first "
@@ -1169,7 +1171,7 @@ def build_english():
     pdf.sub("28.10 Data Storage")
     pdf.txt(
         "Messages sync in real-time to the server database (Supabase). Thread metadata "
-        "(title, workstream, intent, owner, lifecycle, linked items) is stored locally "
+        "(title, workstream, intent, owner, lifecycle, linked items, source ref) is stored locally "
         "in localStorage under 'ctower_mb_threads'. Decisions are stored under "
         "'ctower_mb_decisions'. Message cache uses 'ctower_qa_messages' as local backup. "
         "Settings and archives also persist across sessions.")
@@ -1280,6 +1282,7 @@ def build_english():
         ("RTA", "Refuse to Accept -- FDA's initial screening checklist before substantive review of a 510(k). Failure triggers an immediate rejection."),
         ("Q-Sub", "Q-Submission -- the formal process for requesting a Pre-Submission meeting with FDA to discuss regulatory strategy before filing."),
         ("DICE", "Division of Industry and Consumer Education -- FDA division that handles Q-Sub logistics and communication."),
+        ("Data Source Ref", "External reference linking a document or thread to its raw data origin (e.g., GitHub:repo@commit, SVN rev 4521). Supports 21 CFR Part 11 traceability for split-storage workflows where trial data lives in version control and reports live in the dashboard."),
     ]
     for k, v in terms:
         pdf.kv(k, v)
@@ -2297,6 +2300,7 @@ def build_chinese():
         "  \u6700\u540e\u66f4\u65b0     -- \u6700\u8fd1\u7f16\u8f91\u65e5\u671f\n"
         "  \u8d1f\u8d23\u4eba       -- \u8d1f\u8d23\u6587\u6863\u7684\u56e2\u961f\u6210\u5458\n"
         "  \u5173\u8054\u91cc\u7a0b\u7891   -- \u5173\u8054\u7684R\u7f16\u53f7\u6216T\u7f16\u53f7\u91cc\u7a0b\u7891\n"
+        "  \u6570\u636e\u6e90\u5f15\u7528   -- \u5916\u90e8\u6570\u636e\u6765\u6e90\uff08\u5982 GitHub:repo@commit\u3001SVN rev 123\uff09\n"
         "  \u72b6\u6001         -- \u53ef\u70b9\u51fb\u6807\u7b7e\uff08\u4ec5PMP\uff09\u63a8\u8fdb\u5de5\u4f5c\u6d41\n\n"
         "\u72b6\u6001\u6807\u7b7e\u5728\u4e94\u4e2a\u751f\u547d\u5468\u671f\u9636\u6bb5\u4e4b\u95f4\u5faa\u73af\uff1a\n\n"
         "  \u8349\u7a3f -> \u5ba1\u6838\u4e2d -> \u5df2\u6279\u51c6 -> \u5df2\u751f\u6548 -> \u5df2\u5e9f\u6b62\n\n"
@@ -2305,7 +2309,7 @@ def build_chinese():
     pdf.sub("27.4 \u4fee\u8ba2\u5386\u53f2")
     pdf.txt(
         "\u70b9\u51fb\u4efb\u4f55\u6587\u6863\u540d\u79f0\u53ef\u6253\u5f00\u6a21\u6001\u9762\u677f\uff0c\u663e\u793a\uff1a\n\n"
-        "  \u6587\u6863\u5143\u6570\u636e  -- \u8d1f\u8d23\u4eba\u3001\u7248\u672c\u3001\u751f\u6548\u65e5\u671f\u3001\u4e0b\u6b21\u5ba1\u6838\u3001\u5173\u8054\u91cc\u7a0b\u7891\n"
+        "  \u6587\u6863\u5143\u6570\u636e  -- \u8d1f\u8d23\u4eba\u3001\u7248\u672c\u3001\u751f\u6548\u65e5\u671f\u3001\u4e0b\u6b21\u5ba1\u6838\u3001\u5173\u8054\u91cc\u7a0b\u7891\u3001\u6570\u636e\u6e90\u5f15\u7528\n"
         "  \u4fee\u8ba2\u8868     -- \u6bcf\u6b21\u4fee\u8ba2\u7684\u7248\u6b21\u3001\u65e5\u671f\u3001\u4f5c\u8005\u548c\u53d8\u66f4\u8bf4\u660e\n\n"
         "\u8fd9\u4e3a\u8bbe\u8ba1\u63a7\u5236\u6587\u6863\u63d0\u4f9b\u5b8c\u6574\u7684\u53ef\u8ffd\u6eaf\u6027\u3002")
 
@@ -2344,6 +2348,7 @@ def build_chinese():
         "  \u610f\u56fe       -- \u544a\u77e5\uff08\u5206\u4eab\u4fe1\u606f\uff09\u3001\u51b3\u7b56\uff08\u8bb0\u5f55\u51b3\u5b9a\uff09\u3001\u884c\u52a8\uff08\u5206\u914d\u4efb\u52a1\uff09\n"
         "  \u62e5\u6709\u8005     -- \u521b\u5efa\u4e3b\u9898\u7684\u89d2\u8272\n"
         "  \u76ee\u6807       -- \u53ef\u9009\u7684\u76ee\u7684\u8bf4\u660e\n"
+        "  \u6570\u636e\u6e90\u5f15\u7528 -- \u53ef\u9009\u7684\u5916\u90e8\u6570\u636e\u6765\u6e90\uff08\u5982 GitHub commit\u3001SVN\u7248\u672c\uff09\n"
         "  \u4f18\u5148\u7ea7     -- \u6b63\u5e38 / \u7d27\u6025 / \u5347\u7ea7\uff08\u89c6\u89c9\u6307\u793a\u5668\uff09\n"
         "  \u751f\u547d\u5468\u671f   -- \u8fdb\u884c\u4e2d\u6216\u5df2\u89e3\u51b3\uff08\u542b\u89e3\u51b3\u65b9\u6848\u6458\u8981\uff09\n\n"
         "\u539f\u59cbQ1-Q30\u9884\u5b9a\u4e49\u95ee\u9898\u5728\u9996\u6b21\u52a0\u8f7d\u65f6\u81ea\u52a8\u8fc1\u79fb\u4e3a\u4e3b\u9898\u3002"
@@ -2418,7 +2423,7 @@ def build_chinese():
     pdf.sub("28.10 \u6570\u636e\u5b58\u50a8")
     pdf.txt(
         "\u6d88\u606f\u5b9e\u65f6\u540c\u6b65\u5230\u670d\u52a1\u5668\u6570\u636e\u5e93\uff08Supabase\uff09\u3002"
-        "\u4e3b\u9898\u5143\u6570\u636e\uff08\u6807\u9898\u3001\u5de5\u4f5c\u6d41\u3001\u610f\u56fe\u3001\u62e5\u6709\u8005\u3001\u751f\u547d\u5468\u671f\u3001\u5173\u8054\u5de5\u4ef6\uff09"
+        "\u4e3b\u9898\u5143\u6570\u636e\uff08\u6807\u9898\u3001\u5de5\u4f5c\u6d41\u3001\u610f\u56fe\u3001\u62e5\u6709\u8005\u3001\u751f\u547d\u5468\u671f\u3001\u5173\u8054\u5de5\u4ef6\u3001\u6570\u636e\u6e90\u5f15\u7528\uff09"
         "\u5b58\u50a8\u5728localStorage\u7684\u2018ctower_mb_threads\u2019\u4e2d\u3002"
         "\u51b3\u7b56\u5b58\u50a8\u5728\u2018ctower_mb_decisions\u2019\u4e2d\u3002"
         "\u6d88\u606f\u7f13\u5b58\u4f7f\u7528\u2018ctower_qa_messages\u2019\u4f5c\u4e3a\u672c\u5730\u5907\u4efd\u3002"
@@ -2517,6 +2522,7 @@ def build_chinese():
         ("RTA", "拒绝接受 " + EM + " FDA在实质性审查510(k)之前的初始筛查清单。未通过会被立即拒绝。"),
         ("Q-Sub", "Q提交 " + EM + " 向FDA请求Pre-Sub会议的正式流程，用于在提交前讨论法规策略。"),
         ("DICE", "行业与消费者教育部门 " + EM + " 处理Q-Sub后勤和通信的FDA部门。"),
+        ("数据源引用", "将文档或主题链接到其原始数据来源的外部引用（如 GitHub:repo@commit、SVN rev 4521）。支持21 CFR Part 11可追溯性，适用于试验数据存储在版本控制系统而报告存储在仪表盘的分开存储工作流。"),
     ]
     for k, v in terms:
         pdf.kv(k, v)

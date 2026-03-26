@@ -440,6 +440,7 @@ export interface DocLibItem {
   effectiveDate: string;
   nextReview: string;
   linkedMilestone: string;
+  sourceRef?: string;
   revisions: DocRevision[];
 }
 
@@ -505,6 +506,7 @@ export interface MBThread {
   assignee?: string;
   dueDate?: string;
   linkedItems: MBLinkedItem[];
+  sourceRef?: string;
   createdAt: string;
   resolvedAt?: string;
   resolutionSummary?: string;
