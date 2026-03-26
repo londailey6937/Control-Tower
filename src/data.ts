@@ -2885,11 +2885,22 @@ export const QA_SECTIONS: QASection[] = [
 // ACTIVE ROLE — Controls UI permissions
 // ============================================================
 
-const ADMIN_KEY = "arch2026";
-export const IS_ADMIN: boolean =
-  new URLSearchParams(window.location.search).get("admin") === ADMIN_KEY;
+// Password-based auth: password determines role at login
+export let IS_ADMIN: boolean = false;
+export let ACTIVE_ROLE: UserRole = "business";
 
-export let ACTIVE_ROLE: UserRole = IS_ADMIN ? "pmp" : "business";
+const CREDENTIALS: Record<string, { role: UserRole; admin: boolean }> = {
+  arch2026: { role: "pmp", admin: true },
+  REDACTED: { role: "business", admin: false },
+};
+
+export function authenticatePassword(password: string): boolean {
+  const cred = CREDENTIALS[password];
+  if (!cred) return false;
+  IS_ADMIN = cred.admin;
+  ACTIVE_ROLE = cred.role;
+  return true;
+}
 
 export function setActiveRole(role: UserRole): void {
   ACTIVE_ROLE = role;

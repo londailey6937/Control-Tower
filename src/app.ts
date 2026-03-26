@@ -16,6 +16,7 @@ import {
   ACTIVE_ROLE,
   IS_ADMIN,
   setActiveRole,
+  authenticatePassword,
   AUDIT_LOG,
   DHF_DOCUMENTS,
   CAPA_LOG,
@@ -275,8 +276,30 @@ function setupEventDelegation(): void {
   });
 }
 
-// ── INIT ──────────────────────────────────────
-document.addEventListener("DOMContentLoaded", () => {
+// ── LOGIN GATE ────────────────────────────────
+function initLoginGate(): void {
+  const gate = document.getElementById("loginGate");
+  const form = document.getElementById("loginForm") as HTMLFormElement | null;
+  const input = document.getElementById(
+    "loginPassword",
+  ) as HTMLInputElement | null;
+  const error = document.getElementById("loginError");
+  if (!gate || !form || !input) return;
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (authenticatePassword(input.value)) {
+      gate.style.display = "none";
+      initAfterLogin();
+    } else {
+      if (error) error.style.display = "block";
+      input.value = "";
+      input.focus();
+    }
+  });
+}
+
+function initAfterLogin(): void {
   setupEventDelegation();
   loadCRs();
   loadInputs();
@@ -286,24 +309,23 @@ document.addEventListener("DOMContentLoaded", () => {
   initRoleSwitcher();
   applyLanguage(getLang());
 
-  // Check for saved wizard data — if found, apply it before rendering
   const saved = getSavedAnswers();
   if (saved) {
     applyProjectData(saved);
     bootDashboard();
   } else if (!hasProjectData()) {
-    // No project data — show the setup wizard
     showWizard((answers) => {
-      if (answers) {
-        // Wizard completed with answers
-        applyProjectData(answers);
-      }
-      // else: user clicked "Load Demo Data" — use hardcoded defaults
+      if (answers) applyProjectData(answers);
       bootDashboard();
     });
   } else {
     bootDashboard();
   }
+}
+
+// ── INIT ──────────────────────────────────────
+document.addEventListener("DOMContentLoaded", () => {
+  initLoginGate();
 });
 
 function bootDashboard(): void {
