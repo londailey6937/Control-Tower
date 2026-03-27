@@ -135,6 +135,10 @@
         <span class="tab-icon">🇺🇸</span>
         <span data-i18n="tabUsInvestment">US Investment</span>
       </button>
+      <button class="tab-btn" data-tab="cap-table">
+        <span class="tab-icon">📊</span>
+        <span data-i18n="tabCapTable">Cap Table</span>
+      </button>
       <button class="tab-btn" data-tab="resources">
         <span class="tab-icon">👥</span>
         <span data-i18n="tabResources">Resources</span>
@@ -556,8 +560,12 @@
           ></div>
         </div>
         <div class="us-invest-section">
-          <h3 data-i18n="usInvestBridgeTitle">510(k) Bridge — Investor Outreach Timeline</h3>
-          <p class="panel-desc" data-i18n="usInvestBridgeDesc">Optimal investor engagement windows mapped to regulatory milestones</p>
+          <h3 data-i18n="usInvestBridgeTitle">
+            510(k) Bridge — Investor Outreach Timeline
+          </h3>
+          <p class="panel-desc" data-i18n="usInvestBridgeDesc">
+            Optimal investor engagement windows mapped to regulatory milestones
+          </p>
           <div id="usInvestBridge"></div>
         </div>
         <div class="us-invest-section">
@@ -566,6 +574,109 @@
           <div id="iraAddForm"></div>
           <div
             id="usInvestAddIRABtnWrap"
+            style="text-align: right; margin-top: var(--sp-sm)"
+          ></div>
+        </div>
+      </section>
+
+      <!-- ── TAB: CAP TABLE ───────────────────────── -->
+      <section class="tab-panel" id="panel-cap-table">
+        <div class="panel-header">
+          <h2 data-i18n="capTableTitle">Cap Table Management</h2>
+          <p class="panel-desc" data-i18n="capTableDesc">
+            Equity structure, shareholder registry, vesting schedules, and
+            dilution tracking
+          </p>
+        </div>
+
+        <div class="us-invest-metrics" id="capTableMetrics"></div>
+
+        <!-- Dilution Waterfall -->
+        <div class="us-invest-section">
+          <h3 data-i18n="capTableDilutionTitle">Dilution Waterfall</h3>
+          <div id="capTableDilution"></div>
+        </div>
+
+        <!-- Shareholder Holdings -->
+        <div class="us-invest-section">
+          <h3 data-i18n="capTableHoldingsTitle">Shareholder Holdings</h3>
+          <div class="standards-table-wrap">
+            <table class="standards-table" id="capTableSharesTable">
+              <thead>
+                <tr>
+                  <th data-i18n="capTableShareholder">Shareholder</th>
+                  <th data-i18n="capTableRole">Role</th>
+                  <th data-i18n="capTableShareClass">Share Class</th>
+                  <th data-i18n="capTableShares">Shares</th>
+                  <th data-i18n="capTablePercent">Ownership %</th>
+                  <th data-i18n="capTableNotes">Notes</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="capTableSharesBody"></tbody>
+            </table>
+          </div>
+          <div id="shareholderAddForm"></div>
+          <div
+            id="capTableAddShBtnWrap"
+            style="text-align: right; margin-top: var(--sp-sm)"
+          ></div>
+        </div>
+
+        <!-- Equity Events & Funding Rounds -->
+        <div class="us-invest-section">
+          <h3 data-i18n="capTableEventsTitle">
+            Equity Events & Funding Rounds
+          </h3>
+          <div class="standards-table-wrap">
+            <table class="standards-table" id="capTableEventsTable">
+              <thead>
+                <tr>
+                  <th data-i18n="capTableEventDate">Date</th>
+                  <th data-i18n="capTableEvent">Event</th>
+                  <th data-i18n="capTableShareClass">Share Class</th>
+                  <th data-i18n="capTableEventShares">Shares</th>
+                  <th data-i18n="capTableEventPPS">Price/Share</th>
+                  <th data-i18n="capTableEventTotal">Total Value</th>
+                  <th data-i18n="capTableEventStatus">Status</th>
+                  <th data-i18n="capTableNotes">Notes</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="capTableEventsBody"></tbody>
+            </table>
+          </div>
+          <div id="eqEventAddForm"></div>
+          <div
+            id="capTableAddEqBtnWrap"
+            style="text-align: right; margin-top: var(--sp-sm)"
+          ></div>
+        </div>
+
+        <!-- Vesting Schedules -->
+        <div class="us-invest-section">
+          <h3 data-i18n="capTableVestingTitle">Vesting Schedules</h3>
+          <div class="standards-table-wrap">
+            <table class="standards-table" id="capTableVestingTable">
+              <thead>
+                <tr>
+                  <th data-i18n="capTableVestHolder">Holder</th>
+                  <th data-i18n="capTableVestShares">Total Shares</th>
+                  <th data-i18n="capTableVestStart">Start Date</th>
+                  <th data-i18n="capTableVestCliff">Cliff</th>
+                  <th data-i18n="capTableVestTerm">Term</th>
+                  <th data-i18n="capTableVestVested">Vested</th>
+                  <th data-i18n="capTableVestStatus">Status</th>
+                  <th data-i18n="capTableNotes">Notes</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="capTableVestingBody"></tbody>
+            </table>
+          </div>
+          <div id="vestingAddForm"></div>
+          <div
+            id="capTableAddVsBtnWrap"
             style="text-align: right; margin-top: var(--sp-sm)"
           ></div>
         </div>

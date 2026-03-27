@@ -239,7 +239,15 @@ export type AuditAction =
   | "investor-status"
   | "ir-activity-add"
   | "ir-activity-delete"
-  | "ir-activity-status";
+  | "ir-activity-status"
+  | "shareholder-add"
+  | "shareholder-delete"
+  | "equity-event-add"
+  | "equity-event-delete"
+  | "equity-event-status"
+  | "vesting-add"
+  | "vesting-delete"
+  | "vesting-status";
 
 export interface AuditEntry {
   id: string;
@@ -435,6 +443,17 @@ declare global {
     _addIRActivity: () => void;
     _deleteIRActivity: (activityId: string) => void;
     _cycleIRActivityStatus: (activityId: string) => void;
+    _openAddShareholderForm: () => void;
+    _addShareholder: () => void;
+    _deleteShareholder: (shareholderId: string) => void;
+    _openAddEquityEventForm: () => void;
+    _addEquityEvent: () => void;
+    _deleteEquityEvent: (eventId: string) => void;
+    _cycleEquityEventStatus: (eventId: string) => void;
+    _openAddVestingForm: () => void;
+    _addVesting: () => void;
+    _deleteVesting: (vestingId: string) => void;
+    _cycleVestingStatus: (vestingId: string) => void;
   }
 }
 
@@ -581,4 +600,50 @@ export interface IRActivity {
   date: string;
   activity: string;
   status: IRActivityStatus;
+}
+
+// ── Cap Table Management ────────────────────────
+
+export type ShareClass =
+  | "common"
+  | "preferred-seed"
+  | "preferred-a"
+  | "safe"
+  | "options";
+
+export type EquityEventStatus = "issued" | "pending" | "converted";
+
+export type VestingStatus = "vesting" | "fully-vested" | "cancelled";
+
+export interface Shareholder {
+  id: string;
+  name: string;
+  role: string;
+  shareClass: ShareClass;
+  shares: number;
+  notes: string;
+}
+
+export interface EquityEvent {
+  id: string;
+  date: string;
+  event: string;
+  shareClass: ShareClass;
+  shares: number;
+  pricePerShare: number;
+  totalValue: number;
+  status: EquityEventStatus;
+  notes: string;
+}
+
+export interface VestingSchedule {
+  id: string;
+  holder: string;
+  shares: number;
+  startDate: string;
+  cliffMonths: number;
+  totalMonths: number;
+  vestedShares: number;
+  status: VestingStatus;
+  notes: string;
 }

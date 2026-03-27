@@ -2804,10 +2804,22 @@ body {
   background: var(--surface);
   z-index: 1;
 }
-.bridge-warm .bridge-marker { border-color: var(--color-info); background: var(--color-info); }
-.bridge-active .bridge-marker { border-color: var(--warning); background: var(--warning); }
-.bridge-peak .bridge-marker { border-color: var(--success); background: var(--success); }
-.bridge-close .bridge-marker { border-color: var(--accent); background: var(--accent); }
+.bridge-warm .bridge-marker {
+  border-color: var(--color-info);
+  background: var(--color-info);
+}
+.bridge-active .bridge-marker {
+  border-color: var(--warning);
+  background: var(--warning);
+}
+.bridge-peak .bridge-marker {
+  border-color: var(--success);
+  background: var(--success);
+}
+.bridge-close .bridge-marker {
+  border-color: var(--accent);
+  background: var(--accent);
+}
 .bridge-content {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -2815,10 +2827,18 @@ body {
   padding: var(--sp-sm) var(--sp-md);
   flex: 1;
 }
-.bridge-warm .bridge-content { border-left: 3px solid var(--color-info); }
-.bridge-active .bridge-content { border-left: 3px solid var(--warning); }
-.bridge-peak .bridge-content { border-left: 3px solid var(--success); }
-.bridge-close .bridge-content { border-left: 3px solid var(--accent); }
+.bridge-warm .bridge-content {
+  border-left: 3px solid var(--color-info);
+}
+.bridge-active .bridge-content {
+  border-left: 3px solid var(--warning);
+}
+.bridge-peak .bridge-content {
+  border-left: 3px solid var(--success);
+}
+.bridge-close .bridge-content {
+  border-left: 3px solid var(--accent);
+}
 .bridge-header {
   display: flex;
   align-items: center;
@@ -2843,10 +2863,22 @@ body {
   border-radius: 3px;
   font-weight: 600;
 }
-.bridge-warm .bridge-signal { background: rgba(59, 130, 246, 0.15); color: var(--color-info); }
-.bridge-active .bridge-signal { background: rgba(234, 179, 8, 0.15); color: var(--warning); }
-.bridge-peak .bridge-signal { background: rgba(34, 197, 94, 0.15); color: var(--success); }
-.bridge-close .bridge-signal { background: rgba(168, 85, 247, 0.15); color: var(--accent); }
+.bridge-warm .bridge-signal {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--color-info);
+}
+.bridge-active .bridge-signal {
+  background: rgba(234, 179, 8, 0.15);
+  color: var(--warning);
+}
+.bridge-peak .bridge-signal {
+  background: rgba(34, 197, 94, 0.15);
+  color: var(--success);
+}
+.bridge-close .bridge-signal {
+  background: rgba(168, 85, 247, 0.15);
+  color: var(--accent);
+}
 .bridge-milestone {
   font-weight: 600;
   font-size: 0.9rem;
@@ -2855,6 +2887,55 @@ body {
 .bridge-action {
   font-size: 0.82rem;
   color: var(--text-muted);
+}
+
+/* ══════════════════════════════════════════════════
+   CAP TABLE MANAGEMENT
+   ══════════════════════════════════════════════════ */
+.dilution-bar {
+  display: flex;
+  height: 36px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: var(--sp-sm);
+  border: 1px solid var(--border);
+}
+.dilution-segment {
+  min-width: 2px;
+  transition: width 0.3s ease;
+}
+.dil-common {
+  background: var(--accent);
+}
+.dil-preferred-seed {
+  background: var(--success);
+}
+.dil-preferred-a {
+  background: var(--warning);
+}
+.dil-safe {
+  background: #f97316;
+}
+.dil-options {
+  background: var(--text-muted);
+}
+.dilution-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-sm);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+.dilution-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.dilution-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  display: inline-block;
 }
 
 /* ══════════════════════════════════════════════════
