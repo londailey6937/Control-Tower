@@ -250,6 +250,15 @@ def build():
         "the 510(k) pathway. This includes predicate device analysis, FDA "
         "communications, submission package preparation, and ongoing compliance "
         "with applicable standards (IEC 62304, IEC 60601-1, ISO 14971, 21 CFR 820).\n\n"
+        "A critical insight: a 510(k) submission is fundamentally a technical "
+        "publication. The FDA does not review your device in person -- they review "
+        "your documentation. The submission package IS the product under review. "
+        "This is why the PMP's 14 years of technical publications experience and "
+        "BS in Technical Communication are directly relevant: the same skills that "
+        "produce clear, structured, audience-aware engineering documentation are "
+        "exactly the skills that produce a clean 510(k) filing. The FDA regulatory "
+        "process is not a foreign discipline -- it is another application of a core "
+        "professional skill set.\n\n"
         "Key responsibilities:\n\n"
         "  - 510(k) submission strategy development\n"
         "  - Predicate device identification and equivalence analysis\n"
@@ -566,9 +575,114 @@ def build():
         "  person. Either scenario is workable -- but Dr. Dai's status must be\n"
         "  confirmed before finalizing the CFIUS filing strategy.")
 
-    # ── 8. RECOMMENDATION ──────────────────────
+    # ── 8. CONSULTANT BACKGROUND & QUALIFICATIONS ──
     pdf.add_page()
-    pdf.section(8, "Recommendation")
+    pdf.section(8, "Consultant Background & Qualifications")
+
+    pdf.sub("8.1 Technical Publications Leadership")
+    pdf.txt(
+        "The PMP brings 14 years of professional technical publications "
+        "experience across semiconductor, industrial, and engineering sectors:\n\n"
+        "  Technical Publications Manager, Cascade Microtech (1998-2004):\n"
+        "    - Led a team of technical writers and design drafters\n"
+        "    - Oversaw creation and maintenance of technical manuals and\n"
+        "      documentation systems for semiconductor wafer probing equipment\n"
+        "    - Improved documentation workflows and quality standards across\n"
+        "      departments\n"
+        "    - 6 years managing publications for precision engineering products\n"
+        "      -- systems that, like medical devices, demand accuracy,\n"
+        "      traceability, and regulatory awareness\n\n"
+        "  Technical Writer, Cascade Microtech (1994-1998):\n"
+        "    - Produced detailed technical documentation for wafer probing and\n"
+        "      semiconductor testing systems\n"
+        "    - Collaborated with engineering teams to ensure accuracy and clarity\n"
+        "    - Developed user manuals, service guides, and training materials\n\n"
+        "  Contract Technical Writer (1990-1994):\n"
+        "    - Intel, Cascade Microtech, Lattice Semiconductor, and others\n"
+        "    - Standardized documentation practices across organizations\n"
+        "    - Delivered high-quality materials under tight deadlines\n\n"
+        "  Field Controls Engineer, Coe Manufacturing (1984-1990):\n"
+        "    - Programmed and maintained PLC-controlled machinery\n"
+        "    - Troubleshot and optimized industrial control systems\n"
+        "    - Hands-on engineering foundation before transitioning to\n"
+        "      technical publications")
+
+    pdf.sub("8.2 Education")
+    pdf.txt(
+        "  BS in Technical Communication\n"
+        "    Charter Oak College, New Britain, Connecticut (2002)\n\n"
+        "  AS in Hardware / Software Engineering\n"
+        "    Portland Community College, Portland, Oregon (1984)\n\n"
+        "  Project Management Professional (PMP)\n"
+        "    Stanford University (2000)\n\n"
+        "The combination is deliberately relevant. The technical communication "
+        "degree provides the writing and documentation rigor that FDA submissions "
+        "demand -- structure, audience awareness, precision, and traceability. The "
+        "engineering degree provides the ability to understand the underlying device "
+        "technology: not just document it, but evaluate it critically. Together, they "
+        "produce someone who can both comprehend a device's technical architecture "
+        "and translate it into the clear, structured narrative that FDA reviewers "
+        "require for a 510(k) determination.")
+
+    pdf.sub("8.3 FDA Submission Experience")
+    pdf.txt(
+        "The PMP has prior direct experience with the 510(k) submission process, "
+        "having initiated a 510(k) application for a previous medical device "
+        "concept. The submission was not completed because the device did not "
+        "advance to prototype -- a disciplined decision that reflects understanding "
+        "of when to proceed and when to pivot. The process provided hands-on "
+        "exposure to:\n\n"
+        "  - Predicate device research and substantial equivalence analysis\n"
+        "  - FDA submission structure and eSTAR requirements\n"
+        "  - Regulatory standards mapping\n"
+        "  - The documentation rigor required for a successful filing\n\n"
+        "Since that initial experience, the PMP has undertaken extensive self-study "
+        "of current FDA processes, updated regulations, and the specific standards "
+        "applicable to the Digital Twin program (IEC 62304, IEC 60601-1, ISO 14971, "
+        "21 CFR 820). This re-education -- combined with 14 years of technical "
+        "publications expertise -- creates confidence that the FDA submission "
+        "process is a natural extension of existing skills, not a new discipline "
+        "to learn from scratch.")
+
+    pdf.sub("8.4 Why Technical Publications Is the Core Differentiator")
+    pdf.txt(
+        "Most startups hire a 'regulatory consultant' for their 510(k). What they "
+        "actually need is someone who can write -- clearly, precisely, and with an "
+        "understanding of how a regulatory reviewer reads.\n\n"
+        "A 510(k) submission is, at its foundation, a technical publication. "
+        "Consider what causes FDA submissions to fail or trigger Additional "
+        "Information (AI) requests:\n\n"
+        "  - Poor structure and organization (adds 3-6 months per AI request)\n"
+        "  - Ambiguous intended use statements\n"
+        "  - Incomplete predicate comparison matrices\n"
+        "  - Missing cross-references and traceability\n"
+        "  - Unclear testing rationale and acceptance criteria\n\n"
+        "Every one of these is a documentation problem. A technical publications "
+        "professional solves these by instinct -- it is what they have been trained "
+        "and practiced to do for their entire career.\n\n"
+        "The PMP's specific advantages:\n\n"
+        "  Structure & Clarity: 14 years of producing organized, navigable\n"
+        "  technical documents -- user manuals, service guides, and system\n"
+        "  documentation that must be unambiguous on first reading.\n\n"
+        "  Audience Awareness: Technical writers are trained to write for a\n"
+        "  specific reader. FDA reviewers have a decision framework (substantial\n"
+        "  equivalence) -- the submission must be structured to answer their\n"
+        "  questions before they ask them.\n\n"
+        "  Document Control: Managing a 200+ page submission with cross-\n"
+        "  references, version control, and traceability is a publications\n"
+        "  management problem -- identical to managing technical manual sets\n"
+        "  for complex engineering products.\n\n"
+        "  Team Management: Leading writers and drafters at Cascade Microtech\n"
+        "  required the same coordination skills needed to compile inputs from\n"
+        "  engineering, testing, and clinical teams into a cohesive submission.\n\n"
+        "The FDA process is just another excursion for someone whose career has "
+        "been built on translating complex technical concepts into clear, "
+        "structured, audience-appropriate documentation. The subject matter "
+        "changes; the professional discipline does not.")
+
+    # ── 9. RECOMMENDATION ──────────────────────
+    pdf.add_page()
+    pdf.section(9, "Recommendation")
     pdf.txt(
         "The recommended compensation structure is:\n\n"
         "  Single Monthly Fee:   $10,000/month (all three roles combined)\n"
@@ -600,7 +714,7 @@ def build():
         "role is a fractional VP of Regulatory Affairs, and the IR role is a\n"
         "fractional VP of Investor Relations.")
 
-    pdf.sub("8.1 Summary: Cash + Equity Compensation")
+    pdf.sub("9.1 Summary: Cash + Equity Compensation")
     pdf.summary_table(
         ["Component", "Amount", "Period", "Purpose"],
         [
@@ -613,12 +727,15 @@ def build():
         col_w=[46, 32, 30, 48],
     )
 
-    pdf.sub("8.2 What the Company Gets")
+    pdf.sub("9.2 What the Company Gets")
     pdf.txt(
         "For $10,000/month, Company B USA receives:\n\n"
         "  - 47 hours/week of senior consulting across three critical functions\n"
         "  - PMP-certified project management with medical device design control\n"
         "  - FDA 510(k) regulatory strategy and submission execution\n"
+        "  - 14 years of technical publications leadership -- the core skill\n"
+        "    that produces clean, first-pass 510(k) submissions\n"
+        "  - BS in Technical Communication + AS in Hardware/Software Engineering\n"
         "  - US investor relations, pitch materials, and fundraising support\n"
         "  - Bilingual capability (EN/CN) for cross-border coordination\n"
         "  - A US-citizen board member (critical for CFIUS compliance)\n"
@@ -639,7 +756,7 @@ def build():
         "Market cost for these services hired separately: $38,950/month.\n"
         "Company cost with this structure: $10,000/month + 15% equity.")
 
-    pdf.sub("8.3 Legal Documents Required")
+    pdf.sub("9.3 Legal Documents Required")
     pdf.txt(
         "  1. Restricted Stock Agreement (Company B USA -> Lon Dailey)\n"
         "     - 1,500,000 shares, 4-year vest, 1-year cliff\n"
