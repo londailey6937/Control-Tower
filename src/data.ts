@@ -2208,11 +2208,7 @@ export const INVESTOR_BRIDGE: InvestorBridgeMilestone[] = [
 // CAP TABLE MANAGEMENT
 // ============================================================
 
-import type {
-  Shareholder,
-  EquityEvent,
-  VestingSchedule,
-} from "./types.ts";
+import type { Shareholder, EquityEvent, VestingSchedule } from "./types.ts";
 
 export const SHAREHOLDERS: Shareholder[] = [
   {

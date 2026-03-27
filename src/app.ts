@@ -3082,8 +3082,8 @@ function renderCapTable(): void {
 
   // ── Metrics ───────────────────────────────
   const totalShares = SHAREHOLDERS.reduce((s, sh) => s + sh.shares, 0);
-  const founderShares = SHAREHOLDERS.filter(
-    (sh) => sh.role.toLowerCase().includes("founder"),
+  const founderShares = SHAREHOLDERS.filter((sh) =>
+    sh.role.toLowerCase().includes("founder"),
   ).reduce((s, sh) => s + sh.shares, 0);
   const founderPct = totalShares > 0 ? (founderShares / totalShares) * 100 : 0;
 
@@ -3120,7 +3120,8 @@ function renderCapTable(): void {
   const shBody = document.getElementById("capTableSharesBody");
   if (shBody) {
     shBody.innerHTML = SHAREHOLDERS.map((sh) => {
-      const pct = totalShares > 0 ? ((sh.shares / totalShares) * 100).toFixed(1) : "0.0";
+      const pct =
+        totalShares > 0 ? ((sh.shares / totalShares) * 100).toFixed(1) : "0.0";
       return `
       <tr>
         <td>${sh.name}</td>
@@ -3221,7 +3222,10 @@ function renderCapTable(): void {
     }
     const clsConfig: Record<string, { key: string; cls: string }> = {
       common: { key: "capTableCommon", cls: "dil-common" },
-      "preferred-seed": { key: "capTablePreferredSeed", cls: "dil-preferred-seed" },
+      "preferred-seed": {
+        key: "capTablePreferredSeed",
+        cls: "dil-preferred-seed",
+      },
       "preferred-a": { key: "capTablePreferredA", cls: "dil-preferred-a" },
       safe: { key: "capTableSafe", cls: "dil-safe" },
       options: { key: "capTableOptions", cls: "dil-options" },
@@ -3233,16 +3237,21 @@ function renderCapTable(): void {
     const total = groups.reduce((s, g) => s + g.shares, 0);
     dilutionEl.innerHTML = `
       <div class="dilution-bar">
-        ${groups.map((g) => {
-          const pct = total > 0 ? (g.shares / total) * 100 : 0;
-          return `<div class="dilution-segment ${g.cls}" style="width:${pct}%" title="${g.label}: ${g.shares.toLocaleString()} (${pct.toFixed(1)}%)"></div>`;
-        }).join("")}
+        ${groups
+          .map((g) => {
+            const pct = total > 0 ? (g.shares / total) * 100 : 0;
+            return `<div class="dilution-segment ${g.cls}" style="width:${pct}%" title="${g.label}: ${g.shares.toLocaleString()} (${pct.toFixed(1)}%)"></div>`;
+          })
+          .join("")}
       </div>
       <div class="dilution-legend">
-        ${groups.map((g) => {
-          const pct = total > 0 ? ((g.shares / total) * 100).toFixed(1) : "0.0";
-          return `<span class="dilution-legend-item"><span class="dilution-swatch ${g.cls}"></span>${g.label} ${pct}%</span>`;
-        }).join("")}
+        ${groups
+          .map((g) => {
+            const pct =
+              total > 0 ? ((g.shares / total) * 100).toFixed(1) : "0.0";
+            return `<span class="dilution-legend-item"><span class="dilution-swatch ${g.cls}"></span>${g.label} ${pct}%</span>`;
+          })
+          .join("")}
       </div>
     `;
   }

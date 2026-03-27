@@ -123,7 +123,7 @@ def build_factsheet_en():
     pdf.set_font("Helvetica", "", 8.5)
     pdf.set_text_color(*FactEN.DARK)
     items_left = [
-        "15-tab Control Tower dashboard",
+        "16-tab Control Tower dashboard",
         "Bilingual 9-step setup wizard",
         "Dual-track milestone tracking",
         "FDA Communications Center",

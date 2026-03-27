@@ -332,7 +332,7 @@ def build_en():
         "and business culture gap between China and the US market.")
 
     pdf.sub("Control Tower License -- From $500/mo")
-    pdf.bul("Dedicated project dashboard with 15-tab Control Tower platform")
+    pdf.bul("Dedicated project dashboard with 16-tab Control Tower platform")
     pdf.bul("Bilingual setup wizard (EN/CN) for rapid project onboarding")
     pdf.bul("Dual-track milestone tracking (regulatory + engineering)")
     pdf.bul("Regulatory document control and risk monitoring")
@@ -671,7 +671,7 @@ def build_cn():
         "我们的双语团队弥合中美之间的语言、法规和商业文化差距。")
 
     pdf.sub("Control Tower 许可 -- 起步价$500/月")
-    pdf.bul("专属项目仪表盘，15个选项卡的控制塔平台")
+    pdf.bul("专属项目仪表盘，16个选项卡的控制塔平台")
     pdf.bul("双语设置向导（中英文）快速项目入驻")
     pdf.bul("双轨里程碑跟踪（法规+工程）")
     pdf.bul("法规文档控制和风险监控")
