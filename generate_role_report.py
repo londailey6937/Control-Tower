@@ -434,15 +434,16 @@ def build():
             ["Current (no PMP)", "$45,000", "$320,000", "7.1 months"],
             ["+ PMP at Market Rate", "$83,950", "$320,000", "3.8 months"],
             ["+ PMP at Proposed Fee", "$55,000", "$320,000", "5.8 months"],
-            ["+ PMP + Lawrence $500K", "$55,000", "$820,000", "14.9 months"],
+            ["+ PMP + Lawrence $1M", "$55,000", "$1,320,000", "24.0 months"],
         ],
         col_w=[52, 32, 30, 30],
     )
     pdf.txt(
         "At the proposed $10,000/month fee, the company retains 5.8 months of "
-        "runway without additional investment. With Lawrence's anticipated $500K "
-        "investment, runway extends to nearly 15 months -- sufficient to reach "
-        "510(k) clearance for the sEMG module.")
+        "runway without additional investment. With Lawrence's anticipated $1M "
+        "investment (currently under due diligence), runway extends to 24 months "
+        "-- providing 6 months of margin beyond the 18-month 510(k) clearance "
+        "target for the sEMG module.")
 
     pdf.sub("5.5 Equivalent Full-Time Analysis")
     pdf.txt(
@@ -490,6 +491,10 @@ def build():
 
     pdf.sub("7.1 Equity as Compensation for Below-Market Fees")
     pdf.txt(
+        "NOTE: The equity allocation described in this section is the PMP's "
+        "proposal. No equity terms have been agreed upon by any party. This "
+        "section presents the rationale and is intended as a starting point for "
+        "negotiation.\n\n"
         "The PMP's proposed $10,000/month fee is 74% below the combined market "
         "rate of $38,950/month. Over an 18-month engagement through 510(k) "
         "clearance, this represents:\n\n"
@@ -497,34 +502,49 @@ def build():
         "  Cash compensation received:      $10,000 x 18 = $180,000\n"
         "  Difference (PMP's investment):   $521,100\n\n"
         "This $521,100 gap is the PMP's sweat equity investment in the company. "
-        "It is compensated through founder shares in Company B USA (Delaware C-Corp), "
-        "aligning the PMP's financial upside with the success of the venture.")
+        "The proposal is to compensate this gap through founder shares in Company "
+        "B USA (Delaware C-Corp), aligning the PMP's financial upside with the "
+        "success of the venture.")
 
     pdf.sub("7.2 Proposed Cap Table -- Company B USA")
-    pdf.txt("Authorized shares: 10,000,000 common + preferred")
+    pdf.txt(
+        "Authorized shares: 10,000,000 common + preferred\n\n"
+        "Based on Lawrence Liu's anticipated $1M Series Seed investment at a\n"
+        "$6.67M post-money valuation ($5.67M pre-money), the proposed cap table\n"
+        "is structured as follows:")
     pdf.summary_table(
         ["Party", "Shares", "Ownership", "Type", "Contribution"],
         [
-            ["Dr. Dai (Inventor/CTO)", "4,000,000", "40%", "Common", "IP + Technical Lead"],
-            ["Lawrence Liu (Investor)", "3,000,000", "30%", "Preferred", "Cash Investment"],
-            ["Lon Dailey (PMP)", "1,500,000", "15%", "Common", "PMP+Reg+IR (3 roles)"],
-            ["Employee Option Pool", "1,500,000", "15%", "Reserved", "Future hires"],
+            ["Dr. Dai (Inventor/CTO)", "5,000,000", "50%", "Common", "IP + Technical Lead"],
+            ["Lawrence Liu (Investor)", "1,500,000", "15%", "Preferred", "$1M Cash Investment"],
+            ["Lon Dailey (PMP)*", "1,500,000", "15%", "Common", "PMP+Reg+IR (3 roles)"],
+            ["Employee Option Pool", "2,000,000", "20%", "Reserved", "Future hires"],
             ["TOTAL", "10,000,000", "100%", "", ""],
         ],
         col_w=[48, 24, 22, 22, 48],
     )
-
-    pdf.sub("7.3 How Shares Balance the Fee Discount")
     pdf.txt(
-        "The PMP's 15% equity stake compensates the gap between market rate and "
-        "the proposed monthly fee. The value exchange:\n\n"
-        "  At $5M company valuation:   15% = $750,000   (vs. $521K gap)\n"
-        "  At $10M company valuation:  15% = $1,500,000 (2.9x the gap)\n"
-        "  At $20M company valuation:  15% = $3,000,000 (5.8x the gap)\n"
-        "  At $50M acquisition:        15% = $7,500,000\n\n"
-        "The equity compensates the PMP only if the company succeeds. This is the "
-        "fundamental startup trade-off: lower cash now in exchange for outsized "
-        "upside later. The PMP bears real financial risk alongside the other founders.")
+        "* PMP equity allocation is a proposal and has not been agreed upon by "
+        "any party. Subject to negotiation.")
+
+    pdf.sub("7.3 How Shares Would Balance the Fee Discount")
+    pdf.txt(
+        "If the proposed 15% equity stake is accepted, it would compensate the "
+        "gap between market rate and the proposed monthly fee. The potential "
+        "value exchange at various company valuations:\n\n"
+        "  At $6.67M (current round):  15% = $1,000,000 (1.9x the $521K gap)\n"
+        "  At $10M company valuation:   15% = $1,500,000 (2.9x the gap)\n"
+        "  At $20M company valuation:   15% = $3,000,000 (5.8x the gap)\n"
+        "  At $50M acquisition:         15% = $7,500,000\n\n"
+        "The equity would compensate the PMP only if the company succeeds. This "
+        "is the fundamental startup trade-off: lower cash now in exchange for "
+        "outsized upside later. The PMP bears real financial risk alongside the "
+        "other founders.\n\n"
+        "Note: The current round valuation of $6.67M post-money is set by "
+        "Lawrence's $1M investment for 15%. At this valuation, the PMP's "
+        "proposed 15% stake has a paper value of $1M -- approximately 1.9x "
+        "the $521K market-rate gap, reflecting the risk premium appropriate "
+        "for a pre-revenue, pre-clearance medical device startup.")
 
     pdf.sub("7.4 Vesting Schedule")
     pdf.txt(
@@ -549,12 +569,15 @@ def build():
         "    - Carries voting rights (1 share = 1 vote)\n"
         "    - Last in line during liquidation\n"
         "    - Lower price per share (typically $0.001 at founding)\n\n"
-        "  Preferred Stock (Lawrence Liu):\n"
+        "  Preferred Stock (Lawrence Liu -- $1M Series Seed):\n"
         "    - Issued to investors in exchange for cash\n"
-        "    - Higher price per share (reflects negotiated valuation)\n"
-        "    - Liquidation preference: Lawrence gets investment back FIRST\n"
-        "    - Anti-dilution protection on future rounds\n"
-        "    - Convertible to common at Lawrence's option")
+        "    - Price per share: $0.667 ($1M / 1,500,000 shares)\n"
+        "    - 1x non-participating liquidation preference: Lawrence gets his\n"
+        "      $1M back FIRST in any liquidation or acquisition\n"
+        "    - Pro-rata rights in future financing rounds\n"
+        "    - Anti-dilution protection (weighted average)\n"
+        "    - Convertible to common at Lawrence's option\n"
+        "    - Information rights: quarterly financials, annual budget")
 
     pdf.sub("7.6 Board Governance")
     pdf.txt(
@@ -687,7 +710,8 @@ def build():
     pdf.txt(
         "The recommended compensation structure is:\n\n"
         "  Single Monthly Fee:   $10,000/month (all three roles combined)\n"
-        "  Equity Stake:         15% founder shares (1,500,000 common shares)\n"
+        "  Equity Stake:         15% founder shares (proposed, subject to\n"
+        "                        negotiation -- 1,500,000 common shares)\n"
         "  Vesting:              4-year vest, 1-year cliff, monthly thereafter\n"
         "  Contracting Entity:   Arch Medical Management, LLC (Oregon)\n"
         "  Engagement Type:      Independent contractor (1099)\n"
@@ -695,8 +719,8 @@ def build():
         "  Duration:             Through 510(k) clearance (est. 18 months)\n\n"
         "This structure achieves three objectives:\n\n"
         "  1. Cash Preservation -- At $10,000/month (vs. $38,950 market rate),\n"
-        "     the company saves $347,400/year. Combined with Lawrence's expected\n"
-        "     $500K investment, this extends runway to ~15 months.\n\n"
+        "     the company saves $347,400/year. Combined with Lawrence's anticipated\n"
+        "     $1M investment, this extends runway to ~24 months.\n\n"
         "  2. Aligned Incentives -- The PMP's primary upside is equity, not cash.\n"
         "     The PMP succeeds only if the company succeeds. This is the same\n"
         "     incentive structure as the inventor (Dr. Dai) and the investor\n"
@@ -715,14 +739,17 @@ def build():
         "role is a fractional VP of Regulatory Affairs, and the IR role is a\n"
         "fractional VP of Investor Relations.")
 
-    pdf.sub("9.1 Summary: Cash + Equity Compensation")
+    pdf.sub("9.1 Summary: Cash + Equity Compensation (Proposed)")
+    pdf.txt(
+        "NOTE: Equity figures below reflect the PMP's proposal and are subject "
+        "to negotiation with all parties.")
     pdf.summary_table(
         ["Component", "Amount", "Period", "Purpose"],
         [
             ["Monthly cash fee", "$10,000/mo", "18 months", "Living expenses"],
             ["Total cash", "$180,000", "18 months", "74% below market"],
-            ["Equity (at $0.001)", "1,500,000 sh", "4-yr vest", "Founder shares"],
-            ["Equity (at $5M val)", "$750,000", "Paper value", "1.4x market gap"],
+            ["Equity (proposed)", "1,500,000 sh", "4-yr vest", "Founder shares"],
+            ["Equity (at $6.67M)", "$1,000,000", "Paper value", "1.9x market gap"],
             ["Equity (at $20M)", "$3,000,000", "Potential", "5.8x market gap"],
         ],
         col_w=[46, 32, 30, 48],
@@ -754,20 +781,26 @@ def build():
         "     and business move in lockstep, zero dollars are burned on work\n"
         "     that gets thrown away due to miscommunication.\n\n"
         "Market cost for these services hired separately: $38,950/month.\n"
-        "Company cost with this structure: $10,000/month + 15% equity.")
+        "Proposed company cost with this structure: $10,000/month + 15% equity\n"
+        "(equity subject to negotiation).")
 
-    pdf.sub("9.3 Legal Documents Required")
+    pdf.sub("9.3 Legal Documents Required (Upon Agreement)")
     pdf.txt(
         "  1. Restricted Stock Agreement (Company B USA -> Lon Dailey)\n"
-        "     - 1,500,000 shares, 4-year vest, 1-year cliff\n"
+        "     - Share count and vesting terms per negotiated equity agreement\n"
         "     - 83(b) election filed within 30 days of grant\n\n"
-        "  2. Master Services Agreement (Company B USA -> Arch Medical Mgmt)\n"
+        "  2. Series Seed Preferred Stock Purchase Agreement\n"
+        "     - Lawrence Liu: $1M for 1,500,000 preferred shares\n"
+        "     - $6.67M post-money valuation\n"
+        "     - 1x non-participating liquidation preference\n"
+        "     - Legal cost: est. $15-25K (company expense)\n\n"
+        "  3. Master Services Agreement (Company B USA -> Arch Medical Mgmt)\n"
         "     - Covers all three roles under one contract\n"
         "     - $10,000/month fixed fee, Net-15\n"
         "     - Work product IP assigned to Company B USA\n"
         "     - Mutual NDA, 30-day termination notice\n\n"
-        "  3. Board Consent Resolution\n"
-        "     - Approving the equity grant and MSA\n"
+        "  4. Board Consent Resolution\n"
+        "     - Approving the equity grants, preferred stock sale, and MSA\n"
         "     - Documenting the fair market value determination")
 
     pdf.ln(8)
