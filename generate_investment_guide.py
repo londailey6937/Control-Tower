@@ -28,6 +28,8 @@ class GuidePDF(FPDF):
     LIGHT_BG = (248, 248, 252)
     WARN_BG = (255, 248, 240)
     WARN_BORDER = (200, 120, 20)
+    SCENARIO_BG = (235, 238, 255)
+    SCENARIO_BORDER = (60, 60, 180)
 
     def header(self):
         if self.page_no() == 1:
@@ -94,6 +96,11 @@ class GuidePDF(FPDF):
             self.set_draw_color(*self.WARN_BORDER)
             self.set_text_color(160, 90, 0)
             prefix = "WARNING:  "
+        elif style == "scenario":
+            self.set_fill_color(*self.SCENARIO_BG)
+            self.set_draw_color(*self.SCENARIO_BORDER)
+            self.set_text_color(40, 40, 150)
+            prefix = "WHAT IF:  "
         else:
             self.set_fill_color(240, 250, 245)
             self.set_draw_color(*self.ACCENT)
@@ -225,6 +232,8 @@ def build():
 
     pdf.callout_box("The option pool shuffle is one of the most important dynamics to understand. A $5M pre-money with a 20% option pool carved from pre-money is effectively a $4M pre-money valuation for the founders. Always model the dilution both ways.", style="warn")
 
+    pdf.callout_box("Your seed investor insists on a 20% option pool from pre-money at a $5M valuation, but you only need 10%. With a 20% pool the effective pre-money drops to $4M, so the investor's $1M buys 20% instead of 16.7%. With a 10% pool the effective pre-money is $4.5M and the investor gets 18.2%. That 10-point difference in pool size costs founders roughly $500K in implied value. Always negotiate pool size with a bottoms-up hiring plan showing exactly which roles you need to fill.", style="scenario")
+
     pdf.sub_heading("Liquidation Preference")
     pdf.body("Liquidation preference determines who gets paid first (and how much) when the company is sold, merged, or liquidated. This is the single most important economic term besides valuation.")
 
@@ -234,11 +243,15 @@ def build():
 
     pdf.callout_box("Example: Investor puts in $2M for 20% at 1x participating preferred. Company sells for $10M. Investor gets $2M back (preference) + 20% of remaining $8M ($1.6M) = $3.6M total. Founders/common get $6.4M. With 1x non-participating, investor would choose to convert: 20% of $10M = $2M. Same result here, but at a $50M exit the participating preferred investor gets $2M + 20%($48M) = $11.6M vs. just $10M non-participating.")
 
+    pdf.callout_box("Your 510(k) device company receives a $30M acquisition offer. Investor put in $3M for 25% with 1x participating preferred. Participating: investor gets $3M preference + 25% of remaining $27M ($6.75M) = $9.75M. Founders split $20.25M. Non-participating: investor converts -- 25% of $30M = $7.5M. Founders split $22.5M. The participating preference costs founders $2.25M on this exit. Now imagine a disappointing $6M exit: participating investor gets $3M + 25% of $3M = $3.75M, leaving founders $2.25M. Non-participating investor takes the $3M preference (better than 25% of $6M = $1.5M). Founders get $3M. At lower exits, participating preferred hurts most.", style="scenario")
+
     pdf.sub_heading("Anti-Dilution Protection")
     pdf.body("Protects investors if the company raises a future round at a lower valuation (a 'down round'). The investor's conversion price is adjusted downward, giving them more shares.")
 
     pdf.bullet("The conversion price is recalculated using a weighted average formula that accounts for the size of the down round relative to total shares. This is the standard and more founder-friendly approach.", "Weighted Average (Broad-Based): ")
     pdf.bullet("The conversion price drops to the new lower price -- as if the investor had invested at the lower valuation. Very investor-friendly and punitive to founders. Rare in modern deals.", "Full Ratchet: ")
+
+    pdf.callout_box("Your seed investor buys 20% at $10M pre-money. Six months later, your clinical trial produces mixed results and you must raise a Series A at $5M pre-money (a 'down round'). With FULL RATCHET: the seed investor's shares reprice to the $5M valuation, increasing their ownership from 20% to roughly 35% -- wiping out 15 points of founder equity. With BROAD-BASED WEIGHTED AVERAGE: the formula accounts for the relative size of the down round, and the seed investor increases to about 24%. The difference between these two mechanisms is 11 percentage points of founder dilution. In a $50M exit, that difference is worth $5.5M to the founders.", style="scenario")
 
     pdf.sub_heading("Governance & Control Terms")
 
@@ -248,12 +261,18 @@ def build():
     pdf.bullet("Investors can participate in future rounds to maintain their ownership percentage. Standard and generally non-controversial.", "Pro-Rata Rights: ")
     pdf.bullet("In a future IPO or acquisition, investors with registration rights can require the company to include their shares in the registration. Standard provision.", "Registration Rights: ")
 
+    pdf.callout_box("Your board is 2 founders + 2 investors. A strategic acquirer offers $30M for your cleared 510(k) device, which would give each founder $8M after preferences. The investors want to hold out for $100M in 3 years. With a tied board, the deal stalls -- and the acquirer moves on to a competitor. Six months later, a new competitor enters the market and your company's value drops. Always maintain at least one independent director who can break ties, and be cautious about giving investors board majority before Series B.", style="scenario")
+
     pdf.sub_heading("Founder-Specific Terms")
 
     pdf.bullet("Even though founders already 'own' their shares, investors often require founder shares to be subject to vesting (typically 4 years with a 1-year cliff). This protects against a founder leaving early. Common compromise: credit founders for time already spent (e.g., 1 year of vesting already earned).", "Founder Vesting: ")
     pdf.bullet("Founders commit to work full-time on the company and not compete with it during or for some period after employment. 1-2 years post-departure is standard; longer is aggressive.", "Non-Compete / Non-Solicit: ")
     pdf.bullet("All intellectual property created by founders related to the company's business is assigned to the company. Essential and non-negotiable.", "IP Assignment: ")
     pdf.bullet("Prevents shareholders (founders and investors) from selling shares without company/board approval. Typical for private companies until IPO.", "Right of First Refusal (ROFR): ")
+
+    pdf.callout_box("Your CTO co-founder with 40% equity leaves at month 18 of a 4-year vesting schedule (1-year cliff already passed). WITH vesting: the CTO keeps 18/48 = 15% of the company (37.5% of their allocation). The remaining 25% returns to the company for reallocation. WITHOUT vesting: the CTO walks away with the full 40% -- creating a massive 'dead equity' block that makes the company nearly unfundable. No investor will put money into a company where 40% is held by someone who left. This is why investors require founder vesting even for shares founders already 'own.'", style="scenario")
+
+    pdf.callout_box("Your non-compete clause says 2 years post-departure, covering 'any medical device company.' You leave after disagreements with investors. For 2 years you cannot work in your own field -- including consulting, joining a competitor, or starting a new medtech venture. Most enforceable non-competes are 12 months and narrowly scoped to the specific device category. Push back on anything broader than 12 months or your specific product area. Note: California and several other states do not enforce non-competes at all.", style="scenario")
 
     pdf.sub_heading("Term Sheet Red Flags")
     w2 = [55, 135]
@@ -302,6 +321,8 @@ def build():
     pdf.bullet("Simple, fast (one document), no interest accrual, no maturity date pressure. Standard for pre-seed and seed.", "Pros: ")
     pdf.bullet("No investor rights until conversion, dilution is uncertain until priced round, can stack up multiple SAFEs creating a 'SAFE pile' problem.", "Cons: ")
 
+    pdf.callout_box("You raise $500K on a SAFE at $5M cap, then another $300K on a second SAFE at $8M cap, then do a Series A at $12M pre-money raising $2M. The first SAFE converts at $5M (very favorable -- 10% ownership for $500K). The second converts at $8M (3.75%). The Series A investor prices at $12M. After conversion, the SAFE stack owns 13.75% combined before the Series A investor takes their share. You expected ~6% dilution from $800K but got 13.75%. Each SAFE converts independently at its own cap, and the dilution compounds. Limit yourself to a single SAFE cap whenever possible.", style="scenario")
+
     pdf.sub_heading("Convertible Notes")
     pdf.body("Convertible notes are short-term debt that converts to equity. Unlike SAFEs, they accrue interest and have a maturity date.")
     pdf.bullet("Typically 4-8% annually. Interest converts to equity along with principal.", "Interest Rate: ")
@@ -311,12 +332,16 @@ def build():
     pdf.bullet("Interest accrual costs you equity. Maturity date creates pressure. More complex legally than a SAFE.", "Cons: ")
     pdf.callout_box("For medical device startups, convertible notes can be risky because FDA timelines are unpredictable. If your 510(k) review takes longer than expected and the note matures before your priced round, you may face a forced repayment or unfavorable renegotiation.", style="warn")
 
+    pdf.callout_box("You issue a $500K convertible note at 6% interest with a 24-month maturity and $5M cap. Your 510(k) review takes 14 months instead of the expected 6 -- an FDA Additional Information request adds 8 months. At month 24, the note matures with $60K in accrued interest ($560K total). You haven't raised Series A because you don't have clearance yet. The investor can now demand cash repayment of $560K -- money you don't have -- or renegotiate conversion at a much lower cap ($3M instead of $5M), effectively doubling their ownership. Had you used a SAFE (no maturity date, no interest), there would be no ticking clock and no renegotiation leverage for the investor.", style="scenario")
+
     pdf.sub_heading("Priced Equity Round (Preferred Stock)")
     pdf.body("A priced round sets a specific valuation, price per share, and creates a new class of preferred stock with defined rights. This is the standard structure for Series A and beyond.")
     pdf.bullet("Definitive legal documents: Stock Purchase Agreement, Investors' Rights Agreement, Right of First Refusal, Voting Agreement, Certificate of Incorporation amendment.", "Key Documents: ")
     pdf.bullet("$15K-$50K+ in legal fees for a standard Series A. Both sides typically have counsel.", "Legal Costs: ")
     pdf.bullet("Clean cap table, clear governance, investor rights codified. Required for institutional VC investment.", "Pros: ")
     pdf.bullet("Expensive, time-consuming (4-8 weeks to close), requires board approval and shareholder consent.", "Cons: ")
+
+    pdf.callout_box("You decide to do a priced seed round at $5M pre-money instead of SAFEs. You spend $35K on legal fees and 6 weeks closing. Three months later, you get positive FDA Pre-Sub feedback that significantly de-risks the regulatory pathway. Your company is now worth $8-10M. The entire step-up in value belongs to the seed investors who locked in the $5M price. Had you used a SAFE with a $7M cap, the valuation would have deferred to the Series A -- giving you the benefit of the milestone. Counter-scenario: if your Pre-Sub feedback was NEGATIVE and the company's value dropped to $3M, the priced round at $5M would have protected you from a painful down-round renegotiation. Priced rounds remove uncertainty in both directions.", style="scenario")
 
     pdf.sub_heading("Vehicle Comparison")
     w4 = [35, 45, 45, 65]
@@ -361,12 +386,16 @@ def build():
     pdf.bullet("May want technology access rights, right of first refusal on acquisition, or exclusive licensing. Can scare off other acquirers.", "Watch Out: ")
     pdf.callout_box("Strategic investors can be a double-edged sword. A Medtronic Ventures investment signals validation but may discourage J&J or Abbott from acquiring you. Negotiate carefully around ROFR and information rights.")
 
+    pdf.callout_box("Medtronic Ventures invests $2M in your seed round with a Right of First Refusal on acquisition. Two years later, Abbott offers $50M to acquire your company. Medtronic exercises ROFR and matches the offer -- but takes 90 days during which Abbott's interest cools. Alternatively, if Medtronic declines to match, Abbott may still lower their offer knowing Medtronic saw the deal and passed. Either way, the ROFR reduces your leverage. Counter-scenario: Medtronic's investment gave you access to their clinical sites, distribution network, and regulatory team -- accelerating your clearance by 6 months and increasing the eventual acquisition price by $15M. The ROFR cost you leverage but the strategic value more than compensated.", style="scenario")
+
     pdf.sub_heading("Government / Non-Dilutive Funding")
     pdf.bullet("Phase I ($275K, 6-9 months) for feasibility, Phase II ($1-2M, 2 years) for development. Highly competitive but non-dilutive.", "NIH SBIR/STTR: ")
     pdf.bullet("Phase I ($200K), Phase II ($1.1M). Good for dual-use medical technologies.", "NSF SBIR: ")
     pdf.bullet("BARDA and ASPR for medical countermeasures. Large awards ($5-25M) but very specific use cases.", "BARDA: ")
     pdf.bullet("Oregon SBIR matching grants, Oregon Innovation Council, state venture funds.", "State Programs: ")
     pdf.callout_box("Non-dilutive funding should always be pursued in parallel with equity fundraising. An SBIR grant does not dilute your cap table and signals government validation of the technology.")
+
+    pdf.callout_box("You win an SBIR Phase I ($275K) while simultaneously raising a $1M seed round on a SAFE at $5M cap. The SBIR reduces how much equity capital you need -- you can now raise only $725K instead of $1M, reducing dilution from 20% to 14.5%. Over three rounds, this compounding effect preserves an additional 5-8% founder ownership. Alternatively: you use the SBIR to extend your runway while waiting for a key milestone (Pre-Sub feedback), allowing you to raise the seed at a higher valuation ($7M vs $5M). The non-dilutive capital didn't just save equity -- it bought you time to increase your valuation.", style="scenario")
 
     # ── SECTION 6: 510(k) BRIDGE ───────────────────
     pdf.section_heading(6, "The 510(k) Bridge Strategy", "When to engage investors relative to your regulatory milestones")
@@ -392,6 +421,8 @@ def build():
     pdf.bullet("At M+6 when the 510(k) is submitted, you're 90 days from clearance (standard review). This is close enough that investors can see the finish line but early enough to get in at pre-clearance terms.", "3. Visible Finish Line: ")
 
     pdf.callout_box("The #1 mistake medtech founders make is waiting until AFTER clearance to fundraise. Post-clearance fundraising gives you better terms but costs 6-12 months of commercial runway. The capital you need for launch should be committed BEFORE the clearance letter arrives.")
+
+    pdf.callout_box("Company A raises $2M at M+3 (post-Pre-Sub feedback) at a $6M pre-money valuation. They have capital committed before filing the 510(k). When clearance arrives at M+9, they immediately launch -- hiring sales reps, attending trade shows, shipping first units within 30 days. Company B waits until after clearance to start fundraising. They get better terms ($2M at $12M pre-money -- half the dilution), but the raise takes 5 months. During that time, a competitor launches a similar device and signs two hospital systems. Company A's 'overpayment' in dilution bought them 5 months of market exclusivity and first-mover advantage. In medtech, time-to-market after clearance is often worth more than the valuation difference.", style="scenario")
 
     pdf.sub_heading("What Investors Want to See at Each Stage")
 
@@ -484,6 +515,8 @@ def build():
     pdf.bullet("Each round dilutes all previous shareholders proportionally (unless they exercise pro-rata rights).", "Every round dilutes everyone: ")
 
     pdf.callout_box("A useful mental model: founders who keep 40-60% after seed and 25-40% after Series A are in a strong position. If you're below 20% combined before Series B, you may have given up too much too early.")
+
+    pdf.callout_box("Two founders each own 40% after seed (80% combined), with a 10% option pool and 10% seed investors. A strong position. Now a Series A investor demands 30% ownership with a 15% option pool refresh (from pre-money). Post-Series A: founders drop to 80% x (1 - 0.30 - 0.075) = 50% combined (25% each). Still healthy. But if the seed round was too dilutive (founders at 55% combined post-seed), that same Series A drops founders to 55% x 0.625 = 34.4% combined (17.2% each). By Series B they could be below 10% each -- losing motivation and control. Protect your ownership aggressively in early rounds; the dilution compounds with every subsequent raise.", style="scenario")
 
     # ── SECTION 10: GLOSSARY ───────────────────────
     pdf.section_heading(10, "Glossary", "Essential investment terminology")
