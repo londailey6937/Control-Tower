@@ -2029,6 +2029,182 @@ export const SUPPLIERS: Supplier[] = [
 ];
 
 // ============================================================
+// US INVESTMENT & INVESTOR RELATIONS
+// ============================================================
+
+import type { TargetInvestor, IRActivity } from "./types.ts";
+
+export const TARGET_INVESTORS: TargetInvestor[] = [
+  {
+    id: "INV-001",
+    name: "MedTech Ventures",
+    type: "VC",
+    stage: "Seed",
+    contact: "contacted",
+    amount: 500000,
+    notes: "Focus on FDA-cleared devices",
+  },
+  {
+    id: "INV-002",
+    name: "BioStar Capital",
+    type: "Angel Group",
+    stage: "Seed",
+    contact: "prospect",
+    amount: 250000,
+    notes: "Pacific NW health-tech syndicate",
+  },
+  {
+    id: "INV-003",
+    name: "Cascade Health Fund",
+    type: "VC",
+    stage: "Series A",
+    contact: "prospect",
+    amount: 1000000,
+    notes: "Portland-based, med-device focus",
+  },
+  {
+    id: "INV-004",
+    name: "Oregon Angel Fund",
+    type: "Angel Group",
+    stage: "Seed",
+    contact: "contacted",
+    amount: 200000,
+    notes: "Local angel network",
+  },
+  {
+    id: "INV-005",
+    name: "Digital Health Partners",
+    type: "VC",
+    stage: "Seed",
+    contact: "in-dd",
+    amount: 500000,
+    notes: "ICU/respiratory portfolio",
+  },
+];
+
+export const IR_ACTIVITIES: IRActivity[] = [
+  {
+    id: "IRA-001",
+    date: "2026-03-18",
+    activity:
+      "Initial outreach to MedTech Ventures — sent executive summary & pitch deck",
+    status: "done",
+  },
+  {
+    id: "IRA-002",
+    date: "2026-03-20",
+    activity:
+      "Oregon Angel Fund intro meeting — presented 510(k) regulatory strategy",
+    status: "done",
+  },
+  {
+    id: "IRA-003",
+    date: "2026-03-25",
+    activity: "Digital Health Partners — due diligence data room setup",
+    status: "in-progress",
+  },
+  {
+    id: "IRA-004",
+    date: "2026-04-01",
+    activity:
+      "Prepare Phase 1 Seed Round investor update ($1.8M raised — deployment plan)",
+    status: "todo",
+  },
+  {
+    id: "IRA-005",
+    date: "2026-04-10",
+    activity: "BioStar Capital — schedule intro call",
+    status: "todo",
+  },
+  {
+    id: "IRA-006",
+    date: "2026-04-15",
+    activity: "Cascade Health Fund — warm introduction via Oregon Bio network",
+    status: "todo",
+  },
+];
+
+// ============================================================
+// 510(k) BRIDGE — INVESTOR OUTREACH TIMING
+// ============================================================
+
+export interface InvestorBridgeMilestone {
+  regulatoryId: string;
+  month: number;
+  milestone: { en: string; cn: string };
+  investorAction: { en: string; cn: string };
+  signal: "warm" | "active" | "peak" | "close";
+}
+
+export const INVESTOR_BRIDGE: InvestorBridgeMilestone[] = [
+  {
+    regulatoryId: "R1",
+    month: 0,
+    milestone: {
+      en: "Pre-Sub Filed",
+      cn: "预提交已递交",
+    },
+    investorAction: {
+      en: "Build relationships, warm intros — FDA engagement signals credibility",
+      cn: "建立关系、暖引荐 — FDA参与证明可信度",
+    },
+    signal: "warm",
+  },
+  {
+    regulatoryId: "R2",
+    month: 2,
+    milestone: {
+      en: "Pre-Sub Meeting (FDA Feedback)",
+      cn: "预提交会议（FDA反馈）",
+    },
+    investorAction: {
+      en: "Active outreach & pitch meetings — FDA feedback de-risks the pathway",
+      cn: "主动接触和路演 — FDA反馈降低了监管风险",
+    },
+    signal: "active",
+  },
+  {
+    regulatoryId: "T3",
+    month: 3,
+    milestone: {
+      en: "Bench & Performance Testing Complete",
+      cn: "台架和性能测试完成",
+    },
+    investorAction: {
+      en: "Share performance data with prospects — hard data proves technical viability",
+      cn: "与潜在投资者分享性能数据 — 硬数据证明技术可行性",
+    },
+    signal: "active",
+  },
+  {
+    regulatoryId: "R3",
+    month: 6,
+    milestone: {
+      en: "510(k) Submitted — sEMG Module",
+      cn: "510(k)已提交 — sEMG模块",
+    },
+    investorAction: {
+      en: "Push for term sheets — submission is the inflection point",
+      cn: "推动条款清单 — 提交是拐点",
+    },
+    signal: "peak",
+  },
+  {
+    regulatoryId: "R4",
+    month: 9,
+    milestone: {
+      en: "510(k) Clearance — sEMG",
+      cn: "510(k)批准 — sEMG",
+    },
+    investorAction: {
+      en: "Close rounds, Series A positioning — cleared device, maximum leverage",
+      cn: "完成融资轮次、Series A定位 — 已获批设备、最大谈判筹码",
+    },
+    signal: "close",
+  },
+];
+
+// ============================================================
 // MESSAGE BOARD SECTIONS
 // ============================================================
 

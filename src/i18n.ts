@@ -386,6 +386,15 @@ export const I18N: I18nMessages = {
     usInvestTermSheet: "Term Sheet",
     usInvestClosed: "Closed",
     usInvestProspect: "Prospect",
+    usInvestPassed: "Passed",
+    usInvestAddInvestor: "Add Investor",
+    usInvestAddActivity: "Add Activity",
+    usInvestFormAdd: "Add",
+    usInvestFormCancel: "Cancel",
+    usInvestDeleteConfirm: "Delete this investor?",
+    usInvestDeleteActivityConfirm: "Delete this activity?",
+    usInvestBridgeTitle: "510(k) Bridge \u2014 Investor Outreach Timeline",
+    usInvestBridgeDesc: "Optimal investor engagement windows mapped to regulatory milestones",
 
     // Document Control
     docLibTitle: "Document Control",
@@ -920,6 +929,15 @@ export const I18N: I18nMessages = {
     usInvestTermSheet: "条款清单",
     usInvestClosed: "已关闭",
     usInvestProspect: "潜在",
+    usInvestPassed: "已放弃",
+    usInvestAddInvestor: "添加投资者",
+    usInvestAddActivity: "添加活动",
+    usInvestFormAdd: "添加",
+    usInvestFormCancel: "取消",
+    usInvestDeleteConfirm: "确定删除该投资者？",
+    usInvestDeleteActivityConfirm: "确定删除该活动？",
+    usInvestBridgeTitle: "510(k) Bridge \u2014 投资者接触时间线",
+    usInvestBridgeDesc: "将最佳投资者参与窗口与监管里程碑对应",
 
     // Document Control
     docLibTitle: "文档控制",

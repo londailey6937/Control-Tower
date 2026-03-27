@@ -25,6 +25,9 @@ import {
   TEAM_MEMBERS,
   SUPPLIERS,
   QA_SECTIONS,
+  TARGET_INVESTORS,
+  IR_ACTIVITIES,
+  INVESTOR_BRIDGE,
 } from "./data.ts";
 import { t, localizedText, getLang, setLang, applyLanguage } from "./i18n.ts";
 import {
@@ -52,6 +55,8 @@ import type {
   MBMessageIntent,
   MBLinkedItem,
   MBPriority,
+  InvestorContactStatus,
+  IRActivityStatus,
 } from "./types.ts";
 import { storeDocument, getDocument } from "./docstore.ts";
 import {
@@ -258,6 +263,30 @@ function setupEventDelegation(): void {
         break;
       case "openAddBudgetForm":
         window._openAddBudgetForm();
+        break;
+      case "addInvestor":
+        window._addInvestor();
+        break;
+      case "deleteInvestor":
+        window._deleteInvestor(a.investorid!);
+        break;
+      case "openAddInvestorForm":
+        window._openAddInvestorForm();
+        break;
+      case "cycleInvestorStatus":
+        window._cycleInvestorStatus(a.investorid!);
+        break;
+      case "addIRActivity":
+        window._addIRActivity();
+        break;
+      case "deleteIRActivity":
+        window._deleteIRActivity(a.iraid!);
+        break;
+      case "openAddIRActivityForm":
+        window._openAddIRActivityForm();
+        break;
+      case "cycleIRActivityStatus":
+        window._cycleIRActivityStatus(a.iraid!);
         break;
     }
   });
@@ -2684,26 +2713,44 @@ function renderUsApiIntegrations(): void {
 // ══════════════════════════════════════════════════
 // US INVESTMENT & INVESTOR RELATIONS
 // ══════════════════════════════════════════════════
+
+function fmtInvestAmount(n: number): string {
+  if (n >= 1_000_000)
+    return `$${(n / 1_000_000).toFixed(n % 1_000_000 === 0 ? 0 : 1)}M`;
+  if (n >= 1_000) return `$${(n / 1_000).toFixed(0)}K`;
+  return `$${n}`;
+}
+
 function renderUsInvestment(): void {
+  const canEdit = ["pmp", "business"].includes(ACTIVE_ROLE);
+
+  // Compute metrics from data
+  const totalPipeline = TARGET_INVESTORS.reduce((s, i) => s + i.amount, 0);
+  const converted = TARGET_INVESTORS.filter(
+    (i) => i.contact === "closed",
+  ).reduce((s, i) => s + i.amount, 0);
+  const meetings = IR_ACTIVITIES.filter((a) => a.status === "done").length;
+  const irLead = "Lon Dailey";
+
   // Metrics cards
   const metrics = document.getElementById("usInvestMetrics");
   if (metrics) {
     metrics.innerHTML = `
       <div class="cash-card">
         <div class="cash-card-label">${t("usInvestMeetings")}</div>
-        <div class="cash-card-value">8</div>
+        <div class="cash-card-value">${meetings}</div>
       </div>
       <div class="cash-card">
         <div class="cash-card-label">${t("usInvestPipeline")}</div>
-        <div class="cash-card-value">$2.5M</div>
+        <div class="cash-card-value">${fmtInvestAmount(totalPipeline)}</div>
       </div>
       <div class="cash-card">
         <div class="cash-card-label">${t("usInvestConverted")}</div>
-        <div class="cash-card-value">$0</div>
+        <div class="cash-card-value">${fmtInvestAmount(converted)}</div>
       </div>
       <div class="cash-card">
         <div class="cash-card-label">${t("usInvestIrRole")}</div>
-        <div class="cash-card-value" style="font-size:0.9rem">Lon Dailey</div>
+        <div class="cash-card-value" style="font-size:0.9rem">${irLead}</div>
       </div>
     `;
   }
@@ -2711,143 +2758,269 @@ function renderUsInvestment(): void {
   // Target investors table
   const tbody = document.getElementById("usInvestBody");
   if (tbody) {
-    const targets = [
-      {
-        name: "MedTech Ventures",
-        type: "VC",
-        stage: "Seed",
-        contact: "contacted",
-        amount: "$500K",
-        notes: "Focus on FDA-cleared devices",
-      },
-      {
-        name: "BioStar Capital",
-        type: "Angel Group",
-        stage: "Seed",
-        contact: "prospect",
-        amount: "$250K",
-        notes: "Pacific NW health-tech syndicate",
-      },
-      {
-        name: "Cascade Health Fund",
-        type: "VC",
-        stage: "Series A",
-        contact: "prospect",
-        amount: "$1M",
-        notes: "Portland-based, med-device focus",
-      },
-      {
-        name: "Oregon Angel Fund",
-        type: "Angel Group",
-        stage: "Seed",
-        contact: "contacted",
-        amount: "$200K",
-        notes: "Local angel network",
-      },
-      {
-        name: "Digital Health Partners",
-        type: "VC",
-        stage: "Seed",
-        contact: "in-dd",
-        amount: "$500K",
-        notes: "ICU/respiratory portfolio",
-      },
-    ];
-
-    const contactLabel = (s: string) => {
-      switch (s) {
-        case "contacted":
-          return `<span class="fr-committed">${t("usInvestContacted")}</span>`;
-        case "in-dd":
-          return `<span class="fr-received">${t("usInvestInDD")}</span>`;
-        case "term-sheet":
-          return `<span class="fr-received">${t("usInvestTermSheet")}</span>`;
-        case "closed":
-          return `<span class="fr-received">${t("usInvestClosed")}</span>`;
-        default:
-          return `<span class="fr-pipeline">${t("usInvestProspect")}</span>`;
-      }
+    const contactLabel = (s: InvestorContactStatus) => {
+      const labels: Record<
+        InvestorContactStatus,
+        { cls: string; key: string }
+      > = {
+        contacted: { cls: "fr-committed", key: "usInvestContacted" },
+        "in-dd": { cls: "fr-received", key: "usInvestInDD" },
+        "term-sheet": { cls: "fr-received", key: "usInvestTermSheet" },
+        closed: { cls: "fr-received", key: "usInvestClosed" },
+        passed: { cls: "std-not-started", key: "usInvestPassed" },
+        prospect: { cls: "fr-pipeline", key: "usInvestProspect" },
+      };
+      const l = labels[s] || labels.prospect;
+      return `<span class="${l.cls} clickable-badge" data-action="cycleInvestorStatus" data-investorid="\${id}" title="${t("clickToChangeStatus")}">${t(l.key as any)}</span>`;
     };
 
-    tbody.innerHTML = targets
-      .map(
-        (inv) => `
+    tbody.innerHTML = TARGET_INVESTORS.map(
+      (inv) => `
       <tr>
         <td>${inv.name}</td>
         <td>${inv.type}</td>
         <td>${inv.stage}</td>
-        <td>${contactLabel(inv.contact)}</td>
-        <td>${inv.amount}</td>
+        <td>${contactLabel(inv.contact).replace("${id}", inv.id)}</td>
+        <td>${fmtInvestAmount(inv.amount)}</td>
         <td>${inv.notes}</td>
+        <td>${canEdit ? `<button class="doc-remove-btn" data-action="deleteInvestor" data-investorid="${inv.id}" title="✕">✕</button>` : ""}</td>
       </tr>
     `,
-      )
-      .join("");
+    ).join("");
+  }
+
+  // Add investor button
+  const addInvBtn = document.getElementById("usInvestAddBtnWrap");
+  if (addInvBtn) {
+    addInvBtn.innerHTML = canEdit
+      ? `<button class="btn-add-funding" data-action="openAddInvestorForm">+ ${t("usInvestAddInvestor")}</button>`
+      : "";
+  }
+
+  // 510(k) Bridge — Investor Outreach Timeline
+  const bridgeEl = document.getElementById("usInvestBridge");
+  if (bridgeEl) {
+    const lang = getLang();
+    const signalCls: Record<string, string> = {
+      warm: "bridge-warm",
+      active: "bridge-active",
+      peak: "bridge-peak",
+      close: "bridge-close",
+    };
+    const signalLabel: Record<string, { en: string; cn: string }> = {
+      warm: { en: "Warm-up", cn: "预热" },
+      active: { en: "Active", cn: "活跃" },
+      peak: { en: "Peak", cn: "高峰" },
+      close: { en: "Close", cn: "收尾" },
+    };
+    bridgeEl.innerHTML = `<div class="bridge-timeline">${INVESTOR_BRIDGE.map(
+      (m) => `
+      <div class="bridge-step ${signalCls[m.signal]}">
+        <div class="bridge-marker"></div>
+        <div class="bridge-content">
+          <div class="bridge-header">
+            <span class="bridge-month">M+${m.month}</span>
+            <span class="bridge-id">${m.regulatoryId}</span>
+            <span class="bridge-signal">${lang === "cn" ? signalLabel[m.signal].cn : signalLabel[m.signal].en}</span>
+          </div>
+          <div class="bridge-milestone">${lang === "cn" ? m.milestone.cn : m.milestone.en}</div>
+          <div class="bridge-action">${lang === "cn" ? m.investorAction.cn : m.investorAction.en}</div>
+        </div>
+      </div>
+    `,
+    ).join("")}</div>`;
   }
 
   // IR Activities
   const activities = document.getElementById("usInvestActivities");
   if (activities) {
-    const items = [
-      {
-        date: "2026-03-18",
-        activity:
-          "Initial outreach to MedTech Ventures — sent executive summary & pitch deck",
-        status: "done",
-      },
-      {
-        date: "2026-03-20",
-        activity:
-          "Oregon Angel Fund intro meeting — presented 510(k) regulatory strategy",
-        status: "done",
-      },
-      {
-        date: "2026-03-25",
-        activity: "Digital Health Partners — due diligence data room setup",
-        status: "in-progress",
-      },
-      {
-        date: "2026-04-01",
-        activity:
-          "Prepare Phase 1 Seed Round investor update ($1.8M raised — deployment plan)",
-        status: "todo",
-      },
-      {
-        date: "2026-04-10",
-        activity: "BioStar Capital — schedule intro call",
-        status: "todo",
-      },
-      {
-        date: "2026-04-15",
-        activity:
-          "Cascade Health Fund — warm introduction via Oregon Bio network",
-        status: "todo",
-      },
-    ];
-
-    const statusBadge = (s: string) => {
-      switch (s) {
-        case "done":
-          return `<span class="std-complete">${t("complete")}</span>`;
-        case "in-progress":
-          return `<span class="std-in-progress">${t("inProgress")}</span>`;
-        default:
-          return `<span class="std-not-started">${t("notStarted")}</span>`;
-      }
+    const statusBadge = (s: IRActivityStatus, id: string) => {
+      const map: Record<IRActivityStatus, { cls: string; key: string }> = {
+        done: { cls: "std-complete", key: "complete" },
+        "in-progress": { cls: "std-in-progress", key: "inProgress" },
+        todo: { cls: "std-not-started", key: "notStarted" },
+      };
+      const m = map[s] || map.todo;
+      return `<span class="${m.cls} clickable-badge" data-action="cycleIRActivityStatus" data-iraid="${id}" title="${t("clickToChangeStatus")}">${t(m.key as any)}</span>`;
     };
 
-    activities.innerHTML = items
-      .map(
-        (item) => `
+    activities.innerHTML = IR_ACTIVITIES.map(
+      (item) => `
       <div class="input-entry" style="margin-bottom:var(--sp-sm)">
-        <div class="input-meta">${item.date} ${statusBadge(item.status)}</div>
+        <div class="input-meta">
+          ${item.date} ${statusBadge(item.status, item.id)}
+          ${canEdit ? `<button class="doc-remove-btn" data-action="deleteIRActivity" data-iraid="${item.id}" title="✕" style="margin-left:var(--sp-xs)">✕</button>` : ""}
+        </div>
         <div style="margin-top:var(--sp-xs)">${item.activity}</div>
       </div>
     `,
-      )
-      .join("");
+    ).join("");
+  }
+
+  // Add IR activity button
+  const addIraBtn = document.getElementById("usInvestAddIRABtnWrap");
+  if (addIraBtn) {
+    addIraBtn.innerHTML = canEdit
+      ? `<button class="btn-add-funding" data-action="openAddIRActivityForm">+ ${t("usInvestAddActivity")}</button>`
+      : "";
   }
 }
+
+// ── Investor CRUD ───────────────────────────
+window._openAddInvestorForm = function (): void {
+  const form = document.getElementById("investorAddForm");
+  if (!form) return;
+  form.innerHTML = `
+    <h4>${t("usInvestAddInvestor")}</h4>
+    <div class="funding-form-row">
+      <input type="text" id="invFormName" placeholder="${t("usInvestTarget")}" />
+      <input type="text" id="invFormType" placeholder="${t("usInvestType")}" />
+      <input type="text" id="invFormStage" placeholder="${t("usInvestStage")}" />
+      <input type="number" id="invFormAmount" placeholder="${t("usInvestAmount")}" min="0" />
+      <input type="text" id="invFormNotes" placeholder="${t("usInvestNotes")}" />
+      <button class="btn-add-funding" data-action="addInvestor">${t("usInvestFormAdd")}</button>
+      <button class="btn-secondary" onclick="document.getElementById('investorAddForm').innerHTML=''">${t("usInvestFormCancel")}</button>
+    </div>
+  `;
+};
+
+window._addInvestor = function (): void {
+  if (!["pmp", "business"].includes(ACTIVE_ROLE)) return;
+  const nameEl = document.getElementById("invFormName") as HTMLInputElement;
+  const typeEl = document.getElementById("invFormType") as HTMLInputElement;
+  const stageEl = document.getElementById("invFormStage") as HTMLInputElement;
+  const amountEl = document.getElementById("invFormAmount") as HTMLInputElement;
+  const notesEl = document.getElementById("invFormNotes") as HTMLInputElement;
+  const name = nameEl?.value?.trim();
+  if (!name) return;
+  const id = "INV-" + String(TARGET_INVESTORS.length + 1).padStart(3, "0");
+  TARGET_INVESTORS.push({
+    id,
+    name,
+    type: typeEl?.value?.trim() || "VC",
+    stage: stageEl?.value?.trim() || "Seed",
+    contact: "prospect",
+    amount: parseInt(amountEl?.value || "0", 10) || 0,
+    notes: notesEl?.value?.trim() || "",
+  });
+  logAudit("investor-add", id, "add", "", name, "");
+  const form = document.getElementById("investorAddForm");
+  if (form) form.innerHTML = "";
+  renderUsInvestment();
+};
+
+window._deleteInvestor = function (investorId: string): void {
+  if (!["pmp", "business"].includes(ACTIVE_ROLE)) return;
+  if (!confirm(t("usInvestDeleteConfirm"))) return;
+  const idx = TARGET_INVESTORS.findIndex((i) => i.id === investorId);
+  if (idx < 0) return;
+  const inv = TARGET_INVESTORS[idx];
+  TARGET_INVESTORS.splice(idx, 1);
+  logAudit("investor-delete", investorId, "delete", inv.name, "", "");
+  renderUsInvestment();
+};
+
+window._cycleInvestorStatus = function (investorId: string): void {
+  const inv = TARGET_INVESTORS.find((i) => i.id === investorId);
+  if (!inv) return;
+  if (ACTIVE_ROLE !== "pmp") {
+    window._openChangeRequestForm(
+      "investor-status",
+      investorId,
+      "contact",
+      inv.contact,
+    );
+    return;
+  }
+  const cycle: Record<InvestorContactStatus, InvestorContactStatus> = {
+    prospect: "contacted",
+    contacted: "in-dd",
+    "in-dd": "term-sheet",
+    "term-sheet": "closed",
+    closed: "passed",
+    passed: "prospect",
+  };
+  const old = inv.contact;
+  inv.contact = cycle[inv.contact];
+  logAudit(
+    "investor-status",
+    investorId,
+    "contact",
+    old,
+    inv.contact,
+    `Investor ${inv.name} status changed`,
+  );
+  renderUsInvestment();
+};
+
+// ── IR Activity CRUD ────────────────────────
+window._openAddIRActivityForm = function (): void {
+  const form = document.getElementById("iraAddForm");
+  if (!form) return;
+  form.innerHTML = `
+    <h4>${t("usInvestAddActivity")}</h4>
+    <div class="funding-form-row">
+      <input type="date" id="iraFormDate" />
+      <input type="text" id="iraFormActivity" placeholder="${t("usInvestIrTitle")}" style="flex:2" />
+      <button class="btn-add-funding" data-action="addIRActivity">${t("usInvestFormAdd")}</button>
+      <button class="btn-secondary" onclick="document.getElementById('iraAddForm').innerHTML=''">${t("usInvestFormCancel")}</button>
+    </div>
+  `;
+  const dateInput = document.getElementById("iraFormDate") as HTMLInputElement;
+  if (dateInput) dateInput.value = new Date().toISOString().slice(0, 10);
+};
+
+window._addIRActivity = function (): void {
+  if (!["pmp", "business"].includes(ACTIVE_ROLE)) return;
+  const dateEl = document.getElementById("iraFormDate") as HTMLInputElement;
+  const actEl = document.getElementById("iraFormActivity") as HTMLInputElement;
+  const activity = actEl?.value?.trim();
+  if (!activity) return;
+  const id = "IRA-" + String(IR_ACTIVITIES.length + 1).padStart(3, "0");
+  IR_ACTIVITIES.push({
+    id,
+    date: dateEl?.value || new Date().toISOString().slice(0, 10),
+    activity,
+    status: "todo",
+  });
+  logAudit("ir-activity-add", id, "add", "", activity, "");
+  const form = document.getElementById("iraAddForm");
+  if (form) form.innerHTML = "";
+  renderUsInvestment();
+};
+
+window._deleteIRActivity = function (activityId: string): void {
+  if (!["pmp", "business"].includes(ACTIVE_ROLE)) return;
+  if (!confirm(t("usInvestDeleteActivityConfirm"))) return;
+  const idx = IR_ACTIVITIES.findIndex((a) => a.id === activityId);
+  if (idx < 0) return;
+  const act = IR_ACTIVITIES[idx];
+  IR_ACTIVITIES.splice(idx, 1);
+  logAudit("ir-activity-delete", activityId, "delete", act.activity, "", "");
+  renderUsInvestment();
+};
+
+window._cycleIRActivityStatus = function (activityId: string): void {
+  const act = IR_ACTIVITIES.find((a) => a.id === activityId);
+  if (!act) return;
+  if (!["pmp", "business"].includes(ACTIVE_ROLE)) return;
+  const cycle: Record<IRActivityStatus, IRActivityStatus> = {
+    todo: "in-progress",
+    "in-progress": "done",
+    done: "todo",
+  };
+  const old = act.status;
+  act.status = cycle[act.status];
+  logAudit(
+    "ir-activity-status",
+    activityId,
+    "status",
+    old,
+    act.status,
+    act.activity,
+  );
+  renderUsInvestment();
+};
 
 // ══════════════════════════════════════════════════
 // DOCUMENT CONTROL

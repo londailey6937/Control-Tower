@@ -233,7 +233,13 @@ export type AuditAction =
   | "burn-edit"
   | "burn-add"
   | "burn-delete"
-  | "qa-topic";
+  | "qa-topic"
+  | "investor-add"
+  | "investor-delete"
+  | "investor-status"
+  | "ir-activity-add"
+  | "ir-activity-delete"
+  | "ir-activity-status";
 
 export interface AuditEntry {
   id: string;
@@ -421,6 +427,14 @@ declare global {
     _toggleQaTestMode: (checked: boolean) => void;
     _toggleStandardClauses: (standardId: string) => void;
     _toggleClause: (standardId: string, clauseId: string) => void;
+    _openAddInvestorForm: () => void;
+    _addInvestor: () => void;
+    _deleteInvestor: (investorId: string) => void;
+    _cycleInvestorStatus: (investorId: string) => void;
+    _openAddIRActivityForm: () => void;
+    _addIRActivity: () => void;
+    _deleteIRActivity: (activityId: string) => void;
+    _cycleIRActivityStatus: (activityId: string) => void;
   }
 }
 
@@ -540,3 +554,31 @@ export type MBView =
   | "decisions"
   | "executive"
   | "workstream";
+
+// ── US Investment & Investor Relations ──────────
+export type InvestorContactStatus =
+  | "prospect"
+  | "contacted"
+  | "in-dd"
+  | "term-sheet"
+  | "closed"
+  | "passed";
+
+export type IRActivityStatus = "done" | "in-progress" | "todo";
+
+export interface TargetInvestor {
+  id: string;
+  name: string;
+  type: string;
+  stage: string;
+  contact: InvestorContactStatus;
+  amount: number;
+  notes: string;
+}
+
+export interface IRActivity {
+  id: string;
+  date: string;
+  activity: string;
+  status: IRActivityStatus;
+}

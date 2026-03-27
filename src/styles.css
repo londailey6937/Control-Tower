@@ -2772,6 +2772,91 @@ body {
   margin-bottom: var(--sp-sm);
 }
 
+/* 510(k) Bridge Timeline */
+.bridge-timeline {
+  position: relative;
+  padding-left: 24px;
+}
+.bridge-timeline::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: var(--border);
+}
+.bridge-step {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-sm);
+  padding: var(--sp-sm) 0;
+}
+.bridge-marker {
+  position: absolute;
+  left: -20px;
+  top: 14px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  z-index: 1;
+}
+.bridge-warm .bridge-marker { border-color: var(--color-info); background: var(--color-info); }
+.bridge-active .bridge-marker { border-color: var(--warning); background: var(--warning); }
+.bridge-peak .bridge-marker { border-color: var(--success); background: var(--success); }
+.bridge-close .bridge-marker { border-color: var(--accent); background: var(--accent); }
+.bridge-content {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--sp-sm) var(--sp-md);
+  flex: 1;
+}
+.bridge-warm .bridge-content { border-left: 3px solid var(--color-info); }
+.bridge-active .bridge-content { border-left: 3px solid var(--warning); }
+.bridge-peak .bridge-content { border-left: 3px solid var(--success); }
+.bridge-close .bridge-content { border-left: 3px solid var(--accent); }
+.bridge-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  margin-bottom: var(--sp-xs);
+}
+.bridge-month {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+.bridge-id {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+.bridge-signal {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+.bridge-warm .bridge-signal { background: rgba(59, 130, 246, 0.15); color: var(--color-info); }
+.bridge-active .bridge-signal { background: rgba(234, 179, 8, 0.15); color: var(--warning); }
+.bridge-peak .bridge-signal { background: rgba(34, 197, 94, 0.15); color: var(--success); }
+.bridge-close .bridge-signal { background: rgba(168, 85, 247, 0.15); color: var(--accent); }
+.bridge-milestone {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 2px;
+}
+.bridge-action {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
 /* ══════════════════════════════════════════════════
    DOCUMENT CONTROL
    ══════════════════════════════════════════════════ */
