@@ -238,7 +238,8 @@ def build():
         "  Market range:     $150 - $250/hour\n"
         "  Recommended rate: $175/hour\n"
         "  Justification:    PMP certification + medical device domain + FDA\n"
-        "                    design control experience + bilingual capability")
+        "                    design control experience + technical publications\n"
+        "                    leadership")
 
     # ── 3. ROLE 2: FDA REGULATORY LEAD ─────────
     pdf.add_page()
@@ -360,9 +361,9 @@ def build():
         "Investor relations / fundraising consultants for medical device startups:\n\n"
         "  Market range:     $150 - $275/hour\n"
         "  Recommended rate: $175/hour\n"
-        "  Justification:    Medical device domain knowledge + bilingual\n"
-        "                    capability + US corporate structure expertise\n"
-        "                    + financial modeling + pitch development")
+        "  Justification:    Medical device domain knowledge + US corporate\n"
+        "                    structure expertise + financial modeling\n"
+        "                    + pitch development")
 
     # ── 5. COMBINED ANALYSIS ───────────────────
     pdf.add_page()
@@ -737,7 +738,6 @@ def build():
         "    that produces clean, first-pass 510(k) submissions\n"
         "  - BS in Technical Communication + AS in Hardware/Software Engineering\n"
         "  - US investor relations, pitch materials, and fundraising support\n"
-        "  - Bilingual capability (EN/CN) for cross-border coordination\n"
         "  - A US-citizen board member (critical for CFIUS compliance)\n"
         "  - A co-founder whose financial interests are fully aligned\n\n"
         "But more importantly, the company is buying three outcomes:\n\n"
@@ -780,8 +780,8 @@ def build():
     pdf.multi_cell(0, 5.5,
         "This analysis is based on market rates for medical device consultants "
         "in the United States as of March 2026. Rates reflect the combination of "
-        "PMP certification, FDA regulatory experience, and bilingual (EN/CN) "
-        "capability. Actual compensation should be negotiated based on the specific "
+        "PMP certification, FDA regulatory experience, and technical publications "
+        "leadership. Actual compensation should be negotiated based on the specific "
         "engagement terms, equity structure, and mutual agreement.",
         new_x="LMARGIN", new_y="NEXT")
 
