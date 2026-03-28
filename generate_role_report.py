@@ -583,21 +583,23 @@ def build():
     pdf.txt(
         "  Board of Directors (3 seats):\n"
         "    Seat 1: Lon Dailey (US citizen) -- Elected by common holders\n"
-        "    Seat 2: Dr. Dai (Inventor) -- Elected by common holders\n"
+        "    Seat 2: Dr. Dai (US person, green card holder) -- Elected by\n"
+        "            common holders\n"
         "    Seat 3: Independent Director -- Mutually agreed\n\n"
         "  Lawrence Liu: Board Observer (non-voting) + Protective Provisions\n"
         "    - Observer seat avoids CFIUS 'foreign control' trigger\n"
         "    - Protective provisions give veto on: dissolution, IP sale,\n"
         "      new debt >$100K, senior equity issuance\n\n"
-        "  US-person board majority (2 of 3 seats) satisfies CFIUS requirements\n"
-        "  while preserving Lawrence's economic rights and governance influence.\n\n"
-        "  NOTE: Dr. Dai's US immigration status is not yet confirmed. He has\n"
-        "  relatives in the US who may hold citizenship or green cards. If Dr. Dai\n"
-        "  is a US person, the board has 2 confirmed US seats (Lon + Dr. Dai)\n"
-        "  without relying on the independent director. If Dr. Dai is a foreign\n"
-        "  national, US majority requires the independent director to be a US\n"
-        "  person. Either scenario is workable -- but Dr. Dai's status must be\n"
-        "  confirmed before finalizing the CFIUS filing strategy.")
+        "  Dr. Dai holds a US green card, which qualifies him as a 'US national'\n"
+        "  under CFIUS regulations (31 CFR 800.254). This gives the board two\n"
+        "  confirmed US-person seats (Lon Dailey + Dr. Dai) -- satisfying the\n"
+        "  US-majority requirement regardless of who fills the independent\n"
+        "  director seat. The third seat can therefore be selected purely on\n"
+        "  expertise (industry, legal, financial) rather than citizenship.\n\n"
+        "  NOTE: The founding team includes a third shareholder who operates\n"
+        "  a US-based medical device company. If this party is also a US person,\n"
+        "  additional board configuration options become available. Board\n"
+        "  composition should be finalized once all parties' roles are confirmed.")
 
     # ── 8. CONSULTANT BACKGROUND & QUALIFICATIONS ──
     pdf.add_page()
@@ -802,6 +804,128 @@ def build():
         "  4. Board Consent Resolution\n"
         "     - Approving the equity grants, preferred stock sale, and MSA\n"
         "     - Documenting the fair market value determination")
+
+    # ── 10. ENGAGEMENT MODEL SCENARIOS ─────────
+    pdf.add_page()
+    pdf.section(10, "Engagement Model Scenarios")
+
+    pdf.txt(
+        "The founding team may already have its own structure, shareholders, and "
+        "operational plans in place. The PMP's role and compensation should adapt "
+        "to the actual structure of the company rather than assume a specific "
+        "outcome. This section presents three engagement models ranging from "
+        "full founder participation to a pure contractor relationship.")
+
+    pdf.sub("10.1 Scenario A: Co-Founder (Equity-Heavy)")
+    pdf.txt(
+        "Best fit if: The founding team has an open slot and values the PMP as "
+        "a long-term co-founder with board-level involvement.")
+    pdf.summary_table(
+        ["Component", "Terms", "Notes"],
+        [
+            ["Cash", "$10,000/month", "74% below market"],
+            ["Equity", "10-15% common", "4-yr vest, 1-yr cliff"],
+            ["Board Seat", "Yes (voting)", "US citizen, CFIUS value"],
+            ["Roles", "PMP + Reg + IR", "All three roles"],
+            ["Contract", "Founder agreement", "IP assignment, non-compete"],
+            ["Duration", "Through clearance+", "18-24 months minimum"],
+        ],
+        col_w=[40, 40, 80],
+    )
+    pdf.txt(
+        "Rationale: The low cash fee is subsidized by meaningful equity upside. "
+        "The PMP takes on real financial risk alongside the other founders and is "
+        "fully aligned with the company's success. The US-citizen board seat "
+        "provides CFIUS compliance value.\n\n"
+        "Total cost to company: $10K/month + equity\n"
+        "Market-rate equivalent: $38,950/month")
+
+    pdf.sub("10.2 Scenario B: Hybrid (Moderate Equity + Higher Cash)")
+    pdf.txt(
+        "Best fit if: The founding team wants the PMP's contribution but equity "
+        "is limited due to existing shareholders. The PMP takes a smaller equity "
+        "position compensated with a higher monthly fee.")
+    pdf.summary_table(
+        ["Component", "Terms", "Notes"],
+        [
+            ["Cash", "$15,000-20,000/mo", "50-60% below market"],
+            ["Equity", "2-5% common or options", "4-yr vest, 1-yr cliff"],
+            ["Board Seat", "Observer or advisory", "Non-voting, CFIUS neutral"],
+            ["Roles", "PMP + Reg (primary)", "IR as needed"],
+            ["Contract", "MSA + option grant", "Standard contractor terms"],
+            ["Duration", "12-18 months", "With renewal option"],
+        ],
+        col_w=[40, 40, 80],
+    )
+    pdf.txt(
+        "Rationale: Balances the PMP's need for compensation with the company's "
+        "need to conserve cash. The smaller equity stake still provides alignment "
+        "but recognizes that the PMP is joining an existing team rather than "
+        "co-founding from scratch. Advisory or observer role keeps the PMP "
+        "informed without requiring a formal board seat.\n\n"
+        "Total cost to company: $15-20K/month + small equity\n"
+        "Market-rate equivalent: $38,950/month")
+
+    pdf.sub("10.3 Scenario C: Contractor (Cash-Only)")
+    pdf.txt(
+        "Best fit if: The founding team has a complete cap table and established "
+        "governance. The PMP is brought in as a professional services provider "
+        "with no equity position.")
+    pdf.summary_table(
+        ["Component", "Terms", "Notes"],
+        [
+            ["Cash", "$25,000-30,000/mo", "Closer to market rate"],
+            ["Equity", "None", "Pure contractor"],
+            ["Board Seat", "None", "No governance role"],
+            ["Roles", "PMP (primary)", "Reg/IR as add-on SOWs"],
+            ["Contract", "MSA + SOW per role", "Standard contractor terms"],
+            ["Duration", "6-12 month SOW", "Renewable"],
+        ],
+        col_w=[40, 40, 80],
+    )
+    pdf.txt(
+        "Rationale: If the company already has its regulatory and investor "
+        "relations functions covered (e.g., through an existing US-based medical "
+        "device shareholder), the PMP role alone is what the company needs. At "
+        "a higher monthly fee without equity, the PMP is compensated fairly for "
+        "the value delivered without requiring cap table modifications.\n\n"
+        "Total cost to company: $25-30K/month, no equity\n"
+        "Market-rate equivalent: $15,225/month (PMP role alone)")
+
+    pdf.sub("10.4 Scenario Comparison")
+    pdf.summary_table(
+        ["Factor", "A: Co-Founder", "B: Hybrid", "C: Contractor"],
+        [
+            ["Monthly cash", "$10,000", "$15-20,000", "$25-30,000"],
+            ["Annual cash", "$120,000", "$180-240,000", "$300-360,000"],
+            ["Equity", "10-15%", "2-5%", "None"],
+            ["Board role", "Voting seat", "Observer/Advisory", "None"],
+            ["PMP alignment", "Full (founder)", "Moderate (vested)", "Transactional"],
+            ["Company risk", "Cap table dilution", "Moderate cost", "Higher monthly burn"],
+            ["CFIUS value", "High (board seat)", "Moderate", "None"],
+            ["Flexibility", "Low (vesting)", "Medium", "High (SOW-based)"],
+        ],
+        col_w=[36, 36, 36, 52],
+    )
+
+    pdf.sub("10.5 Recommendation")
+    pdf.txt(
+        "The PMP's preference is Scenario A (Co-Founder), which maximizes "
+        "alignment with the company's long-term success and provides the greatest "
+        "value to the company on a cash basis. However, the PMP recognizes that:\n\n"
+        "  - The founding team may already have an established cap table\n"
+        "  - Additional shareholders may fill roles the PMP proposed to cover\n"
+        "  - Equity decisions are the prerogative of the existing founders\n\n"
+        "The PMP is prepared to engage under any of the three models. The "
+        "core value proposition -- risk reduction, time compression, and team "
+        "alignment through disciplined project management and the Control Tower "
+        "dashboard -- is delivered regardless of the compensation structure.\n\n"
+        "The Control Tower is operational today at control-tower-bmx.pages.dev "
+        "and is purpose-built for medical device 510(k) programs. It provides "
+        "16-tab dual-track execution management, gate reviews, regulatory "
+        "tracking, risk dashboards, budget monitoring, and real-time team "
+        "alignment -- capabilities that exist independent of any equity "
+        "arrangement.")
 
     pdf.ln(8)
     pdf.set_draw_color(30, 60, 120)
