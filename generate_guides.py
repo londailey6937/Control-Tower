@@ -249,7 +249,7 @@ def build_english():
     # 4. Navigation Tabs
     pdf.add_page()
     pdf.sec(4, "Navigation Tabs")
-    pdf.txt("Fourteen tabs provide access to the main dashboard panels. The active tab has a blue underline.")
+    pdf.txt("Sixteen tabs provide access to the main dashboard panels. The active tab has a blue underline.")
     pdf.ln(2)
     pdf.kv("Dual-Track", "Side-by-side view of Technical + Regulatory milestones")
     pdf.kv("Gate System", "Decision checkpoints with PMP authority controls")
@@ -262,9 +262,11 @@ def build_english():
     pdf.kv("Budget", "Budget vs. Actual spending per category")
     pdf.kv("Cash / Runway", "Financial position, burn rate, funding milestones, and API integrations")
     pdf.kv("US Investment", "North America fundraising pipeline, investor tracking, and IR activities")
+    pdf.kv("Cap Table", "Equity ownership, share classes, dilution modeling, and investor cap management")
     pdf.kv("Resources", "Team allocation and capacity utilization")
     pdf.kv("Suppliers", "Hardware component vendor tracking")
     pdf.kv("Message Board", "Purpose-driven messaging with structured threads, decision logging, workstream filtering, and accountability")
+    pdf.kv("FDA Comms", "FDA Communications Center -- Q-Sub tracking, DICE correspondence, RTA checklist, and Pre-Submission meeting management (PMP-only)")
 
     # 5. Dual-Track
     pdf.add_page()
@@ -1644,7 +1646,7 @@ def build_chinese():
     pdf.add_page()
     pdf.sec(4, "\u5bfc\u822a\u9009\u9879\u5361")
     pdf.txt(
-        "\u5341\u56db\u4e2a\u9009\u9879\u5361\u63d0\u4f9b\u4e3b\u8981\u4eea\u8868\u76d8\u9762\u677f\u7684\u8bbf\u95ee\u3002"
+        "\u5341\u516d\u4e2a\u9009\u9879\u5361\u63d0\u4f9b\u4e3b\u8981\u4eea\u8868\u76d8\u9762\u677f\u7684\u8bbf\u95ee\u3002"
         "\u6d3b\u52a8\u9009\u9879\u5361\u4ee5\u84dd\u8272\u4e0b\u5212\u7ebf\u9ad8\u4eae\u663e\u793a\u3002")
     pdf.ln(2)
     pdf.kv("\u53cc\u8f68\u89c6\u56fe", "\u6280\u672f+\u6cd5\u89c4\u91cc\u7a0b\u7891\u5e76\u6392\u663e\u793a")
@@ -1658,9 +1660,11 @@ def build_chinese():
     pdf.kv("\u9884\u7b97", "\u6309\u7c7b\u522b\u7684\u9884\u7b97\u4e0e\u5b9e\u9645\u652f\u51fa")
     pdf.kv("\u8d44\u91d1/\u8dd1\u9053", "\u8d22\u52a1\u72b6\u51b5\u3001\u71c3\u70e7\u7387\u3001\u878d\u8d44\u91cc\u7a0b\u7891\u548cAPI\u96c6\u6210")
     pdf.kv("\u7f8e\u56fd\u6295\u8d44", "\u5317\u7f8e\u878d\u8d44\u7ba1\u9053\u3001\u6295\u8d44\u8005\u8ffd\u8e2a\u548cIR\u6d3b\u52a8")
+    pdf.kv("\u80a1\u6743\u8868", "\u80a1\u6743\u7ed3\u6784\u3001\u80a1\u4efd\u7c7b\u522b\u3001\u7a00\u91ca\u5efa\u6a21\u548c\u6295\u8d44\u8005\u80a1\u6743\u7ba1\u7406")
     pdf.kv("\u8d44\u6e90", "\u56e2\u961f\u5206\u914d\u548c\u4ea7\u80fd\u5229\u7528")
     pdf.kv("\u4f9b\u5e94\u5546", "\u786c\u4ef6\u7ec4\u4ef6\u4f9b\u5e94\u5546\u8ffd\u8e2a")
     pdf.kv("\u7559\u8a00\u677f", "\u76ee\u6807\u9a71\u52a8\u7684\u7ed3\u6784\u5316\u7ebf\u7a0b\u6d88\u606f\u3001\u51b3\u7b56\u8bb0\u5f55\u3001\u5de5\u4f5c\u6d41\u7b5b\u9009\u548c\u8d23\u4efb\u5236")
+    pdf.kv("FDA\u901a\u4fe1", "FDA\u901a\u4fe1\u4e2d\u5fc3" + EM + EM + "Q-Sub\u8ffd\u8e2a\u3001DICE\u901a\u4fe1\u3001RTA\u68c0\u67e5\u8868\u548c\u9884\u63d0\u4ea4\u4f1a\u8bae\u7ba1\u7406\uff08\u4ec5PMP\uff09")
 
     # 5
     pdf.add_page()
