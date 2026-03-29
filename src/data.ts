@@ -3228,13 +3228,27 @@ export const QA_SECTIONS: QASection[] = [
 export let IS_ADMIN: boolean = false;
 export let ACTIVE_ROLE: UserRole = "business";
 
-const CREDENTIALS: Record<string, { role: UserRole; admin: boolean }> = {
-  arch2026: { role: "pmp", admin: true },
-  REDACTED: { role: "business", admin: false },
+const CREDENTIAL_HASHES: Record<string, { role: UserRole; admin: boolean }> = {
+  "135c73edb7cca493ebfa47115cc3015addde7165d14974954b1e125e55a13785": {
+    role: "pmp",
+    admin: true,
+  },
+  "4b355cd6cc19844a3c8fd44cf16c6c168a2eb81eba0fb74bec0f5f21687c2acc": {
+    role: "business",
+    admin: false,
+  },
 };
 
-export function authenticatePassword(password: string): boolean {
-  const cred = CREDENTIALS[password];
+async function sha256(message: string): Promise<string> {
+  const data = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+export async function authenticatePassword(password: string): Promise<boolean> {
+  const hash = await sha256(password);
+  const cred = CREDENTIAL_HASHES[hash];
   if (!cred) return false;
   IS_ADMIN = cred.admin;
   ACTIVE_ROLE = cred.role;

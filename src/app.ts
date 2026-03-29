@@ -356,14 +356,16 @@ function initLoginGate(): void {
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    if (authenticatePassword(input.value)) {
-      gate.style.display = "none";
-      initAfterLogin();
-    } else {
-      if (error) error.style.display = "block";
-      input.value = "";
-      input.focus();
-    }
+    authenticatePassword(input.value).then((ok) => {
+      if (ok) {
+        gate.style.display = "none";
+        initAfterLogin();
+      } else {
+        if (error) error.style.display = "block";
+        input.value = "";
+        input.focus();
+      }
+    });
   });
 }
 
@@ -402,16 +404,21 @@ function bootDashboard(): void {
   if (subEl) subEl.textContent = localizedText(PROJECT.subtitle);
 
   // Bootstrap Supabase data, then render
-  Promise.all([initQaMessages(), initAuditLog()]).then(() => {
-    renderAll();
-    setupRealtimeMessages();
-  });
+  Promise.all([initQaMessages(), initAuditLog()])
+    .then(() => {
+      renderAll();
+      setupRealtimeMessages();
+    })
+    .catch((err) => {
+      console.error("Failed to initialize dashboard data:", err);
+      renderAll();
+    });
 
   // When connection restored, flush queued audit entries
   window.addEventListener("online", () => {
-    flushAuditQueue().then(() => {
-      initAuditLog().then(renderAuditTrail);
-    });
+    flushAuditQueue()
+      .then(() => initAuditLog().then(renderAuditTrail))
+      .catch((err) => console.error("Failed to flush audit queue:", err));
   });
 }
 
