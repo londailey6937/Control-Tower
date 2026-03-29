@@ -10,6 +10,7 @@ import {
   type BudgetEntry,
   type SupplierEntry,
 } from "./seed.ts";
+import { TEMPLATE_LIST, type DeviceTemplate } from "./templates.ts";
 
 const STORAGE_KEY = "ctower_project_data";
 const WIZARD_CSS = `
@@ -68,6 +69,14 @@ const WIZARD_CSS = `
 .wiz-doc-row label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
 .wiz-doc-row input[type=checkbox] { width: auto; }
 .wiz-doc-row .doc-code { color: #94a3b8; font-size: 0.8rem; min-width: 70px; }
+.wiz-tmpl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0; }
+.wiz-tmpl-card { background: #0f172a; border: 2px solid #334155; border-radius: 12px; padding: 18px; cursor: pointer; transition: all 0.2s; text-align: left; color: #e2e8f0; }
+.wiz-tmpl-card:hover { border-color: #38bdf8; background: #1e293b; transform: translateY(-2px); }
+.wiz-tmpl-card .tmpl-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
+.wiz-tmpl-card .tmpl-name { font-size: 1rem; font-weight: 600; color: #f1f5f9; margin-bottom: 4px; }
+.wiz-tmpl-card .tmpl-desc { font-size: 0.78rem; color: #94a3b8; line-height: 1.4; }
+.wiz-tmpl-scratch { background: transparent; border: 2px dashed #475569; border-radius: 12px; padding: 18px; cursor: pointer; transition: all 0.2s; text-align: center; color: #94a3b8; grid-column: 1 / -1; }
+.wiz-tmpl-scratch:hover { border-color: #38bdf8; color: #e2e8f0; }
 `;
 
 // ── Bilingual helpers ────────────────────────────
@@ -88,6 +97,17 @@ const TXT = {
   skipStep: { en: "Skip →", cn: "跳过 →" },
   addAnother: { en: "+ Add Another", cn: "+ 添加" },
   remove: { en: "✕", cn: "✕" },
+
+  tmplTitle: { en: "Choose a Device Category", cn: "选择设备类别" },
+  tmplHint: {
+    en: "Select a template to pre-fill regulatory, risk, and standards data — or start from scratch.",
+    cn: "选择模板预填法规、风险和标准数据，或从头开始。",
+  },
+  tmplScratch: { en: "✎ Start from Scratch", cn: "✎ 从头开始" },
+  tmplScratchDesc: {
+    en: "Enter all project details manually without a template.",
+    cn: "不使用模板，手动输入所有项目信息。",
+  },
 
   s1Title: { en: "Project Basics", cn: "项目基本信息" },
   s1Hint: {
@@ -544,9 +564,24 @@ export function showWizard(onComplete: (answers: WizardAnswers) => void): void {
     document.head.appendChild(s);
   }
 
-  let phase: "lang" | "steps" = "lang";
+  let phase: "lang" | "template" | "steps" = "lang";
   let step = 0;
   const data: WizData = { lang: "en" };
+
+  function applyTemplate(tmpl: DeviceTemplate, lang: "en" | "cn"): void {
+    data.templateId = tmpl.id;
+    data.submissionType = tmpl.submissionType;
+    data.deviceClass = tmpl.deviceClass;
+    data.productCode = tmpl.productCodes;
+    data.regulationSection = tmpl.regulationSection;
+    data.predicateDevices = tmpl.predicateExamples;
+    data.techAreas = lang === "cn" ? tmpl.techAreas.cn : tmpl.techAreas.en;
+    data.projectDurationMonths = tmpl.estimatedDuration;
+    data.budgets = tmpl.budgetCategories.map((c) => ({
+      label: lang === "cn" ? c.cn : c.en,
+      planned: 0,
+    }));
+  }
 
   function render(): void {
     document.getElementById("wizard-overlay")?.remove();
@@ -570,14 +605,60 @@ export function showWizard(onComplete: (answers: WizardAnswers) => void): void {
       ov.querySelectorAll<HTMLButtonElement>("[data-lang]").forEach((b) => {
         b.addEventListener("click", () => {
           data.lang = b.dataset.lang!;
-          phase = "steps";
-          step = 0;
+          phase = "template";
           render();
         });
       });
       ov.querySelector("#wiz-demo")?.addEventListener("click", () => {
         ov.remove();
         onComplete(null as unknown as WizardAnswers);
+      });
+      return;
+    }
+
+    if (phase === "template") {
+      const lang = data.lang as "en" | "cn";
+      let cards = "";
+      TEMPLATE_LIST.forEach((t) => {
+        cards += `<button class="wiz-tmpl-card" data-tmpl="${t.id}">
+          <span class="tmpl-icon">${t.icon}</span>
+          <div class="tmpl-name">${lang === "cn" ? t.name.cn : t.name.en}</div>
+          <div class="tmpl-desc">${lang === "cn" ? t.description.cn : t.description.en}</div>
+        </button>`;
+      });
+      cards += `<button class="wiz-tmpl-scratch" id="wiz-scratch">
+        <div class="tmpl-name">${tx(TXT.tmplScratch, lang)}</div>
+        <div class="tmpl-desc">${tx(TXT.tmplScratchDesc, lang)}</div>
+      </button>`;
+
+      ov.innerHTML = `<div class="wizard-card">
+        <h1>${tx(TXT.wizTitle, lang)}</h1>
+        <div class="wiz-step" style="display:block">
+          <h2>${tx(TXT.tmplTitle, lang)}</h2>
+          <p class="hint">${tx(TXT.tmplHint, lang)}</p>
+          <div class="wiz-tmpl-grid">${cards}</div>
+          <div class="wiz-actions"><div><button class="wiz-btn wiz-btn-back" id="wiz-tmpl-back">← Language</button></div><div></div></div>
+        </div></div>`;
+      document.body.appendChild(ov);
+
+      ov.querySelectorAll<HTMLButtonElement>("[data-tmpl]").forEach((b) => {
+        b.addEventListener("click", () => {
+          const tmpl = TEMPLATE_LIST.find((t) => t.id === b.dataset.tmpl!);
+          if (tmpl) applyTemplate(tmpl, lang);
+          phase = "steps";
+          step = 0;
+          render();
+        });
+      });
+      ov.querySelector("#wiz-scratch")?.addEventListener("click", () => {
+        data.templateId = "";
+        phase = "steps";
+        step = 0;
+        render();
+      });
+      ov.querySelector("#wiz-tmpl-back")?.addEventListener("click", () => {
+        phase = "lang";
+        render();
       });
       return;
     }
@@ -601,7 +682,7 @@ export function showWizard(onComplete: (answers: WizardAnswers) => void): void {
       <div class="wiz-actions">
         <div>${
           step === 0
-            ? `<button class="wiz-btn wiz-btn-back" id="wiz-tolang">← Language</button>`
+            ? `<button class="wiz-btn wiz-btn-back" id="wiz-tolang">← Template</button>`
             : `<button class="wiz-btn wiz-btn-back" id="wiz-back">${tx(TXT.back, lang)}</button>`
         }</div>
         <div style="display:flex;gap:8px">${SKIPPABLE.has(step) ? `<button class="wiz-btn wiz-btn-skip" id="wiz-skip">${tx(TXT.skipStep, lang)}</button>` : ""}
@@ -615,7 +696,7 @@ export function showWizard(onComplete: (answers: WizardAnswers) => void): void {
 
     ov.querySelector("#wiz-tolang")?.addEventListener("click", () => {
       COLLECTORS[step](ov, data);
-      phase = "lang";
+      phase = "template";
       render();
     });
     ov.querySelector("#wiz-back")?.addEventListener("click", () => {

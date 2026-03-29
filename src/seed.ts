@@ -23,6 +23,7 @@ import {
 } from "./data.ts";
 
 import { DEFAULT_DHF_DOCS } from "./wizard.ts";
+import { DEVICE_TEMPLATES } from "./templates.ts";
 
 // ── Public types ─────────────────────────────────
 export interface TeamEntry {
@@ -43,6 +44,7 @@ export interface SupplierEntry {
 
 export interface WizardAnswers {
   lang: string;
+  templateId?: string;
   projectName: string;
   projectNameCn?: string;
   subtitle?: string;
@@ -244,40 +246,84 @@ export function seed(a: WizardAnswers): void {
       standard: "",
     },
   );
+  // Merge template-specific risks
+  const tmpl = a.templateId ? DEVICE_TEMPLATES[a.templateId] : null;
+  if (tmpl) {
+    tmpl.risks.forEach((r) => {
+      RISKS.push({
+        id: `RISK-${String(RISKS.length + 1).padStart(3, "0")}`,
+        title: ls(r.title.en, r.title.cn),
+        severity: r.severity,
+        probability: r.probability,
+        riskLevel: r.riskLevel,
+        controls: ls(r.controls.en, r.controls.cn),
+        residual: ls(
+          r.riskLevel === "red"
+            ? "High"
+            : r.riskLevel === "yellow"
+              ? "Moderate"
+              : "Low",
+          r.riskLevel === "red"
+            ? "高"
+            : r.riskLevel === "yellow"
+              ? "中等"
+              : "低",
+        ),
+        mitigationStatus: "not-started",
+        module: r.module,
+        standard: r.standard,
+      });
+    });
+  }
 
   // ── STANDARDS ─────────────────────────────────
   STANDARDS.length = 0;
-  const stdList = [
-    {
-      code: "IEC 60601-1",
-      title: ls("Medical Electrical Equipment — General", "医用电气设备——通用"),
-    },
-    {
-      code: "IEC 62304",
-      title: ls(
-        "Medical Device Software — Lifecycle",
-        "医疗器械软件——生命周期",
-      ),
-    },
-    {
-      code: "ISO 14971",
-      title: ls("Risk Management for Medical Devices", "医疗器械风险管理"),
-    },
-    {
-      code: "21 CFR 820",
-      title: ls("Quality System Regulation", "质量体系法规"),
-    },
-    {
-      code: "ISO 13485",
-      title: ls("Quality Management Systems", "质量管理体系"),
-    },
-  ];
+  // Use template standards if available, otherwise use generic defaults
+  const stdList = tmpl
+    ? tmpl.standards.map((s) => ({
+        code: s.code,
+        title: ls(s.title.en, s.title.cn),
+        applies: s.applies,
+      }))
+    : [
+        {
+          code: "IEC 60601-1",
+          title: ls(
+            "Medical Electrical Equipment — General",
+            "医用电气设备——通用",
+          ),
+          applies: "All",
+        },
+        {
+          code: "IEC 62304",
+          title: ls(
+            "Medical Device Software — Lifecycle",
+            "医疗器械软件——生命周期",
+          ),
+          applies: "All",
+        },
+        {
+          code: "ISO 14971",
+          title: ls("Risk Management for Medical Devices", "医疗器械风险管理"),
+          applies: "All",
+        },
+        {
+          code: "21 CFR 820",
+          title: ls("Quality System Regulation", "质量体系法规"),
+          applies: "All",
+        },
+        {
+          code: "ISO 13485",
+          title: ls("Quality Management Systems", "质量管理体系"),
+          applies: "All",
+        },
+      ];
   stdList.forEach((s, i) => {
     STANDARDS.push({
       id: `STD-${String(i + 1).padStart(3, "0")}`,
       code: s.code,
       title: s.title,
-      applies: "All",
+      applies: s.applies || "All",
       status: "not-started",
       progress: 0,
       clauses: [],

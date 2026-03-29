@@ -114,6 +114,43 @@ def build_english():
         "decisions. Business and Technology teams provide inputs, but the PMP makes the final call "
         "at every decision checkpoint.")
 
+    pdf.sub("1.1 Project Setup Wizard")
+    pdf.txt(
+        "When launched for the first time (or when no saved project exists), the Control Tower "
+        "presents an interactive Project Setup Wizard. The wizard collects all the information "
+        "needed to configure the dashboard for a specific 510(k) project. It runs in three phases:")
+    pdf.bul("Language Selection -- Choose English or Chinese for the wizard and dashboard interface.")
+    pdf.bul("Device Category Template -- Select a pre-built template for your device type, or start from scratch.")
+    pdf.bul("Step-by-Step Configuration -- Enter project details, team members, budget, suppliers, and documents.")
+    pdf.ln(2)
+    pdf.txt(
+        "A 'Load Demo Data' shortcut is also available on the language selection screen. This "
+        "bypasses the wizard entirely and populates the dashboard with sample ICU Respiratory "
+        "Digital Twin data for demonstration purposes.")
+
+    pdf.sub("1.2 510(k) Category Templates")
+    pdf.txt(
+        "After selecting a language, the wizard presents a grid of seven pre-built device "
+        "category templates. Each template pre-fills regulatory pathway data, category-specific "
+        "risks (per ISO 14971), applicable standards, and budget categories so you don't have "
+        "to enter them manually.\n\n"
+        "The seven templates are:")
+    pdf.bul("Respiratory Devices -- Ventilators, CPAP/BiPAP, nebulizers, airway management (Reg. Section 868)")
+    pdf.bul("Cardiovascular Devices -- ECG monitors, blood pressure devices, cardiac catheters (Reg. Section 870)")
+    pdf.bul("Orthopedic Devices -- Joint implants, fracture fixation, spinal devices (Reg. Section 888)")
+    pdf.bul("In Vitro Diagnostics (IVD) -- Immunoassay analyzers, molecular diagnostics, POC tests (Reg. Section 866)")
+    pdf.bul("Imaging & Monitoring -- Ultrasound, X-ray, patient monitors, physiological sensors (Reg. Section 892)")
+    pdf.bul("Rehabilitation Devices -- Powered exoskeletons, FES systems, robotic rehab (Reg. Section 890)")
+    pdf.bul("Software as Medical Device (SaMD) -- Clinical decision support, AI diagnostics, telehealth (Reg. Section 880)")
+    pdf.ln(2)
+    pdf.txt(
+        "Selecting a template auto-fills: submission type, device class, product codes, "
+        "regulation section, predicate device examples, estimated project duration, "
+        "technical focus areas, and budget line items. All pre-filled values can be "
+        "edited in the subsequent wizard steps.\n\n"
+        "Alternatively, choose 'Start from Scratch' to enter all project details manually "
+        "without any pre-filled data.")
+
     # 2. Top Bar
     pdf.sec(2, "Top Bar")
     pdf.txt("The sticky header bar at the top of the screen contains:")
@@ -1474,6 +1511,38 @@ def build_chinese():
     pdf.txt(
         "PMP\uff08\u9879\u76ee\u7ba1\u7406\u4e13\u4e1a\u4eba\u5458\uff09\u5bf9\u6240\u6709\u95e8\u63a7\u51b3\u7b56\u62e5\u6709\u6700\u9ad8\u6743\u9650\u3002"
         "\u5546\u4e1a\u548c\u6280\u672f\u56e2\u961f\u63d0\u4f9b\u8f93\u5165\uff0c\u4f46PMP\u505a\u51fa\u6700\u7ec8\u51b3\u7b56\u3002")
+
+    pdf.sub("1.1 \u9879\u76ee\u8bbe\u7f6e\u5411\u5bfc")
+    pdf.txt(
+        "\u9996\u6b21\u542f\u52a8\uff08\u6216\u6ca1\u6709\u5df2\u4fdd\u5b58\u9879\u76ee\uff09\u65f6\uff0c\u63a7\u5236\u5854\u4f1a\u663e\u793a\u4ea4\u4e92\u5f0f\u9879\u76ee\u8bbe\u7f6e\u5411\u5bfc\u3002"
+        "\u5411\u5bfc\u6536\u96c6\u914d\u7f6e\u4eea\u8868\u76d8\u6240\u9700\u7684\u6240\u6709\u4fe1\u606f\u3002\u5b83\u5206\u4e09\u4e2a\u9636\u6bb5\u8fd0\u884c\uff1a")
+    pdf.bul("\u8bed\u8a00\u9009\u62e9" + EM + EM + "\u4e3a\u5411\u5bfc\u548c\u4eea\u8868\u76d8\u754c\u9762\u9009\u62e9\u82f1\u6587\u6216\u4e2d\u6587\u3002")
+    pdf.bul("\u8bbe\u5907\u7c7b\u522b\u6a21\u677f" + EM + EM + "\u9009\u62e9\u9884\u5efa\u6a21\u677f\u6216\u4ece\u5934\u5f00\u59cb\u3002")
+    pdf.bul("\u5206\u6b65\u914d\u7f6e" + EM + EM + "\u8f93\u5165\u9879\u76ee\u8be6\u60c5\u3001\u56e2\u961f\u6210\u5458\u3001\u9884\u7b97\u3001\u4f9b\u5e94\u5546\u548c\u6587\u6863\u3002")
+    pdf.ln(2)
+    pdf.txt(
+        "\u8bed\u8a00\u9009\u62e9\u5c4f\u5e55\u8fd8\u63d0\u4f9b" + LQ + "\u52a0\u8f7d\u6f14\u793a\u6570\u636e" + RQ + "\u5feb\u6377\u65b9\u5f0f\u3002"
+        "\u8fd9\u4f1a\u8df3\u8fc7\u5411\u5bfc\uff0c\u76f4\u63a5\u7528ICU\u547c\u5438\u76d1\u62a4\u6570\u5b57\u5b6a\u751f\u793a\u4f8b\u6570\u636e\u586b\u5145\u4eea\u8868\u76d8\u3002")
+
+    pdf.sub("1.2 510(k)\u7c7b\u522b\u6a21\u677f")
+    pdf.txt(
+        "\u9009\u62e9\u8bed\u8a00\u540e\uff0c\u5411\u5bfc\u4f1a\u663e\u793a\u4e03\u4e2a\u9884\u5efa\u8bbe\u5907\u7c7b\u522b\u6a21\u677f\u7684\u7f51\u683c\u3002"
+        "\u6bcf\u4e2a\u6a21\u677f\u9884\u586b\u6cd5\u89c4\u8def\u5f84\u6570\u636e\u3001\u7c7b\u522b\u7279\u5b9a\u98ce\u9669\uff08\u6309ISO 14971\uff09\u3001"
+        "\u9002\u7528\u6807\u51c6\u548c\u9884\u7b97\u7c7b\u522b\uff0c\u65e0\u9700\u624b\u52a8\u8f93\u5165\u3002\n\n"
+        "\u4e03\u4e2a\u6a21\u677f\u5982\u4e0b\uff1a")
+    pdf.bul("\u547c\u5438\u8bbe\u5907" + EM + EM + "\u547c\u5438\u673a\u3001CPAP/BiPAP\u3001\u96fe\u5316\u5668\u3001\u6c14\u9053\u7ba1\u7406\uff08\u6cd5\u89c4\u7b2c868\u6761\uff09")
+    pdf.bul("\u5fc3\u8840\u7ba1\u8bbe\u5907" + EM + EM + "\u5fc3\u7535\u76d1\u62a4\u4eea\u3001\u8840\u538b\u8bbe\u5907\u3001\u5fc3\u5bfc\u7ba1\uff08\u6cd5\u89c4\u7b2c870\u6761\uff09")
+    pdf.bul("\u9aa8\u79d1\u8bbe\u5907" + EM + EM + "\u5173\u8282\u690d\u5165\u4f53\u3001\u9aa8\u6298\u56fa\u5b9a\u3001\u810a\u67f1\u8bbe\u5907\uff08\u6cd5\u89c4\u7b2c888\u6761\uff09")
+    pdf.bul("\u4f53\u5916\u8bca\u65ad (IVD)" + EM + EM + "\u514d\u75ab\u5206\u6790\u4eea\u3001\u5206\u5b50\u8bca\u65ad\u3001POC\u68c0\u6d4b\uff08\u6cd5\u89c4\u7b2c866\u6761\uff09")
+    pdf.bul("\u5f71\u50cf\u4e0e\u76d1\u6d4b" + EM + EM + "\u8d85\u58f0\u3001X\u5c04\u7ebf\u3001\u60a3\u8005\u76d1\u62a4\u3001\u751f\u7406\u4f20\u611f\u5668\uff08\u6cd5\u89c4\u7b2c892\u6761\uff09")
+    pdf.bul("\u5eb7\u590d\u8bbe\u5907" + EM + EM + "\u52a8\u529b\u5916\u9aa8\u9abc\u3001FES\u7cfb\u7edf\u3001\u673a\u5668\u4eba\u5eb7\u590d\uff08\u6cd5\u89c4\u7b2c890\u6761\uff09")
+    pdf.bul("\u8f6f\u4ef6\u4f5c\u4e3a\u533b\u7597\u5668\u68b0 (SaMD)" + EM + EM + "\u4e34\u5e8a\u51b3\u7b56\u652f\u6301\u3001AI\u8bca\u65ad\u3001\u8fdc\u7a0b\u533b\u7597\uff08\u6cd5\u89c4\u7b2c880\u6761\uff09")
+    pdf.ln(2)
+    pdf.txt(
+        "\u9009\u62e9\u6a21\u677f\u540e\u81ea\u52a8\u586b\u5145\uff1a\u63d0\u4ea4\u7c7b\u578b\u3001\u8bbe\u5907\u5206\u7c7b\u3001\u4ea7\u54c1\u4ee3\u7801\u3001"
+        "\u6cd5\u89c4\u6761\u6b3e\u3001\u5bf9\u6bd4\u5668\u68b0\u793a\u4f8b\u3001\u9884\u8ba1\u9879\u76ee\u5468\u671f\u3001"
+        "\u6280\u672f\u91cd\u70b9\u9886\u57df\u548c\u9884\u7b97\u9879\u76ee\u3002\u6240\u6709\u9884\u586b\u503c\u5747\u53ef\u5728\u540e\u7eed\u5411\u5bfc\u6b65\u9aa4\u4e2d\u7f16\u8f91\u3002\n\n"
+        "\u6216\u8005\u9009\u62e9" + LQ + "\u4ece\u5934\u5f00\u59cb" + RQ + "\u624b\u52a8\u8f93\u5165\u6240\u6709\u9879\u76ee\u8be6\u60c5\u3002")
 
     # 2
     pdf.sec(2, "\u9876\u90e8\u680f")
