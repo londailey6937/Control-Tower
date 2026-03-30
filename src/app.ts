@@ -2141,20 +2141,38 @@ window._setRole = function (role: string): void {
   renderAll();
 };
 
-// Accounting: read-only access to Cash/Runway, Timeline, Gate statuses only
-// Tech/Business: can view all, but changes go through CR workflow
+// Role-based tab isolation:
+//   PMP: all tabs (full authority)
+//   Tech: technical/regulatory tabs only — no financial/investor visibility
+//   Business: financial/investor tabs only — no technical IP visibility
+//   Accounting: money tabs only (read-only)
 // Tier gating: ALLOWED_TABS is loaded from the server (get_allowed_tabs RPC).
 // The server function reads from subscriptions — cannot be spoofed client-side.
+
+const ROLE_TABS: Record<string, Set<string>> = {
+  pmp: new Set([
+    "dual-track", "gates", "regulatory", "risks", "audit", "doc-library",
+    "actions", "timeline", "budget", "cash-runway", "us-investment",
+    "cap-table", "resources", "suppliers", "qa-sheet", "fda-comms",
+  ]),
+  tech: new Set([
+    "dual-track", "gates", "regulatory", "risks", "audit", "doc-library",
+    "actions", "resources", "suppliers", "qa-sheet",
+  ]),
+  business: new Set([
+    "dual-track", "gates", "timeline", "budget", "cash-runway",
+    "us-investment", "cap-table", "actions", "qa-sheet",
+  ]),
+  accounting: new Set([
+    "cash-runway", "budget", "timeline", "gates",
+    "us-investment", "cap-table", "qa-sheet",
+  ]),
+};
 
 function applyRoleRestrictions(): void {
   const role = ACTIVE_ROLE;
   const tabs = document.querySelectorAll<HTMLButtonElement>(".tab-btn");
-  const accountingTabs = new Set([
-    "cash-runway",
-    "timeline",
-    "gates",
-    "budget",
-  ]);
+  const roleTabs = ROLE_TABS[role] || ROLE_TABS.pmp;
   // Server-authoritative allowed tabs (loaded from Supabase RPC)
   const tierAllowed = ALLOWED_TABS;
 
@@ -2166,23 +2184,21 @@ function applyRoleRestrictions(): void {
       btn.style.display = hidden ? "none" : "";
       btn.disabled = hidden;
     } else {
-      // Tier restriction takes priority
       const tierOk = tierAllowed.has(tab);
-      // Then role restriction
-      const roleOk = role === "accounting" ? accountingTabs.has(tab) : true;
+      const roleOk = roleTabs.has(tab);
       const allowed = tierOk && roleOk;
       btn.classList.toggle("tab-restricted", !allowed);
       btn.disabled = !allowed;
     }
   });
 
-  // If on a restricted tab, switch to dual-track (always available)
-  const currentAllowed =
-    tierAllowed.has(activeTab) &&
-    (role !== "accounting" || accountingTabs.has(activeTab));
+  // If on a restricted tab, fall back to the first allowed tab
+  const currentAllowed = tierAllowed.has(activeTab) && roleTabs.has(activeTab);
   if (!currentAllowed) {
+    // dual-track is common to all roles except accounting; accounting falls back to cash-runway
+    const fallbackTab = roleTabs.has("dual-track") ? "dual-track" : "cash-runway";
     const fallback = document.querySelector<HTMLButtonElement>(
-      '.tab-btn[data-tab="dual-track"]',
+      `.tab-btn[data-tab="${fallbackTab}"]`,
     );
     if (fallback) fallback.click();
   }
@@ -2199,12 +2215,18 @@ function applyRoleRestrictions(): void {
     roleBadge.textContent = labels[role] || role;
   }
 
-  // Show accounting notice
+  // Show role/tier restriction notice
   const notice = document.getElementById("accountingNotice");
   if (notice) {
     if (role === "accounting") {
       notice.style.display = "block";
       notice.textContent = t("roleAccountingAccess");
+    } else if (role === "tech") {
+      notice.style.display = "block";
+      notice.textContent = t("roleTechAccess");
+    } else if (role === "business") {
+      notice.style.display = "block";
+      notice.textContent = t("roleBusinessAccess");
     } else if (ACTIVE_TIER !== "scale") {
       notice.style.display = "block";
       const tierLabels: Record<string, string> = {
