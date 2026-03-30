@@ -4602,22 +4602,22 @@ function loadQaSettings(): QASettings {
         technologyEmail:
           parsed.technologyEmail ??
           parsed.inventorEmail ??
-          "uniquedai@gmail.com",
-        businessEmail: parsed.businessEmail ?? "Lawrenceliu@soterea.cn",
+          "",
+        businessEmail: parsed.businessEmail ?? "",
         accountingEmail: parsed.accountingEmail ?? "",
       };
     }
     return {
       pmpEmail: "",
-      technologyEmail: "uniquedai@gmail.com",
-      businessEmail: "Lawrenceliu@soterea.cn",
+      technologyEmail: "",
+      businessEmail: "",
       accountingEmail: "",
     };
   } catch {
     return {
       pmpEmail: "",
-      technologyEmail: "uniquedai@gmail.com",
-      businessEmail: "Lawrenceliu@soterea.cn",
+      technologyEmail: "",
+      businessEmail: "",
       accountingEmail: "",
     };
   }
@@ -4639,10 +4639,10 @@ function openQaSettings(): void {
         <input type="email" id="qaSettingsPmpEmail" class="qa-settings-input" value="${settings.pmpEmail.replace(/"/g, "&quot;")}" placeholder="pmp@example.com" />
       </label>
       <label class="qa-settings-label">\ud83d\udd2c ${t("qaTechnologyEmail")}
-        <input type="email" id="qaSettingsTechnologyEmail" class="qa-settings-input" value="${settings.technologyEmail.replace(/"/g, "&quot;")}" placeholder="uniquedai@gmail.com" />
+        <input type="email" id="qaSettingsTechnologyEmail" class="qa-settings-input" value="${settings.technologyEmail.replace(/"/g, "&quot;")}" placeholder="" />
       </label>
       <label class="qa-settings-label">\ud83d\udcbc ${t("qaBusinessEmail")}
-        <input type="email" id="qaSettingsBusinessEmail" class="qa-settings-input" value="${settings.businessEmail.replace(/"/g, "&quot;")}" placeholder="lawrenceliu@enzhi.org" />
+        <input type="email" id="qaSettingsBusinessEmail" class="qa-settings-input" value="${settings.businessEmail.replace(/"/g, "&quot;")}" placeholder="" />
       </label>
       <label class="qa-settings-label">\ud83d\udcca ${t("qaAccountingEmail")}
         <input type="email" id="qaSettingsAccountingEmail" class="qa-settings-input" value="${settings.accountingEmail.replace(/"/g, "&quot;")}" placeholder="" />
