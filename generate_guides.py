@@ -79,8 +79,8 @@ def build_english():
     pdf.ln(4)
     pdf.set_font("Helvetica", "I", 11)
     pdf.set_text_color(*GRAY)
-    pdf.cell(0, 7, "ICU Respiratory Digital Twin System", align="C", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 7, "sEMG Neural Drive + EIT Ventilation/Perfusion Monitoring Platform", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "FDA 510(k) Clearance Program", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "Medical Device Project Management Platform", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(10)
     pdf.set_font("Helvetica", "B", 16)
     pdf.set_text_color(*TEXT)
@@ -88,25 +88,24 @@ def build_english():
     pdf.ln(6)
     pdf.set_font("Helvetica", "", 11)
     pdf.set_text_color(*GRAY)
-    pdf.cell(0, 7, "Version 1.0 | March 2026", align="C", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 7, "Company B USA / Silan Technology (Chengdu)", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "Version 1.1 | March 2026", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "Arch Medical Management", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(20)
     pdf.set_font("Helvetica", "I", 10)
     pdf.set_text_color(*GRAY)
     pdf.multi_cell(0, 5.5,
         "This guide explains every element of the PM Dashboard in detail. "
         "The dashboard is designed for bilingual (EN/CN) project management teams "
-        "pursuing FDA 510(k) clearance for the ICU Respiratory Digital Twin System.",
+        "pursuing FDA 510(k) clearance for medical devices.",
         align="C")
 
     # 1. Overview
     pdf.add_page()
     pdf.sec(1, "Overview")
     pdf.txt(
-        "The Control Tower is a Project Manager (PMP) central command dashboard for the "
-        "ICU Respiratory Digital Twin System, a dual-module 510(k) medical device:\n\n"
-        "  Module A: sEMG Neural Drive Monitoring (Product Code IKN)\n"
-        "  Module B: EIT Ventilation/Perfusion System (Product Code DQS)\n\n"
+        "The Control Tower is a Project Manager (PMP) central command dashboard for "
+        "FDA 510(k) medical device projects. The dashboard uses a Setup Wizard with "
+        "pre-built category templates to configure itself for any device type.\n\n"
         "The dashboard answers ONE master question at all times:\n"
         "  'Are we still on track to FDA clearance, and what is at risk?'")
     pdf.txt(
@@ -125,8 +124,8 @@ def build_english():
     pdf.ln(2)
     pdf.txt(
         "A 'Load Demo Data' shortcut is also available on the language selection screen. This "
-        "bypasses the wizard entirely and populates the dashboard with sample ICU Respiratory "
-        "Digital Twin data for demonstration purposes.")
+        "bypasses the wizard entirely and populates the dashboard with sample data for "
+        "demonstration purposes.")
 
     pdf.sub("1.2 510(k) Category Templates")
     pdf.txt(
@@ -157,9 +156,9 @@ def build_english():
 
     pdf.sub("2.1 Logo & Title")
     pdf.txt(
-        "The medical caduceus icon alongside 'Control Tower' and the subtitle "
-        "'ICU Respiratory Digital Twin' identify the application. These change language "
-        "when you toggle the language switch.")
+        "The medical caduceus icon alongside 'Control Tower' and your project subtitle "
+        "identify the application. The subtitle is set during Setup Wizard configuration "
+        "and updates when you toggle the language switch.")
 
     pdf.sub("2.2 Master Question")
     pdf.txt(
@@ -185,13 +184,13 @@ def build_english():
     pdf.txt(
         "This is one of the most important indicators on the dashboard.\n\n"
         "'M+' stands for 'Months after project start.' The project timeline is measured in "
-        "months from the baseline date (March 2026).\n\n"
-        "Examples:\n"
+        "months from the baseline date set during project setup.\n\n"
+        "Examples (for a project starting March 2026):\n"
         "  M+0  = March 2026 (project kickoff)\n"
         "  M+2  = May 2026 (FDA Pre-Submission meeting)\n"
-        "  M+6  = September 2026 (510(k) sEMG submission)\n"
-        "  M+9  = December 2026 (sEMG clearance expected)\n"
-        "  M+23 = February 2028 (full platform clearance)\n\n"
+        "  M+6  = September 2026 (510(k) submission target)\n"
+        "  M+9  = December 2026 (clearance expected)\n"
+        "  M+12 = March 2027 (commercial launch target)\n\n"
         "'Current: M+0' means the project is currently at Month 0, the very start. "
         "As the project advances, this number increments and all downstream calculations "
         "(days to milestone, gate targets, etc.) update accordingly.")
@@ -434,7 +433,7 @@ def build_english():
     pdf.ln(2)
     pdf.kv("Standard", "The standard code (e.g., IEC 60601-1:2005+AMD1)")
     pdf.kv("Description", "What the standard covers (e.g., Medical Electrical Equipment - General Safety)")
-    pdf.kv("Applies To", "Which component: Both, sEMG Electrodes, EIT Belt, Software, or Silan Manufacturing")
+    pdf.kv("Applies To", "Which component the standard covers (configured during project setup wizard)")
     pdf.kv("Status", "Badge: Complete (green), In Progress (yellow), or Not Started (gray)")
     pdf.kv("Progress", "A percentage bar (0-100%) showing completion")
     pdf.ln(2)
@@ -837,7 +836,7 @@ def build_english():
     pdf.sub("20.2 Workstream Allocations")
     pdf.txt(
         "Each team member may be allocated across multiple workstreams "
-        "(e.g., sEMG Design 40%, EIT Research 30%, Documentation 20%). "
+        "(e.g., Device Development 50%, V&V Testing 30%, Documentation 20%). "
         "The percentage bars show at a glance where each person's time is committed. "
         "Total utilization is calculated by summing all allocation percentages.")
 
@@ -987,8 +986,8 @@ def build_english():
 
     pdf.ln(2)
     pdf.txt(
-        "These APIs support the US investment pipeline managed by Lon Dailey (Investor Relations, "
-        "N. America). They enable automated financial tracking, investor reporting, and regulatory "
+        "These APIs support the US investment pipeline managed by the designated IR lead. "
+        "They enable automated financial tracking, investor reporting, and regulatory "
         "compliance for US-based fundraising activities.")
 
     pdf.sub("25.2 Removing & Restoring Integrations")
@@ -1004,8 +1003,7 @@ def build_english():
     pdf.txt(
         "This tab is the designated home for all investor relations (IR) activity in the "
         "dashboard. It consolidates the complete North America fundraising pipeline, investor "
-        "tracking, and IR activities into a single view managed by Lon Dailey as IR lead for "
-        "N. America.\n\n"
+        "tracking, and IR activities into a single view.\n\n"
         "Because this tab provides dedicated investor-facing content -- pipeline metrics, "
         "target investor details, and an activity log -- standalone investor pitch deck "
         "documents were removed from Document Control to avoid duplication. All investor "
@@ -1171,18 +1169,21 @@ def build_english():
 
     pdf.sub("28.6 Team Members & Dashboard Roles")
     pdf.txt(
-        "The dashboard team consists of four members:\n\n"
-        "  Lon Dailey -- Regulatory & Investor Relations (N. America)\n"
+        "The dashboard supports four role-based access levels, configured during the "
+        "Project Setup Wizard:\n\n"
+        "  PMP / Regulatory Lead\n"
         "    Responsibilities: 510(k) preparation, standards compliance,\n"
-        "    investor relations for North America, project management\n\n"
-        "  Dr. Dai -- Chief Technology Officer\n"
-        "    Responsibilities: sEMG algorithm development, EIT prototype,\n"
-        "    MyoBus integration, technical documentation\n\n"
-        "  Lawrence Liu -- CEO, Company B\n"
-        "    Responsibilities: Investor relations (Asia), business strategy,\n"
+        "    project management, gate decisions\n\n"
+        "  Technical Lead / CTO\n"
+        "    Responsibilities: Device development, algorithm validation,\n"
+        "    V&V testing, technical documentation\n\n"
+        "  Business Lead / CEO\n"
+        "    Responsibilities: Investor relations, business strategy,\n"
         "    operations management\n\n"
-        "  Danielle Liu -- Accounting\n"
-        "    Responsibilities: Monthly burn reports, budget tracking, financial statements")
+        "  Accounting / Finance\n"
+        "    Responsibilities: Monthly burn reports, budget tracking, financial statements\n\n"
+        "Team member names and workstream allocations are entered during the Setup Wizard "
+        "and can be edited from the Resources tab.")
 
     # 29. Message Board (Tab 15)
     pdf.add_page()
@@ -1479,8 +1480,8 @@ def build_chinese():
     pdf.ln(4)
     pdf.set_font("ARUNI", "I", 11)
     pdf.set_text_color(*GRAY)
-    pdf.cell(0, 7, "ICU\u547c\u5438\u76d1\u62a4\u6570\u5b57\u5b6a\u751f\u7cfb\u7edf", align="C", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 7, "sEMG\u795e\u7ecf\u9a71\u52a8 + EIT\u901a\u6c14/\u704c\u6ce8\u76d1\u6d4b\u5e73\u53f0", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "FDA 510(k)\u5ba1\u6279\u9879\u76ee\u7ba1\u7406\u5e73\u53f0", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "\u533b\u7597\u5668\u68b0\u9879\u76ee\u7ba1\u7406\u5e73\u53f0", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(10)
     pdf.set_font("ARUNI", "B", 16)
     pdf.set_text_color(*CN_TEXT)
@@ -1488,15 +1489,15 @@ def build_chinese():
     pdf.ln(6)
     pdf.set_font("ARUNI", "", 11)
     pdf.set_text_color(*GRAY)
-    pdf.cell(0, 7, "\u7248\u672c 1.0 | 2026\u5e743\u6708", align="C", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 7, "B\u516c\u53f8\u7f8e\u56fd / \u601d\u5c9a\u79d1\u6280\uff08\u6210\u90fd\uff09\u6709\u9650\u516c\u53f8", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "\u7248\u672c 1.1 | 2026\u5e743\u6708", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "Arch Medical Management", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(20)
     pdf.set_font("ARUNI", "I", 10)
     pdf.set_text_color(*GRAY)
     pdf.multi_cell(0, 6,
         "\u672c\u6307\u5357\u8be6\u7ec6\u8bf4\u660ePM\u4eea\u8868\u76d8\u7684\u6bcf\u4e00\u4e2a\u754c\u9762\u5143\u7d20\u3002"
         "\u8be5\u4eea\u8868\u76d8\u4e3a\u53cc\u8bed\uff08\u4e2d/\u82f1\uff09\u9879\u76ee\u7ba1\u7406\u56e2\u961f\u8bbe\u8ba1\uff0c"
-        "\u7528\u4e8e\u63a8\u8fdbICU\u547c\u5438\u76d1\u62a4\u6570\u5b57\u5b6a\u751f\u7cfb\u7edf\u7684FDA 510(k)\u5ba1\u6279\u6d41\u7a0b\u3002",
+        "\u7528\u4e8e\u63a8\u8fdb\u533b\u7597\u5668\u68b0\u7684FDA 510(k)\u5ba1\u6279\u6d41\u7a0b\u3002",
         align="C")
 
     # 1
@@ -1504,10 +1505,10 @@ def build_chinese():
     pdf.sec(1, "\u6982\u8ff0")
     pdf.txt(
         "\u63a7\u5236\u5854\u662f\u9879\u76ee\u7ecf\u7406(PMP)\u7684\u6838\u5fc3\u6307\u6325\u4eea\u8868\u76d8\uff0c"
-        "\u7528\u4e8eICU\u547c\u5438\u76d1\u62a4\u6570\u5b57\u5b6a\u751f\u7cfb\u7edf" + EM + EM +
-        "\u4e00\u4e2a\u7531\u4e24\u4e2a\u6a21\u5757\u7ec4\u6210\u7684510(k)\u533b\u7597\u5668\u68b0\uff1a\n\n"
-        "  \u6a21\u5757A\uff1asEMG\u795e\u7ecf\u547c\u5438\u9a71\u52a8\u76d1\u6d4b\uff08\u4ea7\u54c1\u4ee3\u7801IKN\uff09\n"
-        "  \u6a21\u5757B\uff1aEIT\u901a\u6c14/\u704c\u6ce8\u7cfb\u7edf\uff08\u4ea7\u54c1\u4ee3\u7801DQS\uff09\n\n"
+        "\u7528\u4e8e\u7ba1\u7406510(k)\u533b\u7597\u5668\u68b0\u9879\u76ee" + EM + EM +
+        "\u4e00\u4e2a510(k)\u533b\u7597\u5668\u68b0\u9879\u76ee\u3002\n\n"
+        "\u4eea\u8868\u76d8\u7684\u8bbe\u5907\u7c7b\u522b\u3001\u5c1a\u7c7b\u5668\u68b0\u548c\u6cd5\u89c4\u8def\u5f84\u5728\u9879\u76ee\u8bbe\u7f6e\u5411\u5bfc\u4e2d\u914d\u7f6e\u3002\n"
+        "\n"
         "\u4eea\u8868\u76d8\u59cb\u7ec8\u56f4\u7ed5\u4e00\u4e2a\u6838\u5fc3\u95ee\u9898\u8fd0\u884c\uff1a\n"
         + LQ + "\u6211\u4eec\u662f\u5426\u4ecd\u5728FDA\u6279\u51c6\u7684\u6b63\u8f68\u4e0a" + EM + EM + "\u6709\u4ec0\u4e48\u98ce\u9669\uff1f" + RQ)
     pdf.txt(
@@ -1524,7 +1525,7 @@ def build_chinese():
     pdf.ln(2)
     pdf.txt(
         "\u8bed\u8a00\u9009\u62e9\u5c4f\u5e55\u8fd8\u63d0\u4f9b" + LQ + "\u52a0\u8f7d\u6f14\u793a\u6570\u636e" + RQ + "\u5feb\u6377\u65b9\u5f0f\u3002"
-        "\u8fd9\u4f1a\u8df3\u8fc7\u5411\u5bfc\uff0c\u76f4\u63a5\u7528ICU\u547c\u5438\u76d1\u62a4\u6570\u5b57\u5b6a\u751f\u793a\u4f8b\u6570\u636e\u586b\u5145\u4eea\u8868\u76d8\u3002")
+        "\u8fd9\u4f1a\u8df3\u8fc7\u5411\u5bfc\uff0c\u76f4\u63a5\u7528\u793a\u4f8b\u6570\u636e\u586b\u5145\u4eea\u8868\u76d8\u3002")
 
     pdf.sub("1.2 510(k)\u7c7b\u522b\u6a21\u677f")
     pdf.txt(
@@ -1553,7 +1554,7 @@ def build_chinese():
     pdf.sub("2.1 \u6807\u5fd7\u4e0e\u6807\u9898")
     pdf.txt(
         "\u533b\u7597\u6807\u5fd7\u56fe\u6807\u65c1\u8fb9\u662f" + LQ + "\u63a7\u5236\u5854" + RQ +
-        "\u548c\u526f\u6807\u9898" + LQ + "ICU\u547c\u5438\u76d1\u62a4\u6570\u5b57\u5b6a\u751f" + RQ + "\u3002"
+        "\u548c\u526f\u6807\u9898\uff08\u5728\u5411\u5bfc\u4e2d\u8bbe\u7f6e\uff09\u3002"
         "\u5207\u6362\u8bed\u8a00\u65f6\uff0c\u8fd9\u4e9b\u6587\u5b57\u4f1a\u76f8\u5e94\u53d8\u5316\u3002")
 
     pdf.sub("2.2 \u6838\u5fc3\u95ee\u9898")
@@ -1583,9 +1584,9 @@ def build_chinese():
         "\u793a\u4f8b\uff1a\n"
         "  M+0 = 2026\u5e743\u6708\uff08\u9879\u76ee\u542f\u52a8\uff09\n"
         "  M+2 = 2026\u5e745\u6708\uff08FDA\u9884\u63d0\u4ea4\u4f1a\u8bae\uff09\n"
-        "  M+6 = 2026\u5e749\u6708\uff08510(k) sEMG\u63d0\u4ea4\uff09\n"
-        "  M+9 = 2026\u5e7412\u6708\uff08sEMG\u9884\u8ba1\u83b7\u6279\uff09\n"
-        "  M+23 = 2028\u5e742\u6708\uff08\u5168\u5e73\u53f0\u83b7\u6279\uff09\n\n"
+        "  M+6 = 2026\u5e749\u6708\uff08\u63d0\u4ea4\u76ee\u6807\uff09\n"
+        "  M+9 = 2026\u5e7412\u6708\uff08\u9884\u8ba1\u83b7\u6279\uff09\n"
+        "  M+18 = 2027\u5e749\u6708\uff08\u5546\u4e1a\u53d1\u5e03\u76ee\u6807\uff09\n\n"
         + LQ + "\u5f53\u524d: M+0" + RQ + "\u8868\u793a\u9879\u76ee\u76ee\u524d\u5728\u7b2c0\u4e2a\u6708" + EM + EM + "\u521a\u521a\u5f00\u59cb\u3002"
         "\u968f\u7740\u9879\u76ee\u63a8\u8fdb\uff0c\u6b64\u6570\u5b57\u9012\u589e\uff0c\u6240\u6709\u4e0b\u6e38\u8ba1\u7b97\u76f8\u5e94\u66f4\u65b0\u3002")
 
@@ -1742,10 +1743,10 @@ def build_chinese():
     pdf.bul("\u95e8\u63a7\u5907\u6ce8 " + EM + " PMP\u6dfb\u52a0\u7684\u81ea\u7531\u6587\u672c\u5907\u6ce8\u3002\u6bcf\u6761\u5907\u6ce8\u5e26\u65f6\u95f4\u6233\u3002")
 
     pdf.sub("6.4 \u516d\u4e2a\u95e8\u63a7")
-    pdf.kv("G1 (M+3)", "sEMG\u8bbe\u8ba1\u9a8c\u8bc1\u5b8c\u6210")
+    pdf.kv("G1 (M+3)", "\u8bbe\u8ba1\u9a8c\u8bc1\u5b8c\u6210")
     pdf.kv("G2 (M+2)", "\u9884\u63d0\u4ea4FDA\u53cd\u9988\u5df2\u6536\u5230")
-    pdf.kv("G3 (M+6)", "510(k) sEMG\u63d0\u4ea4\u5c31\u7eea")
-    pdf.kv("G4 (M+9)", "sEMG\u6a21\u5757\u5546\u4e1a\u53d1\u5e03")
+    pdf.kv("G3 (M+6)", "510(k)\u63d0\u4ea4\u5c31\u7eea")
+    pdf.kv("G4 (M+9)", "\u5546\u4e1a\u53d1\u5e03\u5c31\u7eea")
     pdf.kv("G5 (M+17)", "EIT 510(k)\u63d0\u4ea4\u5c31\u7eea")
     pdf.kv("G6 (M+23)", "\u5b8c\u6574\u5e73\u53f0\u53d1\u5e03 " + EM + " FDA\u5df2\u6279\u51c6")
 
@@ -1808,8 +1809,8 @@ def build_chinese():
     pdf.kv("M+0", "\u9884\u63d0\u4ea4\u5df2\u63d0\u4ea4 \u2192 FDA\u63a5\u89e6\u542f\u52a8")
     pdf.kv("M+2", "FDA\u9884\u63d0\u4ea4\u4f1a\u8bae \u2192 \u5173\u952e\u6295\u8d44\u8005\u4fe1\u53f7\uff08\u5173\u952e\uff09")
     pdf.kv("M+3", "\u53f0\u67b6\u6d4b\u8bd5\u5f00\u59cb \u2192 \u63d0\u4ea4\u524d\u6700\u5927\u652f\u51fa\uff08\u8b66\u544a\uff09")
-    pdf.kv("M+6", "510(k) sEMG\u5df2\u63d0\u4ea4 \u2192 \u6295\u8d44\u8005\u4fe1\u5fc3\u68c0\u67e5\u70b9\uff08\u5173\u952e\uff09")
-    pdf.kv("M+9", "sEMG\u83b7\u6279 \u2192 A\u6a21\u5757\u53ef\u4ea7\u751f\u6536\u5165\uff08\u5173\u952e\uff09")
+    pdf.kv("M+6", "510(k)\u5df2\u63d0\u4ea4 \u2192 \u6295\u8d44\u8005\u4fe1\u5fc3\u68c0\u67e5\u70b9\uff08\u5173\u952e\uff09")
+    pdf.kv("M+9", "\u83b7\u6279 \u2192 \u53ef\u4ea7\u751f\u6536\u5165\uff08\u5173\u952e\uff09")
     pdf.kv("M+12", "EIT\u6d4b\u8bd5\u5f00\u59cb \u2192 \u9700\u8981\u7b2c\u4e8c\u7b14\u4e3b\u8981\u6295\u8d44\uff08\u8b66\u544a\uff09")
     pdf.kv("M+17", "510(k) EIT\u5df2\u63d0\u4ea4 \u2192 \u6218\u7565\u5408\u4f5c\u53ef\u884c\uff08\u5173\u952e\uff09")
     pdf.kv("M+23", "EIT\u83b7\u6279 \u2192 \u5168\u9762\u5546\u4e1a\u53d1\u5e03/ROI\u5b9e\u73b0\uff08\u5173\u952e\uff09")
@@ -1822,7 +1823,7 @@ def build_chinese():
     pdf.ln(2)
     pdf.kv("\u6807\u51c6", "\u6807\u51c6\u4ee3\u7801\uff08\u5982IEC 60601-1:2005+AMD1\uff09")
     pdf.kv("\u63cf\u8ff0", "\u6807\u51c6\u6db5\u76d6\u5185\u5bb9")
-    pdf.kv("\u9002\u7528\u4e8e", "\u54ea\u4e2a\u7ec4\u4ef6\uff1aBoth\u3001sEMG\u7535\u6781\u3001EIT\u5e26\u3001\u8f6f\u4ef6\u6216\u601d\u5c9a\u5236\u9020")
+    pdf.kv("\u9002\u7528\u4e8e", "\u8bbe\u5907\u7ec4\u4ef6\uff08\u5728\u5411\u5bfc\u4e2d\u914d\u7f6e\uff09\u6216\u601d\u5c9a\u5236\u9020")
     pdf.kv("\u72b6\u6001", "\u5fbd\u7ae0\u663e\u793a\u5df2\u5b8c\u6210/\u8fdb\u884c\u4e2d/\u672a\u5f00\u59cb")
     pdf.kv("\u8fdb\u5ea6", "\u767e\u5206\u6bd4\u6761\uff080-100%\uff09")
     pdf.ln(2)
@@ -2211,7 +2212,7 @@ def build_chinese():
     pdf.sub("20.2 工作流分配")
     pdf.txt(
         "每个团队成员可能分配到多个工作流"
-        "（如sEMG设计40%、EIT研究30%、文档20%）。"
+        "（如设备开发50%、V&V测试30%、文档20%）。"
         "百分比条形图一目了然地显示每个人的时间承诺。"
         "总利用率通过汇总所有分配百分比计算。")
 
@@ -2364,7 +2365,7 @@ def build_chinese():
     pdf.txt(
         "\u6b64\u9009\u9879\u5361\u662f\u4eea\u8868\u76d8\u4e2d\u6240\u6709\u6295\u8d44\u8005\u5173\u7cfb(IR)\u6d3b\u52a8\u7684\u6307\u5b9a\u4e3b\u9875\u3002"
         "\u5b83\u5c06\u5b8c\u6574\u7684\u5317\u7f8e\u878d\u8d44\u7ba1\u9053\u3001\u6295\u8d44\u8005\u8ffd\u8e2a\u548cIR\u6d3b\u52a8\u6574\u5408\u5230\u5355\u4e00\u89c6\u56fe\u4e2d\uff0c"
-        "\u7531Lon Dailey\u4f5c\u4e3a\u5317\u7f8e IR\u8d1f\u8d23\u4eba\u7ba1\u7406\u3002\n\n"
+        "\u7531\u6307\u5b9a\u7684IR\u8d1f\u8d23\u4eba\u7ba1\u7406\u3002\n\n"
         "\u7531\u4e8e\u6b64\u9009\u9879\u5361\u63d0\u4f9b\u4e13\u95e8\u7684\u6295\u8d44\u8005\u5185\u5bb9\u2014\u2014\u7ba1\u9053\u6307\u6807\u3001"
         "\u76ee\u6807\u6295\u8d44\u8005\u8be6\u7ec6\u4fe1\u606f\u548c\u6d3b\u52a8\u65e5\u5fd7\u2014\u2014\u72ec\u7acb\u7684\u6295\u8d44\u8005\u6f14\u793a\u6587\u7a3f"
         "\u5df2\u4ece\u6587\u6863\u63a7\u5236\u4e2d\u79fb\u9664\u4ee5\u907f\u514d\u91cd\u590d\u3002\u6240\u6709\u6295\u8d44\u8005\u6750\u6599\u548c\u4e92\u52a8\u5386\u53f2\u73b0\u5728\u90fd\u5728\u8fd9\u91cc\u3002")
@@ -2526,14 +2527,14 @@ def build_chinese():
 
     pdf.sub("28.6 \u56e2\u961f\u6210\u5458\u4e0e\u4eea\u8868\u76d8\u89d2\u8272")
     pdf.txt(
-        "\u4eea\u8868\u76d8\u56e2\u961f\u7531\u56db\u540d\u6210\u5458\u7ec4\u6210\uff1a\n\n"
-        "  Lon Dailey -- \u6cd5\u89c4\u53ca\u6295\u8d44\u8005\u5173\u7cfb\uff08\u5317\u7f8e\uff09\n"
-        "    \u804c\u8d23\uff1a510(k)\u51c6\u5907\u3001\u6807\u51c6\u5408\u89c4\u3001\u5317\u7f8e\u6295\u8d44\u8005\u5173\u7cfb\u3001\u9879\u76ee\u7ba1\u7406\n\n"
-        "  \u6234\u535a\u58eb -- \u9996\u5e2d\u6280\u672f\u5b98\n"
-        "    \u804c\u8d23\uff1asEMG\u7b97\u6cd5\u5f00\u53d1\u3001EIT\u539f\u578b\u3001MyoBus\u96c6\u6210\u3001\u6280\u672f\u6587\u6863\n\n"
-        "  Lawrence Liu -- CEO\uff0cB\u516c\u53f8\n"
-        "    \u804c\u8d23\uff1a\u6295\u8d44\u8005\u5173\u7cfb\uff08\u4e9a\u6d32\uff09\u3001\u5546\u4e1a\u6218\u7565\u3001\u8fd0\u8425\u7ba1\u7406\n\n"
-        "  Danielle Liu -- \u4f1a\u8ba1\n"
+        "\u4eea\u8868\u76d8\u56e2\u961f\u5728\u9879\u76ee\u8bbe\u7f6e\u5411\u5bfc\u4e2d\u914d\u7f6e\u3002\u9ed8\u8ba4\u89d2\u8272\uff1a\n\n"
+        "  \u9879\u76ee\u8d1f\u8d23\u4eba -- \u6cd5\u89c4\u53ca\u9879\u76ee\u7ba1\u7406\n"
+        "    \u804c\u8d23\uff1a510(k)\u51c6\u5907\u3001\u6807\u51c6\u5408\u89c4\u3001\u6295\u8d44\u8005\u5173\u7cfb\u3001\u9879\u76ee\u7ba1\u7406\n\n"
+        "  \u6280\u672f\u8d1f\u8d23\u4eba -- \u9996\u5e2d\u6280\u672f\u5b98\n"
+        "    \u804c\u8d23\uff1a\u8bbe\u5907\u5f00\u53d1\u3001\u539f\u578b\u8bbe\u8ba1\u3001\u6280\u672f\u6587\u6863\u3001V&V\u6d4b\u8bd5\n\n"
+        "  \u5546\u52a1\u8d1f\u8d23\u4eba -- \u5546\u52a1\u62d3\u5c55\n"
+        "    \u804c\u8d23\uff1a\u5546\u4e1a\u6218\u7565\u3001\u8fd0\u8425\u7ba1\u7406\u3001\u5408\u4f5c\u4f19\u4f34\u5173\u7cfb\n\n"
+        "  \u8d22\u52a1\u8d1f\u8d23\u4eba -- \u4f1a\u8ba1\n"
         "    \u804c\u8d23\uff1a\u6708\u5ea6\u71c3\u70e7\u62a5\u544a\u3001\u9884\u7b97\u8ffd\u8e2a\u3001\u8d22\u52a1\u62a5\u8868")
 
     # 29. 留言板 (Tab 15)
@@ -2709,11 +2710,11 @@ def build_chinese():
         ("510(k)", "FDA\u4e0a\u5e02\u524d\u901a\u77e5\u9014\u5f84\uff0c\u9002\u7528\u4e8eII\u7c7b\u533b\u7597\u5668\u68b0\u3002"),
         ("\u95e8\u63a7(Gate)", "\u9636\u6bb5-\u95e8\u63a7\u51b3\u7b56\u68c0\u67e5\u70b9\u3002\u5728PMP\u51b3\u5b9a\u901a\u8fc7\u4e4b\u524d\u9879\u76ee\u4e0d\u80fd\u8d8a\u8fc7\u95e8\u63a7\u3002"),
         ("CR", "\u53d8\u66f4\u8bf7\u6c42\u3002\u6280\u672f\u6216\u5546\u4e1a\u56e2\u961f\u63d0\u4ea4\u7684\u72b6\u6001\u4fee\u6539\u6b63\u5f0f\u8bf7\u6c42\uff0c\u9700\u8981PMP\u5ba1\u6279\u3002"),
-        ("sEMG", "\u8868\u9762\u808c\u7535\u56fe " + EM + " \u6a21\u5757A\u3002\u975e\u4fb5\u5165\u6027\u76d1\u6d4b\u795e\u7ecf\u547c\u5438\u9a71\u52a8\u3002"),
+        ("sEMG", "\u8868\u9762\u808c\u7535\u56fe " + EM + " \u793a\u4f8b\u6280\u672f\u672f\u8bed\u3002"),
         ("EIT", "\u7535\u963b\u6297\u65ad\u5c42\u6210\u50cf " + EM + " \u6a21\u5757B\u3002\u80ba\u90e8\u901a\u6c14\u548c\u704c\u6ce8\u7684\u6a2a\u622a\u9762\u56fe\u50cf\u3002"),
         ("V/Q", "\u901a\u6c14/\u704c\u6ce8\u6bd4 " + EM + " \u5173\u952e\u4e34\u5e8a\u6d4b\u91cf\u3002"),
-        ("MyoBus", "\u4e13\u6709\u96c6\u6210\u534f\u8bae\uff0c\u4ee5<1ms\u65f6\u95f4\u6233\u5bf9\u9f50\u540c\u6b65sEMG\u548cEIT\u6570\u636e\u3002"),
-        ("IKN", "FDA\u4ea7\u54c1\u4ee3\u7801\uff0c\u7528\u4e8esEMG\u547c\u5438\u76d1\u6d4b\u8bbe\u5907\u3002"),
+        ("MyoBus", "\u793a\u4f8b\u96c6\u6210\u534f\u8bae\u672f\u8bed\u3002"),
+        ("IKN", "FDA\u4ea7\u54c1\u4ee3\u7801\uff08\u793a\u4f8b\uff09\u3002"),
         ("DQS", "FDA\u4ea7\u54c1\u4ee3\u7801\uff0c\u7528\u4e8eEIT\u80f8\u90e8\u6210\u50cf\u8bbe\u5907\u3002"),
         ("\u9884\u63d0\u4ea4/Q-Sub", "\u5411FDA\u63d0\u4ea4\u7684\u9884\u63d0\u4ea4\u8bf7\u6c42\uff0c\u7528\u4e8eQ\u4f1a\u8bae\u8ba8\u8bba\u6cd5\u89c4\u7b56\u7565\u3002"),
         ("ISO 14971", "\u533b\u7597\u5668\u68b0\u98ce\u9669\u7ba1\u7406\u56fd\u9645\u6807\u51c6\u3002"),

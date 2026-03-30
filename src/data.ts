@@ -1,5 +1,5 @@
 // ============================================================
-// DATA MODEL — ICU Respiratory Digital Twin System
+// DATA MODEL — 510(k) Medical Device PM Dashboard
 // Sourced from FDA 510(k) Pre-Submission Package (March 2026)
 // PMP is overriding authority; accepts input from biz & tech
 // ============================================================
@@ -27,22 +27,22 @@ import type {
 
 export const PROJECT: Project = {
   name: {
-    en: "ICU Respiratory Digital Twin System",
-    cn: "ICU呼吸监护数字孪生系统",
+    en: "510(k) Medical Device Project",
+    cn: "510(k)医疗器械项目",
   },
   subtitle: {
-    en: "sEMG Neural Drive + EIT Ventilation/Perfusion Monitoring Platform",
-    cn: "sEMG神经驱动 + EIT通气/灌注监测平台",
+    en: "FDA 510(k) Clearance Program",
+    cn: "FDA 510(k)审批项目",
   },
   submissionType:
-    "510(k) Modular Approval (pathway pending Pre-Sub confirmation)",
+    "510(k) (pathway pending Pre-Sub confirmation)",
   applicant: {
-    en: "Company B USA (Global IP Holder)",
-    cn: "B公司美国（全球知识产权持有方）",
+    en: "US Operating Entity",
+    cn: "美国运营实体",
   },
   manufacturer: {
-    en: "Silan Technology (Chengdu) Co., Ltd.",
-    cn: "\u601d\u6f9c\u79d1\u6280\uff08\u6210\u90fd\uff09\u6709\u9650\u516c\u53f8",
+    en: "Contract Manufacturer",
+    cn: "合同制造商",
   },
   preparedDate: "March 2026",
   currentMonth: 0,
@@ -1914,40 +1914,38 @@ export const BUDGET_CATEGORIES: BudgetCategory[] = [
 export const TEAM_MEMBERS: TeamMember[] = [
   {
     id: "TM-001",
-    name: "Lon Dailey",
+    name: "Project Lead",
     role: {
-      en: "Regulatory & Investor Relations (N. America)",
-      cn: "法规及投资者关系（北美）",
+      en: "Regulatory & Project Management",
+      cn: "法规及项目管理",
     },
     allocation: [
-      { workstream: "510(k) Prep", pct: 30 },
-      { workstream: "Standards Compliance", pct: 15 },
-      { workstream: "Investor Relations N. America", pct: 30 },
-      { workstream: "Project Management", pct: 25 },
+      { workstream: "510(k) Prep", pct: 40 },
+      { workstream: "Standards Compliance", pct: 20 },
+      { workstream: "Project Management", pct: 40 },
     ],
     capacity: 100,
   },
   {
     id: "TM-002",
-    name: "Dr. Dai",
+    name: "Technical Lead",
     role: { en: "Chief Technology Officer", cn: "首席技术官" },
     allocation: [
-      { workstream: "sEMG Algorithm", pct: 40 },
-      { workstream: "EIT Prototype", pct: 30 },
-      { workstream: "MyoBus Integration", pct: 20 },
-      { workstream: "Documentation", pct: 10 },
+      { workstream: "Device Development", pct: 50 },
+      { workstream: "V&V Testing", pct: 30 },
+      { workstream: "Documentation", pct: 20 },
     ],
     capacity: 100,
   },
   {
     id: "TM-003",
-    name: "Lawrence Liu",
+    name: "Business Lead",
     role: {
-      en: "CEO, Company B",
-      cn: "CEO，B公司",
+      en: "Business Development",
+      cn: "商务拓展",
     },
     allocation: [
-      { workstream: "Investor Relations (Asia)", pct: 40 },
+      { workstream: "Investor Relations", pct: 40 },
       { workstream: "Business Strategy", pct: 35 },
       { workstream: "Operations", pct: 25 },
     ],
