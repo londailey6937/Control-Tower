@@ -247,7 +247,9 @@ export type AuditAction =
   | "equity-event-status"
   | "vesting-add"
   | "vesting-delete"
-  | "vesting-status";
+  | "vesting-status"
+  | "team-add"
+  | "team-delete";
 
 export interface AuditEntry {
   id: string;
@@ -454,6 +456,9 @@ declare global {
     _addVesting: () => void;
     _deleteVesting: (vestingId: string) => void;
     _cycleVestingStatus: (vestingId: string) => void;
+    _openAddTeamMemberForm: () => void;
+    _addTeamMember: () => void;
+    _deleteTeamMember: (tmId: string) => void;
   }
 }
 

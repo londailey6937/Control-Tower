@@ -20,6 +20,12 @@ import {
   TEAM_MEMBERS,
   SUPPLIERS,
   QA_SECTIONS,
+  TARGET_INVESTORS,
+  IR_ACTIVITIES,
+  INVESTOR_BRIDGE,
+  SHAREHOLDERS,
+  EQUITY_EVENTS,
+  VESTING_SCHEDULES,
 } from "./data.ts";
 
 import { DEFAULT_DHF_DOCS } from "./wizard.ts";
@@ -543,4 +549,78 @@ export function seed(a: WizardAnswers): void {
       },
     ],
   });
+
+  // ── TARGET_INVESTORS ─────────────────────────
+  TARGET_INVESTORS.length = 0;
+
+  // ── IR_ACTIVITIES ────────────────────────────
+  IR_ACTIVITIES.length = 0;
+
+  // ── INVESTOR_BRIDGE ──────────────────────────
+  INVESTOR_BRIDGE.length = 0;
+  // Seed default bridge milestones aligned to project duration
+  INVESTOR_BRIDGE.push(
+    {
+      regulatoryId: "R1",
+      month: 0,
+      milestone: ls("Pre-Sub Filed", "预提交已递交"),
+      investorAction: ls(
+        "Build relationships, warm intros — FDA engagement signals credibility",
+        "建立关系、暖引荐 — FDA参与证明可信度",
+      ),
+      signal: "warm",
+    },
+    {
+      regulatoryId: "R2",
+      month: Math.round(dur * 0.15),
+      milestone: ls("Pre-Sub Meeting (FDA Feedback)", "预提交会议（FDA反馈）"),
+      investorAction: ls(
+        "Active outreach & pitch meetings — FDA feedback de-risks the pathway",
+        "主动接触和路演 — FDA反馈降低了监管风险",
+      ),
+      signal: "active",
+    },
+    {
+      regulatoryId: "T3",
+      month: Math.round(dur * 0.25),
+      milestone: ls(
+        "Bench & Performance Testing Complete",
+        "台架和性能测试完成",
+      ),
+      investorAction: ls(
+        "Share performance data with prospects — hard data proves technical viability",
+        "与潜在投资者分享性能数据 — 硬数据证明技术可行性",
+      ),
+      signal: "active",
+    },
+    {
+      regulatoryId: "R3",
+      month: Math.round(dur * 0.5),
+      milestone: ls("510(k) Submitted", "510(k)已提交"),
+      investorAction: ls(
+        "Push for term sheets — submission is the inflection point",
+        "推动条款清单 — 提交是拐点",
+      ),
+      signal: "peak",
+    },
+    {
+      regulatoryId: "R4",
+      month: Math.round(dur * 0.75),
+      milestone: ls("510(k) Clearance", "510(k)批准"),
+      investorAction: ls(
+        "Close rounds, Series A positioning — cleared device, maximum leverage",
+        "完成融资轮次、Series A定位 — 已获批设备、最大谈判筹码",
+      ),
+      signal: "close",
+    },
+  );
+
+  // ── SHAREHOLDERS (Cap Table) ─────────────────
+  SHAREHOLDERS.length = 0;
+
+  // ── EQUITY_EVENTS ────────────────────────────
+  EQUITY_EVENTS.length = 0;
+
+  // ── VESTING_SCHEDULES ────────────────────────
+  VESTING_SCHEDULES.length = 0;
 }

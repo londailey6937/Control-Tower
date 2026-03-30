@@ -312,6 +312,14 @@ export const I18N: I18nMessages = {
     resourceWorkstream: "Workstream",
     resourceCapacity: "Capacity",
     resourceUtilization: "Utilization",
+    resourceAddBtn: "Add Team Member",
+    resourceFormName: "Name",
+    resourceFormRole: "Role",
+    resourceFormEmail: "Email",
+    resourceFormWorkstreams: "Workstreams (one per line, Name:Pct)",
+    resourceFormAdd: "Add",
+    resourceFormCancel: "Cancel",
+    resourceDeleteConfirm: "Remove this team member?",
 
     // Suppliers
     supplierTitle: "Supplier Tracker",
@@ -916,6 +924,14 @@ export const I18N: I18nMessages = {
     resourceWorkstream: "工作流",
     resourceCapacity: "产能",
     resourceUtilization: "利用率",
+    resourceAddBtn: "添加团队成员",
+    resourceFormName: "姓名",
+    resourceFormRole: "角色",
+    resourceFormEmail: "邮箱",
+    resourceFormWorkstreams: "工作流（每行一项，名称:百分比）",
+    resourceFormAdd: "添加",
+    resourceFormCancel: "取消",
+    resourceDeleteConfirm: "删除此团队成员？",
 
     // Suppliers
     supplierTitle: "供应商追踪器",

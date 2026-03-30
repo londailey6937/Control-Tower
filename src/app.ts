@@ -327,6 +327,15 @@ function setupEventDelegation(): void {
       case "cycleVestingStatus":
         window._cycleVestingStatus(a.vestingid!);
         break;
+      case "openAddTeamMemberForm":
+        window._openAddTeamMemberForm();
+        break;
+      case "addTeamMember":
+        window._addTeamMember();
+        break;
+      case "deleteTeamMember":
+        window._deleteTeamMember(a.tmid!);
+        break;
     }
   });
   document.addEventListener("change", (e) => {
@@ -484,27 +493,36 @@ function initFab(): void {
 // ── RENDER ALL ────────────────────────────────
 function renderAll(): void {
   applyRoleRestrictions();
-  renderSummary();
-  renderDualTrack();
-  renderGates();
-  renderRisks();
-  renderTimeline();
-  renderStandards();
-  renderCashRunway();
-  renderApiIntegrations();
-  renderUsApiIntegrations();
-  renderActionBoard();
-  renderDHFTable();
-  renderCAPALog();
-  renderBudget();
-  renderResources();
-  renderSuppliers();
-  renderAuditTrail();
-  renderUsInvestment();
-  renderCapTable();
-  renderDocLibrary();
-  renderQaSheet();
-  renderFdaComms();
+  const renderers: [string, () => void][] = [
+    ["Summary", renderSummary],
+    ["DualTrack", renderDualTrack],
+    ["Gates", renderGates],
+    ["Risks", renderRisks],
+    ["Timeline", renderTimeline],
+    ["Standards", renderStandards],
+    ["CashRunway", renderCashRunway],
+    ["ApiIntegrations", renderApiIntegrations],
+    ["UsApiIntegrations", renderUsApiIntegrations],
+    ["ActionBoard", renderActionBoard],
+    ["DHFTable", renderDHFTable],
+    ["CAPALog", renderCAPALog],
+    ["Budget", renderBudget],
+    ["Resources", renderResources],
+    ["Suppliers", renderSuppliers],
+    ["AuditTrail", renderAuditTrail],
+    ["UsInvestment", renderUsInvestment],
+    ["CapTable", renderCapTable],
+    ["DocLibrary", renderDocLibrary],
+    ["QaSheet", renderQaSheet],
+    ["FdaComms", renderFdaComms],
+  ];
+  for (const [name, fn] of renderers) {
+    try {
+      fn();
+    } catch (err) {
+      console.error(`renderAll: ${name} failed`, err);
+    }
+  }
   renderNotifications();
   updateFabBadge();
 }
@@ -1200,7 +1218,7 @@ function renderCashRunway(): void {
 
   // Burn history (editable for PMP/Business/Technology)
   const bhContainer = document.getElementById("burnHistoryContainer")!;
-  const maxBurn = Math.max(...cr.burnHistory.map((b) => b.burn));
+  const maxBurn = Math.max(1, ...cr.burnHistory.map((b) => b.burn));
   bhContainer.innerHTML = cr.burnHistory
     .map((b) => {
       const pct = Math.round((b.burn / maxBurn) * 100);
@@ -6675,6 +6693,8 @@ function renderResources(): void {
   const container = document.getElementById("resourceGrid");
   if (!container) return;
 
+  const canEdit = ["pmp", "business", "technology"].includes(ACTIVE_ROLE);
+
   container.innerHTML = TEAM_MEMBERS.map((m) => {
     const totalAlloc = m.allocation.reduce((s, a) => s + a.pct, 0);
     const utilPct = Math.round((totalAlloc / m.capacity) * 100);
@@ -6686,6 +6706,7 @@ function renderResources(): void {
         <div class="resource-header">
           <span class="resource-name">${m.name}</span>
           <span class="resource-util ${utilClass}">${utilPct}%</span>
+          ${canEdit ? `<button class="doc-remove-btn" data-action="deleteTeamMember" data-tmid="${m.id}" title="✕" style="margin-left:auto">✕</button>` : ""}
         </div>
         <div class="resource-role">${localizedText(m.role)}</div>
         ${m.email ? `<div class="resource-email">📧 <a href="mailto:${m.email}">${m.email}</a></div>` : ""}
@@ -6707,7 +6728,78 @@ function renderResources(): void {
       </div>
     `;
   }).join("");
+
+  // Add team member button
+  const addBtnWrap = document.getElementById("resourceAddBtnWrap");
+  if (addBtnWrap) {
+    addBtnWrap.innerHTML = canEdit
+      ? `<button class="btn-add-funding" data-action="openAddTeamMemberForm">+ ${t("resourceAddBtn")}</button>`
+      : "";
+  }
 }
+
+// ── Resource CRUD ───────────────────────────
+window._openAddTeamMemberForm = function (): void {
+  const form = document.getElementById("resourceAddForm");
+  if (!form) return;
+  form.innerHTML = `
+    <h4>${t("resourceAddBtn")}</h4>
+    <div class="funding-form-row">
+      <input type="text" id="tmFormName" placeholder="${t("resourceFormName")}" />
+      <input type="text" id="tmFormRole" placeholder="${t("resourceFormRole")}" />
+      <input type="text" id="tmFormEmail" placeholder="${t("resourceFormEmail")}" />
+      <input type="text" id="tmFormWorkstreams" placeholder="${t("resourceFormWorkstreams")}" />
+      <button class="btn-add-funding" data-action="addTeamMember">${t("resourceFormAdd")}</button>
+      <button class="btn-secondary" onclick="document.getElementById('resourceAddForm').innerHTML=''">${t("resourceFormCancel")}</button>
+    </div>
+  `;
+};
+
+window._addTeamMember = function (): void {
+  if (!["pmp", "business", "technology"].includes(ACTIVE_ROLE)) return;
+  const nameEl = document.getElementById("tmFormName") as HTMLInputElement;
+  const roleEl = document.getElementById("tmFormRole") as HTMLInputElement;
+  const emailEl = document.getElementById("tmFormEmail") as HTMLInputElement;
+  const wsEl = document.getElementById("tmFormWorkstreams") as HTMLInputElement;
+  const name = nameEl?.value?.trim();
+  if (!name) return;
+  const id = "TM-" + String(TEAM_MEMBERS.length + 1).padStart(3, "0");
+  const wsText = wsEl?.value?.trim() || "";
+  const alloc = wsText
+    .split("\n")
+    .map((line) => {
+      const parts = line.split(":");
+      if (parts.length < 2) return null;
+      return { workstream: parts[0].trim(), pct: parseInt(parts[1]) || 0 };
+    })
+    .filter(Boolean) as { workstream: string; pct: number }[];
+
+  TEAM_MEMBERS.push({
+    id,
+    name,
+    role: { en: roleEl?.value?.trim() || "", cn: roleEl?.value?.trim() || "" },
+    email: emailEl?.value?.trim() || undefined,
+    allocation: alloc.length
+      ? alloc
+      : [{ workstream: roleEl?.value?.trim() || "General", pct: 100 }],
+    capacity: 100,
+  });
+  logAudit("team-add", id, "add", "", name, "");
+  const form = document.getElementById("resourceAddForm");
+  if (form) form.innerHTML = "";
+  renderResources();
+};
+
+window._deleteTeamMember = function (tmId: string): void {
+  if (!["pmp", "business", "technology"].includes(ACTIVE_ROLE)) return;
+  if (!confirm(t("resourceDeleteConfirm"))) return;
+  const idx = TEAM_MEMBERS.findIndex((m) => m.id === tmId);
+  if (idx < 0) return;
+  const member = TEAM_MEMBERS[idx];
+  TEAM_MEMBERS.splice(idx, 1);
+  logAudit("team-delete", tmId, "delete", member.name, "", "");
+  renderResources();
+};
 
 // ══════════════════════════════════════════════════
 // SUPPLIER / VENDOR TRACKER
