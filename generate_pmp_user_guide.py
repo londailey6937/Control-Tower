@@ -352,7 +352,7 @@ def build_english():
         ("Risk Dashboard", "ISO 14971 risk matrix with severity/probability"),
         ("Audit Trail", "Timestamped log of all dashboard changes"),
         ("Document Control", "ISO 13485-aligned document lifecycle management"),
-        ("Actions", "Action items with assignments, due dates, and gate links"),
+        ("Actions", "Task board, DHF Document Tracker, DMR Document Tracker, and CAPA Log"),
         ("Timeline", "Month-by-month project timeline view"),
         ("Budget", "Budget categories with planned vs. actual tracking"),
         ("Cash / Runway", "Cash position, burn rate, and runway forecast"),
@@ -546,6 +546,31 @@ def build_english():
     pdf.kv("Status", "Todo, In Progress, Done, Blocked")
     pdf.kv("Due Date", "Target completion date")
     pdf.kv("Linked Gate", "Associated gate review (e.g., G1, G2)")
+
+    pdf.sub("DHF Document Tracker")
+    pdf.txt(
+        "The Design History File (DHF) Document Tracker appears within the Actions tab. "
+        "It tracks all design-phase documents required by 21 CFR 820.30. Click a document's "
+        "status badge to cycle through: Not Started \u2192 Draft \u2192 In Review \u2192 Approved."
+    )
+
+    pdf.sub("DMR Document Tracker")
+    pdf.txt(
+        "The Device Master Record (DMR) Document Tracker is also within the Actions tab, "
+        "below the DHF tracker. It tracks 12 documents required by 21 CFR 820.181 covering "
+        "device specifications, production processes, quality procedures, and packaging/labeling. "
+        "Status cycling works identically to the DHF tracker."
+    )
+    pdf.txt(
+        "DMR documents become critical at Gate 4 (Manufacturing Scale-Up / Design Transfer). "
+        "Gate 4 criteria include \u2018Manufacturing scaled\u2014production ready.\u2019"
+    )
+
+    pdf.sub("CAPA Log")
+    pdf.txt(
+        "The Corrective and Preventive Action (CAPA) Log is also within the Actions tab. "
+        "It tracks CAPA items with type (Corrective or Preventive), status, owner, and linked gate."
+    )
 
     # ── 11. Timeline ──
     pdf.add_page()
@@ -800,7 +825,7 @@ def build_english():
 
     pdf.sub("Data Persistence")
     pdf.bul("Project configuration: ctower_project_data (localStorage)")
-    pdf.bul("Live dashboard state: ctower_live_state (localStorage) -- milestones, gates, risks, standards, budget, cash/runway, action items, DHF, CAPA, team, suppliers, investors, cap table, audit log")
+    pdf.bul("Live dashboard state: ctower_live_state (localStorage) -- milestones, gates, risks, standards, budget, cash/runway, action items, DHF, DMR, CAPA, team, suppliers, investors, cap table, audit log")
     pdf.bul("Message Board threads: ctower_mb_threads (localStorage)")
     pdf.bul("Documents: ctower_doclib_docs (localStorage)")
     pdf.bul("Messages: Supabase messages table (synced)")
@@ -1028,7 +1053,7 @@ def build_chinese():
         ("风险仪表板", "ISO 14971 风险矩阵（严重性/概率）"),
         ("审计跟踪", "所有仪表板变更的时间戳记录"),
         ("文档控制", "ISO 13485 对齐的文档生命周期管理"),
-        ("行动项", "分配任务、截止日期和门控关联"),
+        ("行动项", "任务看板、DHF文档追踪、DMR文档追踪和CAPA日志"),
         ("时间线", "按月查看的项目时间线"),
         ("预算", "预算类别的计划与实际对比"),
         ("现金/续航", "现金状况、消耗率和续航预测"),
@@ -1184,6 +1209,30 @@ def build_chinese():
     pdf.kv("优先级", "高、中、低")
     pdf.kv("状态", "待办、进行中、完成、受阻")
     pdf.kv("截止日期", "目标完成日期")
+
+    pdf.sub("DHF文档追踪器")
+    pdf.txt(
+        "设计历史文件(DHF)文档追踪器位于行动项标签页内。"
+        "它追踪所有21 CFR 820.30要求的设计阶段文档。点击文档状态徽章可循环切换："
+        "未开始 \u2192 草稿 \u2192 审查中 \u2192 已批准。"
+    )
+
+    pdf.sub("DMR文档追踪器")
+    pdf.txt(
+        "器械主记录(DMR)文档追踪器也位于行动项标签页内，在DHF追踪器下方。"
+        "它追踪按版21 CFR 820.181要求的12份文档，涵盖器械规格、"
+        "生产工艺、质量程序和包装/标签。状态循环与DHF追踪器相同。"
+    )
+    pdf.txt(
+        "DMR文档在门控4（制造规模化/设计转移）变得至关重要。"
+        "门控4标准包括\u2018制造规模化\u2014\u2014生产就绪\u2019。"
+    )
+
+    pdf.sub("CAPA日志")
+    pdf.txt(
+        "纠正和预防措施(CAPA)日志也位于行动项标签页内。"
+        "它跟踪CAPA项目的类型（纠正或预防）、状态、负责人和关联门控。"
+    )
 
     # ── 11. 时间线 ──
     pdf.sec(11, "时间线")
