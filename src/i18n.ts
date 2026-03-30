@@ -814,7 +814,8 @@ export const I18N: I18nMessages = {
     roleAccounting: "财务会计",
     roleLabel: "当前角色",
     roleReadOnly: "只读",
-    roleAccountingAccess: "财务会计：只读访问资金/跑道、预算、股权表、美国投资、时间线、门控状态、留言板",
+    roleAccountingAccess:
+      "财务会计：只读访问资金/跑道、预算、股权表、美国投资、时间线、门控状态、留言板",
     roleTechAccess: "技术团队：仅限技术与法规标签页 — 财务数据受限",
     roleBusinessAccess: "商业/投资方：仅限财务与规划标签页 — 技术IP受限",
     tierLabel: "套餐",

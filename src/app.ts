@@ -2151,21 +2151,54 @@ window._setRole = function (role: string): void {
 
 const ROLE_TABS: Record<string, Set<string>> = {
   pmp: new Set([
-    "dual-track", "gates", "regulatory", "risks", "audit", "doc-library",
-    "actions", "timeline", "budget", "cash-runway", "us-investment",
-    "cap-table", "resources", "suppliers", "qa-sheet", "fda-comms",
+    "dual-track",
+    "gates",
+    "regulatory",
+    "risks",
+    "audit",
+    "doc-library",
+    "actions",
+    "timeline",
+    "budget",
+    "cash-runway",
+    "us-investment",
+    "cap-table",
+    "resources",
+    "suppliers",
+    "qa-sheet",
+    "fda-comms",
   ]),
   tech: new Set([
-    "dual-track", "gates", "regulatory", "risks", "audit", "doc-library",
-    "actions", "resources", "suppliers", "qa-sheet",
+    "dual-track",
+    "gates",
+    "regulatory",
+    "risks",
+    "audit",
+    "doc-library",
+    "actions",
+    "resources",
+    "suppliers",
+    "qa-sheet",
   ]),
   business: new Set([
-    "dual-track", "gates", "timeline", "budget", "cash-runway",
-    "us-investment", "cap-table", "actions", "qa-sheet",
+    "dual-track",
+    "gates",
+    "timeline",
+    "budget",
+    "cash-runway",
+    "us-investment",
+    "cap-table",
+    "actions",
+    "qa-sheet",
   ]),
   accounting: new Set([
-    "cash-runway", "budget", "timeline", "gates",
-    "us-investment", "cap-table", "qa-sheet",
+    "cash-runway",
+    "budget",
+    "timeline",
+    "gates",
+    "us-investment",
+    "cap-table",
+    "qa-sheet",
   ]),
 };
 
@@ -2183,6 +2216,9 @@ function applyRoleRestrictions(): void {
       const hidden = role !== "pmp" || !tierAllowed.has(tab);
       btn.style.display = hidden ? "none" : "";
       btn.disabled = hidden;
+      // Also hide/show the panel itself
+      const panel = document.getElementById("panel-fda-comms");
+      if (panel && hidden) panel.classList.remove("active");
     } else {
       const tierOk = tierAllowed.has(tab);
       const roleOk = roleTabs.has(tab);
@@ -2196,7 +2232,9 @@ function applyRoleRestrictions(): void {
   const currentAllowed = tierAllowed.has(activeTab) && roleTabs.has(activeTab);
   if (!currentAllowed) {
     // dual-track is common to all roles except accounting; accounting falls back to cash-runway
-    const fallbackTab = roleTabs.has("dual-track") ? "dual-track" : "cash-runway";
+    const fallbackTab = roleTabs.has("dual-track")
+      ? "dual-track"
+      : "cash-runway";
     const fallback = document.querySelector<HTMLButtonElement>(
       `.tab-btn[data-tab="${fallbackTab}"]`,
     );
@@ -5154,9 +5192,12 @@ function exportQaThread(): void {
 // ══════════════════════════════════════════════════
 
 function renderFdaComms(): void {
-  if (ACTIVE_ROLE !== "pmp") return;
   const body = document.getElementById("fdaCommsBody");
   if (!body) return;
+  if (ACTIVE_ROLE !== "pmp") {
+    body.innerHTML = "";
+    return;
+  }
   const isCN = getLang() === "cn";
 
   // ── Gather project data ──────────────────────
