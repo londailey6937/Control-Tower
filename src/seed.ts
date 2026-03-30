@@ -373,9 +373,21 @@ export function seed(a: WizardAnswers): void {
             },
           ]
         : [],
-    burnHistory: [
-      { month: 0, burn: monthlyBurn, note: ls("Project start", "项目启动") },
-    ],
+    burnHistory: (() => {
+      const hist = [];
+      const months = Math.min(dur, 6);
+      for (let m = 0; m < months; m++) {
+        hist.push({
+          month: m,
+          burn: monthlyBurn,
+          note: ls(
+            m === 0 ? "Project start" : `Month ${m}`,
+            m === 0 ? "项目启动" : `第${m}月`,
+          ),
+        });
+      }
+      return hist;
+    })(),
   });
 
   // ── STAKEHOLDER_INPUTS ───────────────────────
@@ -530,6 +542,18 @@ export function seed(a: WizardAnswers): void {
       notes: "",
     });
   });
+  if (!SUPPLIERS.length) {
+    SUPPLIERS.push({
+      id: "SUP-001",
+      name: isCn ? "供应商 (待定)" : "Supplier (TBD)",
+      component: ls(isCn ? "待定" : "TBD"),
+      status: "under-review",
+      leadTimeDays: 0,
+      poStatus: "Pending",
+      contractMfgMilestone: "TBD",
+      notes: "",
+    });
+  }
 
   // ── QA_SECTIONS ──────────────────────────────
   QA_SECTIONS.length = 0;
@@ -552,9 +576,37 @@ export function seed(a: WizardAnswers): void {
 
   // ── TARGET_INVESTORS ─────────────────────────
   TARGET_INVESTORS.length = 0;
+  TARGET_INVESTORS.push(
+    {
+      id: "INV-001",
+      name: isCn ? "投资方1 (待定)" : "Investor 1 (TBD)",
+      type: "VC",
+      stage: "Seed",
+      contact: "prospect",
+      amount: 0,
+      notes: isCn ? "待联系" : "Pending outreach",
+    },
+    {
+      id: "INV-002",
+      name: isCn ? "投资方2 (待定)" : "Investor 2 (TBD)",
+      type: "Angel Group",
+      stage: "Seed",
+      contact: "prospect",
+      amount: 0,
+      notes: "",
+    },
+  );
 
   // ── IR_ACTIVITIES ────────────────────────────
   IR_ACTIVITIES.length = 0;
+  IR_ACTIVITIES.push({
+    id: "IRA-001",
+    date: offsetDate(0),
+    activity: isCn
+      ? "项目启动——准备投资者资料"
+      : "Project kickoff — prepare investor materials",
+    status: "todo",
+  });
 
   // ── INVESTOR_BRIDGE ──────────────────────────
   INVESTOR_BRIDGE.length = 0;
@@ -616,11 +668,52 @@ export function seed(a: WizardAnswers): void {
   );
 
   // ── SHAREHOLDERS (Cap Table) ─────────────────
+  const founderName = a.applicantName || (isCn ? "创始人" : "Founder");
   SHAREHOLDERS.length = 0;
+  SHAREHOLDERS.push(
+    {
+      id: "SH-001",
+      name: founderName,
+      role: isCn ? "创始人" : "Founder",
+      shareClass: "common",
+      shares: 0,
+      notes: isCn ? "创始人普通股" : "Founder common shares",
+    },
+    {
+      id: "SH-002",
+      name: isCn ? "期权池" : "Option Pool",
+      role: isCn ? "预留" : "Reserved",
+      shareClass: "options",
+      shares: 0,
+      notes: isCn ? "员工期权预留 (ESOP)" : "Employee stock option pool (ESOP)",
+    },
+  );
 
   // ── EQUITY_EVENTS ────────────────────────────
   EQUITY_EVENTS.length = 0;
+  EQUITY_EVENTS.push({
+    id: "EQ-001",
+    date: offsetDate(0),
+    event: isCn ? "公司成立" : "Company Formation",
+    shareClass: "common",
+    shares: 0,
+    pricePerShare: 0,
+    totalValue: 0,
+    status: "pending",
+    notes: isCn ? "待分配股份" : "Shares pending allocation",
+  });
 
   // ── VESTING_SCHEDULES ────────────────────────
   VESTING_SCHEDULES.length = 0;
+  VESTING_SCHEDULES.push({
+    id: "VS-001",
+    holder: founderName,
+    shares: 0,
+    startDate: offsetDate(0),
+    cliffMonths: 12,
+    totalMonths: 48,
+    vestedShares: 0,
+    status: "vesting",
+    notes: isCn ? "4年归属, 1年悬崖期" : "4-year vest, 1-year cliff",
+  });
 }

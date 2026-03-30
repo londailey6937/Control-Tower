@@ -317,7 +317,7 @@ type WizData = Record<string, unknown>;
 function renderBasics(el: HTMLElement, d: WizData, lang: "en" | "cn"): void {
   el.innerHTML = `<h2>${tx(TXT.s1Title, lang)}</h2><p class="hint">${tx(TXT.s1Hint, lang)}</p>
   ${fld(tx(TXT.projectName, lang), inp("projectName", gv(d, "projectName"), tx(TXT.projectNamePh, lang), "text", true))}
-  ${fld(tx(TXT.projectNameCn, lang), inp("projectNameCn", gv(d, "projectNameCn"), ""))}
+  ${lang === "cn" ? fld(tx(TXT.projectNameCn, lang), inp("projectNameCn", gv(d, "projectNameCn"), "")) : ""}
   ${fld(tx(TXT.subtitle, lang), inp("subtitle", gv(d, "subtitle"), tx(TXT.subtitlePh, lang)))}
   ${fld(tx(TXT.preparedDate, lang), inp("preparedDate", gv(d, "preparedDate"), tx(TXT.preparedDatePh, lang)))}
   ${fld(tx(TXT.contactEmail, lang), inp("contactEmail", gv(d, "contactEmail"), tx(TXT.contactEmailPh, lang), "email", true))}`;
@@ -356,9 +356,9 @@ function renderRegulatory(
 function renderApplicant(el: HTMLElement, d: WizData, lang: "en" | "cn"): void {
   el.innerHTML = `<h2>${tx(TXT.s3Title, lang)}</h2><p class="hint">${tx(TXT.s3Hint, lang)}</p>
   ${fld(tx(TXT.applicantName, lang), inp("applicantName", gv(d, "applicantName"), tx(TXT.applicantNamePh, lang), "text", true))}
-  ${fld(tx(TXT.applicantNameCn, lang), inp("applicantNameCn", gv(d, "applicantNameCn"), ""))}
+  ${lang === "cn" ? fld(tx(TXT.applicantNameCn, lang), inp("applicantNameCn", gv(d, "applicantNameCn"), "")) : ""}
   ${fld(tx(TXT.manufacturerName, lang), inp("manufacturerName", gv(d, "manufacturerName"), tx(TXT.manufacturerNamePh, lang)))}
-  ${fld(tx(TXT.manufacturerNameCn, lang), inp("manufacturerNameCn", gv(d, "manufacturerNameCn"), ""))}`;
+  ${lang === "cn" ? fld(tx(TXT.manufacturerNameCn, lang), inp("manufacturerNameCn", gv(d, "manufacturerNameCn"), "")) : ""}`;
 }
 
 function renderTeam(el: HTMLElement, d: WizData, lang: "en" | "cn"): void {
