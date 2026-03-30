@@ -41,10 +41,11 @@ export function isOnline(): boolean {
 
 // ── Message CRUD ───────────────────────────────────
 
-export async function fetchMessages(): Promise<DbMessage[]> {
+export async function fetchMessages(projectId: string): Promise<DbMessage[]> {
   const { data, error } = await supabase
     .from("messages")
     .select("*")
+    .eq("project_id", projectId)
     .order("created_at", { ascending: true });
   if (error) {
     console.error("Supabase fetchMessages:", error);
@@ -55,10 +56,12 @@ export async function fetchMessages(): Promise<DbMessage[]> {
 
 export async function fetchMessagesByQuestion(
   qNum: number,
+  projectId: string,
 ): Promise<DbMessage[]> {
   const { data, error } = await supabase
     .from("messages")
     .select("*")
+    .eq("project_id", projectId)
     .eq("q_num", qNum)
     .order("created_at", { ascending: true });
   if (error) {
@@ -235,4 +238,49 @@ export async function fetchAllowedTabs(projectId: string): Promise<string[]> {
     return ["dual-track", "gates", "timeline", "budget"];
   }
   return data ?? ["dual-track", "gates", "timeline", "budget"];
+}
+
+// ── Document Control — DHF Upload ───────────────
+
+export interface DbDhfDocument {
+  id: string;
+  project_id: string;
+  dcn: string;
+  category: string;
+  title: string;
+  version: string;
+  status: string;
+  owner: string;
+  effective_date: string | null;
+  next_review: string | null;
+  revisions: unknown[];
+  updated_at?: string;
+}
+
+export async function upsertDhfDocument(
+  projectId: string,
+  doc: Omit<DbDhfDocument, "updated_at">,
+): Promise<boolean> {
+  const { error } = await supabase
+    .from("dhf_documents")
+    .upsert({ ...doc, project_id: projectId }, { onConflict: "id" });
+  if (error) {
+    console.error("Supabase upsertDhfDocument:", error);
+    return false;
+  }
+  return true;
+}
+
+export async function upsertDhfDocumentBatch(
+  projectId: string,
+  docs: Omit<DbDhfDocument, "updated_at">[],
+): Promise<{ ok: number; failed: number }> {
+  let ok = 0;
+  let failed = 0;
+  for (const doc of docs) {
+    const success = await upsertDhfDocument(projectId, doc);
+    if (success) ok++;
+    else failed++;
+  }
+  return { ok, failed };
 }

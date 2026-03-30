@@ -1,0 +1,718 @@
+{
+  "respiratory": {
+    "lang": "en",
+    "templateId": "respiratory",
+    "projectName": "AirFlow Pro 3000 Ventilator",
+    "subtitle": "ICU ventilator for adult and pediatric patients",
+    "preparedDate": "2026-03-30",
+    "contactEmail": "j.chen@shenzhenmed.cn",
+    "submissionType": "510k-standard",
+    "deviceClass": "II",
+    "productCode": "BZD, CBK",
+    "regulationSection": "§ 868",
+    "predicateDevices": "Maquet NAVA Edi catheter (K082437)\nPhilips Respironics DreamStation (K142954)\nAiroCide TiO2 (K023830)",
+    "applicantName": "Shenzhen MedTech Innovations Ltd.",
+    "applicantNameCn": "深圳迈泰创新医疗科技有限公司",
+    "manufacturerName": "Shenzhen MedTech Innovations Ltd.",
+    "manufacturerNameCn": "深圳迈泰创新医疗科技有限公司",
+    "team": [
+      {
+        "name": "Dr. Wei Zhang",
+        "role": "Project Lead / Regulatory Lead",
+        "email": "w.zhang@shenzhenmed.cn",
+        "workstreams": "Regulatory strategy: 40\nPre-Sub coordination: 30\nFDA communications: 30"
+      },
+      {
+        "name": "Emily Liu",
+        "role": "Mechanical Engineer",
+        "email": "e.liu@shenzhenmed.cn",
+        "workstreams": "Airflow & Pressure Control: 40\nHumidification System: 30\nPatient Interface Design: 30"
+      },
+      {
+        "name": "James Wang",
+        "role": "Software Engineer",
+        "email": "j.wang@shenzhenmed.cn",
+        "workstreams": "Software Validation (IEC 62304): 60\nAlarm & Safety Systems: 40"
+      },
+      {
+        "name": "Sarah Chen",
+        "role": "Quality Engineer",
+        "email": "s.chen@shenzhenmed.cn",
+        "workstreams": "ISO 13485 QMS: 40\nDesign Controls: 30\nDHF documentation: 30"
+      },
+      {
+        "name": "Michael Li",
+        "role": "Test Engineer",
+        "email": "m.li@shenzhenmed.cn",
+        "workstreams": "IEC 60601-1 safety testing: 40\nEMC testing: 30\nBiocompatibility (ISO 10993): 30"
+      }
+    ],
+    "budgets": [
+      { "label": "Prototype & Materials", "planned": 45000 },
+      { "label": "Bench & Performance Testing", "planned": 35000 },
+      { "label": "Biocompatibility Testing", "planned": 22000 },
+      { "label": "EMC/Safety Testing", "planned": 28000 },
+      { "label": "Software V&V", "planned": 40000 },
+      { "label": "Regulatory & Legal", "planned": 18000 },
+      { "label": "Personnel", "planned": 85000 },
+      { "label": "Clinical Studies", "planned": 15000 }
+    ],
+    "cashOnHand": 350000,
+    "currency": "USD",
+    "projectDurationMonths": 18,
+    "currentMonth": 3,
+    "techAreas": "Airflow & Pressure Control\nHumidification System\nAlarm & Safety Systems\nPatient Interface Design\nElectrical Safety (IEC 60601-1)\nEMC Testing (IEC 60601-1-2)\nSoftware Validation (IEC 62304)\nBiocompatibility (ISO 10993)",
+    "suppliers": [
+      {
+        "name": "Bosch Sensortec",
+        "component": "Pressure/flow sensors (BMP388)",
+        "leadTimeDays": 45
+      },
+      {
+        "name": "Nidec Motor Corp",
+        "component": "Blower motor assembly",
+        "leadTimeDays": 60
+      },
+      {
+        "name": "Fisher & Paykel OEM",
+        "component": "Humidification chamber",
+        "leadTimeDays": 30
+      },
+      {
+        "name": "Intertek Shenzhen",
+        "component": "IEC 60601 safety testing",
+        "leadTimeDays": 90
+      }
+    ],
+    "docFlags": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+
+  "cardiovascular": {
+    "lang": "en",
+    "templateId": "cardiovascular",
+    "projectName": "CardioWatch ECG-12 Monitor",
+    "subtitle": "12-lead portable ECG with arrhythmia detection",
+    "preparedDate": "2026-03-30",
+    "contactEmail": "h.zhao@suzhou-cardio.cn",
+    "submissionType": "510k-standard",
+    "deviceClass": "II",
+    "productCode": "DRX, DXH",
+    "regulationSection": "§ 870",
+    "predicateDevices": "GE MAC 800 (K150827)\nPhilips TC30 (K143197)\nWelch Allyn CP 150 (K151432)",
+    "applicantName": "Suzhou CardioTech Solutions Co., Ltd.",
+    "applicantNameCn": "苏州心科技解决方案有限公司",
+    "manufacturerName": "Suzhou CardioTech Solutions Co., Ltd.",
+    "manufacturerNameCn": "苏州心科技解决方案有限公司",
+    "team": [
+      {
+        "name": "Dr. Lin Zhao",
+        "role": "Project Lead / Regulatory Lead",
+        "email": "l.zhao@suzhou-cardio.cn",
+        "workstreams": "Regulatory strategy: 40\n510(k) preparation: 30\nPredicate analysis: 30"
+      },
+      {
+        "name": "Kevin Wu",
+        "role": "Hardware Engineer",
+        "email": "k.wu@suzhou-cardio.cn",
+        "workstreams": "ECG front-end circuit design: 40\nAnalog signal conditioning: 30\nElectrical safety (IEC 60601-1): 30"
+      },
+      {
+        "name": "Amy Tan",
+        "role": "Algorithm Engineer",
+        "email": "a.tan@suzhou-cardio.cn",
+        "workstreams": "Arrhythmia detection algorithm: 40\nSoftware V&V (IEC 62304): 30\nSignal processing: 30"
+      },
+      {
+        "name": "David Xu",
+        "role": "Quality/Regulatory",
+        "email": "d.xu@suzhou-cardio.cn",
+        "workstreams": "ISO 13485 QMS: 40\nDesign controls: 30\n21 CFR 820 compliance: 30"
+      },
+      {
+        "name": "Rachel Fang",
+        "role": "Clinical Affairs",
+        "email": "r.fang@suzhou-cardio.cn",
+        "workstreams": "Clinical evidence review: 40\nSubstantial equivalence: 30\nPerformance testing protocol: 30"
+      }
+    ],
+    "budgets": [
+      { "label": "Prototype & Materials", "planned": 38000 },
+      { "label": "Bench & Performance Testing", "planned": 42000 },
+      { "label": "Biocompatibility Testing", "planned": 15000 },
+      { "label": "EMC/Safety Testing", "planned": 30000 },
+      { "label": "Software V&V", "planned": 35000 },
+      { "label": "Regulatory & Legal", "planned": 20000 },
+      { "label": "Personnel", "planned": 90000 },
+      { "label": "Clinical Studies", "planned": 25000 }
+    ],
+    "cashOnHand": 400000,
+    "currency": "USD",
+    "projectDurationMonths": 18,
+    "currentMonth": 2,
+    "techAreas": "ECG Signal Acquisition\nArrhythmia Detection Algorithm\nDisplay & User Interface\nPatient Lead Design\nElectrical Safety (IEC 60601-1)\nEMC Testing (IEC 60601-1-2)\nSoftware Validation (IEC 62304)\nBiocompatibility (ISO 10993)",
+    "suppliers": [
+      {
+        "name": "Texas Instruments",
+        "component": "ADS1298 ECG analog front-end",
+        "leadTimeDays": 30
+      },
+      {
+        "name": "Amphenol Medical",
+        "component": "Patient lead connectors & cables",
+        "leadTimeDays": 45
+      },
+      {
+        "name": "BOE Technology",
+        "component": "7-inch medical-grade LCD panel",
+        "leadTimeDays": 35
+      },
+      {
+        "name": "TÜV SÜD Shanghai",
+        "component": "IEC 60601-2-27 ECG testing",
+        "leadTimeDays": 120
+      }
+    ],
+    "docFlags": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+
+  "orthopedic": {
+    "lang": "en",
+    "templateId": "orthopedic",
+    "projectName": "OrthoFlex Locking Plate System",
+    "subtitle": "Titanium distal radius locking plate for fracture fixation",
+    "preparedDate": "2026-03-30",
+    "contactEmail": "q.yang@hangzhou-ortho.cn",
+    "submissionType": "510k-standard",
+    "deviceClass": "II",
+    "productCode": "HRS, MAX",
+    "regulationSection": "§ 888",
+    "predicateDevices": "Synthes VA-LCP (K100486)\nSmith+Nephew PERI-LOC (K091435)\nStryker VariAx (K112847)",
+    "applicantName": "Hangzhou OrthoMed Devices Co., Ltd.",
+    "applicantNameCn": "杭州奥索医疗器械有限公司",
+    "manufacturerName": "Hangzhou OrthoMed Devices Co., Ltd.",
+    "manufacturerNameCn": "杭州奥索医疗器械有限公司",
+    "team": [
+      {
+        "name": "Dr. Qiang Yang",
+        "role": "Project Lead / Regulatory",
+        "email": "q.yang@hangzhou-ortho.cn",
+        "workstreams": "Regulatory strategy: 40\nPredicate device analysis: 30\n510(k) submission: 30"
+      },
+      {
+        "name": "Tony Ma",
+        "role": "Design Engineer",
+        "email": "t.ma@hangzhou-ortho.cn",
+        "workstreams": "Plate & screw geometry design: 40\nFEA structural analysis: 30\nInstrumentation design: 30"
+      },
+      {
+        "name": "Grace Huang",
+        "role": "Materials Engineer",
+        "email": "g.huang@hangzhou-ortho.cn",
+        "workstreams": "Ti-6Al-4V material characterization: 40\nCorrosion testing: 30\nBiocompatibility (ISO 10993): 30"
+      },
+      {
+        "name": "Peter Zheng",
+        "role": "Test Engineer",
+        "email": "p.zheng@hangzhou-ortho.cn",
+        "workstreams": "ASTM F2077 static/fatigue testing: 40\nPackaging validation (ASTM D4169): 30\nSterilization validation: 30"
+      },
+      {
+        "name": "Linda Gao",
+        "role": "Quality Manager",
+        "email": "l.gao@hangzhou-ortho.cn",
+        "workstreams": "ISO 13485 QMS: 40\nDesign controls / DHF: 30\nSterilization (ISO 11135): 30"
+      }
+    ],
+    "budgets": [
+      { "label": "Prototype & Materials", "planned": 65000 },
+      { "label": "Bench & Performance Testing", "planned": 55000 },
+      { "label": "Biocompatibility Testing", "planned": 25000 },
+      { "label": "EMC/Safety Testing", "planned": 8000 },
+      { "label": "Software V&V", "planned": 5000 },
+      { "label": "Regulatory & Legal", "planned": 22000 },
+      { "label": "Personnel", "planned": 110000 },
+      { "label": "Clinical Studies", "planned": 30000 }
+    ],
+    "cashOnHand": 450000,
+    "currency": "USD",
+    "projectDurationMonths": 24,
+    "currentMonth": 4,
+    "techAreas": "Implant Geometry & FEA\nMetallurgy & Corrosion\nSterilization Validation\nPackaging Validation\nMechanical Testing (ASTM F2077)\nBiocompatibility (ISO 10993)\nSurgical Instruments\nLabeling & IFU",
+    "suppliers": [
+      {
+        "name": "Baoji Titanium Industry",
+        "component": "Ti-6Al-4V ELI bar stock (ASTM F136)",
+        "leadTimeDays": 60
+      },
+      {
+        "name": "Sterigenics Suzhou",
+        "component": "EtO sterilization services",
+        "leadTimeDays": 21
+      },
+      {
+        "name": "Amcor Flexibles",
+        "component": "Tyvek/foil sterile barrier pouches",
+        "leadTimeDays": 40
+      },
+      {
+        "name": "MTS Systems",
+        "component": "Fatigue testing services (ASTM F2077)",
+        "leadTimeDays": 90
+      },
+      {
+        "name": "NAMSA China",
+        "component": "Biocompatibility testing (ISO 10993)",
+        "leadTimeDays": 120
+      }
+    ],
+    "docFlags": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+
+  "ivd": {
+    "lang": "en",
+    "templateId": "ivd",
+    "projectName": "RapidCheck CRP POCT Analyzer",
+    "subtitle": "Point-of-care C-reactive protein quantitative immunoassay",
+    "preparedDate": "2026-03-30",
+    "contactEmail": "y.sun@guangzhou-dx.cn",
+    "submissionType": "510k-standard",
+    "deviceClass": "II",
+    "productCode": "LLL, JJY",
+    "regulationSection": "§ 862-864",
+    "predicateDevices": "Abbott i-STAT CRP (K181913)\nRoche cobas h 232 (K070172)\nSiemens DCA Vantage (K082430)",
+    "applicantName": "Guangzhou DiagnoTech Biomedical Co., Ltd.",
+    "applicantNameCn": "广州达诺泰生物医学有限公司",
+    "manufacturerName": "Guangzhou DiagnoTech Biomedical Co., Ltd.",
+    "manufacturerNameCn": "广州达诺泰生物医学有限公司",
+    "team": [
+      {
+        "name": "Dr. Yanping Sun",
+        "role": "Project Lead / R&D Director",
+        "email": "y.sun@guangzhou-dx.cn",
+        "workstreams": "Assay development: 40\nRegulatory strategy: 30\nClinical study design: 30"
+      },
+      {
+        "name": "Frank He",
+        "role": "Assay Scientist",
+        "email": "f.he@guangzhou-dx.cn",
+        "workstreams": "Immunoassay chemistry: 40\nReagent formulation: 30\nStability studies: 30"
+      },
+      {
+        "name": "Nancy Zhou",
+        "role": "Instrument Engineer",
+        "email": "n.zhou@guangzhou-dx.cn",
+        "workstreams": "Optical reader design: 40\nFluidics system: 30\nCalibration system: 30"
+      },
+      {
+        "name": "Leo Cheng",
+        "role": "Software Engineer",
+        "email": "l.cheng@guangzhou-dx.cn",
+        "workstreams": "Software V&V (IEC 62304): 40\nResult calculation algorithm: 30\nConnectivity (LIS/LIMS): 30"
+      },
+      {
+        "name": "Megan Liang",
+        "role": "Quality / Regulatory",
+        "email": "m.liang@guangzhou-dx.cn",
+        "workstreams": "ISO 13485 QMS: 40\nCLSI method validation: 30\nPerformance evaluation (EP07, EP15): 30"
+      }
+    ],
+    "budgets": [
+      { "label": "Prototype & Materials", "planned": 50000 },
+      { "label": "Bench & Performance Testing", "planned": 40000 },
+      { "label": "Biocompatibility Testing", "planned": 12000 },
+      { "label": "EMC/Safety Testing", "planned": 20000 },
+      { "label": "Software V&V", "planned": 30000 },
+      { "label": "Regulatory & Legal", "planned": 18000 },
+      { "label": "Personnel", "planned": 95000 },
+      { "label": "Clinical Studies", "planned": 35000 }
+    ],
+    "cashOnHand": 380000,
+    "currency": "USD",
+    "projectDurationMonths": 15,
+    "currentMonth": 2,
+    "techAreas": "Immunoassay Chemistry\nOptical Detection System\nReagent Stability / Shelf Life\nCalibration & QC\nElectrical Safety (IEC 61010-1)\nEMC Testing (IEC 61010-2-101)\nSoftware Validation (IEC 62304)\nCLSI Performance Evaluation",
+    "suppliers": [
+      {
+        "name": "Nunc (Thermo Fisher)",
+        "component": "Lateral flow test strip membranes",
+        "leadTimeDays": 30
+      },
+      {
+        "name": "Hamamatsu Photonics",
+        "component": "Photodiode optical sensor module",
+        "leadTimeDays": 45
+      },
+      {
+        "name": "HyTest (Turku)",
+        "component": "Anti-CRP monoclonal antibody pairs",
+        "leadTimeDays": 60
+      },
+      {
+        "name": "Intertek Shanghai",
+        "component": "IEC 61010-1 safety testing",
+        "leadTimeDays": 75
+      }
+    ],
+    "docFlags": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+
+  "imaging": {
+    "lang": "en",
+    "templateId": "imaging",
+    "projectName": "ClearView P60 Handheld Ultrasound",
+    "subtitle": "Wireless POCUS probe with AI-assisted image interpretation",
+    "preparedDate": "2026-03-30",
+    "contactEmail": "b.li@wuhan-imaging.cn",
+    "submissionType": "510k-standard",
+    "deviceClass": "II",
+    "productCode": "IYO, QAS",
+    "regulationSection": "§ 892",
+    "predicateDevices": "Butterfly iQ+ (K211025)\nGE Vscan Air (K202160)\nPhilips Lumify (K160218)",
+    "applicantName": "Wuhan UltraVision Medical Technology Co., Ltd.",
+    "applicantNameCn": "武汉超视医疗科技有限公司",
+    "manufacturerName": "Wuhan UltraVision Medical Technology Co., Ltd.",
+    "manufacturerNameCn": "武汉超视医疗科技有限公司",
+    "team": [
+      {
+        "name": "Dr. Bo Li",
+        "role": "Project Lead / CTO",
+        "email": "b.li@wuhan-imaging.cn",
+        "workstreams": "System architecture: 40\nRegulatory strategy: 30\nPredicate analysis: 30"
+      },
+      {
+        "name": "Chris Jiang",
+        "role": "Transducer Engineer",
+        "email": "c.jiang@wuhan-imaging.cn",
+        "workstreams": "CMUT array design: 40\nAcoustic output verification: 30\nTransducer manufacturing: 30"
+      },
+      {
+        "name": "Helen Qiu",
+        "role": "AI/ML Engineer",
+        "email": "h.qiu@wuhan-imaging.cn",
+        "workstreams": "AI image interpretation model: 40\nTraining data curation: 30\nFDA AI/ML predetermined change control plan: 30"
+      },
+      {
+        "name": "Steven Deng",
+        "role": "Software Engineer",
+        "email": "s.deng@wuhan-imaging.cn",
+        "workstreams": "Mobile app (iOS/Android): 40\nDICOM export: 30\nCybersecurity (FDA guidance): 30"
+      },
+      {
+        "name": "Karen Ye",
+        "role": "Quality/Regulatory",
+        "email": "k.ye@wuhan-imaging.cn",
+        "workstreams": "ISO 13485 QMS: 40\nIEC 60601-2-37 compliance: 30\nUsability (IEC 62366-1): 30"
+      }
+    ],
+    "budgets": [
+      { "label": "Prototype & Materials", "planned": 60000 },
+      { "label": "Bench & Performance Testing", "planned": 45000 },
+      { "label": "Biocompatibility Testing", "planned": 15000 },
+      { "label": "EMC/Safety Testing", "planned": 30000 },
+      { "label": "Software V&V", "planned": 50000 },
+      { "label": "Regulatory & Legal", "planned": 22000 },
+      { "label": "Personnel", "planned": 120000 },
+      { "label": "Clinical Studies", "planned": 20000 }
+    ],
+    "cashOnHand": 500000,
+    "currency": "USD",
+    "projectDurationMonths": 15,
+    "currentMonth": 3,
+    "techAreas": "Transducer Array Design\nBeamforming & Image Processing\nAI/ML Image Interpretation\nMobile App & Connectivity\nElectrical Safety (IEC 60601-1)\nEMC Testing (IEC 60601-1-2)\nSoftware Validation (IEC 62304)\nCybersecurity Assessment",
+    "suppliers": [
+      {
+        "name": "TDK Corporation",
+        "component": "Piezoelectric CMUT wafer arrays",
+        "leadTimeDays": 75
+      },
+      {
+        "name": "Xilinx (AMD)",
+        "component": "FPGA beamformer (Zynq UltraScale+)",
+        "leadTimeDays": 30
+      },
+      {
+        "name": "Murata Manufacturing",
+        "component": "Wi-Fi 6E module (Type 2AE)",
+        "leadTimeDays": 28
+      },
+      {
+        "name": "UL Solutions Suzhou",
+        "component": "IEC 60601-2-37 ultrasound testing",
+        "leadTimeDays": 90
+      }
+    ],
+    "docFlags": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+
+  "rehabilitation": {
+    "lang": "en",
+    "templateId": "rehabilitation",
+    "projectName": "NeuroStep Ankle Exoskeleton",
+    "subtitle": "Powered ankle-foot orthosis for stroke rehabilitation gait training",
+    "preparedDate": "2026-03-30",
+    "contactEmail": "m.xu@changzhou-rehab.cn",
+    "submissionType": "510k-standard",
+    "deviceClass": "II",
+    "productCode": "IKN, IOZ",
+    "regulationSection": "§ 890",
+    "predicateDevices": "ReWalk ReStore (K190521)\nAlterG Bionic Leg (K143498)\nEkso EksoNR (K191245)",
+    "applicantName": "Changzhou NeuroMotion Robotics Co., Ltd.",
+    "applicantNameCn": "常州神经运动机器人有限公司",
+    "manufacturerName": "Changzhou NeuroMotion Robotics Co., Ltd.",
+    "manufacturerNameCn": "常州神经运动机器人有限公司",
+    "team": [
+      {
+        "name": "Dr. Ming Xu",
+        "role": "Project Lead / Robotics Director",
+        "email": "m.xu@changzhou-rehab.cn",
+        "workstreams": "Exoskeleton system architecture: 40\nRegulatory strategy: 30\nClinical protocol: 30"
+      },
+      {
+        "name": "Alex Peng",
+        "role": "Mechanical Engineer",
+        "email": "a.peng@changzhou-rehab.cn",
+        "workstreams": "Actuator design: 40\nAnkle joint mechanism: 30\nFitting/adjustment system: 30"
+      },
+      {
+        "name": "Olivia Zhong",
+        "role": "Controls Engineer",
+        "email": "o.zhong@changzhou-rehab.cn",
+        "workstreams": "Gait cycle control algorithm: 40\nEMG sensor integration: 30\nSafety interlock system: 30"
+      },
+      {
+        "name": "Ryan Cao",
+        "role": "Software Engineer",
+        "email": "r.cao@changzhou-rehab.cn",
+        "workstreams": "Embedded firmware (IEC 62304): 40\nTablet clinician interface: 30\nData logging & analytics: 30"
+      },
+      {
+        "name": "Wendy Shen",
+        "role": "Quality/Regulatory",
+        "email": "w.shen@changzhou-rehab.cn",
+        "workstreams": "ISO 13485 QMS: 40\nIEC 60601-2-10 testing: 30\nUsability engineering (IEC 62366-1): 30"
+      }
+    ],
+    "budgets": [
+      { "label": "Prototype & Materials", "planned": 75000 },
+      { "label": "Bench & Performance Testing", "planned": 40000 },
+      { "label": "Biocompatibility Testing", "planned": 18000 },
+      { "label": "EMC/Safety Testing", "planned": 25000 },
+      { "label": "Software V&V", "planned": 35000 },
+      { "label": "Regulatory & Legal", "planned": 20000 },
+      { "label": "Personnel", "planned": 100000 },
+      { "label": "Clinical Studies", "planned": 30000 }
+    ],
+    "cashOnHand": 420000,
+    "currency": "USD",
+    "projectDurationMonths": 18,
+    "currentMonth": 3,
+    "techAreas": "Actuator & Joint Mechanism\nGait Control Algorithm\nEMG Sensor Integration\nBattery & Power Management\nElectrical Safety (IEC 60601-1)\nEMC Testing (IEC 60601-1-2)\nSoftware Validation (IEC 62304)\nBiocompatibility (ISO 10993)",
+    "suppliers": [
+      {
+        "name": "Maxon Motor AG",
+        "component": "EC-i 40 brushless DC motors",
+        "leadTimeDays": 42
+      },
+      {
+        "name": "ATI Industrial Automation",
+        "component": "6-axis force/torque sensor (Mini45)",
+        "leadTimeDays": 50
+      },
+      {
+        "name": "Samsung SDI",
+        "component": "21700 Li-ion battery cells",
+        "leadTimeDays": 35
+      },
+      {
+        "name": "Delsys Inc.",
+        "component": "Trigno EMG sensor system",
+        "leadTimeDays": 30
+      },
+      {
+        "name": "TÜV Rheinland Shanghai",
+        "component": "IEC 60601-2-10 rehabilitation testing",
+        "leadTimeDays": 100
+      }
+    ],
+    "docFlags": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+
+  "samd": {
+    "lang": "en",
+    "templateId": "samd",
+    "projectName": "PulmoAI Clinical Decision Support",
+    "subtitle": "AI/ML SaMD for chest X-ray triage and pneumonia detection",
+    "preparedDate": "2026-03-30",
+    "contactEmail": "t.huang@beijing-ai-med.cn",
+    "submissionType": "510k-standard",
+    "deviceClass": "II",
+    "productCode": "QAS, LLZ",
+    "regulationSection": "§ 892.2020",
+    "predicateDevices": "Aidoc BriefCase (K210454)\nViz.ai LVO (K193658)\nCaption Health Caption AI (K200980)",
+    "applicantName": "Beijing AI Medical Software Co., Ltd.",
+    "applicantNameCn": "北京智医软件有限公司",
+    "manufacturerName": "Beijing AI Medical Software Co., Ltd.",
+    "manufacturerNameCn": "北京智医软件有限公司",
+    "team": [
+      {
+        "name": "Dr. Tony Huang",
+        "role": "Project Lead / CEO",
+        "email": "t.huang@beijing-ai-med.cn",
+        "workstreams": "Product vision: 30\nRegulatory strategy: 40\nFDA AI/ML guidance alignment: 30"
+      },
+      {
+        "name": "Dr. Mei Lin",
+        "role": "Chief AI Scientist",
+        "email": "m.lin@beijing-ai-med.cn",
+        "workstreams": "CNN architecture (ResNet-50 backbone): 40\nTraining data pipeline: 30\nAlgorithm locked model: 30"
+      },
+      {
+        "name": "Daniel Feng",
+        "role": "Software Architect",
+        "email": "d.feng@beijing-ai-med.cn",
+        "workstreams": "Cloud platform (AWS HIPAA): 40\nDICOM integration: 30\nHL7 FHIR / PACS connectivity: 30"
+      },
+      {
+        "name": "Sophie Wu",
+        "role": "Cybersecurity Lead",
+        "email": "s.wu@beijing-ai-med.cn",
+        "workstreams": "SBOM generation: 40\nPenetration testing: 30\nFDA cybersecurity guidance: 30"
+      },
+      {
+        "name": "Victor Shi",
+        "role": "Quality/Regulatory",
+        "email": "v.shi@beijing-ai-med.cn",
+        "workstreams": "ISO 13485 QMS: 40\nIEC 62304 software lifecycle: 30\nPredetermined change control plan: 30"
+      }
+    ],
+    "budgets": [
+      { "label": "Prototype & Materials", "planned": 15000 },
+      { "label": "Bench & Performance Testing", "planned": 25000 },
+      { "label": "Biocompatibility Testing", "planned": 0 },
+      { "label": "EMC/Safety Testing", "planned": 0 },
+      { "label": "Software V&V", "planned": 65000 },
+      { "label": "Regulatory & Legal", "planned": 25000 },
+      { "label": "Personnel", "planned": 150000 },
+      { "label": "Clinical Studies", "planned": 40000 }
+    ],
+    "cashOnHand": 600000,
+    "currency": "USD",
+    "projectDurationMonths": 12,
+    "currentMonth": 2,
+    "techAreas": "AI/ML Model Development\nTraining Data Curation & Annotation\nCloud Infrastructure (HIPAA)\nDICOM / HL7 FHIR Integration\nCybersecurity Assessment\nSoftware Validation (IEC 62304)\nUsability Engineering (IEC 62366-1)\nClinical Performance Validation",
+    "suppliers": [
+      {
+        "name": "AWS (Amazon)",
+        "component": "HIPAA-eligible cloud hosting (us-east-1)",
+        "leadTimeDays": 7
+      },
+      {
+        "name": "Appen Limited",
+        "component": "Radiology image annotation services (50K+ images)",
+        "leadTimeDays": 45
+      },
+      {
+        "name": "Coalfire Systems",
+        "component": "Penetration testing & SBOM audit",
+        "leadTimeDays": 30
+      },
+      {
+        "name": "Greenlight Guru",
+        "component": "eQMS platform license",
+        "leadTimeDays": 5
+      }
+    ],
+    "docFlags": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  }
+}

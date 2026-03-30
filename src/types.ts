@@ -249,7 +249,9 @@ export type AuditAction =
   | "vesting-delete"
   | "vesting-status"
   | "team-add"
-  | "team-delete";
+  | "team-delete"
+  | "resource-alloc"
+  | "doc-sync";
 
 export interface AuditEntry {
   id: string;

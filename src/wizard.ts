@@ -186,8 +186,8 @@ const TXT = {
   memberRole: { en: "Role", cn: "角色" },
   memberEmail: { en: "Email", cn: "邮箱" },
   memberWorkstreams: {
-    en: "Workstreams (one per line: name: %)",
-    cn: "工作流（每行一个: 名称: %）",
+    en: "Workstreams (one per line — Name: Allocation %)",
+    cn: "工作流（每行一个 — 名称: 分配%）",
   },
   memberWorkstreamsPh: {
     en: "e.g.\nProject Management: 40\nRegulatory: 30\nEngineering: 30",
@@ -545,6 +545,12 @@ export function clearProjectData(): void {
   localStorage.removeItem("ctower_change_requests");
   localStorage.removeItem("ctower_stakeholder_inputs");
   localStorage.removeItem("ctower_qa_messages");
+  localStorage.removeItem("ctower_mb_threads");
+  localStorage.removeItem("ctower_mb_decisions");
+  localStorage.removeItem("ctower_doclib_docs");
+  localStorage.removeItem("ctower_qa_settings");
+  localStorage.removeItem("ctower_qa_archive");
+  localStorage.removeItem("ctower_synced_doc_ids");
 }
 
 export function getSavedAnswers(): WizardAnswers | null {
@@ -611,7 +617,66 @@ export function showWizard(onComplete: (answers: WizardAnswers) => void): void {
       });
       ov.querySelector("#wiz-demo")?.addEventListener("click", () => {
         ov.remove();
-        onComplete(null as unknown as WizardAnswers);
+        // Build demo data from the respiratory template instead of static defaults
+        const demoTmpl = TEMPLATE_LIST[0]; // respiratory
+        const demoAnswers: WizardAnswers = {
+          lang: "en",
+          templateId: demoTmpl.id,
+          projectName: "ICU Respiratory Device",
+          projectNameCn: "ICU 呼吸设备",
+          subtitle: "510(k) Regulatory Pathway",
+          submissionType: demoTmpl.submissionType,
+          deviceClass: demoTmpl.deviceClass,
+          productCode: demoTmpl.productCodes,
+          regulationSection: demoTmpl.regulationSection,
+          predicateDevices: demoTmpl.predicateExamples,
+          applicantName: "Acme Medical Inc.",
+          applicantNameCn: "Acme 医疗公司",
+          manufacturerName: "Acme Medical Inc.",
+          manufacturerNameCn: "Acme 医疗公司",
+          techAreas: demoTmpl.techAreas.en,
+          projectDurationMonths: demoTmpl.estimatedDuration,
+          budgets: demoTmpl.budgetCategories.map((c) => ({
+            label: c.en,
+            planned: 50000,
+          })),
+          cashOnHand: 500000,
+          currency: "USD",
+          team: [
+            {
+              name: "Project Manager",
+              role: "PMP Lead",
+              email: "",
+              workstreams:
+                "Project Management:40\nRegulatory:30\nStakeholders:30",
+            },
+            {
+              name: "Lead Engineer",
+              role: "Engineering",
+              email: "",
+              workstreams: "Design:50\nTesting:30\nDocumentation:20",
+            },
+            {
+              name: "RA Specialist",
+              role: "Regulatory Affairs",
+              email: "",
+              workstreams: "510(k) Submission:60\nStandards:25\nLabeling:15",
+            },
+          ],
+          suppliers: [
+            {
+              name: "Component Supplier A",
+              component: "Sensors & Electronics",
+              leadTimeDays: 45,
+            },
+            {
+              name: "Contract Manufacturer",
+              component: "Assembly & Packaging",
+              leadTimeDays: 60,
+            },
+          ],
+        };
+        onComplete(demoAnswers);
       });
       return;
     }

@@ -835,8 +835,10 @@ def build_english():
 
     pdf.sub("20.2 Workstream Allocations")
     pdf.txt(
-        "Each team member may be allocated across multiple workstreams "
-        "(e.g., Device Development 50%, V&V Testing 30%, Documentation 20%). "
+        "Each team member may be allocated across multiple workstreams. "
+        "Workstreams are entered one per line using the format  Name: Allocation %  "
+        "where the colon is the delimiter between the workstream name and the "
+        "percentage (e.g., Device Development: 50, V&V Testing: 30, Documentation: 20). "
         "The percentage bars show at a glance where each person's time is committed. "
         "Total utilization is calculated by summing all allocation percentages.")
 
@@ -1183,7 +1185,13 @@ def build_english():
         "  Accounting / Finance\n"
         "    Responsibilities: Monthly burn reports, budget tracking, financial statements\n\n"
         "Team member names and workstream allocations are entered during the Setup Wizard "
-        "and can be edited from the Resources tab.")
+        "(Step 4 of 8). Workstreams use the format  Name: Allocation %  with one entry per line "
+        "-- for example:\n\n"
+        "  Regulatory strategy: 40\n"
+        "  Device development: 30\n"
+        "  Documentation: 30\n\n"
+        "The colon separates the workstream name from the percentage. "
+        "Allocations can be edited later from the Resources tab.")
 
     # 29. Message Board (Tab 15)
     pdf.add_page()

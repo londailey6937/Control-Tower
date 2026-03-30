@@ -80,8 +80,10 @@ import {
   fetchAuditLog,
   insertAuditEntry,
   insertAuditBatch,
+  upsertDhfDocumentBatch,
   type DbMessage,
   type DbAuditEntry,
+  type DbDhfDocument,
 } from "./supabase.ts";
 
 // ── STATE ─────────────────────────────────────
@@ -392,6 +394,23 @@ function initAfterLogin(): void {
   initFab();
   initRoleSwitcher();
   applyLanguage(getLang());
+
+  // Check for ?test=<templateId> parameter to load test data
+  const testParam = new URLSearchParams(window.location.search).get("test");
+  if (testParam) {
+    fetch("test-data.json")
+      .then((r) => r.json())
+      .then((all: Record<string, unknown>) => {
+        const td = all[testParam];
+        if (td) {
+          clearProjectData();
+          applyProjectData(td as Parameters<typeof applyProjectData>[0]);
+        }
+        bootDashboard();
+      })
+      .catch(() => bootDashboard());
+    return;
+  }
 
   const saved = getSavedAnswers();
   if (saved) {
@@ -3995,7 +4014,7 @@ function cycleDocStatus(id: string): void {
   }
   saveDocLibDocs(docs);
   logAudit(
-    "doc-status" as AuditEntry["action"],
+    "doc-status",
     id,
     "status",
     prev,
@@ -4359,6 +4378,65 @@ function renderDocLibrary(): void {
   renderDocLibTable();
 }
 
+// ── Sync Documents to Supabase ──────────────────
+
+async function syncDocsToServer(): Promise<void> {
+  if (!isOnline()) {
+    alert(t("docLibOffline") || "Cannot sync while offline.");
+    return;
+  }
+  const docs = loadDocLibDocs();
+  const eligible = docs.filter(
+    (d) => d.status === "approved" || d.status === "effective",
+  );
+  if (eligible.length === 0) {
+    alert(
+      t("docLibNothingToSync") || "No approved/effective documents to sync.",
+    );
+    return;
+  }
+  const mapped: Omit<DbDhfDocument, "updated_at">[] = eligible.map((d) => ({
+    id: d.id,
+    project_id: PROJECT_ID,
+    dcn: d.dcn,
+    category: d.cat,
+    title: typeof d.name === "string" ? d.name : d.name.en,
+    version: d.version,
+    status: d.status,
+    owner: d.owner,
+    effective_date: d.effectiveDate || null,
+    next_review: d.nextReview || null,
+    revisions: d.revisions,
+  }));
+  const result = await upsertDhfDocumentBatch(PROJECT_ID, mapped);
+  if (result.ok > 0) {
+    // Track synced doc IDs to clear the FDA Comms alert
+    const prevSynced: string[] = (() => {
+      try {
+        const raw = localStorage.getItem("ctower_synced_doc_ids");
+        return raw ? JSON.parse(raw) : [];
+      } catch {
+        return [];
+      }
+    })();
+    const newSynced = [
+      ...new Set([...prevSynced, ...eligible.map((d) => d.id)]),
+    ];
+    localStorage.setItem("ctower_synced_doc_ids", JSON.stringify(newSynced));
+  }
+  logAudit(
+    "doc-sync",
+    "SYSTEM",
+    "sync",
+    "",
+    `${result.ok} synced, ${result.failed} failed`,
+    `Synced ${result.ok} of ${eligible.length} documents to server`,
+  );
+  alert(
+    `Synced ${result.ok} document(s) to server.${result.failed ? ` ${result.failed} failed.` : ""}`,
+  );
+}
+
 // Expose Document Control functions globally
 (window as any)._deleteDocLibItem = deleteDocLibItem;
 (window as any)._openAddDocForm = openAddDocForm;
@@ -4366,6 +4444,7 @@ function renderDocLibrary(): void {
 (window as any)._cycleDocStatus = cycleDocStatus;
 (window as any)._openDocHistory = openDocHistory;
 (window as any)._closeDocHistory = closeDocHistory;
+(window as any)._syncDocsToServer = syncDocsToServer;
 
 // ══════════════════════════════════════════════════
 // MESSAGE BOARD — Purpose-Driven Messaging Layer
@@ -4542,7 +4621,7 @@ async function initQaMessages(): Promise<void> {
   ensureDefaultThreads();
   if (isOnline()) {
     try {
-      const rows = await fetchMessages();
+      const rows = await fetchMessages(PROJECT_ID);
       _qaCache = rows.map(dbToQa);
       saveQaMessagesLocal(_qaCache);
     } catch {
@@ -4606,6 +4685,12 @@ function saveQaSettingsData(settings: QASettings): void {
 function openQaSettings(): void {
   const panel = document.getElementById("qaSettingsPanel");
   if (!panel) return;
+  // Toggle: if already visible, hide it
+  if (panel.style.display === "block") {
+    panel.style.display = "none";
+    panel.innerHTML = "";
+    return;
+  }
   const settings = loadQaSettings();
   panel.style.display = "block";
   panel.innerHTML = `
@@ -4637,6 +4722,7 @@ function openQaSettings(): void {
       ${qaTestMode ? `<span class="qa-test-badge">${t("qaTestMode")}</span>` : ""}
     </div>
   `;
+  panel.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function saveQaSettingsUI(): void {
@@ -5059,6 +5145,23 @@ function renderFdaComms(): void {
   const pDate = PROJECT.preparedDate || "";
   const pMonth = PROJECT.currentMonth;
 
+  // Document Control sync alert — approved/effective docs not yet uploaded
+  const docLibDocs = loadDocLibDocs();
+  const syncReady = docLibDocs.filter(
+    (d) => d.status === "approved" || d.status === "effective",
+  );
+  const syncedIds: string[] = (() => {
+    try {
+      const raw = localStorage.getItem("ctower_synced_doc_ids");
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  })();
+  const unsyncedCount = syncReady.filter(
+    (d) => !syncedIds.includes(d.id),
+  ).length;
+
   // DHF doc completion stats
   const dhfTotal = DHF_DOCUMENTS.length;
   const dhfApproved = DHF_DOCUMENTS.filter(
@@ -5409,6 +5512,20 @@ function renderFdaComms(): void {
 
   body.innerHTML = `
   <div class="fda-pmp-badge">🔒 ${isCN ? "PMP专属 — 对技术/商务角色不可见" : "PMP Eyes Only — Not visible to Tech/Business roles"}</div>
+
+  ${
+    unsyncedCount > 0
+      ? `<div class="fda-sync-alert">
+    <span class="fda-sync-alert-icon">⚠️</span>
+    <span>${
+      isCN
+        ? `${unsyncedCount} 份已批准/生效文档尚未上传至服务器 — 请前往 Document Control 同步以保护您的DHF`
+        : `${unsyncedCount} approved/effective document(s) not yet synced to server — go to Document Control and click "Sync to Server" to protect your DHF`
+    }</span>
+    <button class="fda-sync-alert-btn" onclick="document.querySelector('[data-tab=doc-library]')?.click()">📂 ${isCN ? "前往文档控制" : "Go to Document Control"}</button>
+  </div>`
+      : ""
+  }
 
   <!-- Summary Metrics -->
   <div class="fda-metrics">
@@ -6301,7 +6418,7 @@ function setupRealtimeMessages(): void {
 // Re-sync when coming back online
 window.addEventListener("online", async () => {
   await syncOfflineMessages();
-  const rows = await fetchMessages();
+  const rows = await fetchMessages(PROJECT_ID);
   _qaCache = rows.map(dbToQa);
   saveQaMessagesLocal(_qaCache);
   const panel = document.getElementById("panel-qa-sheet");
@@ -6672,7 +6789,7 @@ function renderResources(): void {
 
   const canEdit = ["pmp", "business", "technology"].includes(ACTIVE_ROLE);
 
-  container.innerHTML = TEAM_MEMBERS.map((m) => {
+  container.innerHTML = TEAM_MEMBERS.map((m, mi) => {
     const totalAlloc = m.allocation.reduce((s, a) => s + a.pct, 0);
     const utilPct = Math.round((totalAlloc / m.capacity) * 100);
     const utilClass =
@@ -6690,13 +6807,13 @@ function renderResources(): void {
         <div class="resource-alloc">
           ${m.allocation
             .map(
-              (a) => `
+              (a, ai) => `
             <div class="alloc-row">
               <span class="alloc-label">${a.workstream}</span>
               <div class="alloc-bar-wrap">
                 <div class="alloc-bar" style="width:${a.pct}%"></div>
               </div>
-              <span class="alloc-pct">${a.pct}%</span>
+              <span class="alloc-pct${canEdit ? " alloc-editable" : ""}" ${canEdit ? `data-tm="${mi}" data-ai="${ai}"` : ""}>${a.pct}%</span>
             </div>`,
             )
             .join("")}
@@ -6705,6 +6822,56 @@ function renderResources(): void {
       </div>
     `;
   }).join("");
+
+  // Wire inline allocation editing
+  if (canEdit) {
+    container.addEventListener("click", (e) => {
+      const span = (e.target as HTMLElement).closest<HTMLSpanElement>(
+        ".alloc-editable",
+      );
+      if (!span || span.querySelector("input")) return;
+      const tmIdx = parseInt(span.dataset.tm!, 10);
+      const aiIdx = parseInt(span.dataset.ai!, 10);
+      const member = TEAM_MEMBERS[tmIdx];
+      if (!member) return;
+      const alloc = member.allocation[aiIdx];
+      if (!alloc) return;
+      const oldPct = alloc.pct;
+      const input = document.createElement("input");
+      input.type = "number";
+      input.min = "0";
+      input.max = "100";
+      input.value = String(oldPct);
+      input.className = "alloc-edit-input";
+      span.textContent = "";
+      span.appendChild(input);
+      input.focus();
+      input.select();
+      const commit = () => {
+        const val = Math.max(0, Math.min(100, parseInt(input.value) || 0));
+        alloc.pct = val;
+        logAudit(
+          "resource-alloc",
+          member.id,
+          "allocation",
+          `${alloc.workstream}:${oldPct}%`,
+          `${alloc.workstream}:${val}%`,
+          member.name,
+        );
+        renderResources();
+      };
+      input.addEventListener("blur", commit);
+      input.addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter") {
+          input.blur();
+        }
+        if (ev.key === "Escape") {
+          alloc.pct = oldPct;
+          renderResources();
+        }
+      });
+    });
+  }
 
   // Add team member button
   const addBtnWrap = document.getElementById("resourceAddBtnWrap");

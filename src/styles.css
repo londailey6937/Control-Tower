@@ -1939,6 +1939,11 @@ body {
   color: var(--text-main);
   cursor: pointer;
 }
+.role-select:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: default;
+}
 .tab-btn.tab-restricted {
   opacity: 0.35;
   pointer-events: none;
@@ -2689,6 +2694,27 @@ body {
   text-align: right;
   font-size: 0.72rem;
   color: var(--text-muted);
+}
+.alloc-editable {
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 0 2px;
+  transition: background 0.15s;
+}
+.alloc-editable:hover {
+  background: var(--accent-glow, rgba(79, 140, 255, 0.15));
+  color: var(--accent);
+}
+.alloc-edit-input {
+  width: 36px;
+  padding: 1px 2px;
+  font-size: 0.72rem;
+  border: 1.5px solid var(--accent);
+  border-radius: 3px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  text-align: right;
+  outline: none;
 }
 .resource-cap {
   font-size: 0.72rem;
@@ -4272,6 +4298,38 @@ body {
   text-align: center;
   margin-bottom: 20px;
   border: 1px solid #4c1d95;
+}
+.fda-sync-alert {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #451a03, #78350f);
+  border: 1px solid #b45309;
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  font-size: 0.84rem;
+  color: #fbbf24;
+}
+.fda-sync-alert-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+.fda-sync-alert-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 5px 12px;
+  border: 1px solid #b45309;
+  border-radius: 6px;
+  background: #78350f;
+  color: #fbbf24;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.fda-sync-alert-btn:hover {
+  background: #92400e;
 }
 
 .fda-metrics {
