@@ -259,6 +259,11 @@ export const I18N: I18nMessages = {
     dhfInReview: "In Review",
     dhfApproved: "Approved",
 
+    // DMR Document Tracker
+    dmrTitle: "DMR Document Tracker",
+    dmrDesc:
+      "Device Master Record — finished device specs, production processes, QA procedures (21 CFR 820.181)",
+
     // CAPA Log
     capaTitle: "CAPA Log",
     capaDesc: "Corrective & Preventive Actions tied to risk items",
@@ -878,6 +883,11 @@ export const I18N: I18nMessages = {
     dhfDraft: "草稿",
     dhfInReview: "审核中",
     dhfApproved: "已批准",
+
+    // DMR Document Tracker
+    dmrTitle: "DMR器械主记录追踪器",
+    dmrDesc:
+      "器械主记录 — 成品器械规格、生产工艺、质量保证程序 (21 CFR 820.181)",
 
     // CAPA Log
     capaTitle: "CAPA日志",

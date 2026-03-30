@@ -24,6 +24,7 @@ import {
   authenticatePassword,
   AUDIT_LOG,
   DHF_DOCUMENTS,
+  DMR_DOCUMENTS,
   CAPA_LOG,
   ACTION_ITEMS,
   BUDGET_CATEGORIES,
@@ -118,6 +119,7 @@ function saveAllState(): void {
       actionItems: ACTION_ITEMS,
       auditLog: AUDIT_LOG,
       dhfDocuments: DHF_DOCUMENTS,
+      dmrDocuments: DMR_DOCUMENTS,
       capaLog: CAPA_LOG,
       budgetCategories: BUDGET_CATEGORIES,
       teamMembers: TEAM_MEMBERS,
@@ -163,6 +165,7 @@ function loadAllState(): void {
     replaceArray(ACTION_ITEMS, s.actionItems);
     replaceArray(AUDIT_LOG, s.auditLog);
     replaceArray(DHF_DOCUMENTS, s.dhfDocuments);
+    replaceArray(DMR_DOCUMENTS, s.dmrDocuments);
     replaceArray(CAPA_LOG, s.capaLog);
     replaceArray(BUDGET_CATEGORIES, s.budgetCategories);
     replaceArray(TEAM_MEMBERS, s.teamMembers);
@@ -313,6 +316,9 @@ function setupEventDelegation(): void {
         break;
       case "cycleDHFStatus":
         window._cycleDHFStatus(a.did!);
+        break;
+      case "cycleDMRStatus":
+        window._cycleDMRStatus(a.did!);
         break;
       case "cycleCAPAStatus":
         window._cycleCAPAStatus(a.cid!);
@@ -620,6 +626,7 @@ function renderAll(): void {
     ["UsApiIntegrations", renderUsApiIntegrations],
     ["ActionBoard", renderActionBoard],
     ["DHFTable", renderDHFTable],
+    ["DMRTable", renderDMRTable],
     ["CAPALog", renderCAPALog],
     ["Budget", renderBudget],
     ["Resources", renderResources],
@@ -2745,6 +2752,11 @@ function applyChangeRequest(cr: ChangeRequest): void {
     case "dhf-status": {
       const dhf = DHF_DOCUMENTS.find((d) => d.id === cr.targetId);
       if (dhf) dhf.status = cr.newValue as typeof dhf.status;
+      break;
+    }
+    case "dmr-status": {
+      const dmr = DMR_DOCUMENTS.find((d) => d.id === cr.targetId);
+      if (dmr) dmr.status = cr.newValue as typeof dmr.status;
       break;
     }
     case "capa-status": {
@@ -5347,6 +5359,13 @@ function renderFdaComms(): void {
   ).length;
   const dhfPct = dhfTotal > 0 ? Math.round((dhfApproved / dhfTotal) * 100) : 0;
 
+  // DMR doc completion stats
+  const dmrTotal = DMR_DOCUMENTS.length;
+  const dmrApproved = DMR_DOCUMENTS.filter(
+    (d) => d.status === "approved",
+  ).length;
+  const dmrPct = dmrTotal > 0 ? Math.round((dmrApproved / dmrTotal) * 100) : 0;
+
   // Gate status
   const completedGates = GATES.filter((g) => g.status === "approved").length;
 
@@ -5702,6 +5721,7 @@ function renderFdaComms(): void {
   <div class="fda-metrics">
     ${mc(isCN ? "RTA就绪" : "RTA Ready", `${rtaPct}%`, rtaPct >= 80 ? "#22c55e" : rtaPct >= 50 ? "#f59e0b" : "#ef4444")}
     ${mc(isCN ? "DHF完成度" : "DHF Completion", `${dhfPct}%`, dhfPct >= 80 ? "#22c55e" : dhfPct >= 50 ? "#f59e0b" : "#ef4444")}
+    ${mc(isCN ? "DMR完成度" : "DMR Completion", `${dmrPct}%`, dmrPct >= 80 ? "#22c55e" : dmrPct >= 50 ? "#f59e0b" : "#ef4444")}
     ${mc(isCN ? "门控通过" : "Gates Passed", `${completedGates}/${GATES.length}`, completedGates === GATES.length ? "#22c55e" : "#38bdf8")}
     ${mc(isCN ? "标准合规" : "Standards Met", `${stdComplete}/${stdTotal}`, stdComplete === stdTotal ? "#22c55e" : "#f59e0b")}
     ${mc(isCN ? "红色风险" : "Red Risks", String(redRisks), redRisks > 0 ? "#ef4444" : "#22c55e")}
@@ -6840,6 +6860,77 @@ window._cycleDHFStatus = function (docId: string): void {
 };
 
 // ══════════════════════════════════════════════════
+// DMR DOCUMENT TRACKER — Device Master Record
+// ══════════════════════════════════════════════════
+function renderDMRTable(): void {
+  const tbody = document.getElementById("dmrBody");
+  if (!tbody) return;
+
+  tbody.innerHTML = DMR_DOCUMENTS.map((d) => {
+    const statusLabels: Record<string, string> = {
+      "not-started": t("notStarted"),
+      draft: t("dhfDraft"),
+      "in-review": t("dhfInReview"),
+      approved: t("dhfApproved"),
+    };
+    const badgeClass =
+      d.status === "approved"
+        ? "badge-complete"
+        : d.status === "in-review"
+          ? "badge-in-progress"
+          : d.status === "draft"
+            ? "badge-draft"
+            : "badge-not-started";
+
+    return `
+      <tr>
+        <td><span class="std-code">${d.code}</span></td>
+        <td>${localizedText(d.title)}</td>
+        <td>${d.category}</td>
+        <td>
+          <span class="std-status-badge ${badgeClass} clickable-badge"
+                data-action="cycleDMRStatus" data-did="${d.id}"
+                title="${t("clickToChangeStatus")}">
+            ${statusLabels[d.status] || d.status}
+          </span>
+        </td>
+        <td>M+${d.dueMonth}</td>
+      </tr>
+    `;
+  }).join("");
+}
+
+window._cycleDMRStatus = function (docId: string): void {
+  const doc = DMR_DOCUMENTS.find((d) => d.id === docId);
+  if (!doc) return;
+  if (ACTIVE_ROLE !== "pmp") {
+    window._openChangeRequestForm("dmr-status", docId, "status", doc.status);
+    return;
+  }
+  const cycle: Record<
+    string,
+    "draft" | "in-review" | "approved" | "not-started"
+  > = {
+    "not-started": "draft",
+    draft: "in-review",
+    "in-review": "approved",
+    approved: "not-started",
+  };
+  const old = doc.status;
+  doc.status = cycle[doc.status];
+  logAudit(
+    "dmr-status",
+    docId,
+    "status",
+    old,
+    doc.status,
+    `DMR ${doc.code} status changed`,
+  );
+  saveAllState();
+  renderDMRTable();
+};
+
+// ══════════════════════════════════════════════════
 // CAPA LOG
 // ══════════════════════════════════════════════════
 function renderCAPALog(): void {
@@ -7451,6 +7542,10 @@ window._exportReport = function (): void {
     (d) => d.status === "approved",
   ).length;
   const dhfTotal = DHF_DOCUMENTS.length;
+  const dmrApproved = DMR_DOCUMENTS.filter(
+    (d) => d.status === "approved",
+  ).length;
+  const dmrTotal = DMR_DOCUMENTS.length;
 
   // Overall status
   const overallLabel =
@@ -7614,6 +7709,7 @@ ${sectionTitle(isCN ? "财务概览" : "Financial Overview")}
   ${metricCard(t("monthlyBurnLabel"), esc(fmtCurrency(CASH_RUNWAY.monthlyBurn)), "#dc2626")}
   ${metricCard(t("runwayLabel"), `${CASH_RUNWAY.runwayMonths} ${t("runwayMonths")}`, CASH_RUNWAY.runwayMonths <= 3 ? "#ef4444" : CASH_RUNWAY.runwayMonths <= 6 ? "#f59e0b" : "#22c55e")}
   ${metricCard(isCN ? "DHF文件" : "DHF Docs", `${dhfApproved}/${dhfTotal}`, "#3b82f6")}
+  ${metricCard(isCN ? "DMR文件" : "DMR Docs", `${dmrApproved}/${dmrTotal}`, "#6366f1")}
 </div>
 ${rateNote ? `<p style="font-size:12px;color:#94a3b8;margin:4px 0 12px;font-style:italic">${esc(rateNote)}</p>` : ""}
 

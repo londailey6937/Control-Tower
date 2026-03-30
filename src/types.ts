@@ -174,6 +174,7 @@ export type ChangeRequestType =
   | "funding-status"
   | "action-status"
   | "dhf-status"
+  | "dmr-status"
   | "capa-status"
   | "supplier-status";
 export type ChangeRequestStatus = "pending" | "approved" | "rejected";
@@ -217,6 +218,7 @@ export type AuditAction =
   | "gate-note"
   | "action-item"
   | "dhf-status"
+  | "dmr-status"
   | "capa-status"
   | "budget-entry"
   | "resource-change"
@@ -395,6 +397,7 @@ declare global {
     _downloadDocument: (key: string, filename: string) => void;
     _removeQueuedDocument: (index: number) => void;
     _cycleDHFStatus: (docId: string) => void;
+    _cycleDMRStatus: (docId: string) => void;
     _cycleCAPAStatus: (capaId: string) => void;
     _cycleActionStatus: (actionId: string) => void;
     _cycleSupplierStatus: (supplierId: string) => void;

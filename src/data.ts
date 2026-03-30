@@ -1655,6 +1655,145 @@ export const DHF_DOCUMENTS: DHFDocument[] = [
 ];
 
 // ============================================================
+// DMR DOCUMENT TRACKER — Device Master Record
+// The DMR specifies the finished device: device specs, production
+// processes, quality assurance procedures, and packaging/labeling.
+// Required per 21 CFR 820.181.
+// ============================================================
+
+export const DMR_DOCUMENTS: DHFDocument[] = [
+  {
+    id: "DMR-001",
+    code: "DMR-DS",
+    title: { en: "Device Specifications", cn: "器械规格" },
+    category: "Device Specs",
+    owner: "tech",
+    status: "not-started",
+    dueMonth: 6,
+    notes: "",
+  },
+  {
+    id: "DMR-002",
+    code: "DMR-BOM",
+    title: { en: "Bill of Materials (BOM)", cn: "物料清单(BOM)" },
+    category: "Device Specs",
+    owner: "tech",
+    status: "not-started",
+    dueMonth: 5,
+    notes: "",
+  },
+  {
+    id: "DMR-003",
+    code: "DMR-DWG",
+    title: { en: "Production Drawings & CAD", cn: "生产图纸和CAD" },
+    category: "Device Specs",
+    owner: "tech",
+    status: "not-started",
+    dueMonth: 6,
+    notes: "",
+  },
+  {
+    id: "DMR-004",
+    code: "DMR-MPI",
+    title: { en: "Manufacturing Process Instructions", cn: "制造工艺指导书" },
+    category: "Production Process",
+    owner: "tech",
+    status: "not-started",
+    dueMonth: 7,
+    notes: "",
+  },
+  {
+    id: "DMR-005",
+    code: "DMR-WI",
+    title: { en: "Work Instructions & SOPs", cn: "作业指导书和SOP" },
+    category: "Production Process",
+    owner: "tech",
+    status: "not-started",
+    dueMonth: 7,
+    notes: "",
+  },
+  {
+    id: "DMR-006",
+    code: "DMR-PV",
+    title: {
+      en: "Process Validation Protocols (IQ/OQ/PQ)",
+      cn: "工艺验证方案(IQ/OQ/PQ)",
+    },
+    category: "Production Process",
+    owner: "tech",
+    status: "not-started",
+    dueMonth: 8,
+    notes: "",
+  },
+  {
+    id: "DMR-007",
+    code: "DMR-QAP",
+    title: { en: "Quality Assurance Procedures", cn: "质量保证程序" },
+    category: "Quality",
+    owner: "regulatory",
+    status: "not-started",
+    dueMonth: 7,
+    notes: "",
+  },
+  {
+    id: "DMR-008",
+    code: "DMR-IPC",
+    title: {
+      en: "Incoming / In-Process / Final Inspection",
+      cn: "来料/过程/终检程序",
+    },
+    category: "Quality",
+    owner: "regulatory",
+    status: "not-started",
+    dueMonth: 7,
+    notes: "",
+  },
+  {
+    id: "DMR-009",
+    code: "DMR-ACC",
+    title: {
+      en: "Acceptance Criteria & Test Methods",
+      cn: "接受标准和测试方法",
+    },
+    category: "Quality",
+    owner: "tech",
+    status: "not-started",
+    dueMonth: 6,
+    notes: "",
+  },
+  {
+    id: "DMR-010",
+    code: "DMR-PKG",
+    title: { en: "Packaging & Labeling Specifications", cn: "包装和标签规格" },
+    category: "Packaging/Labeling",
+    owner: "regulatory",
+    status: "not-started",
+    dueMonth: 8,
+    notes: "",
+  },
+  {
+    id: "DMR-011",
+    code: "DMR-SRV",
+    title: { en: "Installation & Servicing Procedures", cn: "安装和维修程序" },
+    category: "Servicing",
+    owner: "tech",
+    status: "not-started",
+    dueMonth: 9,
+    notes: "",
+  },
+  {
+    id: "DMR-012",
+    code: "DMR-ENV",
+    title: { en: "Environmental & Storage Requirements", cn: "环境和储存要求" },
+    category: "Packaging/Labeling",
+    owner: "tech",
+    status: "not-started",
+    dueMonth: 7,
+    notes: "",
+  },
+];
+
+// ============================================================
 // CAPA LOG — Corrective & Preventive Actions
 // ============================================================
 
