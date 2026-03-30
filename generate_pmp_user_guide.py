@@ -290,6 +290,7 @@ def build_english():
         ("20", "Setup Wizard & Templates"),
         ("21", "Keyboard Shortcuts & Tips"),
         ("22", "Troubleshooting"),
+        ("23", "Glossary of FDA & Regulatory Terms"),
     ]
     pdf.set_font("Helvetica", "", 11)
     for num, title in toc:
@@ -848,6 +849,65 @@ def build_english():
         "ctower_qa_archive. Or clear all site data in browser settings."
     )
 
+    # ── 23. Glossary of FDA & Regulatory Terms ──
+    pdf.add_page()
+    pdf.sec(23, "Glossary of FDA & Regulatory Terms")
+    pdf.ln(2)
+    fda_terms = [
+        ("510(k)", "Premarket Notification submitted to FDA to demonstrate a Class II device is substantially equivalent to a legally marketed predicate device. Named after Section 510(k) of the Food, Drug, and Cosmetic Act."),
+        ("PMA", "Premarket Approval. The most stringent FDA pathway, required for Class III devices that cannot demonstrate substantial equivalence. Requires clinical data."),
+        ("De Novo", "FDA classification pathway for novel low-to-moderate risk devices with no predicate. Creates a new regulatory classification if granted."),
+        ("Substantial Equivalence (SE)", "The legal standard for 510(k) clearance. The new device must have the same intended use and similar technological characteristics as the predicate, or different characteristics that do not raise new safety/effectiveness questions."),
+        ("Predicate Device", "A legally marketed device (cleared via 510(k) or pre-Amendments) used as the comparison basis for a new 510(k) submission."),
+        ("Product Code", "FDA's alphanumeric classification code for device types (e.g., IKN for sEMG respiratory monitors, DQS for EIT thoracic imagers, BZG for spirometers)."),
+        ("Regulation Number", "The CFR citation defining a device classification (e.g., 21 CFR 882.1400 for EEG devices, 21 CFR 890.1850 for powered exercise equipment)."),
+        ("Class I / II / III", "FDA risk-based device classifications. Class I = lowest risk (general controls). Class II = moderate risk (special controls + 510(k)). Class III = highest risk (PMA required)."),
+        ("General Controls", "Baseline FDA requirements for all devices: registration, listing, labeling, GMP, premarket notification, and adverse event reporting."),
+        ("Special Controls", "Additional FDA requirements for Class II devices beyond general controls: guidance documents, performance standards, postmarket surveillance, or patient registries."),
+        ("Pre-Submission (Pre-Sub)", "A formal FDA meeting request (formerly Q-Sub) to discuss regulatory strategy, testing plans, or clinical study design before filing a 510(k) or PMA."),
+        ("Q-Submission (Q-Sub)", "Legacy term for Pre-Submission. The formal process for requesting a Pre-Sub meeting with FDA's review division."),
+        ("DICE", "Division of Industry and Consumer Education. FDA division that handles Pre-Sub logistics, meeting scheduling, and general submission inquiries."),
+        ("RTA", "Refuse to Accept. FDA's initial administrative screening of a 510(k) submission against a checklist. Failure triggers immediate rejection before substantive review begins."),
+        ("SE Report", "Substantial Equivalence determination report. FDA's decision document that either clears (SESE) or denies (NSE) a 510(k)."),
+        ("SESE", "Substantially Equivalent -- the positive outcome of a 510(k) review, resulting in clearance to market."),
+        ("NSE", "Not Substantially Equivalent -- negative 510(k) determination. Device cannot be marketed under 510(k); applicant may pursue De Novo or PMA."),
+        ("21 CFR Part 820", "Quality System Regulation (QSR). FDA's current Good Manufacturing Practice (cGMP) requirements for medical devices. Being revised to align with ISO 13485."),
+        ("ISO 13485", "International standard for medical device quality management systems. Widely accepted globally and increasingly harmonized with FDA QSR."),
+        ("ISO 14971", "International standard for medical device risk management. Defines the process for hazard identification, risk estimation, risk evaluation, and risk control."),
+        ("IEC 60601-1", "International standard for basic safety and essential performance of medical electrical equipment. The foundation standard for most powered medical devices."),
+        ("IEC 62304", "International standard for medical device software lifecycle processes. Defines software safety classes (A, B, C) and development requirements."),
+        ("IEC 62366", "International standard for usability engineering of medical devices. Requires formative and summative usability testing."),
+        ("DHF", "Design History File. The complete collection of records documenting the design and development of a medical device, as required by 21 CFR 820.30."),
+        ("DMR", "Device Master Record. Documentation specifying the finished device, including device specifications, production processes, quality assurance procedures, and packaging/labeling specifications."),
+        ("DHR", "Device History Record. Production records for each unit or batch, demonstrating the device was manufactured according to the DMR."),
+        ("CAPA", "Corrective and Preventive Action. A systematic process required by 21 CFR 820.90 for investigating nonconformities, identifying root causes, and implementing corrective/preventive measures."),
+        ("Design Controls", "21 CFR 820.30 requirements for the design process: design planning, input, output, review, verification, validation, transfer, and changes."),
+        ("V&V", "Verification and Validation. Verification confirms design outputs meet design inputs (built right). Validation confirms the device meets user needs and intended use (built the right thing)."),
+        ("Biocompatibility", "Assessment of biological safety per ISO 10993. Required for any device with direct or indirect patient contact. Testing includes cytotoxicity, sensitization, irritation, and more based on contact type and duration."),
+        ("EMC", "Electromagnetic Compatibility. Testing per IEC 60601-1-2 to ensure a device neither emits harmful interference nor is susceptible to external electromagnetic fields."),
+        ("UDI", "Unique Device Identification. FDA-mandated system requiring a unique identifier on device labels and packages for tracking, recalls, and adverse event reporting."),
+        ("MDR / eMDR", "Medical Device Report / Electronic MDR. Mandatory adverse event reporting to FDA when a device may have caused or contributed to a death or serious injury."),
+        ("510(k) Summary", "A publicly available summary of the 510(k) submission describing the device, predicate comparison, and basis for substantial equivalence."),
+        ("Indications for Use", "The specific clinical conditions, patient populations, and purposes for which the device is intended. Must match or be a subset of the predicate's indications."),
+        ("Labeling", "All written, printed, or graphic material on or accompanying a device, including instructions for use (IFU), package inserts, and promotional materials."),
+        ("GMP", "Good Manufacturing Practice. FDA's manufacturing quality requirements codified in 21 CFR Part 820 (QSR)."),
+        ("FDA Establishment Registration", "Annual registration required for all facilities involved in the production and distribution of medical devices marketed in the US."),
+        ("FDA Device Listing", "Requirement to list each device being commercially distributed with FDA, including product codes and proprietary names."),
+        ("US Agent", "Required for foreign device manufacturers. A person residing in the US designated as FDA's point of contact for the foreign establishment."),
+        ("510(k) Holder", "The legal entity (typically a US LLC or corporation) that owns the 510(k) clearance. Foreign companies often establish a US subsidiary for this purpose."),
+        ("eSTAR", "Electronic Submission Template and Resource. FDA's standardized electronic submission format for 510(k) applications, replacing the former paper/eCopy process."),
+        ("MDSAP", "Medical Device Single Audit Program. A program allowing a single regulatory audit to satisfy requirements of multiple participating countries (US, Canada, Australia, Brazil, Japan)."),
+        ("PAC", "Premarket Assessment Committee. Internal FDA committee that reviews complex 510(k) submissions requiring multi-disciplinary expertise."),
+        ("sEMG", "Surface Electromyography. Non-invasive measurement of muscle electrical activity. In respiratory monitoring, measures neural respiratory drive from intercostal and diaphragm muscles."),
+        ("EIT", "Electrical Impedance Tomography. Non-invasive imaging technique that creates cross-sectional images of tissue conductivity. Used for real-time lung ventilation monitoring."),
+        ("V/Q Ratio", "Ventilation/Perfusion ratio. The relationship between air reaching the alveoli and blood reaching the alveoli. A key indicator of gas exchange efficiency."),
+        ("FES", "Functional Electrical Stimulation. Therapeutic application of electrical current to activate paralyzed or weakened muscles for functional movement."),
+        ("NRE", "Non-Recurring Engineering. One-time engineering costs for product development, tooling, and manufacturing setup that are not repeated for each unit produced."),
+    ]
+    for k, v in fda_terms:
+        pdf.kv(k, v)
+        pdf.ln(1)
+
     out = os.path.join(OUT_DIR, "PMP_Users_Guide_EN.pdf")
     pdf.output(out)
     return out
@@ -910,6 +970,7 @@ def build_chinese():
         ("20", "设置向导与模板"),
         ("21", "快捷操作与技巧"),
         ("22", "故障排除"),
+        ("23", "FDA与法规术语表"),
     ]
     pdf.set_font("CJK", "", 11)
     for num, title in toc:
@@ -1373,6 +1434,64 @@ def build_chinese():
         "ctower_doclib_docs, ctower_qa_messages, ctower_qa_settings, "
         "ctower_qa_archive。或在浏览器设置中清除所有站点数据。"
     )
+
+    # ── 23. FDA与法规术语表 ──
+    pdf.add_page()
+    pdf.sec(23, "FDA与法规术语表")
+    pdf.ln(2)
+    fda_terms_cn = [
+        ("510(k)", "上市前通知。向FDA提交的文件，证明II类器械与已合法上市的对照器械实质等同。以《食品、药品和化妆品法》第510(k)条命名。"),
+        ("PMA（上市前批准）", "最严格的FDA审批路径，适用于无法证明实质等同的III类器械。需要临床数据支持。"),
+        ("De Novo（从新分类）", "针对无对照器械的新型低至中等风险器械的FDA分类途径。批准后创建新的监管分类。"),
+        ("实质等同（SE）", "510(k)放行的法定标准。新器械必须与对照器械具有相同的预期用途和相似的技术特征，或不同的技术特征不会引发新的安全性/有效性问题。"),
+        ("对照器械（Predicate）", "已合法上市的器械（通过510(k)放行或修正前上市），用作新510(k)提交的比较基础。"),
+        ("产品代码（Product Code）", "FDA对器械类型的字母数字分类代码（如IKN用于sEMG呼吸监测器，DQS用于EIT胸部成像仪，BZG用于肺功能仪）。"),
+        ("法规编号（Regulation Number）", "定义器械分类的CFR引用（如21 CFR 882.1400用于EEG器械，21 CFR 890.1850用于动力运动设备）。"),
+        ("I类 / II类 / III类", "FDA基于风险的器械分类。I类=最低风险（一般控制）。II类=中等风险（特殊控制+510(k)）。III类=最高风险（需PMA）。"),
+        ("一般控制（General Controls）", "所有器械的FDA基线要求：注册、列名、标签、GMP、上市前通知和不良事件报告。"),
+        ("特殊控制（Special Controls）", "II类器械在一般控制之外的额外FDA要求：指南文件、性能标准、上市后监督或患者登记。"),
+        ("Pre-Sub（上市前会议）", "正式的FDA会议请求（前称Q-Sub），用于在提交510(k)或PMA之前讨论监管策略、测试计划或临床研究设计。"),
+        ("Q-Sub（Q提交）", "Pre-Sub的旧称。请求与FDA审查部门召开Pre-Sub会议的正式流程。"),
+        ("DICE", "工业与消费者教育司。负责处理Pre-Sub后勤、会议安排和一般提交咨询的FDA部门。"),
+        ("RTA（拒绝受理）", "FDA对510(k)提交的初步行政筛查。未通过检查清单将在实质审查前立即被退回。"),
+        ("SE报告", "实质等同判定报告。FDA的决策文件，对510(k)做出放行（SESE）或拒绝（NSE）的决定。"),
+        ("SESE", "实质等同——510(k)审查的肯定结果，获得上市许可。"),
+        ("NSE", "非实质等同——510(k)的否定判定。器械不能通过510(k)上市；申请人可寻求De Novo或PMA途径。"),
+        ("21 CFR Part 820", "质量体系法规（QSR）。FDA对医疗器械的现行良好生产规范（cGMP）要求。正在修订以与ISO 13485协调。"),
+        ("ISO 13485", "医疗器械质量管理体系国际标准。在全球范围内广泛认可，并日益与FDA QSR协调。"),
+        ("ISO 14971", "医疗器械风险管理国际标准。定义了危害识别、风险估计、风险评价和风险控制的流程。"),
+        ("IEC 60601-1", "医用电气设备基本安全和基本性能的国际标准。大多数有源医疗器械的基础标准。"),
+        ("IEC 62304", "医疗器械软件生命周期过程的国际标准。定义了软件安全等级（A、B、C）和开发要求。"),
+        ("IEC 62366", "医疗器械可用性工程的国际标准。要求进行形成性和总结性可用性测试。"),
+        ("DHF（设计历史文件）", "记录医疗器械设计和开发的完整记录集合，依据21 CFR 820.30要求。"),
+        ("DMR（器械主记录）", "规定成品器械的文档，包括器械规格、生产工艺、质量保证程序和包装/标签规格。"),
+        ("DHR（器械历史记录）", "每个单元或批次的生产记录，证明器械按照DMR制造。"),
+        ("CAPA（纠正和预防措施）", "21 CFR 820.90要求的系统化流程，用于调查不合格品、识别根本原因并实施纠正/预防措施。"),
+        ("设计控制（Design Controls）", "21 CFR 820.30对设计过程的要求：设计策划、输入、输出、评审、验证、确认、转换和变更。"),
+        ("V&V（验证与确认）", "验证确认设计输出满足设计输入（构建正确）。确认确认器械满足用户需求和预期用途（构建正确的产品）。"),
+        ("生物相容性", "依据ISO 10993的生物安全性评估。任何与患者直接或间接接触的器械均需评估。测试包括细胞毒性、致敏性、刺激性等，具体取决于接触类型和持续时间。"),
+        ("EMC（电磁兼容性）", "依据IEC 60601-1-2的测试，确保器械既不发射有害干扰，也不受外部电磁场影响。"),
+        ("UDI（唯一器械标识）", "FDA强制要求的系统，要求在器械标签和包装上标注唯一标识符，用于追踪、召回和不良事件报告。"),
+        ("MDR / eMDR（医疗器械报告）", "当器械可能导致或促成死亡或严重伤害时，向FDA提交的强制性不良事件报告。"),
+        ("510(k)摘要", "510(k)提交的公开摘要，描述器械、对照比较和实质等同的依据。"),
+        ("预期用途（Indications for Use）", "器械的特定临床适应症、患者群体和使用目的。必须与对照器械的适应症相匹配或为其子集。"),
+        ("标签（Labeling）", "器械上或随附的所有书面、印刷或图形材料，包括使用说明（IFU）、包装插页和推广材料。"),
+        ("GMP（良好生产规范）", "FDA的制造质量要求，编入21 CFR Part 820（QSR）。"),
+        ("FDA机构注册", "所有参与在美国市场销售的医疗器械生产和分销设施每年必须进行的注册。"),
+        ("FDA器械列名", "要求将每个商业化分销的器械向FDA列名，包括产品代码和专有名称。"),
+        ("美国代理人（US Agent）", "外国器械制造商的强制要求。指定一名居住在美国的人员作为FDA与外国机构的联系人。"),
+        ("510(k)持有人", "拥有510(k)放行的法人实体（通常是美国LLC或公司）。外国公司通常为此设立美国子公司。"),
+        ("eSTAR", "电子提交模板与资源。FDA标准化的510(k)电子提交格式，取代以前的纸质/eCopy流程。"),
+        ("MDSAP", "医疗器械单一审计程序。允许通过一次监管审计满足多个参与国家的要求（美国、加拿大、澳大利亚、巴西、日本）。"),
+        ("sEMG（表面肌电图）", "非侵入性肌肉电活动测量。在呼吸监测中，测量来自肋间肌和膈肌的神经呼吸驱动。"),
+        ("EIT（电阻抗断层成像）", "非侵入性成像技术，创建组织电导率的横截面图像。用于实时肺通气监测。"),
+        ("V/Q比值", "通气/灌注比。到达肺泡的空气与到达肺泡的血液之间的关系。气体交换效率的关键指标。"),
+        ("FES（功能性电刺激）", "治疗性电流应用，激活瘫痪或虚弱的肌肉以实现功能性运动。"),
+        ("NRE（非经常性工程费用）", "产品开发、工装和制造设置的一次性工程成本，不在每个单元生产中重复发生。"),
+    ]
+    for k, v in fda_terms_cn:
+        pdf.kv(k, v)
+        pdf.ln(1)
 
     out = os.path.join(OUT_DIR, "PMP_Users_Guide_CN.pdf")
     pdf.output(out)
