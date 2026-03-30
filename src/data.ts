@@ -4,6 +4,8 @@
 // PMP is overriding authority; accepts input from biz & tech
 // ============================================================
 
+import { fetchProjectTier, fetchAllowedTabs } from "./supabase.ts";
+
 import type {
   Project,
   Tracks,
@@ -15,6 +17,7 @@ import type {
   CashRunway,
   ChangeRequest,
   UserRole,
+  SaasTier,
   AuditEntry,
   DHFDocument,
   CAPAItem,
@@ -34,8 +37,7 @@ export const PROJECT: Project = {
     en: "FDA 510(k) Clearance Program",
     cn: "FDA 510(k)审批项目",
   },
-  submissionType:
-    "510(k) (pathway pending Pre-Sub confirmation)",
+  submissionType: "510(k) (pathway pending Pre-Sub confirmation)",
   applicant: {
     en: "US Operating Entity",
     cn: "美国运营实体",
@@ -3225,6 +3227,54 @@ export const QA_SECTIONS: QASection[] = [
 // Password-based auth: password determines role at login
 export let IS_ADMIN: boolean = false;
 export let ACTIVE_ROLE: UserRole = "business";
+
+/** Project identifier — must match the subscriptions.project_id in Supabase */
+export const PROJECT_ID = "demo";
+
+const TIER_STORAGE_KEY = "ctower_saas_tier";
+export let ACTIVE_TIER: SaasTier =
+  (localStorage.getItem(TIER_STORAGE_KEY) as SaasTier) || "starter";
+
+/** Server-authoritative allowed tabs — loaded from Supabase RPC.
+ *  Defaults to starter until the server responds. */
+export let ALLOWED_TABS: Set<string> = new Set([
+  "dual-track",
+  "gates",
+  "timeline",
+  "budget",
+]);
+
+export function setActiveTier(tier: SaasTier): void {
+  ACTIVE_TIER = tier;
+  localStorage.setItem(TIER_STORAGE_KEY, tier);
+}
+
+/** Load tier from Supabase subscriptions table (authoritative source).
+ *  Falls back to localStorage if the table doesn't exist yet. */
+export async function loadTierFromSupabase(
+  projectId: string,
+): Promise<SaasTier> {
+  const result = await fetchProjectTier(projectId);
+  if (result && ["starter", "growth", "scale"].includes(result.tier)) {
+    const tier = result.tier as SaasTier;
+    ACTIVE_TIER = tier;
+    localStorage.setItem(TIER_STORAGE_KEY, tier);
+    return tier;
+  }
+  // Keep whatever localStorage has
+  return ACTIVE_TIER;
+}
+
+/** Load allowed tabs from server — the authoritative tab list.
+ *  The server's get_allowed_tabs() function reads from subscriptions
+ *  and cannot be spoofed client-side. */
+export async function loadAllowedTabsFromSupabase(
+  projectId: string,
+): Promise<Set<string>> {
+  const tabs = await fetchAllowedTabs(projectId);
+  ALLOWED_TABS = new Set(tabs);
+  return ALLOWED_TABS;
+}
 
 const CREDENTIAL_HASHES: Record<string, { role: UserRole; admin: boolean }> = {
   "135c73edb7cca493ebfa47115cc3015addde7165d14974954b1e125e55a13785": {

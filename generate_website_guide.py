@@ -338,6 +338,24 @@ def build_en():
     pdf.bul("Regulatory document control and risk monitoring")
     pdf.bul("Real-time bilingual team messaging")
 
+    pdf.sub("7 Device Category Templates")
+    pdf.txt(
+        "The Control Tower includes pre-built project templates for the most common "
+        "510(k) device categories. Selecting a template automatically configures your "
+        "FDA product codes, regulation sections, applicable standards, risk register, "
+        "budget categories, and estimated timeline -- saving weeks of setup time.")
+    pdf.bul("Respiratory Devices (CFR Part 868) -- ventilators, CPAP/BiPAP, monitors")
+    pdf.bul("Cardiovascular Devices (CFR Part 870) -- ECG, blood pressure, cardiac monitors")
+    pdf.bul("Orthopedic Devices (CFR Part 888) -- implants, fixation, joint replacements")
+    pdf.bul("In Vitro Diagnostics / IVD (CFR Parts 862-864) -- analyzers, assays, reagents")
+    pdf.bul("Imaging & Monitoring (CFR Part 892) -- ultrasound, X-ray, patient monitors")
+    pdf.bul("Rehabilitation Devices (CFR Part 890) -- stimulators, mobility aids, therapy")
+    pdf.bul("Software as Medical Device / SaMD (CFR 892.2020) -- clinical AI/ML, telehealth, PACS")
+    pdf.txt(
+        "Each template pre-fills the regulatory framework, technical workstreams, and risk "
+        "categories specific to your device type -- or choose 'Start from Scratch' to configure "
+        "everything manually.")
+
     pdf.sub("Professional PM -- $10-25K/mo")
     pdf.bul("Everything in SaaS, plus dedicated PMP project manager")
     pdf.bul("FDA Communications Center with Q-Sub automation")
@@ -676,6 +694,22 @@ def build_cn():
     pdf.bul("双轨里程碑跟踪（法规+工程）")
     pdf.bul("法规文档控制和风险监控")
     pdf.bul("实时双语团队消息")
+
+    pdf.sub("7大设备类别模板")
+    pdf.txt(
+        "Control Tower 内置常见510(k)设备类别的预配置项目模板。"
+        "选择模板后，系统自动配置FDA产品代码、法规章节、适用标准、"
+        "风险清单、预算类别和预估时间线——节省数周配置时间。")
+    pdf.bul("呼吸设备（CFR Part 868）——呼吸机、CPAP/BiPAP、监测仪")
+    pdf.bul("心血管设备（CFR Part 870）——心电图、血压、心脏监测")
+    pdf.bul("骨科设备（CFR Part 888）——植入物、固定装置、关节置换")
+    pdf.bul("体外诊断/IVD（CFR Parts 862-864）——分析仪、试剂")
+    pdf.bul("影像与监测（CFR Part 892）——超声、X光、患者监测")
+    pdf.bul("康复设备（CFR Part 890）——刺激器、助行器、治疗设备")
+    pdf.bul("软件医疗器械/SaMD（CFR 892.2020）——临床AI/ML、远程医疗")
+    pdf.txt(
+        "每个模板预填充您设备类型的法规框架、技术工作流和风险类别——"
+        "或选择'从零开始'手动配置所有内容。")
 
     pdf.sub("专业PM服务 -- $10,000-$25,000/月")
     pdf.bul("SaaS全部功能，外加专属PMP项目经理")

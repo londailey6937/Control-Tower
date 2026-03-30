@@ -307,6 +307,65 @@ def build():
         [45, 50, 60]
     )
 
+    pdf.sub("Dual-Entity Operating Model")
+    pdf.txt(
+        "510kBridge operates through two complementary entities. Understanding the "
+        "revenue flow between them is critical to the EB-5 structure and daily "
+        "operations:"
+    )
+
+    pdf.sub2("Why Two Entities Are Required")
+    pdf.bullet("EB-5 capital ($800,000) must be deployed into a US commercial enterprise "
+               "(8 CFR 204.6). The investment flows into 510kBridge, Inc. (Delaware C-Corp) "
+               "and is spent on US operations, salaries, and job creation.")
+    pdf.bullet("Chinese medical device clients expect to contract and pay in RMB through "
+               "a local Chinese entity. Without the Shanghai WFOE, every client would need "
+               "to wire USD internationally -- a major friction point that kills deals.")
+    pdf.bullet("FDA requires US-based document storage and a US Agent for foreign "
+               "manufacturers (21 CFR 820.180). Regulatory work must originate from the US entity.")
+    pdf.bullet("The WFOE satisfies EB-1C multinational manager requirements for the CEO's "
+               "eventual transfer to the US.")
+
+    pdf.sub2("Revenue Flow: China to US")
+    pdf.txt(
+        "Clients contract with the Shanghai WFOE and pay in RMB. The WFOE retains a "
+        "margin for local operations (sales team salaries, office, marketing) and "
+        "transfers management fees / service fees upstream to the US parent via "
+        "intercompany agreements. This is standard WFOE-to-parent transfer pricing "
+        "and must comply with two frameworks:"
+    )
+    pdf.bold_bullet("China SAFE (State Administration of Foreign Exchange): ",
+        "The WFOE must register with SAFE to remit profits or management fees to the "
+        "US parent. Registration takes 2-4 weeks and requires proper documentation "
+        "of the intercompany agreement and fee basis.")
+    pdf.bold_bullet("OECD Transfer Pricing: ",
+        "Intercompany fees must be at arm's length -- priced as if the two entities "
+        "were unrelated parties. Common structures include a percentage-of-revenue "
+        "management fee (15-25%) or cost-plus arrangement.")
+
+    pdf.sub2("Tax Treatment")
+    pdf.txt(
+        "The US-China tax treaty (Article 5/7) prevents double taxation on the same "
+        "income. The WFOE pays China corporate tax (25%) on its local margin. The US "
+        "parent pays US corporate tax on repatriated profits with foreign tax credits "
+        "for taxes already paid in China. A cross-border CPA experienced in US-China "
+        "structures is essential (many available in the Portland/Vancouver area).")
+
+    pdf.sub2("Operating Model Summary")
+    pdf.table(
+        ["Function", "US Parent (Camas, WA)", "Shanghai WFOE"],
+        [
+            ["EB-5 compliance", "Yes -- capital deployed here", "N/A"],
+            ["FDA regulatory work", "US Agent, submissions, DHF storage", "Cannot perform"],
+            ["Client sales", "Secondary (EN-speaking clients)", "Primary -- Mandarin team"],
+            ["Banking", "USD business accounts", "RMB accounts, local invoicing"],
+            ["Contracts", "US-law (FDA, labs, agents)", "CN-law (client contracts)"],
+            ["Tax jurisdiction", "US federal + WA (no state income tax)", "China 25% corporate"],
+            ["Job creation", "W-2 employees count for EB-5", "Does NOT count for EB-5"],
+        ],
+        [35, 60, 60]
+    )
+
     # ══════════════════════════════════════════════════════════════
     # 3. PHASE 1: CHINA PILOT PROGRAM
     # ══════════════════════════════════════════════════════════════
@@ -683,6 +742,77 @@ def build():
         "The existing generate_regulatory_analysis.py engine is exposed as a "
         "self-service tool for clients to get preliminary gap analysis before "
         "engaging full services.")
+
+    pdf.sub("Regulatory Pathway Expansion Strategy")
+    pdf.txt(
+        "510kBridge currently focuses exclusively on FDA 510(k) clearance for "
+        "Class II devices. This is a deliberate strategic choice -- the 510(k) "
+        "pathway represents the largest addressable market for Chinese medical "
+        "device companies entering the US. However, future expansion into "
+        "adjacent regulatory pathways is planned:"
+    )
+
+    pdf.sub2("Current Focus: 510(k) Class II")
+    pdf.txt(
+        "The vast majority of Chinese medical device companies seeking US market "
+        "entry have Class II devices: patient monitors, imaging systems, IVD "
+        "analyzers, rehabilitation equipment, and software as medical device (SaMD). "
+        "Control Tower's 7 device category templates, dual-track milestones, and "
+        "regulatory workflows are purpose-built for this pathway. This is where "
+        "client demand lives and where 510kBridge's competitive advantage is strongest."
+    )
+
+    pdf.sub2("Next Expansion: De Novo Classification")
+    pdf.txt(
+        "De Novo is the natural adjacent pathway. It applies to novel devices "
+        "that are low-to-moderate risk but have no existing predicate device. "
+        "De Novo shares significant DNA with 510(k): similar testing requirements, "
+        "similar FDA review timelines, and similar documentation structure. "
+        "Control Tower can support De Novo with modest additions -- primarily "
+        "replacing the predicate-equivalence argument with a risk-based "
+        "classification argument. Target: Year 3-4."
+    )
+
+    pdf.sub2("Class III / PMA: A Different Business")
+    pdf.txt(
+        "Class III devices require Premarket Approval (PMA), which is "
+        "fundamentally different from 510(k). PMA demands prospective clinical "
+        "trials, Investigational Device Exemptions (IDE), and dramatically "
+        "higher costs and timelines. 510kBridge does not plan to offer PMA "
+        "services in its current form. The rationale:"
+    )
+
+    pdf.table(
+        ["Factor", "510(k) Class II", "PMA Class III"],
+        [
+            ["Core argument", "Substantial equivalence", "Independent safety/effectiveness"],
+            ["Clinical data", "Bench/algorithm validation", "Mandatory clinical trials"],
+            ["FDA user fee", "$6.5K-$26K", "~$425K"],
+            ["Review timeline", "90 days (MDUFA)", "6-18 months"],
+            ["Total cost/device", "$130K-$320K", "$1M-$3M+"],
+            ["Post-clearance", "Device listing, complaints", "Conditions of approval, PAS"],
+            ["Typical client", "$5M-$50M revenue company", "$50M+ with RA team in place"],
+        ],
+        [35, 60, 60]
+    )
+
+    pdf.txt(
+        "Companies with Class III devices typically have $50M+ in funding and "
+        "established regulatory teams. They hire specialized CROs and regulatory "
+        "firms (EMERGO, NAMSA, Hogan Lovells), not consulting firms for end-to-end "
+        "PM. Additionally, PMA would require 510kBridge to build clinical trial "
+        "management capabilities (IRB submissions, patient enrollment, adverse event "
+        "monitoring, IDE submissions) that do not exist in Control Tower today. "
+        "This represents a separate business with a different client profile, "
+        "different pricing model ($50-100K/month for 2-3 years), and intense "
+        "competition from entrenched players."
+    )
+
+    pdf.green_txt(
+        "Strategic position: Own 510(k) Class II. Expand to De Novo in Year 3-4. "
+        "Leave PMA/Class III to specialized firms -- or evaluate as a separate "
+        "business unit only after achieving $3M+ annual revenue."
+    )
 
     pdf.sub("Partnership Development")
     pdf.bullet("Testing labs (UL, TUV, Intertek) -- referral partnerships")

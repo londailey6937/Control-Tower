@@ -346,6 +346,9 @@ export interface Supplier {
 // ── User Roles ──────────────────────────────────
 export type UserRole = "pmp" | "tech" | "business" | "accounting";
 
+// ── SaaS Tier ───────────────────────────────────
+export type SaasTier = "starter" | "growth" | "scale";
+
 // ── i18n ────────────────────────────────────────
 export type I18nKey = string;
 export type I18nDict = Record<I18nKey, string>;

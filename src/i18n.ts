@@ -185,6 +185,12 @@ export const I18N: I18nMessages = {
     roleReadOnly: "Read-Only",
     roleAccountingAccess:
       "Accounting has read-only access to: Cash/Runway, Timeline, Gate statuses",
+    tierLabel: "Tier",
+    tierStarter: "Starter ($500/mo)",
+    tierGrowth: "Growth ($1,000/mo)",
+    tierScale: "Scale ($2,000/mo)",
+    tierNotice:
+      "{tier} plan — some tabs are restricted. Upgrade for full access.",
 
     // China API integrations
     apiTitle: "Payment & Banking Integrations",
@@ -805,6 +811,11 @@ export const I18N: I18nMessages = {
     roleLabel: "当前角色",
     roleReadOnly: "只读",
     roleAccountingAccess: "财务会计可只读访问：资金/跑道、时间线、门控状态",
+    tierLabel: "套餐",
+    tierStarter: "入门版 ($500/月)",
+    tierGrowth: "成长版 ($1,000/月)",
+    tierScale: "专业版 ($2,000/月)",
+    tierNotice: "{tier}套餐 — 部分标签页受限。升级以获取完整访问权限。",
 
     // China API integrations
     apiTitle: "支付与银行集成",

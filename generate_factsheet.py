@@ -125,6 +125,7 @@ def build_factsheet_en():
     items_left = [
         "16-tab Control Tower dashboard",
         "Bilingual 9-step setup wizard",
+        "7 device category templates",
         "Dual-track milestone tracking",
         "FDA Communications Center",
         "Q-Sub generation automation",
@@ -132,6 +133,7 @@ def build_factsheet_en():
     items_right = [
         "Document control with version history",
         "Risk & budget monitoring",
+        "Auto-configured standards & risks",
         "Thread-based team messaging (EN/CN)",
         "Automated RTA self-check",
         "Data Source Ref for audit traceability",
@@ -318,8 +320,9 @@ def build_factsheet_cn():
     x_right = pdf.l_margin + col_w + 4
     y0 = pdf.get_y()
     items_left = [
-        "15选项卡控制塔仪表盘",
+        "16选项卡控制塔仪表盘",
         "双语9步设置向导",
+        "7大设备类别模板",
         "双轨里程碑跟踪",
         "FDA通信中心",
         "Q-Sub生成自动化",
@@ -327,6 +330,7 @@ def build_factsheet_cn():
     items_right = [
         "版本化文档控制",
         "风险与预算监控",
+        "自动配置标准与风险",
         "线程式团队消息(中英文)",
         "自动化RTA自检",
         "数据源引用审计追踪",

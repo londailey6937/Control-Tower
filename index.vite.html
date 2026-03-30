@@ -3,6 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://fllqdhvvnqoayugohzld.supabase.co wss://fllqdhvvnqoayugohzld.supabase.co; font-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self';"
+    />
     <title>Medical Device Development Control Tower | 医疗器械开发控制塔</title>
   </head>
   <body>
@@ -63,7 +67,23 @@
           >
         </div>
         <div class="role-switcher" id="roleSwitcher">
-          <label class="role-label" data-i18n="roleLabel">Role:</label>
+          <label class="role-label" data-i18n="tierLabel">Tier:</label>
+          <select
+            id="tierSelect"
+            class="role-select"
+            disabled
+            title="Tier is managed by your subscription"
+          >
+            <option value="starter" data-i18n="tierStarter">Starter</option>
+            <option value="growth" data-i18n="tierGrowth">Growth</option>
+            <option value="scale" data-i18n="tierScale">Scale</option>
+          </select>
+          <label
+            class="role-label"
+            data-i18n="roleLabel"
+            style="margin-left: 8px"
+            >Role:</label
+          >
           <select id="roleSelect" class="role-select">
             <option value="pmp" selected data-i18n="rolePmp">PMP</option>
             <option value="tech" data-i18n="roleTech">Technical</option>

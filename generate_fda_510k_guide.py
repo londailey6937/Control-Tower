@@ -307,6 +307,14 @@ def build():
     pdf.bullet("Product code and regulation number confirmed in data.ts")
     pdf.bullet("Gate G0 review completed and documented")
 
+    pdf.callout_box(
+        "Control Tower Device Category Templates: The setup wizard offers 7 pre-built "
+        "templates (Respiratory, Cardiovascular, Orthopedic, IVD, Imaging & Monitoring, "
+        "Rehabilitation, SaMD) that auto-populate product codes, regulation sections, "
+        "applicable standards, risk registers, budget categories, and estimated timelines "
+        "based on your device type. This accelerates Phase 1 classification and ensures "
+        "the correct regulatory framework is loaded from day one.")
+
     # ════════════════════════════════════════════════════
     # PHASE 2: PRE-SUBMISSION (Q-SUB)
     # ════════════════════════════════════════════════════

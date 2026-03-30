@@ -19,6 +19,7 @@ export const supabase: SupabaseClient = createClient(
 // ── Types matching the DB schema ──────────────────
 export interface DbMessage {
   id: string;
+  project_id: string;
   q_num: number;
   sender: string;
   text: string;
@@ -191,4 +192,47 @@ export async function insertAuditBatch(
     return false;
   }
   return true;
+}
+
+// ── Subscription / Tier ─────────────────────────
+
+export interface DbSubscription {
+  id: string;
+  project_id: string;
+  tier: string;
+  max_seats: number;
+  stripe_customer_id: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export async function fetchProjectTier(
+  projectId: string,
+): Promise<{ tier: string; maxSeats: number } | null> {
+  const { data, error } = await supabase
+    .from("subscriptions")
+    .select("tier, max_seats")
+    .eq("project_id", projectId)
+    .single();
+  if (error) {
+    // Table may not exist yet — fall back gracefully
+    if (error.code !== "PGRST116") {
+      console.warn("Supabase fetchProjectTier:", error.message);
+    }
+    return null;
+  }
+  return data ? { tier: data.tier, maxSeats: data.max_seats } : null;
+}
+
+/** Server-authoritative tab list — calls the get_allowed_tabs RPC.
+ *  Cannot be spoofed client-side; the function reads from subscriptions. */
+export async function fetchAllowedTabs(projectId: string): Promise<string[]> {
+  const { data, error } = await supabase.rpc("get_allowed_tabs", {
+    p_project_id: projectId,
+  });
+  if (error) {
+    console.warn("fetchAllowedTabs:", error.message);
+    return ["dual-track", "gates", "timeline", "budget"];
+  }
+  return data ?? ["dual-track", "gates", "timeline", "budget"];
 }

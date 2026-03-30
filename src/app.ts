@@ -14,8 +14,13 @@ import {
   CASH_RUNWAY,
   CHANGE_REQUESTS,
   ACTIVE_ROLE,
+  ACTIVE_TIER,
+  ALLOWED_TABS,
   IS_ADMIN,
+  PROJECT_ID,
   setActiveRole,
+  loadTierFromSupabase,
+  loadAllowedTabsFromSupabase,
   authenticatePassword,
   AUDIT_LOG,
   DHF_DOCUMENTS,
@@ -412,9 +417,20 @@ function bootDashboard(): void {
   const subEl = document.querySelector(".logo-subtitle");
   if (subEl) subEl.textContent = localizedText(PROJECT.subtitle);
 
-  // Bootstrap Supabase data, then render
-  Promise.all([initQaMessages(), initAuditLog()])
-    .then(() => {
+  // Bootstrap Supabase data (tier, allowed tabs, messages, audit), then render
+  const projectId = PROJECT_ID;
+  Promise.all([
+    loadTierFromSupabase(projectId),
+    loadAllowedTabsFromSupabase(projectId),
+    initQaMessages(),
+    initAuditLog(),
+  ])
+    .then(([tier]) => {
+      // Sync tier display (read-only) with server value
+      const tierSel = document.getElementById(
+        "tierSelect",
+      ) as HTMLSelectElement | null;
+      if (tierSel) tierSel.value = tier;
       renderAll();
       setupRealtimeMessages();
     })
@@ -2047,6 +2063,15 @@ function initRoleSwitcher(): void {
   const container = document.getElementById("roleSwitcher");
   if (!container) return;
 
+  // Init tier selector (display-only — tier is server-controlled)
+  const tierSelect = document.getElementById(
+    "tierSelect",
+  ) as HTMLSelectElement | null;
+  if (tierSelect) {
+    tierSelect.value = ACTIVE_TIER;
+    tierSelect.disabled = true; // Tier is server-authoritative
+  }
+
   // Lock out PMP for non-admin visitors
   const select = document.getElementById(
     "roleSelect",
@@ -2099,6 +2124,9 @@ window._setRole = function (role: string): void {
 
 // Accounting: read-only access to Cash/Runway, Timeline, Gate statuses only
 // Tech/Business: can view all, but changes go through CR workflow
+// Tier gating: ALLOWED_TABS is loaded from the server (get_allowed_tabs RPC).
+// The server function reads from subscriptions — cannot be spoofed client-side.
+
 function applyRoleRestrictions(): void {
   const role = ACTIVE_ROLE;
   const tabs = document.querySelectorAll<HTMLButtonElement>(".tab-btn");
@@ -2108,29 +2136,36 @@ function applyRoleRestrictions(): void {
     "gates",
     "budget",
   ]);
+  // Server-authoritative allowed tabs (loaded from Supabase RPC)
+  const tierAllowed = ALLOWED_TABS;
 
   tabs.forEach((btn) => {
     const tab = btn.dataset.tab || "";
+    // FDA Comms: only PMP role AND scale tier
     if (tab === "fda-comms") {
-      const hidden = role !== "pmp";
+      const hidden = role !== "pmp" || !tierAllowed.has(tab);
       btn.style.display = hidden ? "none" : "";
       btn.disabled = hidden;
-    } else if (role === "accounting") {
-      const allowed = accountingTabs.has(tab);
+    } else {
+      // Tier restriction takes priority
+      const tierOk = tierAllowed.has(tab);
+      // Then role restriction
+      const roleOk = role === "accounting" ? accountingTabs.has(tab) : true;
+      const allowed = tierOk && roleOk;
       btn.classList.toggle("tab-restricted", !allowed);
       btn.disabled = !allowed;
-    } else {
-      btn.classList.remove("tab-restricted");
-      btn.disabled = false;
     }
   });
 
-  // If accounting is on a restricted tab, switch to cash-runway
-  if (role === "accounting" && !accountingTabs.has(activeTab)) {
-    const cashBtn = document.querySelector<HTMLButtonElement>(
-      '.tab-btn[data-tab="cash-runway"]',
+  // If on a restricted tab, switch to dual-track (always available)
+  const currentAllowed =
+    tierAllowed.has(activeTab) &&
+    (role !== "accounting" || accountingTabs.has(activeTab));
+  if (!currentAllowed) {
+    const fallback = document.querySelector<HTMLButtonElement>(
+      '.tab-btn[data-tab="dual-track"]',
     );
-    if (cashBtn) cashBtn.click();
+    if (fallback) fallback.click();
   }
 
   // Show/hide role badge
@@ -2148,8 +2183,22 @@ function applyRoleRestrictions(): void {
   // Show accounting notice
   const notice = document.getElementById("accountingNotice");
   if (notice) {
-    notice.style.display = role === "accounting" ? "block" : "none";
-    notice.textContent = t("roleAccountingAccess");
+    if (role === "accounting") {
+      notice.style.display = "block";
+      notice.textContent = t("roleAccountingAccess");
+    } else if (ACTIVE_TIER !== "scale") {
+      notice.style.display = "block";
+      const tierLabels: Record<string, string> = {
+        starter: t("tierStarter"),
+        growth: t("tierGrowth"),
+      };
+      notice.textContent = t("tierNotice").replace(
+        "{tier}",
+        tierLabels[ACTIVE_TIER] || ACTIVE_TIER,
+      );
+    } else {
+      notice.style.display = "none";
+    }
   }
 }
 
@@ -2795,10 +2844,16 @@ function renderUsInvestment(): void {
     (i) => i.contact === "closed",
   ).reduce((s, i) => s + i.amount, 0);
   const meetings = IR_ACTIVITIES.filter((a) => a.status === "done").length;
-  const pmpMember = TEAM_MEMBERS.find((m) =>
-    (typeof m.role === "string" ? m.role : m.role.en).toLowerCase().includes("investor") ||
-    (typeof m.role === "string" ? m.role : m.role.en).toLowerCase().includes("ir")
-  ) || TEAM_MEMBERS[0];
+  const pmpMember =
+    TEAM_MEMBERS.find(
+      (m) =>
+        (typeof m.role === "string" ? m.role : m.role.en)
+          .toLowerCase()
+          .includes("investor") ||
+        (typeof m.role === "string" ? m.role : m.role.en)
+          .toLowerCase()
+          .includes("ir"),
+    ) || TEAM_MEMBERS[0];
   const irLead = pmpMember?.name || t("rolePmp");
 
   // Metrics cards
@@ -3650,7 +3705,10 @@ const DEFAULT_DOCS: DocLibItem[] = [
     id: "doc-7",
     dcn: "DCN-TECH-004",
     cat: "technical",
-    name: { en: "Risk Management File (ISO 14971)", cn: "风险管理文件 (ISO 14971)" },
+    name: {
+      en: "Risk Management File (ISO 14971)",
+      cn: "风险管理文件 (ISO 14971)",
+    },
     version: "1.0",
     date: "2026-02-28",
     owner: "Technical Lead",
@@ -4502,6 +4560,7 @@ async function syncOfflineMessages(): Promise<void> {
   for (const m of localMsgs) {
     if (!remoteIds.has(m.id)) {
       await insertMessage({
+        project_id: PROJECT_ID,
         q_num: m.qNum,
         sender: m.sender,
         text: m.text,
@@ -4676,6 +4735,7 @@ function sendQaMessage(threadId: number): void {
 
   if (isOnline()) {
     insertMessage({
+      project_id: PROJECT_ID,
       q_num: threadId,
       sender: role,
       text,

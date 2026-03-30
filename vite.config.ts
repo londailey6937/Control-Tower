@@ -24,6 +24,7 @@ export default defineConfig({
     },
   },
   build: {
+    sourcemap: false,
     rollupOptions: {
       input: resolve(__dirname, "index.vite.html"),
     },
