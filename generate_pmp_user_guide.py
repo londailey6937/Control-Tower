@@ -782,7 +782,8 @@ def build_english():
     pdf.add_page()
     pdf.sec(21, "Keyboard Shortcuts & Tips")
     pdf.sub("General Tips")
-    pdf.bul("All data saves automatically to browser localStorage")
+    pdf.bul("All data saves automatically to browser localStorage -- including full dashboard state (milestones, gates, risks, budget, investors, etc.)")
+    pdf.bul("Dashboard state survives browser crashes and power outages -- data reloads automatically on next visit")
     pdf.bul("Supabase sync happens in real-time when online")
     pdf.bul("Offline changes queue and sync when connection is restored")
     pdf.bul("Currency display toggles between USD and CNY based on language setting")
@@ -798,10 +799,12 @@ def build_english():
 
     pdf.sub("Data Persistence")
     pdf.bul("Project configuration: ctower_project_data (localStorage)")
+    pdf.bul("Live dashboard state: ctower_live_state (localStorage) -- milestones, gates, risks, standards, budget, cash/runway, action items, DHF, CAPA, team, suppliers, investors, cap table, audit log")
     pdf.bul("Message Board threads: ctower_mb_threads (localStorage)")
     pdf.bul("Documents: ctower_doclib_docs (localStorage)")
     pdf.bul("Messages: Supabase messages table (synced)")
     pdf.bul("Audit log: Supabase audit_log table (synced)")
+    pdf.tip_box("All dashboard state is automatically saved to localStorage after every change. If power is lost or the browser crashes, your data is preserved and will reload on next visit.")
 
     # ── 22. Troubleshooting ──
     pdf.add_page()
@@ -840,7 +843,7 @@ def build_english():
     pdf.sub("Resetting the Dashboard")
     pdf.txt(
         "To completely reset, clear the following localStorage keys: "
-        "ctower_project_data, ctower_mb_threads, ctower_mb_decisions, "
+        "ctower_project_data, ctower_live_state, ctower_mb_threads, ctower_mb_decisions, "
         "ctower_doclib_docs, ctower_qa_messages, ctower_qa_settings, "
         "ctower_qa_archive. Or clear all site data in browser settings."
     )
@@ -1311,7 +1314,7 @@ def build_chinese():
     pdf.add_page()
     pdf.sec(21, "快捷操作与技巧")
     pdf.sub("常用技巧")
-    pdf.bul("所有数据自动保存到浏览器localStorage")
+    pdf.bul("所有数据自动保存到浏览器localStorage，包括全部仪表板状态")
     pdf.bul("在线时Supabase实时同步")
     pdf.bul("离线更改排队，恢复连接后同步")
     pdf.bul("货币显示根据语言设置在USD和CNY之间切换")
@@ -1324,10 +1327,12 @@ def build_chinese():
 
     pdf.sub("数据持久化")
     pdf.bul("项目配置: ctower_project_data (localStorage)")
+    pdf.bul("实时仪表板状态: ctower_live_state (localStorage) -- 里程碑、门控、风险、标准、预算、资金/跑道、行动项、DHF、CAPA、团队、供应商、投资者、股权表、审计日志")
     pdf.bul("消息板线程: ctower_mb_threads (localStorage)")
     pdf.bul("文档: ctower_doclib_docs (localStorage)")
     pdf.bul("消息: Supabase messages 表（已同步）")
     pdf.bul("审计日志: Supabase audit_log 表（已同步）")
+    pdf.tip_box("所有仪表板状态在每次更改后自动保存到localStorage。如果断电或浏览器崩溃，您的数据将保留并在下次访问时重新加载。")
 
     # ── 22. 故障排除 ──
     pdf.add_page()
@@ -1364,7 +1369,7 @@ def build_chinese():
     pdf.sub("重置仪表板")
     pdf.txt(
         "要完全重置，清除以下localStorage键: "
-        "ctower_project_data, ctower_mb_threads, ctower_mb_decisions, "
+        "ctower_project_data, ctower_live_state, ctower_mb_threads, ctower_mb_decisions, "
         "ctower_doclib_docs, ctower_qa_messages, ctower_qa_settings, "
         "ctower_qa_archive。或在浏览器设置中清除所有站点数据。"
     )

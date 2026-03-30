@@ -102,6 +102,85 @@ let dismissedNotifs: Set<string> = new Set();
 const CR_STORAGE_KEY = "ctower_change_requests";
 const INPUT_STORAGE_KEY = "ctower_stakeholder_inputs";
 const AUDIT_QUEUE_KEY = "ctower_audit_queue";
+const STATE_STORAGE_KEY = "ctower_live_state";
+
+// ── FULL STATE PERSISTENCE ─────────────────────
+// Saves all mutable in-memory data to localStorage so
+// nothing is lost on refresh, crash, or power outage.
+function saveAllState(): void {
+  try {
+    const state = {
+      tracks: TRACKS,
+      gates: GATES,
+      risks: RISKS,
+      standards: STANDARDS,
+      cashRunway: CASH_RUNWAY,
+      actionItems: ACTION_ITEMS,
+      auditLog: AUDIT_LOG,
+      dhfDocuments: DHF_DOCUMENTS,
+      capaLog: CAPA_LOG,
+      budgetCategories: BUDGET_CATEGORIES,
+      teamMembers: TEAM_MEMBERS,
+      suppliers: SUPPLIERS,
+      shareholders: SHAREHOLDERS,
+      equityEvents: EQUITY_EVENTS,
+      vestingSchedules: VESTING_SCHEDULES,
+      targetInvestors: TARGET_INVESTORS,
+      irActivities: IR_ACTIVITIES,
+    };
+    localStorage.setItem(STATE_STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    /* quota exceeded — silently skip */
+  }
+}
+
+function loadAllState(): void {
+  try {
+    const raw = localStorage.getItem(STATE_STORAGE_KEY);
+    if (!raw) return;
+    const s = JSON.parse(raw);
+
+    // Helper: replace array contents in-place
+    const replaceArray = <T>(target: T[], source: T[] | undefined) => {
+      if (!Array.isArray(source)) return;
+      target.length = 0;
+      source.forEach((item) => target.push(item));
+    };
+
+    // Tracks (nested milestones)
+    if (s.tracks?.technical?.milestones)
+      replaceArray(TRACKS.technical.milestones, s.tracks.technical.milestones);
+    if (s.tracks?.regulatory?.milestones)
+      replaceArray(
+        TRACKS.regulatory.milestones,
+        s.tracks.regulatory.milestones,
+      );
+
+    // Simple arrays
+    replaceArray(GATES, s.gates);
+    replaceArray(RISKS, s.risks);
+    replaceArray(STANDARDS, s.standards);
+    replaceArray(ACTION_ITEMS, s.actionItems);
+    replaceArray(AUDIT_LOG, s.auditLog);
+    replaceArray(DHF_DOCUMENTS, s.dhfDocuments);
+    replaceArray(CAPA_LOG, s.capaLog);
+    replaceArray(BUDGET_CATEGORIES, s.budgetCategories);
+    replaceArray(TEAM_MEMBERS, s.teamMembers);
+    replaceArray(SUPPLIERS, s.suppliers);
+    replaceArray(SHAREHOLDERS, s.shareholders);
+    replaceArray(EQUITY_EVENTS, s.equityEvents);
+    replaceArray(VESTING_SCHEDULES, s.vestingSchedules);
+    replaceArray(TARGET_INVESTORS, s.targetInvestors);
+    replaceArray(IR_ACTIVITIES, s.irActivities);
+
+    // Object (CASH_RUNWAY) — copy properties
+    if (s.cashRunway) {
+      Object.assign(CASH_RUNWAY, s.cashRunway);
+    }
+  } catch {
+    /* corrupt data — start fresh */
+  }
+}
 
 function loadCRs(): void {
   try {
@@ -415,6 +494,7 @@ function initAfterLogin(): void {
   const saved = getSavedAnswers();
   if (saved) {
     applyProjectData(saved);
+    loadAllState(); // Restore in-session mutations on top of wizard data
     bootDashboard();
   } else if (!hasProjectData()) {
     showWizard((answers) => {
@@ -560,6 +640,7 @@ function renderAll(): void {
   }
   renderNotifications();
   updateFabBadge();
+  saveAllState();
 }
 
 // ── SUMMARY BAR ───────────────────────────────
@@ -844,6 +925,7 @@ window._toggleCriteria = function (gateId: string, index: number): void {
     String(gate.criteria[index].met),
     "Gate criteria toggled",
   );
+  saveAllState();
   renderGates();
   renderSummary();
   window._openGate(gateId);
@@ -864,6 +946,7 @@ window._setDecision = function (gateId: string, decision: string): void {
     decision,
     `Gate G${gate.number} decision set`,
   );
+  saveAllState();
   renderGates();
   renderSummary();
   window._openGate(gateId);
@@ -879,6 +962,7 @@ window._addGateNote = function (gateId: string): void {
     date: new Date().toISOString().split("T")[0],
     text: input.value.trim(),
   });
+  saveAllState();
   window._openGate(gateId);
 };
 
@@ -1523,6 +1607,7 @@ window._setRiskField = function (
   }
 
   (risk as unknown as Record<string, unknown>)[field] = value;
+  saveAllState();
   renderRisks();
   renderSummary();
 };
@@ -1559,6 +1644,7 @@ window._cycleStandardStatus = function (standardId: string): void {
   else if (std.status === "not-started") std.progress = 0;
   else if (std.progress === 0 || std.progress === 100) std.progress = 50;
 
+  saveAllState();
   renderStandards();
   renderSummary();
 };
@@ -1586,6 +1672,7 @@ window._setStandardProgress = function (
   else if (num === 0) std.status = "not-started";
   else std.status = "in-progress";
 
+  saveAllState();
   renderStandards();
   renderSummary();
 };
@@ -1619,6 +1706,7 @@ window._toggleClause = function (standardId: string, clauseId: string): void {
   else if (std.progress === 0) std.status = "not-started";
   else std.status = "in-progress";
 
+  saveAllState();
   renderStandards();
   renderSummary();
 };
@@ -1833,6 +1921,7 @@ window._editCashField = function (field: "cashOnHand" | "monthlyBurn"): void {
     t("currencySymbol") + val.toLocaleString(),
     `Runway recalculated: ${CASH_RUNWAY.runwayMonths} months`,
   );
+  saveAllState();
   renderCashRunway();
   renderAll();
 };
@@ -1960,6 +2049,7 @@ window._addFundingRound = function (): void {
     status: "pipeline",
   });
 
+  saveAllState();
   renderCashRunway();
 };
 
@@ -1999,6 +2089,7 @@ window._toggleFundingStatus = function (roundId: string): void {
     );
   }
 
+  saveAllState();
   renderCashRunway();
   renderSummary();
 };
@@ -2025,6 +2116,7 @@ window._editBurnEntry = function (month: number): void {
     fmtCurrency(val),
     "",
   );
+  saveAllState();
   renderCashRunway();
 };
 
@@ -2054,6 +2146,7 @@ window._addBurnEntry = function (): void {
     fmtCurrency(amt),
     note,
   );
+  saveAllState();
   renderCashRunway();
 };
 
@@ -2064,6 +2157,7 @@ window._deleteBurnEntry = function (month: number): void {
   CASH_RUNWAY.burnHistory = CASH_RUNWAY.burnHistory.filter(
     (b) => b.month !== month,
   );
+  saveAllState();
   logAudit(
     "burn-delete",
     `M${month}`,
@@ -3109,6 +3203,7 @@ window._addInvestor = function (): void {
   logAudit("investor-add", id, "add", "", name, "");
   const form = document.getElementById("investorAddForm");
   if (form) form.innerHTML = "";
+  saveAllState();
   renderUsInvestment();
 };
 
@@ -3120,6 +3215,7 @@ window._deleteInvestor = function (investorId: string): void {
   const inv = TARGET_INVESTORS[idx];
   TARGET_INVESTORS.splice(idx, 1);
   logAudit("investor-delete", investorId, "delete", inv.name, "", "");
+  saveAllState();
   renderUsInvestment();
 };
 
@@ -3153,6 +3249,7 @@ window._cycleInvestorStatus = function (investorId: string): void {
     inv.contact,
     `Investor ${inv.name} status changed`,
   );
+  saveAllState();
   renderUsInvestment();
 };
 
@@ -3189,6 +3286,7 @@ window._addIRActivity = function (): void {
   logAudit("ir-activity-add", id, "add", "", activity, "");
   const form = document.getElementById("iraAddForm");
   if (form) form.innerHTML = "";
+  saveAllState();
   renderUsInvestment();
 };
 
@@ -3200,6 +3298,7 @@ window._deleteIRActivity = function (activityId: string): void {
   const act = IR_ACTIVITIES[idx];
   IR_ACTIVITIES.splice(idx, 1);
   logAudit("ir-activity-delete", activityId, "delete", act.activity, "", "");
+  saveAllState();
   renderUsInvestment();
 };
 
@@ -3222,6 +3321,7 @@ window._cycleIRActivityStatus = function (activityId: string): void {
     act.status,
     act.activity,
   );
+  saveAllState();
   renderUsInvestment();
 };
 
@@ -3466,6 +3566,7 @@ window._addShareholder = function (): void {
   logAudit("shareholder-add", id, "add", "", name, "");
   const form = document.getElementById("shareholderAddForm");
   if (form) form.innerHTML = "";
+  saveAllState();
   renderCapTable();
 };
 
@@ -3477,6 +3578,7 @@ window._deleteShareholder = function (shareholderId: string): void {
   const sh = SHAREHOLDERS[idx];
   SHAREHOLDERS.splice(idx, 1);
   logAudit("shareholder-delete", shareholderId, "delete", sh.name, "", "");
+  saveAllState();
   renderCapTable();
 };
 
@@ -3534,6 +3636,7 @@ window._addEquityEvent = function (): void {
   logAudit("equity-event-add", id, "add", "", event, "");
   const form = document.getElementById("eqEventAddForm");
   if (form) form.innerHTML = "";
+  saveAllState();
   renderCapTable();
 };
 
@@ -3545,6 +3648,7 @@ window._deleteEquityEvent = function (eventId: string): void {
   const ev = EQUITY_EVENTS[idx];
   EQUITY_EVENTS.splice(idx, 1);
   logAudit("equity-event-delete", eventId, "delete", ev.event, "", "");
+  saveAllState();
   renderCapTable();
 };
 
@@ -3560,6 +3664,7 @@ window._cycleEquityEventStatus = function (eventId: string): void {
   const old = ev.status;
   ev.status = cycle[ev.status];
   logAudit("equity-event-status", eventId, "status", old, ev.status, ev.event);
+  saveAllState();
   renderCapTable();
 };
 
@@ -3609,6 +3714,7 @@ window._addVesting = function (): void {
   logAudit("vesting-add", id, "add", "", holder, "");
   const form = document.getElementById("vestingAddForm");
   if (form) form.innerHTML = "";
+  saveAllState();
   renderCapTable();
 };
 
@@ -3620,6 +3726,7 @@ window._deleteVesting = function (vestingId: string): void {
   const vs = VESTING_SCHEDULES[idx];
   VESTING_SCHEDULES.splice(idx, 1);
   logAudit("vesting-delete", vestingId, "delete", vs.holder, "", "");
+  saveAllState();
   renderCapTable();
 };
 
@@ -3635,6 +3742,7 @@ window._cycleVestingStatus = function (vestingId: string): void {
   const old = vs.status;
   vs.status = cycle[vs.status];
   logAudit("vesting-status", vestingId, "status", old, vs.status, vs.holder);
+  saveAllState();
   renderCapTable();
 };
 
@@ -6656,6 +6764,7 @@ window._cycleActionStatus = function (actionId: string): void {
     item.status,
     `Action ${actionId} status changed`,
   );
+  saveAllState();
   renderActionBoard();
 };
 
@@ -6726,6 +6835,7 @@ window._cycleDHFStatus = function (docId: string): void {
     doc.status,
     `DHF ${doc.code} status changed`,
   );
+  saveAllState();
   renderDHFTable();
 };
 
@@ -6795,6 +6905,7 @@ window._cycleCAPAStatus = function (capaId: string): void {
     capa.status,
     `CAPA ${capaId} status changed`,
   );
+  saveAllState();
   renderCAPALog();
 };
 
@@ -6921,6 +7032,7 @@ function renderResources(): void {
           `${alloc.workstream}:${val}%`,
           member.name,
         );
+        saveAllState();
         renderResources();
       };
       input.addEventListener("blur", commit);
@@ -6994,6 +7106,7 @@ window._addTeamMember = function (): void {
   logAudit("team-add", id, "add", "", name, "");
   const form = document.getElementById("resourceAddForm");
   if (form) form.innerHTML = "";
+  saveAllState();
   renderResources();
 };
 
@@ -7005,6 +7118,7 @@ window._deleteTeamMember = function (tmId: string): void {
   const member = TEAM_MEMBERS[idx];
   TEAM_MEMBERS.splice(idx, 1);
   logAudit("team-delete", tmId, "delete", member.name, "", "");
+  saveAllState();
   renderResources();
 };
 
@@ -7077,6 +7191,7 @@ window._cycleSupplierStatus = function (supplierId: string): void {
     sup.status,
     `Supplier ${sup.name} status changed`,
   );
+  saveAllState();
   renderSuppliers();
 };
 
@@ -7130,6 +7245,7 @@ window._addSupplier = function (): void {
   logAudit("supplier-add", id, "add", "", name, "");
   const form = document.getElementById("supplierAddForm");
   if (form) form.innerHTML = "";
+  saveAllState();
   renderSuppliers();
 };
 
@@ -7141,6 +7257,7 @@ window._deleteSupplier = function (supplierId: string): void {
   const sup = SUPPLIERS[idx];
   SUPPLIERS.splice(idx, 1);
   logAudit("supplier-delete", supplierId, "delete", sup.name, "", "");
+  saveAllState();
   renderSuppliers();
 };
 

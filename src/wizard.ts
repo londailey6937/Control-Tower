@@ -551,6 +551,7 @@ export function clearProjectData(): void {
   localStorage.removeItem("ctower_qa_settings");
   localStorage.removeItem("ctower_qa_archive");
   localStorage.removeItem("ctower_synced_doc_ids");
+  localStorage.removeItem("ctower_live_state");
 }
 
 export function getSavedAnswers(): WizardAnswers | null {

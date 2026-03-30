@@ -540,11 +540,14 @@ def build_english():
     pdf.txt(
         "A dropdown menu in the top bar lets you switch between roles:\n\n"
         "  PMP (Full Authority) -- Can directly change any status, approve/reject change requests, "
-        "make gate decisions, and access all tabs.\n"
-        "  Technology Team -- Can view all tabs but cannot make direct changes. Must submit a "
-        "Change Request for any status modification.\n"
-        "  Business / Investors -- Same as Technology: full view, but changes require a CR.\n"
-        "  Accounting -- Read-only access limited to three tabs only.")
+        "make gate decisions, and access all 16 tabs.\n"
+        "  Technology Team -- Isolated to technical & regulatory tabs only. Financial data "
+        "(budget, cash/runway, investment, cap table) is restricted. Must submit a "
+        "Change Request for status modifications.\n"
+        "  Business / Investors -- Isolated to financial & planning tabs only. Technical IP "
+        "(regulatory tracker, risks, doc library, resources, suppliers) is restricted. "
+        "Must submit a CR for status modifications.\n"
+        "  Accounting -- Read-only access limited to financial tabs only.")
 
     pdf.sub("13.2 PMP Role")
     pdf.txt(
@@ -559,6 +562,13 @@ def build_english():
 
     pdf.sub("13.3 Technology & Business Roles")
     pdf.txt(
+        "Technology and Business are cross-isolated -- neither can see the other's tabs.\n\n"
+        "TECHNOLOGY TEAM tabs (10):\n"
+        "  Dual-Track, Gates, Regulatory Tracker, Risk Dashboard, Audit Trail, "
+        "Document Control, Actions, Resources, Suppliers, Message Board\n\n"
+        "BUSINESS / INVESTORS tabs (9):\n"
+        "  Dual-Track, Gates, Timeline, Budget, Cash/Runway, US Investment, "
+        "Cap Table, Actions, Message Board\n\n"
         "When a Tech or Business team member clicks a status to change it, instead of "
         "directly modifying the data, a Change Request form opens.\n\n"
         "They must provide:\n"
@@ -577,14 +587,17 @@ def build_english():
     pdf.sub("13.4 Accounting Role")
     pdf.txt(
         "Accounting has the most restricted access:\n\n"
-        "  ALLOWED (read-only):\n"
+        "  ALLOWED (read-only, 7 tabs):\n"
         "    - Cash / Runway -- View balances, funding rounds, and burn history\n"
+        "    - Budget -- View planned vs actual spending\n"
         "    - Timeline -- View milestone events in business language\n"
-        "    - Gate System -- View gate statuses and criteria\n\n"
+        "    - Gate System -- View gate statuses and criteria\n"
+        "    - US Investment -- View investor pipeline (read-only)\n"
+        "    - Cap Table -- View ownership table (read-only)\n"
+        "    - Message Board -- Participate in threads\n\n"
         "  RESTRICTED (tabs disabled):\n"
-        "    - Dual-Track (contains proprietary technical details)\n"
-        "    - Risk Dashboard (contains sensitive risk assessments)\n"
-        "    - Regulatory Tracker (compliance implementation details)\n\n"
+        "    - Dual-Track, Regulatory Tracker, Risk Dashboard, Audit Trail, "
+        "Document Control, Actions, Resources, Suppliers, FDA Comms\n\n"
         "A yellow notice banner appears when Accounting is active, explaining the access limits. "
         "Restricted tabs are grayed out and unclickable.")
 
@@ -1392,6 +1405,7 @@ def build_english():
         ("Kanban", "Visual task management board with columns representing work stages."),
         ("FAB", "Floating Action Button -- the circular button for quick access to stakeholder inputs."),
         ("IndexedDB", "Browser-based local storage used as a fallback for document persistence."),
+        ("ctower_live_state", "localStorage key that persists all mutable dashboard state (milestones, gates, risks, standards, budget, cash/runway, action items, DHF, CAPA, team, suppliers, investors, cap table, audit log). Saved after every change for crash-proof resilience."),
         ("Runway", "Number of months the project can continue operating at current burn rate before funds run out."),
         ("NRE", "Non-Recurring Engineering -- one-time engineering costs for manufacturing setup."),
         ("RTA", "Refuse to Accept -- FDA's initial screening checklist before substantive review of a 510(k). Failure triggers an immediate rejection."),
@@ -1936,10 +1950,12 @@ def build_chinese():
     pdf.txt(
         "\u9876\u90e8\u680f\u4e2d\u7684\u4e0b\u62c9\u83dc\u5355\u5141\u8bb8\u60a8\u5207\u6362\u89d2\u8272\uff1a\n\n"
         "  PMP\uff08\u5b8c\u5168\u6743\u9650\uff09" + EM + " \u53ef\u76f4\u63a5\u4fee\u6539\u4efb\u4f55\u72b6\u6001\uff0c\u5ba1\u6279/\u62d2\u7edd\u53d8\u66f4\u8bf7\u6c42\uff0c"
-        "\u505a\u51fa\u95e8\u63a7\u51b3\u7b56\uff0c\u8bbf\u95ee\u6240\u6709\u9009\u9879\u5361\u3002\n"
-        "  \u6280\u672f\u56e2\u961f " + EM + " \u53ef\u67e5\u770b\u6240\u6709\u9009\u9879\u5361\uff0c\u4f46\u4e0d\u80fd\u76f4\u63a5\u4fee\u6539\u3002\u4efb\u4f55\u72b6\u6001\u53d8\u66f4\u5fc5\u987b\u63d0\u4ea4\u53d8\u66f4\u8bf7\u6c42\u3002\n"
-        "  \u5546\u4e1a/\u6295\u8d44\u65b9 " + EM + " \u4e0e\u6280\u672f\u56e2\u961f\u76f8\u540c\uff1a\u53ef\u67e5\u770b\u5168\u90e8\uff0c\u4f46\u4fee\u6539\u9700\u8981\u63d0\u4ea4CR\u3002\n"
-        "  \u8d22\u52a1\u4f1a\u8ba1 " + EM + " \u53ea\u8bfb\u8bbf\u95ee\uff0c\u4ec5\u9650\u4e09\u4e2a\u9009\u9879\u5361\u3002")
+        "\u505a\u51fa\u95e8\u63a7\u51b3\u7b56\uff0c\u8bbf\u95ee\u6240\u670916\u4e2a\u9009\u9879\u5361\u3002\n"
+        "  \u6280\u672f\u56e2\u961f " + EM + " \u4ec5\u9650\u6280\u672f\u548c\u6cd5\u89c4\u9009\u9879\u5361\u3002\u8d22\u52a1\u6570\u636e\uff08\u9884\u7b97\u3001\u8d44\u91d1/\u8dd1\u9053\u3001"
+        "\u6295\u8d44\u3001\u80a1\u6743\u8868\uff09\u53d7\u9650\u3002\u72b6\u6001\u53d8\u66f4\u5fc5\u987b\u63d0\u4ea4\u53d8\u66f4\u8bf7\u6c42\u3002\n"
+        "  \u5546\u4e1a/\u6295\u8d44\u65b9 " + EM + " \u4ec5\u9650\u8d22\u52a1\u548c\u89c4\u5212\u9009\u9879\u5361\u3002\u6280\u672fIP\uff08\u6cd5\u89c4\u8ffd\u8e2a\u5668\u3001"
+        "\u98ce\u9669\u3001\u6587\u6863\u5e93\u3001\u8d44\u6e90\u3001\u4f9b\u5e94\u5546\uff09\u53d7\u9650\u3002\u4fee\u6539\u9700\u8981\u63d0\u4ea4CR\u3002\n"
+        "  \u8d22\u52a1\u4f1a\u8ba1 " + EM + " \u53ea\u8bfb\u8bbf\u95ee\uff0c\u4ec5\u9650\u8d22\u52a1\u9009\u9879\u5361\u3002")
 
     pdf.sub("13.2 PMP\u89d2\u8272")
     pdf.txt(
@@ -1954,6 +1970,13 @@ def build_chinese():
 
     pdf.sub("13.3 \u6280\u672f\u548c\u5546\u4e1a\u89d2\u8272")
     pdf.txt(
+        "\u6280\u672f\u548c\u5546\u4e1a\u89d2\u8272\u4e92\u76f8\u9694\u79bb" + EM + " \u53cc\u65b9\u65e0\u6cd5\u67e5\u770b\u5bf9\u65b9\u7684\u9009\u9879\u5361\u3002\n\n"
+        "\u6280\u672f\u56e2\u961f\u9009\u9879\u5361\uff0810\u4e2a\uff09\uff1a\n"
+        "  \u53cc\u8f68\u3001\u95e8\u63a7\u3001\u6cd5\u89c4\u8ffd\u8e2a\u3001\u98ce\u9669\u4eea\u8868\u76d8\u3001\u5ba1\u8ba1\u8ffd\u8e2a\u3001"
+        "\u6587\u6863\u63a7\u5236\u3001\u884c\u52a8\u9879\u3001\u8d44\u6e90\u3001\u4f9b\u5e94\u5546\u3001\u6d88\u606f\u677f\n\n"
+        "\u5546\u4e1a/\u6295\u8d44\u65b9\u9009\u9879\u5361\uff089\u4e2a\uff09\uff1a\n"
+        "  \u53cc\u8f68\u3001\u95e8\u63a7\u3001\u65f6\u95f4\u7ebf\u3001\u9884\u7b97\u3001\u8d44\u91d1/\u8dd1\u9053\u3001"
+        "\u7f8e\u56fd\u6295\u8d44\u3001\u80a1\u6743\u8868\u3001\u884c\u52a8\u9879\u3001\u6d88\u606f\u677f\n\n"
         "\u5f53\u6280\u672f\u6216\u5546\u4e1a\u56e2\u961f\u6210\u5458\u70b9\u51fb\u72b6\u6001\u8fdb\u884c\u4fee\u6539\u65f6\uff0c"
         "\u4e0d\u4f1a\u76f4\u63a5\u4fee\u6539\u6570\u636e\uff0c\u800c\u662f\u6253\u5f00\u53d8\u66f4\u8bf7\u6c42\u8868\u5355\u3002\n\n"
         "\u5fc5\u987b\u63d0\u4f9b\uff1a\n"
@@ -1971,14 +1994,17 @@ def build_chinese():
     pdf.sub("13.4 \u8d22\u52a1\u4f1a\u8ba1\u89d2\u8272")
     pdf.txt(
         "\u8d22\u52a1\u4f1a\u8ba1\u7684\u8bbf\u95ee\u6700\u53d7\u9650\u5236\uff1a\n\n"
-        "  \u5141\u8bb8\uff08\u53ea\u8bfb\uff09\uff1a\n"
+        "  \u5141\u8bb8\uff08\u53ea\u8bfb\uff0c7\u4e2a\u9009\u9879\u5361\uff09\uff1a\n"
         "    - \u8d44\u91d1/\u8dd1\u9053 " + EM + " \u67e5\u770b\u4f59\u989d\u3001\u878d\u8d44\u8f6e\u6b21\u3001\u71c3\u70e7\u5386\u53f2\n"
+        "    - \u9884\u7b97 " + EM + " \u67e5\u770b\u8ba1\u5212\u4e0e\u5b9e\u9645\u652f\u51fa\n"
         "    - \u65f6\u95f4\u7ebf " + EM + " \u67e5\u770b\u5546\u4e1a\u8bed\u8a00\u7684\u91cc\u7a0b\u7891\u4e8b\u4ef6\n"
-        "    - \u95e8\u63a7\u7cfb\u7edf " + EM + " \u67e5\u770b\u95e8\u63a7\u72b6\u6001\u548c\u6807\u51c6\n\n"
+        "    - \u95e8\u63a7\u7cfb\u7edf " + EM + " \u67e5\u770b\u95e8\u63a7\u72b6\u6001\u548c\u6807\u51c6\n"
+        "    - \u7f8e\u56fd\u6295\u8d44 " + EM + " \u67e5\u770b\u6295\u8d44\u8005\u7ba1\u9053\uff08\u53ea\u8bfb\uff09\n"
+        "    - \u80a1\u6743\u8868 " + EM + " \u67e5\u770b\u6240\u6709\u6743\u8868\uff08\u53ea\u8bfb\uff09\n"
+        "    - \u6d88\u606f\u677f " + EM + " \u53c2\u4e0e\u7ebf\u7a0b\n\n"
         "  \u53d7\u9650\uff08\u9009\u9879\u5361\u7981\u7528\uff09\uff1a\n"
-        "    - \u53cc\u8f68\u89c6\u56fe\uff08\u5305\u542b\u4e13\u6709\u6280\u672f\u7ec6\u8282\uff09\n"
-        "    - \u98ce\u9669\u4eea\u8868\u76d8\uff08\u5305\u542b\u654f\u611f\u98ce\u9669\u8bc4\u4f30\uff09\n"
-        "    - \u6cd5\u89c4\u8ffd\u8e2a\u5668\uff08\u5408\u89c4\u5b9e\u65bd\u7ec6\u8282\uff09\n\n"
+        "    - \u53cc\u8f68\u3001\u6cd5\u89c4\u8ffd\u8e2a\u5668\u3001\u98ce\u9669\u4eea\u8868\u76d8\u3001\u5ba1\u8ba1\u8ffd\u8e2a\u3001"
+        "\u6587\u6863\u63a7\u5236\u3001\u884c\u52a8\u9879\u3001\u8d44\u6e90\u3001\u4f9b\u5e94\u5546\u3001FDA\u901a\u4fe1\n\n"
         "\u8d22\u52a1\u89d2\u8272\u6fc0\u6d3b\u65f6\u4f1a\u663e\u793a\u9ec4\u8272\u63d0\u793a\u6846\uff0c\u8bf4\u660e\u8bbf\u95ee\u9650\u5236\u3002"
         "\u53d7\u9650\u9009\u9879\u5361\u4f1a\u53d8\u7070\u4e14\u65e0\u6cd5\u70b9\u51fb\u3002")
 
