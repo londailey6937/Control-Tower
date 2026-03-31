@@ -370,9 +370,8 @@ def build():
 
     pdf.sub("7.2 Team (Year 1)")
     pdf.txt(
-        "  Founder / CEO -- Business development, product vision, regulatory strategy\n"
-        "  Contract Developer -- Frontend/backend maintenance\n"
-        "  Regulatory Advisor -- Part-time FDA/RAC consultant\n"
+        "  Founder / CEO -- Business development, product vision, regulatory strategy,\n"
+        "    software development, frontend/backend maintenance\n"
         "  Sales / BD (China) -- WeChat, accelerator relationships")
 
     pdf.sub("7.3 Hiring Plan (Years 2-5)")
@@ -392,24 +391,23 @@ def build():
         "  CloudFlare Pages hosting -- $0 (free tier)\n"
         "  Supabase -- $0 free tier (upgrade at $25/mo at scale)\n"
         "  Development tools -- $0 (open source stack)\n"
-        "  Legal (contract templates) -- $2,000\n"
-        "  Initial marketing (WeChat, LinkedIn) -- $5,000\n"
-        "  Total Year 1 startup: ~$7,500")
+        "  Legal (contract templates, prepared in China) -- $500\n"
+        "  Initial marketing (WeChat, LinkedIn, China-based) -- $1,500\n"
+        "  Total Year 1 startup: ~$2,500")
 
     pdf.sub("8.2 Operating Costs (Monthly, Year 1)")
     pdf.txt(
         "  Cloud hosting -- $25/mo\n"
         "  SaaS tools (email, CRM) -- $50/mo\n"
-        "  Contract developer -- $3,000/mo (part-time)\n"
-        "  Marketing -- $500/mo\n"
-        "  Total: ~$3,575/mo = $43K/yr")
+        "  Marketing (China-based) -- $200/mo\n"
+        "  Total: ~$275/mo = $3,300/yr")
 
     pdf.sub("8.3 Break-Even Analysis")
     pdf.txt(
-        "  Monthly cost: $3,575\n"
-        "  Revenue needed: 1 CT Starter ($500) + 1 retainer ($10K) = $10,500/mo\n"
-        "  Break-even: Month 4-6 with first paying client + first retainer\n"
-        "  Gross margin target: 75% (SaaS) / 60% (services)")
+        "  Monthly cost: $275\n"
+        "  Revenue needed: 1 CT Starter ($500) = $500/mo covers operating costs\n"
+        "  Break-even: Month 1-2 with first paying client\n"
+        "  Gross margin target: 85% (SaaS) / 65% (services)")
 
     # ── 9. Risk Factors ──
     pdf.add_page()
