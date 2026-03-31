@@ -655,6 +655,15 @@ function renderAll(): void {
   }
   renderNotifications();
   updateFabBadge();
+  // Update New Project button text on language change
+  const npBtn = document.getElementById("newProjectBtn");
+  if (npBtn) {
+    const cn = getLang() === "cn";
+    npBtn.textContent = cn ? "⊕ 新建项目" : "⊕ New Project";
+    npBtn.title = cn
+      ? "开始新项目（清除当前数据）"
+      : "Start a new project (clears current data)";
+  }
   saveAllState();
 }
 
@@ -2225,10 +2234,13 @@ function initRoleSwitcher(): void {
 
   // Admin: add "New Project" button
   if (IS_ADMIN) {
-    const isCN = getLang() === "cn";
     const btn = document.createElement("button");
+    btn.id = "newProjectBtn";
+    const isCN = getLang() === "cn";
     btn.textContent = isCN ? "⊕ 新建项目" : "⊕ New Project";
-    btn.title = isCN ? "开始新项目（清除当前数据）" : "Start a new project (clears current data)";
+    btn.title = isCN
+      ? "开始新项目（清除当前数据）"
+      : "Start a new project (clears current data)";
     btn.style.cssText =
       "margin-left:12px;padding:4px 12px;border-radius:6px;border:1px solid #475569;" +
       "background:#1e293b;color:#94a3b8;font-size:0.78rem;cursor:pointer;";
