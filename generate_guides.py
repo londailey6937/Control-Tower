@@ -1477,9 +1477,74 @@ def build_english():
         "Tracker, Risk Dashboard, and FDA Communications Center tabs, keeping all 510(k) "
         "intelligence in one place.")
 
-    # 33. Glossary
+    # 33. QMS-Lite for Startups
     pdf.add_page()
-    pdf.sec(33, "Glossary of Key Terms")
+    pdf.sec(33, "QMS-Lite for Startups")
+    pdf.txt(
+        "QMS-Lite is a lightweight quality management system designed specifically for "
+        "510(k)-stage startups. It provides the minimum viable QMS needed to pass an "
+        "FDA audit without the $30K-$100K/year cost of full platforms like Greenlight "
+        "Guru or MasterControl.")
+
+    pdf.sub("33.1 Modules (aligned to 21 CFR 820 / ISO 13485)")
+    pdf.bul("Document Control -- version-controlled SOPs, work instructions, forms")
+    pdf.bul("CAPA -- corrective and preventive action tracking with root cause analysis")
+    pdf.bul("Training Records -- employee training matrix, sign-off tracking, competency logs")
+    pdf.bul("Supplier Qualification -- approved supplier list, audit schedules, scorecards")
+    pdf.bul("Complaint Handling -- customer complaint intake, investigation, trend analysis")
+
+    pdf.sub("33.2 Pricing")
+    pdf.txt(
+        "  QMS-Lite Starter -- $200/month (Document Control, CAPA, Training Records)\n"
+        "  QMS-Lite Pro -- $500/month (full suite including Supplier Qualification, "
+        "Complaint Handling)\n\n"
+        "Compared to Greenlight Guru ($2.5K-$8K/month) and MasterControl ($8K+/month), "
+        "QMS-Lite targets startups that need just enough QMS to satisfy FDA auditors.")
+
+    pdf.sub("33.3 Integration with Control Tower")
+    pdf.txt(
+        "QMS-Lite reuses existing Control Tower modules -- Document Control, Actions "
+        "(CAPA), and Suppliers tabs -- extended with QMS-specific templates to meet "
+        "21 CFR 820 requirements. Data flows between the PM dashboard and the QMS to "
+        "keep regulatory deliverables and quality records in sync.")
+
+    # 34. Cross-Border Entity Setup Tracker
+    pdf.add_page()
+    pdf.sec(34, "Cross-Border Entity Setup Tracker")
+    pdf.txt(
+        "The Entity Setup Tracker provides a structured dashboard for Chinese companies "
+        "entering the US market. Currently these workflows are handled entirely through "
+        "email chains with attorneys -- there is no dedicated tool.")
+
+    pdf.sub("34.1 Checklist Modules")
+    pdf.bul("Delaware C-Corp Formation -- articles of incorporation, bylaws, EIN")
+    pdf.bul("Oregon Registration -- foreign entity registration, business license")
+    pdf.bul("Washington Registration -- foreign entity registration, B&O tax setup")
+    pdf.bul("Registered Agent -- appointment and annual renewal tracking")
+    pdf.bul("US Bank Account -- application status, signatory requirements")
+    pdf.bul("FDA Establishment Registration -- facility registration, device listing")
+    pdf.bul("US Agent Appointment -- FDA-required US agent designation")
+    pdf.bul("Labeling Compliance -- 21 CFR 801 requirements checklist")
+    pdf.bul("State Business Licenses -- state-specific permits and renewals")
+    pdf.bul("Insurance -- product liability, general liability, D&O coverage")
+
+    pdf.sub("34.2 Pricing")
+    pdf.txt(
+        "  One-time setup -- $1K-$5K (guided entity formation with checklist tracking)\n"
+        "  SaaS -- $200/month (ongoing dashboard with renewal reminders, compliance "
+        "status)\n\n"
+        "Revenue add-on: referral partnerships with immigration attorneys, corporate "
+        "service providers, and registered agent companies.")
+
+    pdf.sub("34.3 Integration with Control Tower")
+    pdf.txt(
+        "Entity Setup status feeds into the Control Tower's US Investment and Resources "
+        "tabs, giving project managers visibility into corporate formation progress "
+        "alongside regulatory milestones.")
+
+    # 35. Glossary
+    pdf.add_page()
+    pdf.sec(35, "Glossary of Key Terms")
     pdf.ln(2)
     terms = [
         ("M+N", "Month notation. M+0 = project start (March 2026). M+6 = six months later (Sep 2026). Used throughout for all scheduling."),
@@ -1515,6 +1580,8 @@ def build_english():
         ("Predicate Chain", "The lineage of predicate references connecting a cleared device back through prior generations of 510(k) clearances."),
         ("openFDA", "FDA's public API providing searchable access to 510(k) clearance records, adverse events, recalls, and other regulatory data."),
         ("Predicate Finder", "510k Bridge's SaaS tool for searching, comparing, and tracing predicate devices using the openFDA database."),
+        ("QMS-Lite", "510k Bridge's lightweight quality management system for 510(k)-stage startups, aligned to 21 CFR 820 / ISO 13485."),
+        ("Entity Setup Tracker", "510k Bridge's SaaS dashboard for managing US market entry tasks: Delaware C-Corp, state registrations, FDA establishment registration, banking, and insurance."),
     ]
     for k, v in terms:
         pdf.kv(k, v)
@@ -2927,9 +2994,68 @@ def build_chinese():
         "\u6cd5\u89c4\u8ddf\u8e2a\u5668\u3001\u98ce\u9669\u4eea\u8868\u677f\u548cFDA\u901a\u4fe1\u4e2d\u5fc3\u9009\u9879\u5361\u63d0\u4f9b\u4fe1\u606f\uff0c"
         "\u5c06\u6240\u6709510(k)\u667a\u80fd\u96c6\u4e2d\u5728\u4e00\u4e2a\u5730\u65b9\u3002")
 
-    # 33 关键术语表
+    # 33 QMS-Lite 创业版
     pdf.add_page()
-    pdf.sec(33, "\u5173\u952e\u672f\u8bed\u8868")
+    pdf.sec(33, "QMS-Lite \u8d28\u91cf\u7ba1\u7406\u8f7b\u91cf\u7248")
+    pdf.txt(
+        "QMS-Lite\u662f\u4e13\u4e3a510(k)\u9636\u6bb5\u521b\u4e1a\u4f01\u4e1a\u8bbe\u8ba1\u7684\u8f7b\u91cf\u7ea7\u8d28\u91cf\u7ba1\u7406\u7cfb\u7edf\u3002"
+        "\u63d0\u4f9b\u901a\u8fc7FDA\u5ba1\u8ba1\u6240\u9700\u7684\u6700\u4f4e\u53ef\u884cQMS\uff0c"
+        "\u65e0\u9700\u50cfGreenlight Guru\u6216MasterControl\u90a3\u6837\u6bcf\u5e74$30K-$100K\u7684\u6210\u672c\u3002")
+
+    pdf.sub("33.1 \u6a21\u5757\uff08\u7b26\u540821 CFR 820 / ISO 13485\uff09")
+    pdf.bul("\u6587\u6863\u63a7\u5236 -- \u7248\u672c\u63a7\u5236\u7684SOP\u3001\u4f5c\u4e1a\u6307\u5bfc\u4e66\u3001\u8868\u5355")
+    pdf.bul("CAPA -- \u7ea0\u6b63\u548c\u9884\u9632\u63aa\u65bd\u8ffd\u8e2a\uff0c\u6839\u672c\u539f\u56e0\u5206\u6790")
+    pdf.bul("\u57f9\u8bad\u8bb0\u5f55 -- \u5458\u5de5\u57f9\u8bad\u77e9\u9635\u3001\u7b7e\u5b57\u8ffd\u8e2a\u3001\u80fd\u529b\u65e5\u5fd7")
+    pdf.bul("\u4f9b\u5e94\u5546\u8d44\u8d28 -- \u5408\u683c\u4f9b\u5e94\u5546\u540d\u5f55\u3001\u5ba1\u8ba1\u8ba1\u5212\u3001\u8bc4\u5206\u5361")
+    pdf.bul("\u6295\u8bc9\u5904\u7406 -- \u5ba2\u6237\u6295\u8bc9\u53d7\u7406\u3001\u8c03\u67e5\u3001\u8d8b\u52bf\u5206\u6790")
+
+    pdf.sub("33.2 \u5b9a\u4ef7")
+    pdf.txt(
+        "  QMS-Lite \u57fa\u7840\u7248 -- $200/\u6708\uff08\u6587\u6863\u63a7\u5236\u3001CAPA\u3001\u57f9\u8bad\u8bb0\u5f55\uff09\n"
+        "  QMS-Lite Pro -- $500/\u6708\uff08\u5168\u5957\u542b\u4f9b\u5e94\u5546\u8d44\u8d28\u3001\u6295\u8bc9\u5904\u7406\uff09\n\n"
+        "\u76f8\u6bd4Greenlight Guru ($2.5K-$8K/\u6708) \u548c MasterControl ($8K+/\u6708)\uff0c"
+        "QMS-Lite\u9488\u5bf9\u53ea\u9700\u8981\u8db3\u591f\u6ee1\u8db3FDA\u5ba1\u8ba1\u5458\u7684\u521b\u4e1a\u4f01\u4e1a\u3002")
+
+    pdf.sub("33.3 \u4e0eControl Tower\u7684\u96c6\u6210")
+    pdf.txt(
+        "QMS-Lite\u590d\u7528Control Tower\u73b0\u6709\u6a21\u5757 -- \u6587\u6863\u63a7\u5236\u3001\u884c\u52a8\u9879"
+        "\uff08CAPA\uff09\u548c\u4f9b\u5e94\u5546\u9009\u9879\u5361 -- \u6269\u5c55\u4e86QMS\u7279\u5b9a\u6a21\u677f\u4ee5\u6ee1\u8db3"
+        "21 CFR 820\u8981\u6c42\u3002\u6570\u636e\u5728PM\u4eea\u8868\u677f\u548cQMS\u4e4b\u95f4\u6d41\u52a8\uff0c"
+        "\u786e\u4fdd\u6cd5\u89c4\u4ea4\u4ed8\u7269\u548c\u8d28\u91cf\u8bb0\u5f55\u4fdd\u6301\u540c\u6b65\u3002")
+
+    # 34 跨境实体设立追踪器
+    pdf.add_page()
+    pdf.sec(34, "\u8de8\u5883\u5b9e\u4f53\u8bbe\u7acb\u8ffd\u8e2a\u5668")
+    pdf.txt(
+        "\u5b9e\u4f53\u8bbe\u7acb\u8ffd\u8e2a\u5668\u4e3a\u8fdb\u5165\u7f8e\u56fd\u5e02\u573a\u7684\u4e2d\u56fd\u4f01\u4e1a\u63d0\u4f9b\u7ed3\u6784\u5316\u4eea\u8868\u677f\u3002"
+        "\u76ee\u524d\u8fd9\u4e9b\u5de5\u4f5c\u6d41\u5b8c\u5168\u901a\u8fc7\u4e0e\u5f8b\u5e08\u7684\u90ae\u4ef6\u94fe\u5904\u7406 -- \u6ca1\u6709\u4e13\u7528\u5de5\u5177\u3002")
+
+    pdf.sub("34.1 \u6e05\u5355\u6a21\u5757")
+    pdf.bul("\u7279\u62c9\u534eC-Corp\u7ec4\u5efa -- \u516c\u53f8\u7ae0\u7a0b\u3001\u7ae0\u5219\u3001EIN")
+    pdf.bul("\u4fc4\u52d2\u5188\u5dde\u6ce8\u518c -- \u5916\u5dde\u5b9e\u4f53\u6ce8\u518c\u3001\u8425\u4e1a\u6267\u7167")
+    pdf.bul("\u534e\u76db\u987f\u5dde\u6ce8\u518c -- \u5916\u5dde\u5b9e\u4f53\u6ce8\u518c\u3001B&O\u7a0e\u52a1\u8bbe\u7f6e")
+    pdf.bul("\u6ce8\u518c\u4ee3\u7406\u4eba -- \u59d4\u4efb\u548c\u5e74\u5ea6\u7eed\u671f\u8ffd\u8e2a")
+    pdf.bul("\u7f8e\u56fd\u94f6\u884c\u8d26\u6237 -- \u7533\u8bf7\u72b6\u6001\u3001\u7b7e\u5b57\u4eba\u8981\u6c42")
+    pdf.bul("FDA\u673a\u6784\u6ce8\u518c -- \u8bbe\u65bd\u6ce8\u518c\u3001\u5668\u68b0\u5217\u540d")
+    pdf.bul("\u7f8e\u56fd\u4ee3\u7406\u4eba\u59d4\u4efb -- FDA\u8981\u6c42\u7684\u7f8e\u56fd\u4ee3\u7406\u4eba\u6307\u5b9a")
+    pdf.bul("\u6807\u7b7e\u5408\u89c4 -- 21 CFR 801\u8981\u6c42\u6e05\u5355")
+    pdf.bul("\u5dde\u8425\u4e1a\u6267\u7167 -- \u5404\u5dde\u7279\u5b9a\u8bb8\u53ef\u548c\u7eed\u671f")
+    pdf.bul("\u4fdd\u9669 -- \u4ea7\u54c1\u8d23\u4efb\u3001\u4e00\u822c\u8d23\u4efb\u3001\u8463\u4e8b\u53ca\u9ad8\u7ba1\u8d23\u4efb")
+
+    pdf.sub("34.2 \u5b9a\u4ef7")
+    pdf.txt(
+        "  \u4e00\u6b21\u6027\u8bbe\u7acb -- $1K-$5K\uff08\u5f15\u5bfc\u5f0f\u5b9e\u4f53\u8bbe\u7acb\uff0c\u542b\u6e05\u5355\u8ffd\u8e2a\uff09\n"
+        "  SaaS -- $200/\u6708\uff08\u6301\u7eed\u4eea\u8868\u677f\uff0c\u542b\u7eed\u671f\u63d0\u9192\u3001\u5408\u89c4\u72b6\u6001\uff09\n\n"
+        "\u6536\u5165\u52a0\u6210: \u4e0e\u79fb\u6c11\u5f8b\u5e08\u3001\u516c\u53f8\u670d\u52a1\u63d0\u4f9b\u5546\u548c\u6ce8\u518c\u4ee3\u7406\u516c\u53f8\u7684\u8f6c\u4ecb\u5408\u4f5c\u3002")
+
+    pdf.sub("34.3 \u4e0eControl Tower\u7684\u96c6\u6210")
+    pdf.txt(
+        "\u5b9e\u4f53\u8bbe\u7acb\u72b6\u6001\u63a5\u5165Control Tower\u7684\u7f8e\u56fd\u6295\u8d44\u548c\u8d44\u6e90\u9009\u9879\u5361\uff0c"
+        "\u8ba9\u9879\u76ee\u7ecf\u7406\u5728\u6cd5\u89c4\u91cc\u7a0b\u7891\u65c1\u8fb9\u4e86\u89e3\u516c\u53f8\u7ec4\u5efa\u8fdb\u5ea6\u3002")
+
+    # 35 关键术语表
+    pdf.add_page()
+    pdf.sec(35, "\u5173\u952e\u672f\u8bed\u8868")
     pdf.ln(2)
     terms = [
         ("M+N", "\u6708\u4efd\u6807\u8bb0\u3002M+0 = \u9879\u76ee\u542f\u52a8\uff082026\u5e743\u6708\uff09\u3002M+6 = \u542f\u52a8\u540e6\u4e2a\u6708\u3002\u8d2f\u7a7f\u6240\u6709\u8ba1\u5212\u4f7f\u7528\u3002"),
@@ -2964,6 +3090,8 @@ def build_chinese():
         ("\u5148\u5bfc\u94fe", "\u5c06\u5df2\u6279\u51c6\u5668\u68b0\u901a\u8fc7\u5148\u524d\u51e0\u4ee3510(k)\u6279\u51c6\u8fde\u63a5\u8d77\u6765\u7684\u5148\u5bfc\u5f15\u7528\u8c31\u7cfb\u3002"),
         ("openFDA", "FDA\u7684\u516c\u5171API\uff0c\u63d0\u4f9b\u5bf9510(k)\u6279\u51c6\u8bb0\u5f55\u3001\u4e0d\u826f\u4e8b\u4ef6\u3001\u53ec\u56de\u7b49\u6cd5\u89c4\u6570\u636e\u7684\u53ef\u641c\u7d22\u8bbf\u95ee\u3002"),
         ("Predicate Finder", "510k Bridge\u7684SaaS\u5de5\u5177\uff0c\u7528\u4e8e\u4f7f\u7528openFDA\u6570\u636e\u5e93\u641c\u7d22\u3001\u6bd4\u8f83\u548c\u8ffd\u6eaf\u5148\u5bfc\u5668\u68b0\u3002"),
+        ("QMS-Lite", "510k Bridge\u7684\u8f7b\u91cf\u7ea7\u8d28\u91cf\u7ba1\u7406\u7cfb\u7edf\uff0c\u9488\u5bf9510(k)\u9636\u6bb5\u521b\u4e1a\u4f01\u4e1a\uff0c\u7b26\u540821 CFR 820 / ISO 13485\u3002"),
+        ("\u5b9e\u4f53\u8bbe\u7acb\u8ffd\u8e2a\u5668", "510k Bridge\u7684SaaS\u4eea\u8868\u677f\uff0c\u7528\u4e8e\u7ba1\u7406\u7f8e\u56fd\u5e02\u573a\u8fdb\u5165\u4efb\u52a1\uff1a\u7279\u62c9\u534eC-Corp\u3001\u5dde\u6ce8\u518c\u3001FDA\u673a\u6784\u6ce8\u518c\u3001\u94f6\u884c\u548c\u4fdd\u9669\u3002"),
     ]
     for k, v in terms:
         pdf.kv(k, v)

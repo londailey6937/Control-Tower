@@ -148,9 +148,12 @@ def build():
         "  Greenlight Guru  -- QMS + design control. $30K/yr. No bilingual, no predicate tool.\n"
         "  MasterControl     -- Enterprise QMS. $100K+/yr. Overkill for 510(k)-stage startups.\n"
         "  Qualio            -- Cloud QMS. $20K/yr. No PM dashboard, no Chinese market focus.\n"
-        "  Regulatory consultants -- $300-500/hr. Fragmented, no tooling.\n\n"
+        "  Regulatory consultants -- $300-500/hr. Fragmented, no tooling.\n"
+        "  Immigration/corporate attorneys -- $5-15K per entity setup. Email-based, no dashboard.\n\n"
         "None of these competitors offer a bilingual (EN/CN) platform combining PM dashboard, "
-        "predicate research, and SE argument generation.")
+        "predicate research, QMS, entity setup tracking, and SE argument generation. "
+        "Full QMS systems cost $30K-$100K/yr and take months to implement -- startups need "
+        "just enough QMS to pass FDA audit, which is the QMS-Lite opportunity.")
 
     # ── 3. Product Portfolio ──
     pdf.add_page()
@@ -187,7 +190,41 @@ def build():
         "their email to unlock premium features, entering the sales funnel for Control "
         "Tower and professional services.")
 
-    pdf.sub("3.3 Lead Magnets & Content")
+    pdf.sub("3.3 QMS-Lite for Startups")
+    pdf.txt(
+        "A lightweight quality management system built for 510(k)-stage startups that need "
+        "just enough QMS to pass FDA audit without the $30K-$100K/yr cost of full platforms.\n\n"
+        "Modules (aligned to 21 CFR 820 / ISO 13485):\n"
+        "  Document Control -- Version-controlled SOPs, work instructions, forms\n"
+        "  CAPA -- Corrective and preventive action tracking with root cause analysis\n"
+        "  Training Records -- Employee training matrix, sign-off tracking, competency logs\n"
+        "  Supplier Qualification -- Approved supplier list, audit schedules, scorecards\n"
+        "  Complaint Handling -- Customer complaint intake, investigation, trending\n\n"
+        "Market: Every 510(k) applicant needs QMS and most are using spreadsheets.\n"
+        "Pricing: $200-$500/mo per company (vs. $2.5K-$8K/mo for Greenlight Guru / MasterControl).\n"
+        "Half the modules already exist as Control Tower tabs (Document Control, Actions/CAPA, "
+        "Suppliers).")
+
+    pdf.sub("3.4 Cross-Border Entity Setup Tracker")
+    pdf.txt(
+        "A dashboard for Chinese companies setting up US operations. Nobody has a "
+        "structured tool for this -- it is all handled via email chains with lawyers.\n\n"
+        "Checklist Modules:\n"
+        "  Delaware C-Corp Formation -- Articles of incorporation, bylaws, EIN\n"
+        "  Oregon Registration -- Foreign entity registration, business license\n"
+        "  Washington Registration -- Foreign entity registration, B&O tax setup\n"
+        "  Registered Agent -- Appointment and annual renewal tracking\n"
+        "  US Bank Account -- Application status, signatory requirements\n"
+        "  FDA Establishment Registration -- Facility registration, device listing\n"
+        "  US Agent Appointment -- FDA-required US agent designation\n"
+        "  Labeling Compliance -- 21 CFR 801 requirements checklist\n"
+        "  State Business Licenses -- State-specific permits and renewals\n"
+        "  Insurance -- Product liability, general liability, D&O\n\n"
+        "Pricing: $1K-$5K one-time setup or $200/mo SaaS.\n"
+        "Revenue kicker: Referral partnerships with immigration attorneys, corporate "
+        "service providers, and registered agent companies.")
+
+    pdf.sub("3.5 Lead Magnets & Content")
     pdf.txt(
         "  Stanford PMP Course -- Free professional development giveaway\n"
         "  FDA 510(k) Pathway Guide -- Branded PDF (EN + CN)\n"
@@ -206,7 +243,10 @@ def build():
         "  Control Tower Starter -- $500/mo (read-only dashboard per project)\n"
         "  Control Tower Growth -- $1,000/mo (full dashboard, 2 projects, message board)\n"
         "  Control Tower Scale -- $2,000/mo (multi-project, Predicate Finder embedded, "
-        "cap table, FDA comms)")
+        "cap table, FDA comms)\n"
+        "  QMS-Lite Starter -- $200/mo (doc control, CAPA, training records)\n"
+        "  QMS-Lite Pro -- $500/mo (full suite incl. supplier qual, complaint handling)\n"
+        "  Entity Setup Tracker -- $200/mo SaaS or $1K-$5K one-time setup")
 
     pdf.sub("4.2 Professional Services")
     pdf.txt(
@@ -217,26 +257,41 @@ def build():
 
     pdf.sub("4.3 Revenue Projections (5-Year)")
     pdf.txt(
-        "  Year 1 -- Product launch + 3 clients  = $180K ARR\n"
+        "  Year 1 -- Product launch + 3 clients  = $240K ARR\n"
         "    Predicate Finder: 500 free users, 20 Pro ($24K)\n"
         "    Control Tower: 3 Starter clients ($18K)\n"
-        "    Services: 1 retainer at $10K/mo ($120K) + ad hoc ($18K)\n\n"
-        "  Year 2 -- Market validation + 8 clients = $600K ARR\n"
+        "    Entity Setup: 5 one-time setups at $3K avg ($15K)\n"
+        "    QMS-Lite: 3 Starter clients ($7K, partial year)\n"
+        "    Services: 1 retainer at $10K/mo ($120K) + ad hoc ($18K)\n"
+        "    Referral commissions: immigration/corporate ($38K)\n\n"
+        "  Year 2 -- Market validation + 8 clients = $780K ARR\n"
         "    Predicate Finder: 2,000 free users, 80 Pro ($95K)\n"
         "    Control Tower: 3 Starter + 4 Growth + 1 Scale ($102K)\n"
-        "    Services: 3 retainers ($360K) + ad hoc ($43K)\n\n"
-        "  Year 3 -- Growth phase + 15 clients = $1.6M ARR\n"
+        "    QMS-Lite: 15 clients avg $300/mo ($54K)\n"
+        "    Entity Setup: 20 setups + 10 SaaS ($86K)\n"
+        "    Services: 3 retainers ($360K) + ad hoc ($43K)\n"
+        "    Referral commissions ($40K)\n\n"
+        "  Year 3 -- Growth phase + 15 clients = $2.1M ARR\n"
         "    Predicate Finder: 5,000 free users, 200 Pro ($238K)\n"
         "    Control Tower: 5 Starter + 6 Growth + 4 Scale ($198K)\n"
-        "    Services: 6 retainers ($900K) + consulting ($264K)\n\n"
-        "  Year 4 -- Scale + 30 clients = $3.5M ARR\n"
+        "    QMS-Lite: 40 clients avg $350/mo ($168K)\n"
+        "    Entity Setup: 40 setups + 25 SaaS ($170K)\n"
+        "    Services: 6 retainers ($900K) + consulting ($264K)\n"
+        "    Referral commissions ($62K)\n\n"
+        "  Year 4 -- Scale + 30 clients = $4.5M ARR\n"
         "    Predicate Finder: 10,000 free, 500 Pro ($594K)\n"
         "    Control Tower: 10 Starter + 12 Growth + 8 Scale ($396K)\n"
-        "    Services: 10 retainers ($1.8M) + enterprise ($710K)\n\n"
-        "  Year 5 -- Market leader + 50 clients = $8.4M ARR\n"
+        "    QMS-Lite: 80 clients avg $400/mo ($384K)\n"
+        "    Entity Setup: 60 setups + 40 SaaS ($220K)\n"
+        "    Services: 10 retainers ($1.8M) + enterprise ($710K)\n"
+        "    Referral commissions ($96K) + QMS upsell ($300K)\n\n"
+        "  Year 5 -- Market leader + 50 clients = $10.8M ARR\n"
         "    Predicate Finder: 20,000 free, 1,000 Pro ($1.2M)\n"
         "    Control Tower: 15 Starter + 20 Growth + 15 Scale ($690K)\n"
-        "    Services: 15 retainers ($3.6M) + enterprise ($2.9M)")
+        "    QMS-Lite: 150 clients avg $420/mo ($756K)\n"
+        "    Entity Setup: 100 setups + 60 SaaS ($360K)\n"
+        "    Services: 15 retainers ($3.6M) + enterprise ($2.9M)\n"
+        "    Referral commissions ($150K) + QMS upsell ($1.1M)")
 
     # ── 5. Go-to-Market Strategy ──
     pdf.add_page()
@@ -278,19 +333,27 @@ def build():
         "  Q2 -- Predicate Finder launch with freemium gating\n"
         "  Q2 -- 510k Bridge website launch (510kbridge.com)\n"
         "  Q3 -- Multi-tenant Control Tower (Supabase RLS per client)\n"
-        "  Q4 -- Predicate Finder Pro: PDF export, bulk comparison, saved searches")
+        "  Q3 -- Cross-Border Entity Setup Tracker v1 (DE C-Corp, OR, WA registration)\n"
+        "  Q4 -- Predicate Finder Pro: PDF export, bulk comparison, saved searches\n"
+        "  Q4 -- QMS-Lite MVP: Document Control + CAPA modules")
 
     pdf.sub("6.2 Year 2 (2027)")
     pdf.txt(
-        "  Q1 -- Predicate Finder embedded as Control Tower Scale tab\n"
-        "  Q2 -- AI regulatory gap analysis: expose generate_regulatory_analysis.py as self-service\n"
-        "  Q3 -- QMS-Lite module: lightweight quality management for 510(k) stage\n"
-        "  Q4 -- API integrations: Supabase Edge Functions for automated notifications")
+        "  Q1 -- QMS-Lite: Training Records + Supplier Qualification modules\n"
+        "  Q1 -- Entity Setup Tracker: bank account + FDA registration workflows\n"
+        "  Q2 -- QMS-Lite: Complaint Handling + full 21 CFR 820 alignment\n"
+        "  Q2 -- Predicate Finder embedded as Control Tower Scale tab\n"
+        "  Q3 -- AI regulatory gap analysis: expose generate_regulatory_analysis.py as self-service\n"
+        "  Q3 -- Entity Setup referral partner portal (attorneys, CSPs)\n"
+        "  Q4 -- API integrations: Supabase Edge Functions for automated notifications\n"
+        "  Q4 -- QMS-Lite + Control Tower unified dashboard")
 
     pdf.sub("6.3 Years 3-5 (2028-2030)")
     pdf.txt(
         "  Template library for common predicate categories (respiratory, cardiovascular, "
         "orthopedic, IVD, imaging, rehab, SaMD)\n"
+        "  QMS-Lite ISO 13485 audit-ready report generator\n"
+        "  Entity Setup Tracker: automated state filings + annual renewal reminders\n"
         "  Mobile app for on-the-go project monitoring\n"
         "  De Novo and PMA pathway extensions\n"
         "  EU MDR / CE marking module (expand beyond FDA)\n"
@@ -361,7 +424,11 @@ def build():
         "  4. Single-founder risk -- Key person dependency\n"
         "     Mitigation: Documented codebase, modular architecture, early hiring\n\n"
         "  5. openFDA API changes -- Rate limits or data format changes\n"
-        "     Mitigation: Local caching, fallback to FDA 510(k) database downloads")
+        "     Mitigation: Local caching, fallback to FDA 510(k) database downloads\n\n"
+        "  6. QMS regulatory evolution -- 21 CFR 820 harmonization with ISO 13485\n"
+        "     Mitigation: Modular QMS design, template-driven compliance updates\n\n"
+        "  7. State registration complexity -- 50 states with different requirements\n"
+        "     Mitigation: Start with DE/OR/WA, expand based on client demand")
 
     # ── 10. Milestones & KPIs ──
     pdf.add_page()
@@ -372,14 +439,18 @@ def build():
         "  Q1 -- Control Tower v1.1 shipped, Predicate Finder MVP\n"
         "  Q2 -- 510kbridge.com live, first 100 Predicate Finder users\n"
         "  Q3 -- First paying CT client, first professional services retainer\n"
-        "  Q4 -- 500 PF free users, 3 CT clients, $15K MRR")
+        "  Q3 -- Entity Setup Tracker v1 live (DE/OR/WA)\n"
+        "  Q4 -- QMS-Lite MVP live (Doc Control + CAPA)\n"
+        "  Q4 -- 500 PF free users, 3 CT clients, $20K MRR")
 
     pdf.sub("10.2 Key Performance Indicators")
     pdf.txt(
         "  Predicate Finder free registrations (target: 500 Y1 / 20,000 Y5)\n"
         "  PF Free -> Pro conversion rate (target: 5%)\n"
         "  Control Tower paying clients (target: 3 Y1 / 50 Y5)\n"
-        "  Monthly Recurring Revenue (target: $15K Y1 / $700K Y5)\n"
+        "  QMS-Lite paying clients (target: 3 Y1 / 150 Y5)\n"
+        "  Entity Setup completions (target: 5 Y1 / 100 Y5)\n"
+        "  Monthly Recurring Revenue (target: $20K Y1 / $900K Y5)\n"
         "  Professional services revenue (target: $140K Y1 / $6.5M Y5)\n"
         "  Net Promoter Score (target: 50+)\n"
         "  Client retention rate (target: 90%+)")
@@ -388,7 +459,7 @@ def build():
     pdf.txt(
         "  Strategic acquisition by QMS vendor (Greenlight Guru, Qualio, MasterControl)\n"
         "  Private equity roll-up of regulatory tech platforms\n"
-        "  Continue as lifestyle business at $3-8M ARR with 75% gross margins")
+        "  Continue as lifestyle business at $5-11M ARR with 75% gross margins")
 
     path = os.path.join(OUT_DIR, "510kBridge_5Year_Business_Strategy_EN.pdf")
     pdf.output(path)
