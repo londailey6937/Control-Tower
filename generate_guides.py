@@ -1435,9 +1435,51 @@ def build_english():
         "  Gray   -- Not Started\n\n"
         "Provides a quick visual of how close the documentation package is to submission-ready.")
 
-    # 31. Glossary
+    # 32. Predicate Finder Integration
     pdf.add_page()
-    pdf.sec(32, "Glossary of Key Terms")
+    pdf.sec(32, "510(k) Predicate Finder Integration")
+    pdf.txt(
+        "The 510(k) Predicate Finder is a companion SaaS tool that connects directly "
+        "to the FDA openFDA database to help teams identify and analyse predicate devices "
+        "for their substantial equivalence (SE) argument. It is available as a standalone "
+        "free tool and is embedded in the Scale tier of Control Tower.")
+
+    pdf.sub("32.1 Free Tier")
+    pdf.txt(
+        "Anyone can use the Predicate Finder at no cost with the following limits:\n\n"
+        "  5 searches per day\n"
+        "  1 predicate chain trace per day\n"
+        "  2-device side-by-side comparison\n\n"
+        "An email address is required to unlock the tool. This serves as the primary "
+        "lead-generation funnel for Arch Medical Management.")
+
+    pdf.sub("32.2 Pro Tier ($99/month)")
+    pdf.txt(
+        "Pro unlocks unlimited searches, unlimited chain tracing, 4-device comparison, "
+        "SE argument generation, and PDF export. Users who need the full Control Tower "
+        "can upgrade to any dashboard tier directly from the Predicate Finder.")
+
+    pdf.sub("32.3 Key Features")
+    pdf.bul("Keyword & Product Code Search -- query the openFDA 510(k) database by applicant, "
+            "product code, device name, or decision date range")
+    pdf.bul("Predicate Chain Tracing -- starting from any cleared device, automatically trace "
+            "the chain of predicate references back through multiple generations")
+    pdf.bul("Side-by-Side Comparison -- select up to 4 devices (Pro) and view a structured "
+            "comparison of regulatory class, product code, applicant, and decision data")
+    pdf.bul("SE Argument Draft (Pro) -- auto-generate a preliminary Substantial Equivalence "
+            "narrative comparing the subject device to the selected predicate")
+    pdf.bul("Bilingual (EN/CN) -- full Chinese language support matching Control Tower")
+
+    pdf.sub("32.4 Integration with Control Tower")
+    pdf.txt(
+        "On the Scale tier ($2,000/mo), the Predicate Finder is embedded directly in the "
+        "Control Tower dashboard. Predicate research results can inform the Regulatory "
+        "Tracker, Risk Dashboard, and FDA Communications Center tabs, keeping all 510(k) "
+        "intelligence in one place.")
+
+    # 33. Glossary
+    pdf.add_page()
+    pdf.sec(33, "Glossary of Key Terms")
     pdf.ln(2)
     terms = [
         ("M+N", "Month notation. M+0 = project start (March 2026). M+6 = six months later (Sep 2026). Used throughout for all scheduling."),
@@ -1468,6 +1510,11 @@ def build_english():
         ("Q-Sub", "Q-Submission -- the formal process for requesting a Pre-Submission meeting with FDA to discuss regulatory strategy before filing."),
         ("DICE", "Division of Industry and Consumer Education -- FDA division that handles Q-Sub logistics and communication."),
         ("Data Source Ref", "External reference linking a document or thread to its raw data origin (e.g., GitHub:repo@commit, SVN rev 4521). Supports 21 CFR Part 11 traceability for split-storage workflows where trial data lives in version control and reports live in the dashboard."),
+        ("Predicate Device", "A legally marketed device to which a new 510(k) device is compared to demonstrate substantial equivalence."),
+        ("Substantial Equivalence (SE)", "The standard of comparison for 510(k) clearance: the new device must have the same intended use and similar technological characteristics as the predicate."),
+        ("Predicate Chain", "The lineage of predicate references connecting a cleared device back through prior generations of 510(k) clearances."),
+        ("openFDA", "FDA's public API providing searchable access to 510(k) clearance records, adverse events, recalls, and other regulatory data."),
+        ("Predicate Finder", "Arch Medical Management's SaaS tool for searching, comparing, and tracing predicate devices using the openFDA database."),
     ]
     for k, v in terms:
         pdf.kv(k, v)
@@ -2842,9 +2889,47 @@ def build_chinese():
         "  琥珀 -- 草稿\n"
         "  灰色 -- 未开始")
 
-    # 32 关键术语表
+    # 32 510(k) Predicate Finder
     pdf.add_page()
-    pdf.sec(32, "\u5173\u952e\u672f\u8bed\u8868")
+    pdf.sec(32, "510(k) Predicate Finder \u96c6\u6210")
+    pdf.txt(
+        "510(k) Predicate Finder\u662f\u4e00\u6b3e\u914d\u5957SaaS\u5de5\u5177\uff0c\u76f4\u63a5\u8fde\u63a5FDA openFDA\u6570\u636e\u5e93\uff0c"
+        "\u5e2e\u52a9\u56e2\u961f\u8bc6\u522b\u548c\u5206\u6790\u5148\u5bfc\u5668\u68b0\uff0c\u7528\u4e8e\u5b9e\u8d28\u7b49\u6548\u6027\uff08SE\uff09\u8bba\u8bc1\u3002"
+        "\u5b83\u4f5c\u4e3a\u72ec\u7acb\u7684\u514d\u8d39\u5de5\u5177\u63d0\u4f9b\uff0c\u5e76\u5d4c\u5165\u5728Control Tower\u7684Scale\u5c42\u7ea7\u4e2d\u3002")
+
+    pdf.sub("32.1 \u514d\u8d39\u7248")
+    pdf.txt(
+        "\u4efb\u4f55\u4eba\u90fd\u53ef\u4ee5\u514d\u8d39\u4f7f\u7528Predicate Finder\uff0c\u9650\u5236\u5982\u4e0b\uff1a\n\n"
+        "  \u6bcf\u65e55\u6b21\u641c\u7d22\n"
+        "  \u6bcf\u65e51\u6b21\u5148\u5bfc\u94fe\u8ffd\u6eaf\n"
+        "  2\u5668\u68b0\u5bf9\u6bd4\n\n"
+        "\u9700\u8981\u63d0\u4f9b\u90ae\u7bb1\u5730\u5740\u6765\u89e3\u9501\u5de5\u5177\u3002"
+        "\u8fd9\u662fArch Medical Management\u7684\u4e3b\u8981\u6f5c\u5728\u5ba2\u6237\u83b7\u53d6\u6e20\u9053\u3002")
+
+    pdf.sub("32.2 Pro\u7248 ($99/\u6708)")
+    pdf.txt(
+        "Pro\u89e3\u9501\u65e0\u9650\u641c\u7d22\u3001\u65e0\u9650\u94fe\u8ffd\u6eaf\u3001"
+        "4\u5668\u68b0\u5bf9\u6bd4\u3001SE\u8bba\u8bc1\u751f\u6210\u548cPDF\u5bfc\u51fa\u3002"
+        "\u9700\u8981\u5b8c\u6574Control Tower\u7684\u7528\u6237\u53ef\u4ee5\u4ece"
+        "Predicate Finder\u76f4\u63a5\u5347\u7ea7\u5230\u4efb\u4f55\u4eea\u8868\u677f\u5c42\u7ea7\u3002")
+
+    pdf.sub("32.3 \u4e3b\u8981\u529f\u80fd")
+    pdf.bul("\u5173\u952e\u8bcd\u548c\u4ea7\u54c1\u4ee3\u7801\u641c\u7d22 -- \u901a\u8fc7\u7533\u8bf7\u4eba\u3001\u4ea7\u54c1\u4ee3\u7801\u3001\u5668\u68b0\u540d\u79f0\u6216\u51b3\u5b9a\u65e5\u671f\u8303\u56f4\u67e5\u8be2openFDA 510(k)\u6570\u636e\u5e93")
+    pdf.bul("\u5148\u5bfc\u94fe\u8ffd\u6eaf -- \u4ece\u4efb\u4f55\u5df2\u6279\u51c6\u5668\u68b0\u5f00\u59cb\uff0c\u81ea\u52a8\u8ffd\u6eaf\u591a\u4ee3\u5148\u5bfc\u5f15\u7528\u94fe")
+    pdf.bul("\u5e76\u6392\u5bf9\u6bd4 -- \u9009\u62e9\u6700\u591a4\u4e2a\u5668\u68b0\uff08Pro\uff09\uff0c\u67e5\u770b\u6cd5\u89c4\u7c7b\u522b\u3001\u4ea7\u54c1\u4ee3\u7801\u3001\u7533\u8bf7\u4eba\u548c\u51b3\u5b9a\u6570\u636e\u7684\u7ed3\u6784\u5316\u5bf9\u6bd4")
+    pdf.bul("SE\u8bba\u8bc1\u8349\u7a3f\uff08Pro\uff09 -- \u81ea\u52a8\u751f\u6210\u521d\u6b65\u7684\u5b9e\u8d28\u7b49\u6548\u6027\u53d9\u8ff0\uff0c\u5c06\u4e3b\u9898\u5668\u68b0\u4e0e\u6240\u9009\u5148\u5bfc\u5668\u68b0\u8fdb\u884c\u6bd4\u8f83")
+    pdf.bul("\u53cc\u8bed\uff08EN/CN\uff09 -- \u5b8c\u6574\u7684\u4e2d\u6587\u8bed\u8a00\u652f\u6301\uff0c\u4e0eControl Tower\u4e00\u81f4")
+
+    pdf.sub("32.4 \u4e0eControl Tower\u7684\u96c6\u6210")
+    pdf.txt(
+        "\u5728Scale\u5c42\u7ea7\uff08$2,000/\u6708\uff09\u4e0a\uff0cPredicate Finder\u76f4\u63a5\u5d4c\u5165\u5728"
+        "Control Tower\u4eea\u8868\u677f\u4e2d\u3002\u5148\u5bfc\u7814\u7a76\u7ed3\u679c\u53ef\u4ee5\u4e3a"
+        "\u6cd5\u89c4\u8ddf\u8e2a\u5668\u3001\u98ce\u9669\u4eea\u8868\u677f\u548cFDA\u901a\u4fe1\u4e2d\u5fc3\u9009\u9879\u5361\u63d0\u4f9b\u4fe1\u606f\uff0c"
+        "\u5c06\u6240\u6709510(k)\u667a\u80fd\u96c6\u4e2d\u5728\u4e00\u4e2a\u5730\u65b9\u3002")
+
+    # 33 关键术语表
+    pdf.add_page()
+    pdf.sec(33, "\u5173\u952e\u672f\u8bed\u8868")
     pdf.ln(2)
     terms = [
         ("M+N", "\u6708\u4efd\u6807\u8bb0\u3002M+0 = \u9879\u76ee\u542f\u52a8\uff082026\u5e743\u6708\uff09\u3002M+6 = \u542f\u52a8\u540e6\u4e2a\u6708\u3002\u8d2f\u7a7f\u6240\u6709\u8ba1\u5212\u4f7f\u7528\u3002"),
@@ -2874,6 +2959,11 @@ def build_chinese():
         ("Q-Sub", "Q提交 " + EM + " 向FDA请求Pre-Sub会议的正式流程，用于在提交前讨论法规策略。"),
         ("DICE", "行业与消费者教育部门 " + EM + " 处理Q-Sub后勤和通信的FDA部门。"),
         ("数据源引用", "将文档或主题链接到其原始数据来源的外部引用（如 GitHub:repo@commit、SVN rev 4521）。支持21 CFR Part 11可追溯性，适用于试验数据存储在版本控制系统而报告存储在仪表盘的分开存储工作流。"),
+        ("\u5148\u5bfc\u5668\u68b0", "\u4e00\u4e2a\u5df2\u5408\u6cd5\u4e0a\u5e02\u7684\u5668\u68b0\uff0c\u65b0\u7684510(k)\u5668\u68b0\u4e0e\u5176\u6bd4\u8f83\u4ee5\u8bc1\u660e\u5b9e\u8d28\u7b49\u6548\u6027\u3002"),
+        ("\u5b9e\u8d28\u7b49\u6548\u6027(SE)", "510(k)\u6279\u51c6\u7684\u6bd4\u8f83\u6807\u51c6\uff1a\u65b0\u5668\u68b0\u5fc5\u987b\u4e0e\u5148\u5bfc\u5668\u68b0\u5177\u6709\u76f8\u540c\u7684\u9884\u671f\u7528\u9014\u548c\u7c7b\u4f3c\u7684\u6280\u672f\u7279\u5f81\u3002"),
+        ("\u5148\u5bfc\u94fe", "\u5c06\u5df2\u6279\u51c6\u5668\u68b0\u901a\u8fc7\u5148\u524d\u51e0\u4ee3510(k)\u6279\u51c6\u8fde\u63a5\u8d77\u6765\u7684\u5148\u5bfc\u5f15\u7528\u8c31\u7cfb\u3002"),
+        ("openFDA", "FDA\u7684\u516c\u5171API\uff0c\u63d0\u4f9b\u5bf9510(k)\u6279\u51c6\u8bb0\u5f55\u3001\u4e0d\u826f\u4e8b\u4ef6\u3001\u53ec\u56de\u7b49\u6cd5\u89c4\u6570\u636e\u7684\u53ef\u641c\u7d22\u8bbf\u95ee\u3002"),
+        ("Predicate Finder", "Arch Medical Management\u7684SaaS\u5de5\u5177\uff0c\u7528\u4e8e\u4f7f\u7528openFDA\u6570\u636e\u5e93\u641c\u7d22\u3001\u6bd4\u8f83\u548c\u8ffd\u6eaf\u5148\u5bfc\u5668\u68b0\u3002"),
     ]
     for k, v in terms:
         pdf.kv(k, v)

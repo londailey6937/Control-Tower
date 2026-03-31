@@ -874,9 +874,48 @@ def build_english():
         "ctower_qa_archive. Or clear all site data in browser settings."
     )
 
-    # ── 23. Glossary of FDA & Regulatory Terms ──
+    # ── 23. 510(k) Predicate Finder ──
     pdf.add_page()
-    pdf.sec(23, "Glossary of FDA & Regulatory Terms")
+    pdf.sec(23, "510(k) Predicate Finder")
+    pdf.txt(
+        "The 510(k) Predicate Finder is a companion SaaS tool that connects to the "
+        "FDA openFDA database. It helps PMPs and regulatory teams identify predicate "
+        "devices, trace predicate chains, and draft Substantial Equivalence arguments "
+        "-- tasks that are critical to planning a 510(k) submission.")
+
+    pdf.sub("Free vs Pro")
+    pdf.txt(
+        "The Predicate Finder is available free with daily limits (5 searches, "
+        "1 chain trace, 2-device comparison). Pro ($99/month) unlocks unlimited "
+        "searches, unlimited chain tracing, 4-device comparison, SE argument "
+        "generation, and PDF export.")
+    pdf.tip_box(
+        "The Predicate Finder is the primary lead-generation tool for Arch Medical "
+        "Management. Free users provide their email to unlock the tool, creating a "
+        "natural upgrade funnel to Control Tower subscriptions.")
+
+    pdf.sub("Integration with Control Tower (Scale Tier)")
+    pdf.txt(
+        "On the Scale tier ($2,000/mo), the Predicate Finder is embedded directly "
+        "in the Control Tower dashboard. Predicate research informs:"
+    )
+    pdf.bul("Regulatory Tracker -- predicate device references and SE strategy")
+    pdf.bul("Risk Dashboard -- risks identified during predicate comparison")
+    pdf.bul("FDA Communications Center -- Pre-Sub discussion points based on predicate analysis")
+    pdf.bul("Document Control -- predicate comparison reports as DHF artifacts")
+
+    pdf.sub("PMP Workflow")
+    pdf.txt(
+        "1. Use Predicate Finder to search for candidate predicate devices by product "
+        "code or keyword.\n"
+        "2. Trace the predicate chain to understand the regulatory lineage.\n"
+        "3. Compare up to 4 devices side-by-side (Pro) to select the strongest predicate.\n"
+        "4. Generate a draft SE argument (Pro) as a starting point for the regulatory team.\n"
+        "5. Export results to PDF and attach to the 510(k) submission package in Document Control.")
+
+    # ── 24. Glossary of FDA & Regulatory Terms ──
+    pdf.add_page()
+    pdf.sec(24, "Glossary of FDA & Regulatory Terms")
     pdf.ln(2)
     fda_terms = [
         ("510(k)", "Premarket Notification submitted to FDA to demonstrate a Class II device is substantially equivalent to a legally marketed predicate device. Named after Section 510(k) of the Food, Drug, and Cosmetic Act."),
@@ -928,6 +967,9 @@ def build_english():
         ("V/Q Ratio", "Ventilation/Perfusion ratio. The relationship between air reaching the alveoli and blood reaching the alveoli. A key indicator of gas exchange efficiency."),
         ("FES", "Functional Electrical Stimulation. Therapeutic application of electrical current to activate paralyzed or weakened muscles for functional movement."),
         ("NRE", "Non-Recurring Engineering. One-time engineering costs for product development, tooling, and manufacturing setup that are not repeated for each unit produced."),
+        ("openFDA", "FDA's public API providing searchable access to 510(k) clearance records, adverse events, recalls, and other regulatory data."),
+        ("Predicate Finder", "Arch Medical Management's SaaS tool for searching, comparing, and tracing predicate devices using the openFDA database. Free and Pro tiers available."),
+        ("Predicate Chain", "The lineage of predicate references connecting a cleared device back through prior generations of 510(k) clearances."),
     ]
     for k, v in fda_terms:
         pdf.kv(k, v)
@@ -1484,9 +1526,45 @@ def build_chinese():
         "ctower_qa_archive。或在浏览器设置中清除所有站点数据。"
     )
 
-    # ── 23. FDA与法规术语表 ──
+    # ── 23. 510(k) Predicate Finder ──
     pdf.add_page()
-    pdf.sec(23, "FDA与法规术语表")
+    pdf.sec(23, "510(k) Predicate Finder")
+    pdf.txt(
+        "510(k) Predicate Finder\u662f\u4e00\u6b3e\u914d\u5957SaaS\u5de5\u5177\uff0c"
+        "\u8fde\u63a5\u5230FDA openFDA\u6570\u636e\u5e93\u3002\u5b83\u5e2e\u52a9PMP\u548c\u6cd5\u89c4\u56e2\u961f"
+        "\u8bc6\u522b\u5148\u5bfc\u5668\u68b0\u3001\u8ffd\u6eaf\u5148\u5bfc\u94fe\u5e76\u8d77\u8349\u5b9e\u8d28\u7b49\u6548\u6027\u8bba\u8bc1"
+        " -- \u8fd9\u4e9b\u4efb\u52a1\u5bf9\u89c4\u5212510(k)\u63d0\u4ea4\u81f3\u5173\u91cd\u8981\u3002")
+
+    pdf.sub("\u514d\u8d39\u7248 vs Pro\u7248")
+    pdf.txt(
+        "Predicate Finder\u514d\u8d39\u63d0\u4f9b\uff0c\u6709\u6bcf\u65e5\u9650\u5236\uff085\u6b21\u641c\u7d22\u30011\u6b21\u94fe\u8ffd\u6eaf\u30012\u5668\u68b0\u5bf9\u6bd4\uff09\u3002"
+        "Pro\u7248\uff08$99/\u6708\uff09\u89e3\u9501\u65e0\u9650\u641c\u7d22\u3001\u65e0\u9650\u94fe\u8ffd\u6eaf\u30014\u5668\u68b0\u5bf9\u6bd4\u3001"
+        "SE\u8bba\u8bc1\u751f\u6210\u548cPDF\u5bfc\u51fa\u3002")
+    pdf.tip_box(
+        "Predicate Finder\u662fArch Medical Management\u7684\u4e3b\u8981\u6f5c\u5728\u5ba2\u6237\u83b7\u53d6\u5de5\u5177\u3002"
+        "\u514d\u8d39\u7528\u6237\u63d0\u4f9b\u90ae\u7bb1\u89e3\u9501\u5de5\u5177\uff0c\u521b\u5efa\u81ea\u7136\u7684\u5347\u7ea7\u6f0f\u6597\u3002")
+
+    pdf.sub("\u4e0eControl Tower\u7684\u96c6\u6210\uff08Scale\u5c42\u7ea7\uff09")
+    pdf.txt(
+        "\u5728Scale\u5c42\u7ea7\uff08$2,000/\u6708\uff09\u4e0a\uff0cPredicate Finder\u76f4\u63a5\u5d4c\u5165\u5728"
+        "Control Tower\u4eea\u8868\u677f\u4e2d\u3002\u5148\u5bfc\u7814\u7a76\u4e3a\u4ee5\u4e0b\u5185\u5bb9\u63d0\u4f9b\u4fe1\u606f\uff1a"
+    )
+    pdf.bul("\u6cd5\u89c4\u8ddf\u8e2a\u5668 -- \u5148\u5bfc\u5668\u68b0\u5f15\u7528\u548cSE\u7b56\u7565")
+    pdf.bul("\u98ce\u9669\u4eea\u8868\u677f -- \u5148\u5bfc\u5bf9\u6bd4\u4e2d\u8bc6\u522b\u7684\u98ce\u9669")
+    pdf.bul("FDA\u901a\u4fe1\u4e2d\u5fc3 -- \u57fa\u4e8e\u5148\u5bfc\u5206\u6790\u7684Pre-Sub\u8ba8\u8bba\u8981\u70b9")
+    pdf.bul("\u6587\u6863\u63a7\u5236 -- \u5148\u5bfc\u5bf9\u6bd4\u62a5\u544a\u4f5c\u4e3aDHF\u5de5\u4ef6")
+
+    pdf.sub("PMP\u5de5\u4f5c\u6d41\u7a0b")
+    pdf.txt(
+        "1. \u4f7f\u7528Predicate Finder\u6309\u4ea7\u54c1\u4ee3\u7801\u6216\u5173\u952e\u8bcd\u641c\u7d22\u5019\u9009\u5148\u5bfc\u5668\u68b0\u3002\n"
+        "2. \u8ffd\u6eaf\u5148\u5bfc\u94fe\u4ee5\u4e86\u89e3\u6cd5\u89c4\u8c31\u7cfb\u3002\n"
+        "3. \u5e76\u6392\u5bf9\u6bd4\u6700\u591a4\u4e2a\u5668\u68b0\uff08Pro\uff09\u4ee5\u9009\u62e9\u6700\u5f3a\u7684\u5148\u5bfc\u3002\n"
+        "4. \u751f\u6210SE\u8bba\u8bc1\u8349\u7a3f\uff08Pro\uff09\u4f5c\u4e3a\u6cd5\u89c4\u56e2\u961f\u7684\u8d77\u70b9\u3002\n"
+        "5. \u5bfc\u51fa\u7ed3\u679c\u4e3aPDF\u5e76\u9644\u52a0\u5230\u6587\u6863\u63a7\u5236\u4e2d\u7684510(k)\u63d0\u4ea4\u5305\u3002")
+
+    # ── 24. FDA与法规术语表 ──
+    pdf.add_page()
+    pdf.sec(24, "FDA与法规术语表")
     pdf.ln(2)
     fda_terms_cn = [
         ("510(k)", "上市前通知。向FDA提交的文件，证明II类器械与已合法上市的对照器械实质等同。以《食品、药品和化妆品法》第510(k)条命名。"),
@@ -1537,6 +1615,9 @@ def build_chinese():
         ("V/Q比值", "通气/灌注比。到达肺泡的空气与到达肺泡的血液之间的关系。气体交换效率的关键指标。"),
         ("FES（功能性电刺激）", "治疗性电流应用，激活瘫痪或虚弱的肌肉以实现功能性运动。"),
         ("NRE（非经常性工程费用）", "产品开发、工装和制造设置的一次性工程成本，不在每个单元生产中重复发生。"),
+        ("openFDA", "FDA\u7684\u516c\u5171API\uff0c\u63d0\u4f9b\u5bf9510(k)\u6279\u51c6\u8bb0\u5f55\u3001\u4e0d\u826f\u4e8b\u4ef6\u3001\u53ec\u56de\u7b49\u6cd5\u89c4\u6570\u636e\u7684\u53ef\u641c\u7d22\u8bbf\u95ee\u3002"),
+        ("Predicate Finder", "Arch Medical Management\u7684SaaS\u5de5\u5177\uff0c\u7528\u4e8e\u4f7f\u7528openFDA\u6570\u636e\u5e93\u641c\u7d22\u3001\u6bd4\u8f83\u548c\u8ffd\u6eaf\u5148\u5bfc\u5668\u68b0\u3002\u63d0\u4f9b\u514d\u8d39\u7248\u548cPro\u7248\u3002"),
+        ("\u5148\u5bfc\u94fe", "\u5c06\u5df2\u6279\u51c6\u5668\u68b0\u901a\u8fc7\u5148\u524d\u51e0\u4ee3510(k)\u6279\u51c6\u8fde\u63a5\u8d77\u6765\u7684\u5148\u5bfc\u5f15\u7528\u8c31\u7cfb\u3002"),
     ]
     for k, v in fda_terms_cn:
         pdf.kv(k, v)
