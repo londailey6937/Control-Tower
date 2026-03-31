@@ -660,7 +660,8 @@ export function showWizard(onComplete: (answers: WizardAnswers) => void): void {
           predicateDevices: demoTmpl.predicateExamples,
           applicantName: "Acme Medical Inc.",
           applicantNameCn: "Acme 医疗公司",
-          applicantAddress: "123 Innovation Drive, Suite 200, Portland, OR 97201",
+          applicantAddress:
+            "123 Innovation Drive, Suite 200, Portland, OR 97201",
           applicantPhone: "(503) 555-0100",
           contactName: "Jane Chen, VP Regulatory Affairs",
           contactEmail: "regulatory@acmemedical.com",

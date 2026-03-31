@@ -663,7 +663,7 @@ export function renderHelp(): void {
       <div class="help-search-wrap">
         <input type="text" id="helpSearch" class="help-search" placeholder="${isCN ? "搜索指南..." : "Search guide..."}" />
       </div>
-      <button class="help-close" id="helpClose">&times;</button>
+      <button class="help-close" id="helpClose">${isCN ? "关闭" : "Close"}</button>
     </div>
     <div class="help-body">
       <nav class="help-toc" id="helpToc">

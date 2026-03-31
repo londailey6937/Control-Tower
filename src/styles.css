@@ -4762,7 +4762,7 @@ body {
 .help-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--bg);
 }
 .help-panel {
   position: absolute;
@@ -4808,16 +4808,18 @@ body {
   border-color: var(--accent);
 }
 .help-close {
-  background: none;
-  border: none;
-  color: var(--dim);
-  font-size: 1.6rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 0.82rem;
   cursor: pointer;
-  padding: 0 4px;
-  line-height: 1;
+  padding: 5px 14px;
+  border-radius: 6px;
+  transition: background 0.15s;
 }
 .help-close:hover {
-  color: var(--danger);
+  background: var(--accent);
+  color: #fff;
 }
 
 /* Body */
@@ -4844,7 +4846,9 @@ body {
   text-decoration: none;
   cursor: pointer;
   border-left: 3px solid transparent;
-  transition: background 0.12s, color 0.12s;
+  transition:
+    background 0.12s,
+    color 0.12s;
 }
 .help-toc-item:hover {
   background: var(--surface);
