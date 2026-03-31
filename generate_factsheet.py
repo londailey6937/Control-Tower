@@ -97,7 +97,7 @@ def build_factsheet_en():
         "Chinese medical device companies seeking FDA 510(k) clearance to enter "
         "the US market. We specialize in Class II non-invasive devices: patient "
         "monitors, imaging systems, rehabilitation equipment, diagnostic tools, "
-        "and software-as-a-medical-device (SaMD).")
+        "and software-as-a-medical-device (SaMD). Offices in Camas, WA & Shanghai, China.")
 
     # ── The Problem ──
     pdf.section_bar("THE PROBLEM")
@@ -106,13 +106,15 @@ def build_factsheet_en():
     pdf.bul("Difficulty coordinating testing labs, US agents, and regulatory consultants")
     pdf.bul("High failure rates: ~30% of 510(k) submissions receive AI requests")
     pdf.bul("Costly delays from preventable errors (wrong predicate, missing test data, RTA)")
+    pdf.bul("No lightweight QMS for startups -- enterprise systems are overkill")
 
     # ── Our Solution ──
     pdf.section_bar("OUR SOLUTION")
     pdf.txt(
         "A bilingual (EN/CN) 510(k) project management platform paired with "
-        "experienced regulatory professionals. From strategy through clearance, "
-        "we bridge the language, process, and compliance gap.")
+        "experienced regulatory professionals. From predicate device research through "
+        "FDA clearance, we bridge the language, process, and compliance gap -- "
+        "including QMS, entity formation, and investor relations.")
 
     # ── Platform Highlights ──
     pdf.section_bar("PLATFORM HIGHLIGHTS")
@@ -125,17 +127,19 @@ def build_factsheet_en():
     items_left = [
         "16-tab Control Tower dashboard",
         "Bilingual 9-step setup wizard",
-        "7 device category templates",
-        "Dual-track milestone tracking",
+        "AI-powered Predicate Finder",
         "FDA Communications Center",
-        "Q-Sub generation automation",
+        "Q-Sub generation & RTA self-check",
+        "QMS-Lite (21 CFR 820 / ISO 13485)",
+        "Cross-border Entity Setup Tracker",
     ]
     items_right = [
+        "Dual-track milestone tracking",
         "Document control with version history",
-        "Risk & budget monitoring",
-        "Auto-configured standards & risks",
+        "Risk & budget monitoring (USD/CNY)",
         "Thread-based team messaging (EN/CN)",
-        "Automated RTA self-check",
+        "SE decision flowchart & DHF readiness",
+        "CAPA, DMR & supplier qualification",
         "Data Source Ref for audit traceability",
     ]
     for i, (l, r) in enumerate(zip(items_left, items_right)):
@@ -169,17 +173,16 @@ def build_factsheet_en():
     # ── Service Tiers ──
     pdf.section_bar("SERVICE TIERS")
     tiers = [
-        ("SaaS Platform", "From $500/mo",
-         ["Control Tower dashboard", "Bilingual setup wizard", "Dual-track milestones",
-          "Document control", "Team messaging", "Risk & budget tracking"]),
+        ("Control Tower", "From $500/mo",
+         ["16-tab PM dashboard", "Bilingual setup wizard", "Dual-track milestones",
+          "Document control & messaging", "Risk & budget tracking", "Predicate Finder included"]),
+        ("QMS-Lite", "$200-500/mo",
+         ["21 CFR 820 & ISO 13485 aligned", "Document control & CAPA",
+          "Training records mgmt", "Supplier qualification",
+          "Complaint handling", "Integrates with Control Tower"]),
         ("Professional PM", "$10-25K/mo",
-         ["All SaaS features", "Dedicated PMP project manager", "FDA Comms Center",
-          "US Agent representation", "Gate review management", "Submission oversight",
-          "Supplier coordination"]),
-        ("Enterprise", "Project-Based",
-         ["All Professional features", "End-to-end 510(k) management", "Regulatory strategy",
-          "RTA self-check & DHF readiness", "US Agent representation",
-          "US entity formation", "Investor documentation"]),
+         ["All SaaS features", "Dedicated PMP project manager", "FDA Comms Center & Q-Sub",
+          "US Agent representation", "Gate review management", "Submission oversight"]),
     ]
     col_w = (pdf.w - pdf.l_margin - pdf.r_margin - 6) / 3
     y0 = pdf.get_y()
@@ -204,11 +207,21 @@ def build_factsheet_en():
             pdf.cell(col_w - 4, 4, _a("- " + feat))
     pdf.set_y(y0 + 4.5 + 5 + max(len(t[2]) for t in tiers) * 4 + 5)
 
+    # ── Additional Products ──
+    pdf.section_bar("ADDITIONAL PRODUCTS")
+    pdf.bul("Predicate Finder -- AI-powered search of openFDA database for predicate devices, SE analysis, comparison reports (included with services)")
+    pdf.bul("Entity Setup Tracker -- Delaware C-Corp formation, state registration, EIN, bank account, FDA establishment registration ($1K-5K or $200/mo)")
+    pdf.bul("Enterprise -- End-to-end: regulatory strategy + PM + RTA/DHF readiness + US entity formation + investor documentation (project-based pricing)")
+
     # ── Contact ──
     pdf.section_bar("GET STARTED")
     pdf.set_font("Helvetica", "", 9)
     pdf.set_text_color(*FactEN.DARK)
-    pdf.cell(0, 5, _a("info@510kbridge.com  |  510kbridge.com  |  Schedule a free consultation today."), align="C")
+    pdf.cell(0, 5, _a("info@510kbridge.com  |  510kbridge.com  |  Camas, WA & Shanghai, China"), align="C")
+    pdf.ln(3)
+    pdf.set_font("Helvetica", "", 8)
+    pdf.set_text_color(*FactEN.GRAY)
+    pdf.cell(0, 4, _a("510kBridge, a Delaware corporation. Schedule a free 30-minute consultation today."), align="C")
 
     path = os.path.join(OUT, "510k_Bridge_Factsheet_EN.pdf")
     pdf.output(path)
@@ -367,17 +380,16 @@ def build_factsheet_cn():
     # ── Service Tiers ──
     pdf.section_bar("服务层级")
     tiers = [
-        ("SaaS 平台", "起步价$500/月",
-         ["控制塔仪表盘", "双语设置向导", "双轨里程碑",
-          "文档控制", "团队消息", "风险与预算跟踪"]),
+        ("Control Tower", "起步价$500/月",
+         ["16选项卡PM仪表板", "双语设置向导", "双轨里程碑",
+          "文档控制与消息", "风险与预算跟踪", "Predicate Finder包含"]),
+        ("QMS-Lite", "$200-500/月",
+         ["21 CFR 820 & ISO 13485对齐", "文档控制与CAPA",
+          "培训记录管理", "供应商资质",
+          "投诉处理", "与Control Tower集成"]),
         ("专业PM服务", "$10,000-$25,000/月",
-         ["SaaS全部功能", "专属PMP项目经理", "FDA通信中心",
-          "美国代理人服务", "门控评审管理", "提交监督",
-          "供应商协调"]),
-        ("企业级服务", "按项目定价",
-         ["专业版全部功能", "端到端510(k)管理", "法规策略",
-          "RTA自检与DHF就绪", "美国代理人服务",
-          "美国实体设立", "投资者文档"]),
+         ["SaaS全部功能", "专属PMP项目经理", "FDA通信中心与Q-Sub",
+          "美国代理人服务", "门控评审管理", "提交监督"]),
     ]
     col_w = (pdf.w - pdf.l_margin - pdf.r_margin - 6) / 3
     y0 = pdf.get_y()
@@ -402,11 +414,21 @@ def build_factsheet_cn():
             pdf.cell(col_w - 4, 4, "- " + feat)
     pdf.set_y(y0 + 4.5 + 5 + max(len(t[2]) for t in tiers) * 4 + 5)
 
+    # ── Additional Products ──
+    pdf.section_bar("额外产品")
+    pdf.bul("Predicate Finder -- AI驱动的openFDA数据库先导器械搜索、SE分析、比较报告（服务包含）")
+    pdf.bul("跨境实体设立追踪器 -- 特拉华C-Corp注册、州登记、EIN、银行账户、FDA机构注册 ($1K-5K或$200/月)")
+    pdf.bul("企业级 -- 端到端: 法规策略 + PM + RTA/DHF就绪 + 美国实体设立 + 投资者文档 (项目定价)")
+
     # ── Contact ──
     pdf.section_bar("立即开始")
     pdf.set_font("ARUNI", "", 9)
     pdf.set_text_color(*FactCN.DARK)
-    pdf.cell(0, 5, "info@510kbridge.com  |  510kbridge.com  |  立即预约免费咨询", align="C")
+    pdf.cell(0, 5, "info@510kbridge.com  |  510kbridge.com  |  美国卡马斯 & 中国上海", align="C")
+    pdf.ln(3)
+    pdf.set_font("ARUNI", "", 8)
+    pdf.set_text_color(*FactCN.GRAY)
+    pdf.cell(0, 4, "510kBridge, 特拉华公司。立即预约免费30分钟咨询。", align="C")
 
     path = os.path.join(OUT, "510k_Bridge_Factsheet_CN.pdf")
     pdf.output(path)
