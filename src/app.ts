@@ -71,6 +71,7 @@ import type {
   VestingStatus,
 } from "./types.ts";
 import { storeDocument, getDocument } from "./docstore.ts";
+import { toggleHelp } from "./help.ts";
 import {
   isOnline,
   fetchMessages,
@@ -476,6 +477,7 @@ function initAfterLogin(): void {
   loadInputs();
   initTabs();
   initLangToggle();
+  initHelpToggle();
   initFab();
   initRoleSwitcher();
   applyLanguage(getLang());
@@ -593,6 +595,12 @@ function initLangToggle(): void {
     applyLanguage(newLang);
     renderAll();
   });
+}
+
+// ── HELP TOGGLE ───────────────────────────────
+function initHelpToggle(): void {
+  const btn = document.getElementById("helpToggle");
+  btn?.addEventListener("click", () => toggleHelp());
 }
 
 // ── FAB / INPUT PANEL ─────────────────────────
@@ -5677,10 +5685,15 @@ function renderFdaComms(): void {
   </div>`;
 
   // ── Letter body templates for each Q-Sub type ──
-  const subLabel = pSub.replace(/-/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase());
+  const subLabel = pSub
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, (c: string) => c.toUpperCase());
   const deviceDesc = localizedText(PROJECT.subtitle);
 
-  const letterBodies: Record<string, { reEN: string; reCN: string; bodyEN: string; bodyCN: string }> = {
+  const letterBodies: Record<
+    string,
+    { reEN: string; reCN: string; bodyEN: string; bodyCN: string }
+  > = {
     "pre-sub-meeting": {
       reEN: `Pre-Submission Meeting Request — ${pName}`,
       reCN: `Pre-Submission会议请求 — ${pName}`,
@@ -5711,7 +5724,7 @@ function renderFdaComms(): void {
         <p><strong>制造商:</strong> ${pMfr}</p>
         <p>我们请求对所附具体问题提供书面反馈。此次不请求正式会议。</p>`,
     },
-    "sir": {
+    sir: {
       reEN: `Submission Issue Request (SIR) — ${pName}`,
       reCN: `提交问题请求 (SIR) — ${pName}`,
       bodyEN: `<p>${pApplicant} respectfully submits this Submission Issue Request (SIR) regarding our pending ${subLabel} submission for the ${pName}.</p>
@@ -5727,7 +5740,7 @@ function renderFdaComms(): void {
         <p>我们收到日期为[请插入日期]的补充信息(AI)函，在回复前就以下问题寻求澄清：</p>
         <p><strong>需要澄清的具体问题详见下文。</strong></p>`,
     },
-    "informational": {
+    informational: {
       reEN: `Informational Meeting Request — ${pName}`,
       reCN: `信息会议请求 — ${pName}`,
       bodyEN: `<p>${pApplicant} respectfully requests an Informational Meeting to discuss general regulatory topics related to the ${pName}.</p>
@@ -5761,11 +5774,31 @@ function renderFdaComms(): void {
 
   // Template selector options
   const qsubSelectOptions = [
-    { value: "pre-sub-meeting", labelEN: "Pre-Sub (Meeting Request)", labelCN: "Pre-Sub（会议请求）" },
-    { value: "pre-sub-written", labelEN: "Pre-Sub (Written Feedback)", labelCN: "Pre-Sub（书面反馈）" },
-    { value: "sir", labelEN: "Submission Issue Request (SIR)", labelCN: "提交问题请求 (SIR)" },
-    { value: "informational", labelEN: "Informational Meeting", labelCN: "信息会议" },
-    { value: "study-risk", labelEN: "Study Risk Determination", labelCN: "研究风险判定" },
+    {
+      value: "pre-sub-meeting",
+      labelEN: "Pre-Sub (Meeting Request)",
+      labelCN: "Pre-Sub（会议请求）",
+    },
+    {
+      value: "pre-sub-written",
+      labelEN: "Pre-Sub (Written Feedback)",
+      labelCN: "Pre-Sub（书面反馈）",
+    },
+    {
+      value: "sir",
+      labelEN: "Submission Issue Request (SIR)",
+      labelCN: "提交问题请求 (SIR)",
+    },
+    {
+      value: "informational",
+      labelEN: "Informational Meeting",
+      labelCN: "信息会议",
+    },
+    {
+      value: "study-risk",
+      labelEN: "Study Risk Determination",
+      labelCN: "研究风险判定",
+    },
   ];
 
   // Build default letter
@@ -5892,21 +5925,31 @@ function renderFdaComms(): void {
       <div class="fda-tips">
         <h4>🧭 ${isCN ? "如何选择正确的Q-Sub类型" : "How to Choose the Right Q-Sub Type"}</h4>
         <ul>
-          <li>${isCN
-            ? "📋 <strong>首次FDA互动？</strong> → Pre-Sub（会议）——始终首选会议形式"
-            : '📋 <strong>First FDA interaction?</strong> → Pre-Sub (Meeting) — always prefer the meeting option'}</li>
-          <li>${isCN
-            ? "✉️ <strong>简单确认？</strong> → Pre-Sub（仅书面）——标准确认或简单技术问题"
-            : '✉️ <strong>Simple confirmation?</strong> → Pre-Sub (Written Only) — standards confirmation or simple technical questions'}</li>
-          <li>${isCN
-            ? "⚠️ <strong>收到AI信函？</strong> → SIR——在回复前澄清FDA要求（窗口期有限！）"
-            : '⚠️ <strong>Got an AI letter?</strong> → SIR — clarify what FDA wants before responding (limited window!)'}</li>
-          <li>${isCN
-            ? "💬 <strong>还在探索？</strong> → 信息会议——无约束力，但有助于确定方向"
-            : '💬 <strong>Still exploring?</strong> → Informational Meeting — non-binding but helps set direction'}</li>
-          <li>${isCN
-            ? "🔬 <strong>计划临床研究？</strong> → 研究风险判定——确定SR vs NSR，影响IDE要求"
-            : '🔬 <strong>Planning a clinical study?</strong> → Study Risk Determination — SR vs NSR affects IDE requirements'}</li>
+          <li>${
+            isCN
+              ? "📋 <strong>首次FDA互动？</strong> → Pre-Sub（会议）——始终首选会议形式"
+              : "📋 <strong>First FDA interaction?</strong> → Pre-Sub (Meeting) — always prefer the meeting option"
+          }</li>
+          <li>${
+            isCN
+              ? "✉️ <strong>简单确认？</strong> → Pre-Sub（仅书面）——标准确认或简单技术问题"
+              : "✉️ <strong>Simple confirmation?</strong> → Pre-Sub (Written Only) — standards confirmation or simple technical questions"
+          }</li>
+          <li>${
+            isCN
+              ? "⚠️ <strong>收到AI信函？</strong> → SIR——在回复前澄清FDA要求（窗口期有限！）"
+              : "⚠️ <strong>Got an AI letter?</strong> → SIR — clarify what FDA wants before responding (limited window!)"
+          }</li>
+          <li>${
+            isCN
+              ? "💬 <strong>还在探索？</strong> → 信息会议——无约束力，但有助于确定方向"
+              : "💬 <strong>Still exploring?</strong> → Informational Meeting — non-binding but helps set direction"
+          }</li>
+          <li>${
+            isCN
+              ? "🔬 <strong>计划临床研究？</strong> → 研究风险判定——确定SR vs NSR，影响IDE要求"
+              : "🔬 <strong>Planning a clinical study?</strong> → Study Risk Determination — SR vs NSR affects IDE requirements"
+          }</li>
         </ul>
       </div>
 
@@ -6087,20 +6130,24 @@ function renderFdaComms(): void {
   // ── Event handlers ─────────────────────────
 
   // Q-Sub type selector → update letter body and Re: line
-  document.getElementById("fdaQsubTypeSelect")?.addEventListener("change", (e) => {
-    const sel = (e.target as HTMLSelectElement).value;
-    const tmpl = letterBodies[sel];
-    if (!tmpl) return;
-    const reEl = document.getElementById("fdaLetterRe");
-    const bodyEl = document.getElementById("fdaLetterBody");
-    if (reEl) reEl.innerHTML = isCN ? tmpl.reCN : tmpl.reEN;
-    if (bodyEl) bodyEl.innerHTML = isCN ? tmpl.bodyCN : tmpl.bodyEN;
-  });
+  document
+    .getElementById("fdaQsubTypeSelect")
+    ?.addEventListener("change", (e) => {
+      const sel = (e.target as HTMLSelectElement).value;
+      const tmpl = letterBodies[sel];
+      if (!tmpl) return;
+      const reEl = document.getElementById("fdaLetterRe");
+      const bodyEl = document.getElementById("fdaLetterBody");
+      if (reEl) reEl.innerHTML = isCN ? tmpl.reCN : tmpl.reEN;
+      if (bodyEl) bodyEl.innerHTML = isCN ? tmpl.bodyCN : tmpl.bodyEN;
+    });
 
   document.getElementById("fdaExportLetter")?.addEventListener("click", () => {
     const letter = document.getElementById("fdaLetterPreview");
     if (!letter) return;
-    const selEl = document.getElementById("fdaQsubTypeSelect") as HTMLSelectElement | null;
+    const selEl = document.getElementById(
+      "fdaQsubTypeSelect",
+    ) as HTMLSelectElement | null;
     const selType = selEl?.value || "pre-sub-meeting";
     const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Q-Sub Cover Letter — ${pName}</title>
     <style>body{font-family:Helvetica,Arial,sans-serif;max-width:700px;margin:40px auto;padding:20px;line-height:1.7;color:#1e293b}
