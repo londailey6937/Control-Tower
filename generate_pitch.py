@@ -174,7 +174,7 @@ def build():
     pdf.body("The Digital Twin program is not a routine product development. It presents five compounding complexities:")
     pdf.bullet("17 interdependent milestones across Technical and Regulatory tracks with a 22-month critical path and only 5 activities with float.", "Dual-Track Parallelism:  ", dash=False)
     pdf.bullet("Two separate 510(k) submissions (sEMG under product code IKN, EIT under DQS), each requiring rigorous DHF, V&V, risk management, and FDA Pre-Submission engagement.", "Sequential FDA Submissions:  ", dash=False)
-    pdf.bullet("Arch Medical Management, LLC (PMP engagement entity, Oregon) + Silan Technology Chengdu (R&D/manufacturing) -- cross-border coordination, ISO 13485 audit, and CFIUS-aware structure.", "Dual-Entity, Cross-Border:  ", dash=False)
+    pdf.bullet("510k Bridge, Inc. (PMP engagement entity, Delaware) + Silan Technology Chengdu (R&D/manufacturing) -- cross-border coordination, ISO 13485 audit, and CFIUS-aware structure.", "Dual-Entity, Cross-Border:  ", dash=False)
     pdf.bullet("12 IEC/ISO standards, 21 CFR 820 QSR compliance, biocompatibility testing, EMC testing -- each with interdependencies that affect the critical path.", "Regulatory Burden:  ", dash=False)
     pdf.bullet("This could mean for example, $320K cash on hand, $45K monthly burn, 7-month runway -- every schedule slip directly erodes financial viability.", "Constrained Budget:  ", dash=False)
 
@@ -269,7 +269,7 @@ def build():
         ("Deliverables", "CPM updates, EVM reports, risk register reviews, gate readiness assessments, DHF oversight"),
         ("Tools", "PM Dashboard (live), Network Diagram, Risk Monte Carlo, Budget Tracker"),
         ("Relationship", "Technical lead retains full technical authority; PMP manages schedule, cost, and process"),
-        ("Entity", "Arch Medical Management, LLC"),
+        ("Entity", "510k Bridge, Inc."),
     ]
     pdf.set_font("Helvetica", "", 9)
     pdf.set_text_color(*PitchPDF.DARK)
@@ -322,7 +322,7 @@ def build():
     pdf.cell(0, 6, "Lon Dailey", new_x="LMARGIN", new_y="NEXT")
     pdf.set_font("Helvetica", "", 10)
     pdf.cell(0, 5, "Stanford Certificate in Project Management (SCPM)", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 5, "Arch Medical Management, LLC", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 5, "510k Bridge, Inc.", new_x="LMARGIN", new_y="NEXT")
     pdf.set_font("Helvetica", "I", 9)
     pdf.set_text_color(*PitchPDF.GRAY)
     pdf.cell(0, 5, "March 21, 2026", new_x="LMARGIN", new_y="NEXT")

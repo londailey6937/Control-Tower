@@ -115,7 +115,7 @@ def build():
 
     # Job 1
     pdf.job_title("Self-Employed Software Developer")
-    pdf.job_meta("Pilot Software, Oregon | 2025-2026")
+    pdf.job_meta("510k Bridge, Delaware | 2025-2026")
     pdf.bullet("Developed custom software solutions tailored to client needs")
     pdf.bullet("Designed and implemented applications with a focus on usability and performance")
     pdf.bullet("Managed full development lifecycle from concept to deployment")

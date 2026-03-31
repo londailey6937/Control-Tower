@@ -881,7 +881,7 @@ def build():
     pdf.bullet("Annual registration fee (currently ~$7,653 per establishment)")
 
     pdf.labeled_item("Dual-Entity Note:",
-        "If manufacturing occurs at Silan Technology (Chengdu) and Arch Medical is the US agent/importer, "
+        "If manufacturing occurs at Silan Technology (Chengdu) and 510k Bridge is the US agent/importer, "
         "BOTH entities may need to register. Foreign manufacturers must designate a US Agent.")
 
     pdf.sub_heading("9.2: Quality System Regulation (QSR) Compliance")
@@ -982,7 +982,7 @@ def build():
         "The Chengdu facility must hold ISO 13485 certification. If not already certified, "
         "this process takes 6-12 months and is on the critical path.")
     pdf.labeled_item("Import Controls:",
-        "FDA may inspect foreign manufacturing facilities. Initial Importer (Arch Medical) "
+        "FDA may inspect foreign manufacturing facilities. Initial Importer (510k Bridge) "
         "has specific labeling and record-keeping obligations.")
 
     pdf.sub_heading("A.3: Software as Core Technology")
@@ -1032,7 +1032,7 @@ def build():
     pdf.ln(6)
     pdf.set_font("Helvetica", "I", 9)
     pdf.set_text_color(*GuidePDF.GRAY)
-    pdf.cell(0, 5, _a("Prepared by: Lon Dailey  |  Stanford SCPM  |  Arch Medical Management, LLC"), new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 5, _a("Prepared by: Lon Dailey  |  Stanford SCPM  |  510k Bridge, Inc."), new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 5, _a("Reference: 21 CFR 807 Subpart E, FDA Guidance Documents, ISO 13485:2016, ISO 14971:2019"), new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 5, "March 21, 2026", new_x="LMARGIN", new_y="NEXT")
 

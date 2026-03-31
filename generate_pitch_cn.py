@@ -177,7 +177,7 @@ def build():
         "各自需要严格的DHF、V&V、风险管理和FDA预申报沟通。",
         "连续FDA申报：  ", dash=False)
     pdf.bullet(
-        "Arch Medical Management, LLC（PMP聘用实体，俄勒冈州）+ 思澜科技（成都）（研发/制造）"
+        "510k Bridge, Inc.（PMP聘用实体，特拉华州）+ 思澜科技（成都）（研发/制造）"
         "——跨境协调、ISO 13485审核和CFIUS合规结构。",
         "双实体、跨境：  ", dash=False)
     pdf.bullet(
@@ -285,7 +285,7 @@ def build():
         ("交付物", "CPM更新、EVM报告、风险登记审查、关口就绪评估、DHF监管"),
         ("工具", "PM仪表板（在线）、网络图、风险蒙特卡洛、预算追踪器"),
         ("关系", "技术负责人保留完全技术权限；PMP管理进度、成本和流程"),
-        ("实体", "Arch Medical Management, LLC"),
+        ("实体", "510k Bridge, Inc."),
     ]
     pdf.set_font("CJK", "", 9)
     pdf.set_text_color(*PitchPDF.DARK)

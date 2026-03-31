@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Generate 510(k) Bridge 5-Year Business Strategy — English PDF
-Arch Medical Management / Pilot Software LLC
+510k Bridge, Inc.
 """
 
 import os
@@ -94,14 +94,14 @@ def build():
     pdf.ln(6)
     pdf.set_font("Helvetica", "I", 11)
     pdf.set_text_color(*GRAY)
-    pdf.cell(0, 7, "Arch Medical Management", align="C", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 7, "Pilot Software LLC", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "510k Bridge", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "510k Bridge, Inc.", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 7, "Version 2.0 | March 2026", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(20)
     pdf.set_font("Helvetica", "", 10)
     pdf.set_text_color(*TEXT)
     pdf.multi_cell(0, 5.5, _s(
-        "This document outlines a five-year strategy for Arch Medical Management to become "
+        "This document outlines a five-year strategy for 510k Bridge to become "
         "the leading SaaS platform and professional services partner for Chinese medical "
         "device companies pursuing FDA 510(k) clearance in the United States."
     ), align="C")
@@ -110,7 +110,7 @@ def build():
     pdf.add_page()
     pdf.sec(1, "Executive Summary")
     pdf.txt(
-        "Arch Medical Management operates two complementary SaaS products and a professional "
+        "510k Bridge operates two complementary SaaS products and a professional "
         "services practice targeting Chinese medical device companies entering the US market "
         "through the FDA 510(k) pathway.\n\n"
         "Core Products:\n"
@@ -265,7 +265,7 @@ def build():
     pdf.txt(
         "  Long-tail EN: 'FDA 510(k) process for Chinese company'\n"
         "  Long-tail CN: 'FDA 510(k) shenqing liucheng' (application process)\n"
-        "  Domain: archmedical.com + .cn\n"
+        "  Domain: 510kbridge.com + .cn\n"
         "  Bilingual landing page with live Control Tower demo embed")
 
     # ── 6. Technology Roadmap ──
@@ -276,7 +276,7 @@ def build():
     pdf.txt(
         "  Q1 -- Control Tower v1.1: DMR tracker, FDA Comms tab, message board\n"
         "  Q2 -- Predicate Finder launch with freemium gating\n"
-        "  Q2 -- Arch Medical website launch (archmedical.com)\n"
+        "  Q2 -- 510k Bridge website launch (510kbridge.com)\n"
         "  Q3 -- Multi-tenant Control Tower (Supabase RLS per client)\n"
         "  Q4 -- Predicate Finder Pro: PDF export, bulk comparison, saved searches")
 
@@ -302,9 +302,8 @@ def build():
 
     pdf.sub("7.1 Corporate Structure")
     pdf.txt(
-        "  Operating Entity: Pilot Software LLC (Oregon LLC, active)\n"
-        "  Trade Name / DBA: Arch Medical Management\n"
-        "  Contracts & Invoices: 'Pilot Software LLC dba Arch Medical Management'")
+        "  Operating Entity: 510k Bridge, Inc. (Delaware corporation)\n"
+        "  Contracts & Invoices: '510k Bridge, Inc.'")
 
     pdf.sub("7.2 Team (Year 1)")
     pdf.txt(
@@ -326,8 +325,7 @@ def build():
 
     pdf.sub("8.1 Startup Costs")
     pdf.txt(
-        "  Domain registration (archmedical.com) -- $10/yr\n"
-        "  DBA filing (Oregon) -- $50\n"
+        "  Domain registration (510kbridge.com) -- $10/yr\n"
         "  CloudFlare Pages hosting -- $0 (free tier)\n"
         "  Supabase -- $0 free tier (upgrade at $25/mo at scale)\n"
         "  Development tools -- $0 (open source stack)\n"
@@ -372,7 +370,7 @@ def build():
     pdf.sub("10.1 Year 1 Milestones")
     pdf.txt(
         "  Q1 -- Control Tower v1.1 shipped, Predicate Finder MVP\n"
-        "  Q2 -- archmedical.com live, first 100 Predicate Finder users\n"
+        "  Q2 -- 510kbridge.com live, first 100 Predicate Finder users\n"
         "  Q3 -- First paying CT client, first professional services retainer\n"
         "  Q4 -- 500 PF free users, 3 CT clients, $15K MRR")
 

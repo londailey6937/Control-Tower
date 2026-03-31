@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Generate 510(k) Bridge 5-Year Business Strategy — Chinese PDF
-Arch Medical Management / Pilot Software LLC
+510k Bridge, Inc.
 """
 
 import os
@@ -101,14 +101,14 @@ def build():
     pdf.ln(6)
     pdf.set_font("CJK", "I", 11)
     pdf.set_text_color(*GRAY)
-    pdf.cell(0, 7, "Arch Medical Management", align="C", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 7, "Pilot Software LLC", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "510k Bridge", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "510k Bridge, Inc.", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 7, _a("\u7248\u672c 2.0 | 2026\u5e743\u6708"), align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(20)
     pdf.set_font("CJK", "", 10)
     pdf.set_text_color(*TEXT)
     pdf.multi_cell(0, 6, _a(
-        "\u672c\u6587\u4ef6\u6982\u8ff0\u4e86Arch Medical Management\u7684\u4e94\u5e74\u6218\u7565\uff0c"
+        "\u672c\u6587\u4ef6\u6982\u8ff0\u4e86510k Bridge\u7684\u4e94\u5e74\u6218\u7565\uff0c"
         "\u65e8\u5728\u6210\u4e3a\u4e2d\u56fd\u533b\u7597\u5668\u68b0\u4f01\u4e1a\u901a\u8fc7FDA 510(k)"
         "\u9014\u5f84\u8fdb\u5165\u7f8e\u56fd\u5e02\u573a\u7684\u9886\u5148SaaS\u5e73\u53f0\u548c"
         "\u4e13\u4e1a\u670d\u52a1\u5408\u4f5c\u4f19\u4f34\u3002"
@@ -118,7 +118,7 @@ def build():
     pdf.add_page()
     pdf.sec(1, "\u6267\u884c\u6458\u8981")
     pdf.txt(
-        "Arch Medical Management\u8fd0\u8425\u4e24\u4e2a\u4e92\u8865\u7684SaaS\u4ea7\u54c1\u548c\u4e13\u4e1a\u670d\u52a1\u5b9e\u8df5\uff0c"
+        "510k Bridge\u8fd0\u8425\u4e24\u4e2a\u4e92\u8865\u7684SaaS\u4ea7\u54c1\u548c\u4e13\u4e1a\u670d\u52a1\u5b9e\u8df5\uff0c"
         "\u9488\u5bf9\u901a\u8fc7FDA 510(k)\u9014\u5f84\u8fdb\u5165\u7f8e\u56fd\u5e02\u573a\u7684\u4e2d\u56fd\u533b\u7597\u5668\u68b0\u4f01\u4e1a\u3002\n\n"
         "\u6838\u5fc3\u4ea7\u54c1:\n"
         "  1. Control Tower -- 510(k)\u9879\u76ee\u7ba1\u7406\u4eea\u8868\u677f\n"
@@ -261,7 +261,7 @@ def build():
     pdf.txt(
         "  Q1 -- Control Tower v1.1: DMR\u8ffd\u8e2a\u5668\u3001FDA\u901a\u4fe1\u6807\u7b7e\u3001\u6d88\u606f\u677f\n"
         "  Q2 -- Predicate Finder\u53d1\u5e03\uff0c\u5e26\u514d\u8d39\u589e\u503c\u95e8\u63a7\n"
-        "  Q2 -- Arch Medical\u7f51\u7ad9\u4e0a\u7ebf (archmedical.com)\n"
+        "  Q2 -- 510k Bridge\u7f51\u7ad9\u4e0a\u7ebf (510kbridge.com)\n"
         "  Q3 -- Control Tower\u591a\u79df\u6237\uff08Supabase RLS\u6bcf\u5ba2\u6237\uff09\n"
         "  Q4 -- Predicate Finder Pro: PDF\u5bfc\u51fa\u3001\u6279\u91cf\u5bf9\u6bd4\u3001\u4fdd\u5b58\u641c\u7d22")
 
@@ -286,9 +286,8 @@ def build():
 
     pdf.sub("7.1 \u516c\u53f8\u7ed3\u6784")
     pdf.txt(
-        "  \u8fd0\u8425\u5b9e\u4f53: Pilot Software LLC\uff08\u4fc4\u52d2\u5188LLC\uff0c\u6d3b\u8dc3\uff09\n"
-        "  \u5546\u53f7 / DBA: Arch Medical Management\n"
-        "  \u5408\u540c\u4e0e\u53d1\u7968: 'Pilot Software LLC dba Arch Medical Management'")
+        "  \u8fd0\u8425\u5b9e\u4f53: 510k Bridge, Inc.\uff08\u7279\u62c9\u534e\u516c\u53f8\uff09\n"
+        "  \u5408\u540c\u4e0e\u53d1\u7968: '510k Bridge, Inc.'")
 
     pdf.sub("7.2 \u56e2\u961f\uff08\u7b2c1\u5e74\uff09")
     pdf.txt(
@@ -303,8 +302,7 @@ def build():
 
     pdf.sub("8.1 \u542f\u52a8\u6210\u672c")
     pdf.txt(
-        "  \u57df\u540d\u6ce8\u518c (archmedical.com) -- $10/\u5e74\n"
-        "  DBA\u5907\u6848\uff08\u4fc4\u52d2\u5188\uff09 -- $50\n"
+        "  \u57df\u540d\u6ce8\u518c (510kbridge.com) -- $10/\u5e74\n"
         "  CloudFlare Pages\u6258\u7ba1 -- $0\uff08\u514d\u8d39\u5c42\uff09\n"
         "  Supabase -- $0\u514d\u8d39\u5c42\uff08\u89c4\u6a21\u5316\u540e$25/\u6708\uff09\n"
         "  \u6cd5\u5f8b\uff08\u5408\u540c\u6a21\u677f\uff09 -- $2,000\n"
@@ -339,7 +337,7 @@ def build():
     pdf.sub("10.1 \u7b2c1\u5e74\u91cc\u7a0b\u7891")
     pdf.txt(
         "  Q1 -- Control Tower v1.1\u53d1\u5e03\uff0cPredicate Finder MVP\n"
-        "  Q2 -- archmedical.com\u4e0a\u7ebf\uff0c\u9996\u6279100\u4e2aPredicate Finder\u7528\u6237\n"
+        "  Q2 -- 510kbridge.com\u4e0a\u7ebf\uff0c\u9996\u6279100\u4e2aPredicate Finder\u7528\u6237\n"
         "  Q3 -- \u7b2c\u4e00\u4e2aCT\u4ed8\u8d39\u5ba2\u6237\uff0c\u7b2c\u4e00\u4e2a\u4e13\u4e1a\u670d\u52a1\u6708\u8d39\n"
         "  Q4 -- 500 PF\u514d\u8d39\u7528\u6237, 3 CT\u5ba2\u6237, $15K MRR")
 

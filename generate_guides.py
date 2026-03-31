@@ -89,7 +89,7 @@ def build_english():
     pdf.set_font("Helvetica", "", 11)
     pdf.set_text_color(*GRAY)
     pdf.cell(0, 7, "Version 1.1 | March 2026", align="C", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 7, "Arch Medical Management", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "510k Bridge", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(20)
     pdf.set_font("Helvetica", "I", 10)
     pdf.set_text_color(*GRAY)
@@ -1451,7 +1451,7 @@ def build_english():
         "  1 predicate chain trace per day\n"
         "  2-device side-by-side comparison\n\n"
         "An email address is required to unlock the tool. This serves as the primary "
-        "lead-generation funnel for Arch Medical Management.")
+        "lead-generation funnel for 510k Bridge.")
 
     pdf.sub("32.2 Pro Tier ($99/month)")
     pdf.txt(
@@ -1514,7 +1514,7 @@ def build_english():
         ("Substantial Equivalence (SE)", "The standard of comparison for 510(k) clearance: the new device must have the same intended use and similar technological characteristics as the predicate."),
         ("Predicate Chain", "The lineage of predicate references connecting a cleared device back through prior generations of 510(k) clearances."),
         ("openFDA", "FDA's public API providing searchable access to 510(k) clearance records, adverse events, recalls, and other regulatory data."),
-        ("Predicate Finder", "Arch Medical Management's SaaS tool for searching, comparing, and tracing predicate devices using the openFDA database."),
+        ("Predicate Finder", "510k Bridge's SaaS tool for searching, comparing, and tracing predicate devices using the openFDA database."),
     ]
     for k, v in terms:
         pdf.kv(k, v)
@@ -1615,7 +1615,7 @@ def build_chinese():
     pdf.set_font("ARUNI", "", 11)
     pdf.set_text_color(*GRAY)
     pdf.cell(0, 7, "\u7248\u672c 1.1 | 2026\u5e743\u6708", align="C", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 7, "Arch Medical Management", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "510k Bridge", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(20)
     pdf.set_font("ARUNI", "I", 10)
     pdf.set_text_color(*GRAY)
@@ -2904,7 +2904,7 @@ def build_chinese():
         "  \u6bcf\u65e51\u6b21\u5148\u5bfc\u94fe\u8ffd\u6eaf\n"
         "  2\u5668\u68b0\u5bf9\u6bd4\n\n"
         "\u9700\u8981\u63d0\u4f9b\u90ae\u7bb1\u5730\u5740\u6765\u89e3\u9501\u5de5\u5177\u3002"
-        "\u8fd9\u662fArch Medical Management\u7684\u4e3b\u8981\u6f5c\u5728\u5ba2\u6237\u83b7\u53d6\u6e20\u9053\u3002")
+        "\u8fd9\u662f510k Bridge\u7684\u4e3b\u8981\u6f5c\u5728\u5ba2\u6237\u83b7\u53d6\u6e20\u9053\u3002")
 
     pdf.sub("32.2 Pro\u7248 ($99/\u6708)")
     pdf.txt(
@@ -2963,7 +2963,7 @@ def build_chinese():
         ("\u5b9e\u8d28\u7b49\u6548\u6027(SE)", "510(k)\u6279\u51c6\u7684\u6bd4\u8f83\u6807\u51c6\uff1a\u65b0\u5668\u68b0\u5fc5\u987b\u4e0e\u5148\u5bfc\u5668\u68b0\u5177\u6709\u76f8\u540c\u7684\u9884\u671f\u7528\u9014\u548c\u7c7b\u4f3c\u7684\u6280\u672f\u7279\u5f81\u3002"),
         ("\u5148\u5bfc\u94fe", "\u5c06\u5df2\u6279\u51c6\u5668\u68b0\u901a\u8fc7\u5148\u524d\u51e0\u4ee3510(k)\u6279\u51c6\u8fde\u63a5\u8d77\u6765\u7684\u5148\u5bfc\u5f15\u7528\u8c31\u7cfb\u3002"),
         ("openFDA", "FDA\u7684\u516c\u5171API\uff0c\u63d0\u4f9b\u5bf9510(k)\u6279\u51c6\u8bb0\u5f55\u3001\u4e0d\u826f\u4e8b\u4ef6\u3001\u53ec\u56de\u7b49\u6cd5\u89c4\u6570\u636e\u7684\u53ef\u641c\u7d22\u8bbf\u95ee\u3002"),
-        ("Predicate Finder", "Arch Medical Management\u7684SaaS\u5de5\u5177\uff0c\u7528\u4e8e\u4f7f\u7528openFDA\u6570\u636e\u5e93\u641c\u7d22\u3001\u6bd4\u8f83\u548c\u8ffd\u6eaf\u5148\u5bfc\u5668\u68b0\u3002"),
+        ("Predicate Finder", "510k Bridge\u7684SaaS\u5de5\u5177\uff0c\u7528\u4e8e\u4f7f\u7528openFDA\u6570\u636e\u5e93\u641c\u7d22\u3001\u6bd4\u8f83\u548c\u8ffd\u6eaf\u5148\u5bfc\u5668\u68b0\u3002"),
     ]
     for k, v in terms:
         pdf.kv(k, v)

@@ -162,7 +162,7 @@ def build_en():
     pdf.ln(20)
     pdf.set_font("Helvetica", "", 9)
     pdf.cell(0, 5, "Prepared: March 21, 2026", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 5, "Program: ICU Respiratory Digital Twin  |  Arch Medical Management, LLC", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 5, "Program: ICU Respiratory Digital Twin  |  510k Bridge, Inc.", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 5, "Classification: CONFIDENTIAL / Internal Use Only", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(5)
 
@@ -416,7 +416,7 @@ def build_cn():
     pdf.ln(20)
     sf("", 9)
     pdf.cell(0, 5, "\u7f16\u5236\u65e5\u671f\uff1a2026\u5e743\u670821\u65e5", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 5, "\u9879\u76ee\uff1aICU\u547c\u5438\u6570\u5b57\u5b6a\u751f  |  Arch Medical Management, LLC", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 5, "\u9879\u76ee\uff1aICU\u547c\u5438\u6570\u5b57\u5b6a\u751f  |  510k Bridge, Inc.", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 5, "\u5bc6\u7ea7\uff1a\u673a\u5bc6 / \u4ec5\u9650\u5185\u90e8\u4f7f\u7528", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(5)
 

@@ -245,7 +245,7 @@ def build():
         "Proposed US Entity: Delaware C-Corp ('Company B USA')",
         "Inventor: Dr. Dai (CTO, 100% allocation)",
         "Investor: Lawrence Liu (proposed CEO or operational lead, lead investor)",
-        "PMP / Regulatory Lead: Lon Dailey (Arch Medical Management, LLC)",
+        "PMP / Regulatory Lead: Lon Dailey (510k Bridge, Inc.)",
         "Seed Round: $1.8M raised (direct equity) -- funds available for deployment",
         "Monthly Burn: ~$45K  |  Estimated Runway: ~40 months at seed level",
     ])
@@ -972,7 +972,7 @@ def build():
         "  2. Engage US IP attorney to draft IP Assignment Agreement\n"
         "  3. Draft Term Sheet for Lawrence's investment (amount, valuation, terms)\n"
         "  4. Draft Restricted Stock Agreements (Dr. Dai + Lon)\n"
-        "  5. Draft Master Services Agreement (Arch Medical Management, LLC)\n"
+        "  5. Draft Master Services Agreement (510k Bridge, Inc.)\n"
         "  6. Draft Manufacturing Agreement with Silan Technology\n"
         "  7. File voluntary CFIUS declaration (if Lawrence or Dr. Dai are foreign persons)\n"
         "  8. Prepare FDA Pre-Submission package (requires IP ownership documented)")

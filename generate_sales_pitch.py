@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate Sales Playbook PDF — Arch Medical Management
+Generate Sales Playbook PDF — 510k Bridge
 EN + CN bilingual sales pitch deck for the Control Tower + Predicate Finder product suite.
 """
 
@@ -37,7 +37,7 @@ class SalesEN(FPDF):
             return
         self.set_font("Helvetica", "I", 8)
         self.set_text_color(*GRAY)
-        self.cell(0, 8, _s("Arch Medical Management -- Sales Playbook"), align="R", ln=True)
+        self.cell(0, 8, _s("510k Bridge -- Sales Playbook"), align="R", ln=True)
         self.ln(2)
 
     def footer(self):
@@ -94,18 +94,18 @@ def build_english():
     pdf.cell(0, 14, "Sales Playbook", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.set_font("Helvetica", "", 14)
     pdf.set_text_color(*TEXT)
-    pdf.cell(0, 9, "Arch Medical Management", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 9, "510k Bridge", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(6)
     pdf.set_font("Helvetica", "I", 11)
     pdf.set_text_color(*GRAY)
     pdf.cell(0, 7, "Version 1.0 | March 2026", align="C", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 7, "Pilot Software LLC", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "510k Bridge, Inc.", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(20)
     pdf.set_font("Helvetica", "", 10)
     pdf.set_text_color(*TEXT)
     pdf.multi_cell(0, 5.5, _s(
         "This playbook equips the sales team with positioning, pricing, objection handling, "
-        "and demo scripts for the complete Arch Medical Management product suite: "
+        "and demo scripts for the complete 510k Bridge product suite: "
         "Control Tower, 510(k) Predicate Finder, and professional services."
     ), align="C")
 
@@ -135,7 +135,7 @@ def build_english():
 
     pdf.sub("2.1 Elevator Pitch (30 seconds)")
     pdf.txt(
-        "'Arch Medical Management is the only bilingual platform that combines FDA "
+        "'510k Bridge is the only bilingual platform that combines FDA "
         "predicate device research with a full project management dashboard, purpose-built "
         "for Chinese medical device companies pursuing 510(k) clearance. Our Predicate "
         "Finder tool is free -- it's how most clients discover us.'")
@@ -274,7 +274,7 @@ def build_english():
     pdf.sub("6.3 Demo Links")
     pdf.kv("Predicate Finder", "predicate-finder.pages.dev (free, live)")
     pdf.kv("Control Tower Demo", "control-tower-bmx.pages.dev (read-only demo)")
-    pdf.kv("Arch Medical Website", "archmedical.com (bilingual landing page)")
+    pdf.kv("510k Bridge Website", "510kbridge.com (bilingual landing page)")
 
     # 7. Metrics & Targets
     pdf.add_page()
@@ -309,7 +309,7 @@ class SalesCN(FPDF):
             return
         self.set_font("CJK", "I", 8)
         self.set_text_color(*GRAY)
-        self.cell(0, 8, _s("Arch Medical Management -- \u9500\u552e\u624b\u518c"), align="R", ln=True)
+        self.cell(0, 8, _s("510k Bridge -- \u9500\u552e\u624b\u518c"), align="R", ln=True)
         self.ln(2)
 
     def footer(self):
@@ -366,18 +366,18 @@ def build_chinese():
     pdf.cell(0, 14, _s("\u9500\u552e\u624b\u518c"), align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.set_font("CJK", "", 14)
     pdf.set_text_color(*TEXT)
-    pdf.cell(0, 9, "Arch Medical Management", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 9, "510k Bridge", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(6)
     pdf.set_font("CJK", "I", 11)
     pdf.set_text_color(*GRAY)
     pdf.cell(0, 7, _s("\u7248\u672c 1.0 | 2026\u5e743\u6708"), align="C", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 7, "Pilot Software LLC", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "510k Bridge, Inc.", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(20)
     pdf.set_font("CJK", "", 10)
     pdf.set_text_color(*TEXT)
     pdf.multi_cell(0, 6, _s(
         "\u672c\u624b\u518c\u4e3a\u9500\u552e\u56e2\u961f\u63d0\u4f9b\u5b9a\u4f4d\u3001\u5b9a\u4ef7\u3001\u5f02\u8bae\u5904\u7406\u548c\u6f14\u793a\u811a\u672c\uff0c"
-        "\u6db5\u76d6Arch Medical Management\u5b8c\u6574\u4ea7\u54c1\u5957\u4ef6\uff1a"
+        "\u6db5\u76d6510k Bridge\u5b8c\u6574\u4ea7\u54c1\u5957\u4ef6\uff1a"
         "Control Tower\u3001510(k) Predicate Finder\u548c\u4e13\u4e1a\u670d\u52a1\u3002"
     ), align="C")
 
@@ -400,7 +400,7 @@ def build_chinese():
 
     pdf.sub("2.1 \u7535\u68af\u6f14\u8bf4 (30\u79d2)")
     pdf.txt(
-        "'Arch Medical Management\u662f\u552f\u4e00\u5c06FDA\u5148\u5bfc\u5668\u68b0\u7814\u7a76\u4e0e\u5b8c\u6574"
+        "'510k Bridge\u662f\u552f\u4e00\u5c06FDA\u5148\u5bfc\u5668\u68b0\u7814\u7a76\u4e0e\u5b8c\u6574"
         "\u9879\u76ee\u7ba1\u7406\u4eea\u8868\u677f\u7ed3\u5408\u7684\u53cc\u8bed\u5e73\u53f0\uff0c\u4e13\u4e3a\u4e2d\u56fd\u533b\u7597\u5668\u68b0"
         "\u4f01\u4e1a\u8ffd\u6c42510(k)\u6279\u51c6\u800c\u6253\u9020\u3002\u6211\u4eec\u7684Predicate Finder\u5de5\u5177"
         "\u662f\u514d\u8d39\u7684 -- \u8fd9\u662f\u5927\u591a\u6570\u5ba2\u6237\u53d1\u73b0\u6211\u4eec\u7684\u65b9\u5f0f\u3002'")

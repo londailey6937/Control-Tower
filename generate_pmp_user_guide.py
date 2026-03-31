@@ -258,7 +258,7 @@ def build_english():
     pdf.cell(0, 7, "FDA 510(k) Regulatory Pathway", align="C", ln=True)
     pdf.ln(30)
     pdf.set_font("Helvetica", "", 10)
-    pdf.cell(0, 6, "Arch Medical Management", align="C", ln=True)
+    pdf.cell(0, 6, "510k Bridge", align="C", ln=True)
     pdf.cell(0, 6, "Version 1.0 -- March 2026", align="C", ln=True)
 
     # ── Table of Contents ──
@@ -890,8 +890,8 @@ def build_english():
         "searches, unlimited chain tracing, 4-device comparison, SE argument "
         "generation, and PDF export.")
     pdf.tip_box(
-        "The Predicate Finder is the primary lead-generation tool for Arch Medical "
-        "Management. Free users provide their email to unlock the tool, creating a "
+        "The Predicate Finder is the primary lead-generation tool for 510k Bridge. "
+        "Free users provide their email to unlock the tool, creating a "
         "natural upgrade funnel to Control Tower subscriptions.")
 
     pdf.sub("Integration with Control Tower (Scale Tier)")
@@ -968,7 +968,7 @@ def build_english():
         ("FES", "Functional Electrical Stimulation. Therapeutic application of electrical current to activate paralyzed or weakened muscles for functional movement."),
         ("NRE", "Non-Recurring Engineering. One-time engineering costs for product development, tooling, and manufacturing setup that are not repeated for each unit produced."),
         ("openFDA", "FDA's public API providing searchable access to 510(k) clearance records, adverse events, recalls, and other regulatory data."),
-        ("Predicate Finder", "Arch Medical Management's SaaS tool for searching, comparing, and tracing predicate devices using the openFDA database. Free and Pro tiers available."),
+        ("Predicate Finder", "510k Bridge's SaaS tool for searching, comparing, and tracing predicate devices using the openFDA database. Free and Pro tiers available."),
         ("Predicate Chain", "The lineage of predicate references connecting a cleared device back through prior generations of 510(k) clearances."),
     ]
     for k, v in fda_terms:
@@ -1005,7 +1005,7 @@ def build_chinese():
     pdf.cell(0, 7, _a("FDA 510(k) 监管路径"), align="C", ln=True)
     pdf.ln(30)
     pdf.set_font("CJK", "", 10)
-    pdf.cell(0, 6, _a("Arch Medical Management"), align="C", ln=True)
+    pdf.cell(0, 6, _a("510k Bridge"), align="C", ln=True)
     pdf.cell(0, 6, _a("版本 1.0 -- 2026年3月"), align="C", ln=True)
 
     # ── Table of Contents ──
@@ -1541,7 +1541,7 @@ def build_chinese():
         "Pro\u7248\uff08$99/\u6708\uff09\u89e3\u9501\u65e0\u9650\u641c\u7d22\u3001\u65e0\u9650\u94fe\u8ffd\u6eaf\u30014\u5668\u68b0\u5bf9\u6bd4\u3001"
         "SE\u8bba\u8bc1\u751f\u6210\u548cPDF\u5bfc\u51fa\u3002")
     pdf.tip_box(
-        "Predicate Finder\u662fArch Medical Management\u7684\u4e3b\u8981\u6f5c\u5728\u5ba2\u6237\u83b7\u53d6\u5de5\u5177\u3002"
+        "Predicate Finder\u662f510k Bridge\u7684\u4e3b\u8981\u6f5c\u5728\u5ba2\u6237\u83b7\u53d6\u5de5\u5177\u3002"
         "\u514d\u8d39\u7528\u6237\u63d0\u4f9b\u90ae\u7bb1\u89e3\u9501\u5de5\u5177\uff0c\u521b\u5efa\u81ea\u7136\u7684\u5347\u7ea7\u6f0f\u6597\u3002")
 
     pdf.sub("\u4e0eControl Tower\u7684\u96c6\u6210\uff08Scale\u5c42\u7ea7\uff09")
@@ -1616,7 +1616,7 @@ def build_chinese():
         ("FES（功能性电刺激）", "治疗性电流应用，激活瘫痪或虚弱的肌肉以实现功能性运动。"),
         ("NRE（非经常性工程费用）", "产品开发、工装和制造设置的一次性工程成本，不在每个单元生产中重复发生。"),
         ("openFDA", "FDA\u7684\u516c\u5171API\uff0c\u63d0\u4f9b\u5bf9510(k)\u6279\u51c6\u8bb0\u5f55\u3001\u4e0d\u826f\u4e8b\u4ef6\u3001\u53ec\u56de\u7b49\u6cd5\u89c4\u6570\u636e\u7684\u53ef\u641c\u7d22\u8bbf\u95ee\u3002"),
-        ("Predicate Finder", "Arch Medical Management\u7684SaaS\u5de5\u5177\uff0c\u7528\u4e8e\u4f7f\u7528openFDA\u6570\u636e\u5e93\u641c\u7d22\u3001\u6bd4\u8f83\u548c\u8ffd\u6eaf\u5148\u5bfc\u5668\u68b0\u3002\u63d0\u4f9b\u514d\u8d39\u7248\u548cPro\u7248\u3002"),
+        ("Predicate Finder", "510k Bridge\u7684SaaS\u5de5\u5177\uff0c\u7528\u4e8e\u4f7f\u7528openFDA\u6570\u636e\u5e93\u641c\u7d22\u3001\u6bd4\u8f83\u548c\u8ffd\u6eaf\u5148\u5bfc\u5668\u68b0\u3002\u63d0\u4f9b\u514d\u8d39\u7248\u548cPro\u7248\u3002"),
         ("\u5148\u5bfc\u94fe", "\u5c06\u5df2\u6279\u51c6\u5668\u68b0\u901a\u8fc7\u5148\u524d\u51e0\u4ee3510(k)\u6279\u51c6\u8fde\u63a5\u8d77\u6765\u7684\u5148\u5bfc\u5f15\u7528\u8c31\u7cfb\u3002"),
     ]
     for k, v in fda_terms_cn:

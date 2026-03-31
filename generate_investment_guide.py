@@ -169,8 +169,8 @@ def build():
     pdf.ln(30)
     pdf.set_font("Helvetica", "", 10)
     pdf.set_text_color(*GuidePDF.DARK)
-    pdf.cell(0, 6, _a("Arch Medical Management"), align="C", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 6, _a("Pilot Software LLC dba Arch Medical Management"), align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 6, _a("510k Bridge"), align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 6, _a("510k Bridge, Inc."), align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 6, _a("March 2026"), align="C", new_x="LMARGIN", new_y="NEXT")
 
     # ── SECTION 1: FUNDING ROUNDS ──────────────────

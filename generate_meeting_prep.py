@@ -1144,7 +1144,7 @@ def build():
     pdf.set_text_color(*TEXT)
     pdf.txt(
         "  Structure:     Independent contractor (1099), not W-2 employee\n"
-        "  Engagement:    Arch Medical Management, LLC (Oregon) as the contracting entity\n"
+        "  Engagement:    510k Bridge, Inc. (Delaware) as the contracting entity\n"
         "  Rate:          $10,000 - $15,000/month (blended across both roles)\n"
         "  Hours:         ~30-40 hrs/week (regulatory + IR combined)\n"
         "  Invoice:       Monthly, Net-15 payment terms\n"
@@ -1274,7 +1274,7 @@ def build():
     pdf.set_font("Helvetica", "", 10)
     pdf.set_text_color(*TEXT)
     pdf.txt(
-        "  Contracting Entity:   Arch Medical Management, LLC (Oregon)\n"
+        "  Contracting Entity:   510k Bridge, Inc. (Delaware)\n"
         "  Engagement Type:      Independent contractor (Master Services Agreement)\n"
         "  Equity Grant:         Restricted Stock Agreement (Company B USA -> Lon Dailey)\n"
         "  IP Assignment:        All work product created under the MSA is assigned to\n"

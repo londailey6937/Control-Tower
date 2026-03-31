@@ -1,22 +1,13 @@
-# Arch Medical Management — Business Strategy (March 2026)
+# 510k Bridge — Business Strategy (March 2026)
 
 ## Corporate Structure
 
-- **Operating Entity**: Pilot Software LLC (Oregon LLC, active)
-- **Trade Name / DBA**: Arch Medical Management (to be filed under Pilot Software LLC — $50 Oregon Assumed Business Name)
-- **Arch Medical Management LLC**: Oregon LLC (currently dissolved — not needed if DBA route used)
-- **Client-Facing Brand**: Arch Medical Management
-- **Contracts & Invoices**: "Pilot Software LLC dba Arch Medical Management"
+- **Operating Entity**: 510k Bridge, Inc. (Delaware corporation)
+- **Client-Facing Brand**: 510k Bridge
+- **Contracts & Invoices**: "510k Bridge, Inc."
 - **Target Market**: Chinese entrepreneurs seeking FDA pathway for medical devices
 - **Core Asset**: Control Tower PM Dashboard (Vite+TS, Supabase, CloudFlare Pages)
 - **Demo URL**: control-tower-bmx.pages.dev
-
-## DBA Filing Checklist
-
-- [ ] File Assumed Business Name "Arch Medical Management" at Oregon Secretary of State ($50)
-- [ ] Update Pilot Software LLC registered agent if needed
-- [ ] Open business bank account (or add DBA to existing Pilot Software account)
-- [ ] Verify Pilot Software LLC annual report is current
 
 ## Lead Magnets
 
@@ -37,7 +28,7 @@
 ## Website & Digital
 
 - Bilingual (EN/CN) landing page with live Control Tower demo embed
-- Domain options: archmedicalmanagement.com, archmedical.com, + .cn domain
+- Domain options: 510kbridge.com + .cn domain
 - SEO: long-tail keywords in EN + CN ("FDA 510(k) process for Chinese company", "美国FDA 510(k) 申请流程")
 - Blog + LinkedIn articles in both languages
 - **WeChat Official Account** — essential for Chinese entrepreneur reach
@@ -59,7 +50,7 @@
 
 1. Build bilingual landing page (Next.js or static) with Control Tower demo embed + lead capture
 2. WeChat Official Account setup
-3. Package 510(k) guide with Arch Medical branding
+3. Package 510(k) guide with 510k Bridge branding
 4. CRM setup (Notion or HubSpot free tier)
 
 ## Context
