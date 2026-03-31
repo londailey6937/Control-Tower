@@ -4740,8 +4740,8 @@ body {
    HELP OVERLAY — In-app user guide
    ============================================================ */
 .help-toggle {
-  background: var(--surface);
-  color: var(--text);
+  background: var(--bg-card);
+  color: var(--text-primary);
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 4px 10px;
@@ -4762,12 +4762,12 @@ body {
 .help-backdrop {
   position: absolute;
   inset: 0;
-  background: var(--bg);
+  background: #0f1117;
 }
 .help-panel {
   position: absolute;
   inset: 24px;
-  background: var(--surface);
+  background: #1c1f2e;
   border: 1px solid var(--border);
   border-radius: 12px;
   display: flex;
@@ -4783,7 +4783,7 @@ body {
   gap: 12px;
   padding: 12px 20px;
   border-bottom: 1px solid var(--border);
-  background: var(--bg);
+  background: #0f1117;
 }
 .help-header h2 {
   margin: 0;
@@ -4799,8 +4799,8 @@ body {
   padding: 6px 12px;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: var(--surface);
-  color: var(--text);
+  background: #1c1f2e;
+  color: #e8eaf0;
   font-size: 0.85rem;
 }
 .help-search:focus {
@@ -4808,9 +4808,9 @@ body {
   border-color: var(--accent);
 }
 .help-close {
-  background: var(--surface);
+  background: #1c1f2e;
   border: 1px solid var(--border);
-  color: var(--text);
+  color: #e8eaf0;
   font-size: 0.82rem;
   cursor: pointer;
   padding: 5px 14px;
@@ -4836,13 +4836,13 @@ body {
   overflow-y: auto;
   border-right: 1px solid var(--border);
   padding: 8px 0;
-  background: var(--bg);
+  background: #0f1117;
 }
 .help-toc-item {
   display: block;
   padding: 7px 16px;
   font-size: 0.82rem;
-  color: var(--dim);
+  color: #6b7394;
   text-decoration: none;
   cursor: pointer;
   border-left: 3px solid transparent;
@@ -4851,13 +4851,13 @@ body {
     color 0.12s;
 }
 .help-toc-item:hover {
-  background: var(--surface);
-  color: var(--text);
+  background: #1c1f2e;
+  color: #e8eaf0;
 }
 .help-toc-item.active {
   color: var(--accent);
   border-left-color: var(--accent);
-  background: var(--surface);
+  background: #1c1f2e;
   font-weight: 600;
 }
 
@@ -4868,7 +4868,7 @@ body {
   padding: 24px 32px;
   font-size: 0.88rem;
   line-height: 1.7;
-  color: var(--text);
+  color: #e8eaf0;
 }
 .help-content h2 {
   color: var(--accent);
@@ -4878,7 +4878,7 @@ body {
   padding-bottom: 8px;
 }
 .help-content h3 {
-  color: var(--text);
+  color: #e8eaf0;
   font-size: 1rem;
   margin: 20px 0 8px;
 }
@@ -4913,12 +4913,12 @@ body {
   text-align: left;
 }
 .help-table th {
-  background: var(--bg);
+  background: #0f1117;
   color: var(--accent);
   font-weight: 600;
 }
 .help-table td {
-  color: var(--text);
+  color: #e8eaf0;
 }
 .help-glossary td:first-child {
   white-space: nowrap;
@@ -4927,16 +4927,16 @@ body {
 
 /* Tips and warnings */
 .help-tip {
-  background: rgba(76, 175, 80, 0.1);
-  border-left: 3px solid var(--success);
+  background: rgba(45, 212, 160, 0.1);
+  border-left: 3px solid #2dd4a0;
   padding: 8px 14px;
   margin: 12px 0;
   border-radius: 4px;
   font-size: 0.84rem;
 }
 .help-warn {
-  background: rgba(255, 152, 0, 0.1);
-  border-left: 3px solid var(--warning);
+  background: rgba(245, 183, 49, 0.1);
+  border-left: 3px solid #f5b731;
   padding: 8px 14px;
   margin: 12px 0;
   border-radius: 4px;
@@ -4945,12 +4945,12 @@ body {
 
 /* Search results */
 .help-search-count {
-  color: var(--dim);
+  color: #6b7394;
   font-size: 0.82rem;
   margin-bottom: 16px;
 }
 .help-search-empty {
-  color: var(--dim);
+  color: #6b7394;
   text-align: center;
   padding: 48px 0;
   font-size: 0.9rem;
@@ -4964,7 +4964,7 @@ body {
   transition: background 0.12s;
 }
 .help-search-result:hover {
-  background: var(--bg);
+  background: #0f1117;
 }
 .help-search-result h3 {
   margin: 0 0 6px;
@@ -4972,13 +4972,13 @@ body {
   color: var(--accent);
 }
 .help-snippet {
-  color: var(--dim);
+  color: #6b7394;
   font-size: 0.82rem;
   margin: 0;
 }
 .help-snippet mark {
   background: rgba(255, 214, 0, 0.3);
-  color: var(--text);
+  color: #e8eaf0;
   padding: 0 2px;
   border-radius: 2px;
 }

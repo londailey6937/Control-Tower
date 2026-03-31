@@ -2225,16 +2225,19 @@ function initRoleSwitcher(): void {
 
   // Admin: add "New Project" button
   if (IS_ADMIN) {
+    const isCN = getLang() === "cn";
     const btn = document.createElement("button");
-    btn.textContent = "⊕ New Project";
-    btn.title = "Start a new project (clears current data)";
+    btn.textContent = isCN ? "⊕ 新建项目" : "⊕ New Project";
+    btn.title = isCN ? "开始新项目（清除当前数据）" : "Start a new project (clears current data)";
     btn.style.cssText =
       "margin-left:12px;padding:4px 12px;border-radius:6px;border:1px solid #475569;" +
       "background:#1e293b;color:#94a3b8;font-size:0.78rem;cursor:pointer;";
     btn.addEventListener("click", () => {
       if (
         !confirm(
-          "Start a new project? This will clear all current project data.",
+          isCN
+            ? "开始新项目？这将清除所有当前项目数据。"
+            : "Start a new project? This will clear all current project data.",
         )
       )
         return;
