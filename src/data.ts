@@ -42,6 +42,10 @@ export const PROJECT: Project = {
     en: "US Operating Entity",
     cn: "美国运营实体",
   },
+  applicantAddress: "",
+  applicantPhone: "",
+  contactName: "",
+  contactEmail: "",
   manufacturer: {
     en: "Contract Manufacturer",
     cn: "合同制造商",

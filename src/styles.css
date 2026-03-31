@@ -4386,6 +4386,46 @@ body {
   grid-column: 1 / -1;
 }
 
+/* Letterhead */
+.fda-letterhead-company {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #1e40af;
+}
+.fda-letterhead-addr {
+  font-size: 0.82rem;
+  color: #475569;
+  margin: 1px 0;
+}
+.fda-letterhead-rule {
+  border: none;
+  border-top: 2px solid #1e40af;
+  margin: 10px 0 16px;
+}
+
+/* Q-Sub type selector */
+.fda-qsub-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.fda-qsub-selector label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+}
+.fda-qsub-selector select {
+  flex: 1;
+  padding: 6px 10px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.85rem;
+}
+
 .fda-card-actions {
   display: flex;
   gap: 8px;

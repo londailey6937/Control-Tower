@@ -164,6 +164,30 @@ const TXT = {
     cn: "例: Titania Labs, LLC",
   },
   applicantNameCn: { en: "Applicant Name (Chinese)", cn: "申请人名称（中文）" },
+  applicantAddress: {
+    en: "Applicant Address",
+    cn: "申请人地址",
+  },
+  applicantAddressPh: {
+    en: "e.g. 123 Main St, Suite 100, Camas, WA 98607",
+    cn: "例: 123 Main St, Suite 100, Camas, WA 98607",
+  },
+  applicantPhone: {
+    en: "Applicant Phone",
+    cn: "申请人电话",
+  },
+  applicantPhonePh: {
+    en: "e.g. (503) 555-1234",
+    cn: "例: (503) 555-1234",
+  },
+  contactName: {
+    en: "Contact Person Name",
+    cn: "联系人姓名",
+  },
+  contactNamePh: {
+    en: "e.g. John Smith, VP Regulatory Affairs",
+    cn: "例: 张三, 法规事务副总裁",
+  },
   manufacturerName: {
     en: "Manufacturer Name & Location",
     cn: "制造商名称和地点",
@@ -357,6 +381,9 @@ function renderApplicant(el: HTMLElement, d: WizData, lang: "en" | "cn"): void {
   el.innerHTML = `<h2>${tx(TXT.s3Title, lang)}</h2><p class="hint">${tx(TXT.s3Hint, lang)}</p>
   ${fld(tx(TXT.applicantName, lang), inp("applicantName", gv(d, "applicantName"), tx(TXT.applicantNamePh, lang), "text", true))}
   ${lang === "cn" ? fld(tx(TXT.applicantNameCn, lang), inp("applicantNameCn", gv(d, "applicantNameCn"), "")) : ""}
+  ${fld(tx(TXT.applicantAddress, lang), inp("applicantAddress", gv(d, "applicantAddress"), tx(TXT.applicantAddressPh, lang)))}
+  ${fld(tx(TXT.applicantPhone, lang), inp("applicantPhone", gv(d, "applicantPhone"), tx(TXT.applicantPhonePh, lang), "tel"))}
+  ${fld(tx(TXT.contactName, lang), inp("contactName", gv(d, "contactName"), tx(TXT.contactNamePh, lang)))}
   ${fld(tx(TXT.manufacturerName, lang), inp("manufacturerName", gv(d, "manufacturerName"), tx(TXT.manufacturerNamePh, lang)))}
   ${lang === "cn" ? fld(tx(TXT.manufacturerNameCn, lang), inp("manufacturerNameCn", gv(d, "manufacturerNameCn"), "")) : ""}`;
 }
@@ -633,6 +660,10 @@ export function showWizard(onComplete: (answers: WizardAnswers) => void): void {
           predicateDevices: demoTmpl.predicateExamples,
           applicantName: "Acme Medical Inc.",
           applicantNameCn: "Acme 医疗公司",
+          applicantAddress: "123 Innovation Drive, Suite 200, Portland, OR 97201",
+          applicantPhone: "(503) 555-0100",
+          contactName: "Jane Chen, VP Regulatory Affairs",
+          contactEmail: "regulatory@acmemedical.com",
           manufacturerName: "Acme Medical Inc.",
           manufacturerNameCn: "Acme 医疗公司",
           techAreas: demoTmpl.techAreas.en,

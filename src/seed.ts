@@ -63,6 +63,9 @@ export interface WizardAnswers {
   predicateDevices?: string;
   applicantName?: string;
   applicantNameCn?: string;
+  applicantAddress?: string;
+  applicantPhone?: string;
+  contactName?: string;
   manufacturerName?: string;
   manufacturerNameCn?: string;
   team?: TeamEntry[];
@@ -105,6 +108,10 @@ export function seed(a: WizardAnswers): void {
       a.applicantName || "TBD",
       a.applicantNameCn || a.applicantName || "TBD",
     ),
+    applicantAddress: a.applicantAddress || "",
+    applicantPhone: a.applicantPhone || "",
+    contactName: a.contactName || "",
+    contactEmail: a.contactEmail || "",
     manufacturer: ls(
       a.manufacturerName || "TBD",
       a.manufacturerNameCn || a.manufacturerName || "TBD",

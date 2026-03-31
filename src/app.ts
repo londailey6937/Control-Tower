@@ -5618,45 +5618,7 @@ function renderFdaComms(): void {
   ];
 
   // Q-Sub types reference data (per FDA CDRH guidance §4)
-  const qsubTypes = [
-    {
-      type: "Pre-Sub (Meeting)",
-      typeCN: "Pre-Sub（会议）",
-      desc: "Request feedback meeting with FDA review division",
-      descCN: "请求与FDA审评部门进行反馈会议",
-      timeline: isCN ? "75天窗口" : "75-day window",
-    },
-    {
-      type: "Pre-Sub (Written Only)",
-      typeCN: "Pre-Sub（仅书面）",
-      desc: "Written-only feedback, no meeting requested",
-      descCN: "仅书面反馈，不要求会议",
-      timeline: isCN ? "75天窗口" : "75-day window",
-    },
-    {
-      type: "Submission Issue Request (SIR)",
-      typeCN: "提交问题请求 (SIR)",
-      desc: "Clarification on pending 510(k) after AI letter",
-      descCN: "AI信函后对待审510(k)的澄清",
-      timeline: isCN
-        ? "提交后≤60天: 21天; >60天: 70天"
-        : "≤60 days post-sub: 21 days; >60 days: 70 days",
-    },
-    {
-      type: "Informational Meeting",
-      typeCN: "信息会议",
-      desc: "General discussion, no binding feedback",
-      descCN: "一般性讨论，无约束力反馈",
-      timeline: isCN ? "时间协商" : "Timing negotiated",
-    },
-    {
-      type: "Study Risk Determination",
-      typeCN: "研究风险判定",
-      desc: "Determine if clinical study is significant risk (SR) or non-significant risk (NSR)",
-      descCN: "确定临床研究是显著风险(SR)还是非显著风险(NSR)",
-      timeline: isCN ? "75天窗口" : "75-day window",
-    },
-  ];
+  // qsubTypes moved inline into the reference table
 
   // SE Decision Points (per FDA 510(k) guidance Appendix A)
   const seDecisionPoints = [
@@ -5700,6 +5662,118 @@ function renderFdaComms(): void {
   const mc = (label: string, val: string, color: string) =>
     `<div class="fda-metric"><div class="fda-metric-val" style="color:${color}">${val}</div><div class="fda-metric-lbl">${label}</div></div>`;
 
+  const pAddr = PROJECT.applicantAddress || "";
+  const pPhone = PROJECT.applicantPhone || "";
+  const pContact = PROJECT.contactName || "";
+  const pEmail = PROJECT.contactEmail || "";
+
+  // ── Letterhead builder ──────────────────────
+  const letterhead = `<div class="fda-letterhead">
+    <div class="fda-letterhead-company">${pApplicant}</div>
+    ${pAddr ? `<div class="fda-letterhead-addr">${pAddr}</div>` : ""}
+    ${pPhone ? `<div class="fda-letterhead-addr">${isCN ? "电话" : "Tel"}: ${pPhone}</div>` : ""}
+    ${pEmail ? `<div class="fda-letterhead-addr">${isCN ? "邮箱" : "Email"}: ${pEmail}</div>` : ""}
+    <hr class="fda-letterhead-rule">
+  </div>`;
+
+  // ── Letter body templates for each Q-Sub type ──
+  const subLabel = pSub.replace(/-/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase());
+  const deviceDesc = localizedText(PROJECT.subtitle);
+
+  const letterBodies: Record<string, { reEN: string; reCN: string; bodyEN: string; bodyCN: string }> = {
+    "pre-sub-meeting": {
+      reEN: `Pre-Submission Meeting Request — ${pName}`,
+      reCN: `Pre-Submission会议请求 — ${pName}`,
+      bodyEN: `<p>${pApplicant} respectfully requests a Pre-Submission meeting to discuss a planned ${subLabel} submission for the ${pName}.</p>
+        <p><strong>Device Description:</strong> ${deviceDesc}</p>
+        <p><strong>Submission Type:</strong> ${subLabel}</p>
+        <p><strong>Manufacturer:</strong> ${pMfr}</p>
+        <p><strong>Preferred Meeting Type:</strong> Teleconference</p>
+        <p><strong>Specific questions are attached herewith.</strong></p>`,
+      bodyCN: `<p>${pApplicant}谨请求一次Pre-Submission会议，讨论拟提交的${subLabel}申请——${pName}。</p>
+        <p><strong>设备描述:</strong> ${deviceDesc}</p>
+        <p><strong>提交类型:</strong> ${subLabel}</p>
+        <p><strong>制造商:</strong> ${pMfr}</p>
+        <p><strong>希望的会议形式:</strong> 电话会议</p>
+        <p><strong>具体问题见附件。</strong></p>`,
+    },
+    "pre-sub-written": {
+      reEN: `Pre-Submission Written Feedback Request — ${pName}`,
+      reCN: `Pre-Submission书面反馈请求 — ${pName}`,
+      bodyEN: `<p>${pApplicant} respectfully requests written-only feedback (no meeting) on a planned ${subLabel} submission for the ${pName}.</p>
+        <p><strong>Device Description:</strong> ${deviceDesc}</p>
+        <p><strong>Submission Type:</strong> ${subLabel}</p>
+        <p><strong>Manufacturer:</strong> ${pMfr}</p>
+        <p>We are requesting written feedback on the specific questions attached herewith. A formal meeting is not requested at this time.</p>`,
+      bodyCN: `<p>${pApplicant}谨请求对拟提交的${subLabel}申请——${pName}提供书面反馈（无需会议）。</p>
+        <p><strong>设备描述:</strong> ${deviceDesc}</p>
+        <p><strong>提交类型:</strong> ${subLabel}</p>
+        <p><strong>制造商:</strong> ${pMfr}</p>
+        <p>我们请求对所附具体问题提供书面反馈。此次不请求正式会议。</p>`,
+    },
+    "sir": {
+      reEN: `Submission Issue Request (SIR) — ${pName}`,
+      reCN: `提交问题请求 (SIR) — ${pName}`,
+      bodyEN: `<p>${pApplicant} respectfully submits this Submission Issue Request (SIR) regarding our pending ${subLabel} submission for the ${pName}.</p>
+        <p><strong>Device Description:</strong> ${deviceDesc}</p>
+        <p><strong>Pending Submission Reference:</strong> [Insert 510(k) number, e.g. K261234]</p>
+        <p><strong>Manufacturer:</strong> ${pMfr}</p>
+        <p>We received an Additional Information (AI) letter dated [insert date] and seek clarification on the following issues before responding:</p>
+        <p><strong>Specific issues requiring clarification are detailed below.</strong></p>`,
+      bodyCN: `<p>${pApplicant}谨就我们待审的${subLabel}申请——${pName}提交此提交问题请求(SIR)。</p>
+        <p><strong>设备描述:</strong> ${deviceDesc}</p>
+        <p><strong>待审提交参考号:</strong> [请插入510(k)编号，如 K261234]</p>
+        <p><strong>制造商:</strong> ${pMfr}</p>
+        <p>我们收到日期为[请插入日期]的补充信息(AI)函，在回复前就以下问题寻求澄清：</p>
+        <p><strong>需要澄清的具体问题详见下文。</strong></p>`,
+    },
+    "informational": {
+      reEN: `Informational Meeting Request — ${pName}`,
+      reCN: `信息会议请求 — ${pName}`,
+      bodyEN: `<p>${pApplicant} respectfully requests an Informational Meeting to discuss general regulatory topics related to the ${pName}.</p>
+        <p><strong>Device Description:</strong> ${deviceDesc}</p>
+        <p><strong>Manufacturer:</strong> ${pMfr}</p>
+        <p>This request is for an informational discussion only. We understand that feedback provided during an Informational Meeting is non-binding and does not constitute formal FDA advice.</p>
+        <p><strong>Topics for discussion are outlined below.</strong></p>`,
+      bodyCN: `<p>${pApplicant}谨请求一次信息会议，讨论与${pName}相关的一般性法规话题。</p>
+        <p><strong>设备描述:</strong> ${deviceDesc}</p>
+        <p><strong>制造商:</strong> ${pMfr}</p>
+        <p>此请求仅用于信息性讨论。我们理解信息会议中提供的反馈不具有约束力，不构成正式FDA建议。</p>
+        <p><strong>讨论主题概述如下。</strong></p>`,
+    },
+    "study-risk": {
+      reEN: `Study Risk Determination Request — ${pName}`,
+      reCN: `研究风险判定请求 — ${pName}`,
+      bodyEN: `<p>${pApplicant} respectfully requests a Study Risk Determination for a planned clinical study supporting the ${subLabel} submission for the ${pName}.</p>
+        <p><strong>Device Description:</strong> ${deviceDesc}</p>
+        <p><strong>Submission Type:</strong> ${subLabel}</p>
+        <p><strong>Manufacturer:</strong> ${pMfr}</p>
+        <p>We seek FDA's determination of whether the proposed clinical investigation constitutes a Significant Risk (SR) or Non-Significant Risk (NSR) study under 21 CFR 812.</p>
+        <p><strong>Study protocol summary and risk analysis are attached.</strong></p>`,
+      bodyCN: `<p>${pApplicant}谨就支持${subLabel}申请——${pName}的拟定临床研究请求研究风险判定。</p>
+        <p><strong>设备描述:</strong> ${deviceDesc}</p>
+        <p><strong>提交类型:</strong> ${subLabel}</p>
+        <p><strong>制造商:</strong> ${pMfr}</p>
+        <p>我们请求FDA根据21 CFR 812判定拟定临床研究是否构成显著风险(SR)或非显著风险(NSR)研究。</p>
+        <p><strong>研究方案摘要和风险分析见附件。</strong></p>`,
+    },
+  };
+
+  // Template selector options
+  const qsubSelectOptions = [
+    { value: "pre-sub-meeting", labelEN: "Pre-Sub (Meeting Request)", labelCN: "Pre-Sub（会议请求）" },
+    { value: "pre-sub-written", labelEN: "Pre-Sub (Written Feedback)", labelCN: "Pre-Sub（书面反馈）" },
+    { value: "sir", labelEN: "Submission Issue Request (SIR)", labelCN: "提交问题请求 (SIR)" },
+    { value: "informational", labelEN: "Informational Meeting", labelCN: "信息会议" },
+    { value: "study-risk", labelEN: "Study Risk Determination", labelCN: "研究风险判定" },
+  ];
+
+  // Build default letter
+  const defaultType = "pre-sub-meeting";
+  const defaultBody = letterBodies[defaultType];
+  const defaultRe = isCN ? defaultBody.reCN : defaultBody.reEN;
+  const defaultContent = isCN ? defaultBody.bodyCN : defaultBody.bodyEN;
+
   body.innerHTML = `
   <div class="fda-pmp-badge">🔒 ${isCN ? "PMP专属 — 对技术/商务角色不可见" : "PMP Eyes Only — Not visible to Tech/Business roles"}</div>
 
@@ -5730,37 +5804,32 @@ function renderFdaComms(): void {
 
   <div class="fda-grid">
     <!-- Q-Sub Cover Letter Generator -->
-    <div class="fda-card">
+    <div class="fda-card fda-card-wide">
       <h3>📋 ${isCN ? "Q-Sub附信生成器" : "Q-Sub Cover Letter Generator"}</h3>
       <p class="fda-card-hint">${
         isCN
-          ? "按照FDA Q-Sub指南自动生成Pre-Sub会议请求附信"
-          : "Auto-generate a Pre-Sub meeting request cover letter per FDA Q-Sub guidance"
+          ? "选择Q-Sub类型，自动生成带公司抬头的FDA附信——支持全部5种Q-Sub类型"
+          : "Select a Q-Sub type to auto-generate an FDA cover letter with your company letterhead — all 5 Q-Sub types supported"
       }</p>
+      <div class="fda-qsub-selector">
+        <label>${isCN ? "选择Q-Sub类型" : "Select Q-Sub Type"}:</label>
+        <select id="fdaQsubTypeSelect">
+          ${qsubSelectOptions.map((o) => `<option value="${o.value}">${isCN ? o.labelCN : o.labelEN}</option>`).join("")}
+        </select>
+      </div>
       <div class="fda-preview">
-        <div class="fda-letter">
+        <div class="fda-letter" id="fdaLetterPreview">
+          ${letterhead}
           <p><strong>${isCN ? "致" : "To"}:</strong> Division of Industry and Consumer Education (DICE)<br>
           Center for Devices and Radiological Health<br>
           Food and Drug Administration</p>
-          <p><strong>${isCN ? "发件人" : "From"}:</strong> ${pApplicant}</p>
+          <p><strong>${isCN ? "发件人" : "From"}:</strong> ${pApplicant}${pContact ? `<br>${isCN ? "联系人" : "Contact"}: ${pContact}` : ""}</p>
           <p><strong>${isCN ? "日期" : "Date"}:</strong> ${pDate || new Date().toLocaleDateString()}</p>
-          <p><strong>${isCN ? "主题" : "Re"}:</strong> Pre-Submission Meeting Request — ${pName}</p>
+          <p><strong>${isCN ? "主题" : "Re"}:</strong> <span id="fdaLetterRe">${defaultRe}</span></p>
           <hr>
           <p>${isCN ? "尊敬的先生/女士：" : "Dear Sir or Madam:"}</p>
-          <p>${
-            isCN
-              ? `${pApplicant}谨请求一次Pre-Submission会议，讨论拟提交的${pSub === "510k-standard" ? "510(k)" : pSub}申请——${pName}。`
-              : `${pApplicant} respectfully requests a Pre-Submission meeting to discuss a planned ${pSub === "510k-standard" ? "510(k)" : pSub} submission for the ${pName}.`
-          }</p>
-
-          <p><strong>${isCN ? "设备描述" : "Device Description"}:</strong> ${localizedText(PROJECT.subtitle)}</p>
-          <p><strong>${isCN ? "提交类型" : "Submission Type"}:</strong> ${pSub.replace(/-/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase())}</p>
-          <p><strong>${isCN ? "制造商" : "Manufacturer"}:</strong> ${pMfr}</p>
-
-          <p><strong>${isCN ? "希望的会议形式" : "Preferred Meeting Type"}:</strong> ${isCN ? "电话会议" : "Teleconference"}</p>
-
-          <p><strong>${isCN ? "具体问题见附件" : "Specific questions are attached herewith"}.</strong></p>
-          <p>${isCN ? "此致敬礼" : "Sincerely"},<br>${pApplicant}</p>
+          <div id="fdaLetterBody">${defaultContent}</div>
+          <p>${isCN ? "此致敬礼" : "Sincerely"},<br>${pContact || pApplicant}<br>${pContact ? pApplicant : ""}</p>
         </div>
       </div>
       <div class="fda-card-actions">
@@ -5770,7 +5839,7 @@ function renderFdaComms(): void {
     </div>
 
     <!-- Q-Sub Reference Guide -->
-    <div class="fda-card">
+    <div class="fda-card fda-card-wide">
       <h3>📚 ${isCN ? "Q-Sub类型参考" : "Q-Submission Types Reference"}</h3>
       <p class="fda-card-hint">${
         isCN
@@ -5783,25 +5852,73 @@ function renderFdaComms(): void {
             <th>${isCN ? "类型" : "Type"}</th>
             <th>${isCN ? "用途" : "Purpose"}</th>
             <th>${isCN ? "时间线" : "Timeline"}</th>
+            <th>${isCN ? "何时使用" : "When to Use"}</th>
           </tr>
         </thead>
         <tbody>
-          ${qsubTypes
-            .map(
-              (q) =>
-                `<tr><td><strong>${isCN ? q.typeCN : q.type}</strong></td><td>${isCN ? q.descCN : q.desc}</td><td>${q.timeline}</td></tr>`,
-            )
-            .join("")}
+          <tr>
+            <td><strong>${isCN ? "Pre-Sub（会议）" : "Pre-Sub (Meeting)"}</strong></td>
+            <td>${isCN ? "请求与FDA审评部门进行反馈会议" : "Request feedback meeting with FDA review division"}</td>
+            <td>${isCN ? "75天窗口" : "75-day window"}</td>
+            <td>${isCN ? "首次申请前——确认等效器械策略、测试计划和临床需求" : "Before first submission — confirm predicate strategy, testing plan & clinical needs"}</td>
+          </tr>
+          <tr>
+            <td><strong>${isCN ? "Pre-Sub（仅书面）" : "Pre-Sub (Written Only)"}</strong></td>
+            <td>${isCN ? "仅书面反馈，不要求会议" : "Written-only feedback, no meeting requested"}</td>
+            <td>${isCN ? "75天窗口" : "75-day window"}</td>
+            <td>${isCN ? "问题明确、无需讨论——如确认标准或特定测试方法" : "Clear-cut questions needing no discussion — e.g. confirming standards or specific test methods"}</td>
+          </tr>
+          <tr>
+            <td><strong>${isCN ? "提交问题请求 (SIR)" : "Submission Issue Request (SIR)"}</strong></td>
+            <td>${isCN ? "收到AI信函后对待审510(k)的澄清" : "Clarification on pending 510(k) after AI letter"}</td>
+            <td>${isCN ? "提交后≤60天: 21天; >60天: 70天" : "≤60 days post-sub: 21 days; >60 days: 70 days"}</td>
+            <td>${isCN ? "收到补充信息(AI)函后——在回复前澄清FDA要求" : "After receiving an AI letter — clarify FDA's request before responding"}</td>
+          </tr>
+          <tr>
+            <td><strong>${isCN ? "信息会议" : "Informational Meeting"}</strong></td>
+            <td>${isCN ? "一般性讨论，无约束力反馈" : "General discussion, no binding feedback"}</td>
+            <td>${isCN ? "时间协商" : "Timing negotiated"}</td>
+            <td>${isCN ? "早期探索——当您尚未确定法规路径或需要总体指导时" : "Early exploration — when you haven't committed to a regulatory path or need general guidance"}</td>
+          </tr>
+          <tr>
+            <td><strong>${isCN ? "研究风险判定" : "Study Risk Determination"}</strong></td>
+            <td>${isCN ? "确定临床研究是SR还是NSR" : "Determine if clinical study is SR or NSR"}</td>
+            <td>${isCN ? "75天窗口" : "75-day window"}</td>
+            <td>${isCN ? "临床研究计划前——确定IDE要求和IRB审查级别" : "Before planning a clinical study — determines IDE requirements and IRB review level"}</td>
+          </tr>
         </tbody>
       </table>
+
       <div class="fda-tips">
-        <h4>💡 ${isCN ? "Pre-Sub实用贴士" : "Pre-Sub Practical Tips"}</h4>
+        <h4>🧭 ${isCN ? "如何选择正确的Q-Sub类型" : "How to Choose the Right Q-Sub Type"}</h4>
+        <ul>
+          <li>${isCN
+            ? "📋 <strong>首次FDA互动？</strong> → Pre-Sub（会议）——始终首选会议形式"
+            : '📋 <strong>First FDA interaction?</strong> → Pre-Sub (Meeting) — always prefer the meeting option'}</li>
+          <li>${isCN
+            ? "✉️ <strong>简单确认？</strong> → Pre-Sub（仅书面）——标准确认或简单技术问题"
+            : '✉️ <strong>Simple confirmation?</strong> → Pre-Sub (Written Only) — standards confirmation or simple technical questions'}</li>
+          <li>${isCN
+            ? "⚠️ <strong>收到AI信函？</strong> → SIR——在回复前澄清FDA要求（窗口期有限！）"
+            : '⚠️ <strong>Got an AI letter?</strong> → SIR — clarify what FDA wants before responding (limited window!)'}</li>
+          <li>${isCN
+            ? "💬 <strong>还在探索？</strong> → 信息会议——无约束力，但有助于确定方向"
+            : '💬 <strong>Still exploring?</strong> → Informational Meeting — non-binding but helps set direction'}</li>
+          <li>${isCN
+            ? "🔬 <strong>计划临床研究？</strong> → 研究风险判定——确定SR vs NSR，影响IDE要求"
+            : '🔬 <strong>Planning a clinical study?</strong> → Study Risk Determination — SR vs NSR affects IDE requirements'}</li>
+        </ul>
+      </div>
+
+      <div class="fda-tips">
+        <h4>💡 ${isCN ? "实用贴士" : "Practical Tips"}</h4>
         <ul>
           <li>${isCN ? "始终请求会议——即使FDA建议仅书面回复，也比不请求好" : "Always request a meeting upfront — even if FDA offers written-only, it's better than not asking"}</li>
           <li>${isCN ? "每次Pre-Sub限制3-4个议题——FDA对每个议题有更充分的时间" : "Limit to 3–4 focused topics per Pre-Sub — FDA has more time per question that way"}</li>
           <li>${isCN ? "Pre-Sub没有费用——可以提交多次Pre-Sub" : "No user fee for Pre-Subs — you can file multiple Pre-Subs over the project lifecycle"}</li>
           <li>${isCN ? 'Pre-Sub反馈构成"承诺"——FDA在后续510(k)审查中会参考' : 'Pre-Sub feedback constitutes a "commitment" — FDA will reference it during subsequent 510(k) review'}</li>
           <li>${isCN ? "提交后75天内获得反馈/会议" : "Feedback/meeting within 75 calendar days of submission"}</li>
+          <li>${isCN ? "附信模板现在支持所有5种类型——使用上方选择器切换" : "Cover letter templates now support all 5 types — use the selector above to switch"}</li>
         </ul>
       </div>
     </div>
@@ -5968,18 +6085,35 @@ function renderFdaComms(): void {
   `;
 
   // ── Event handlers ─────────────────────────
+
+  // Q-Sub type selector → update letter body and Re: line
+  document.getElementById("fdaQsubTypeSelect")?.addEventListener("change", (e) => {
+    const sel = (e.target as HTMLSelectElement).value;
+    const tmpl = letterBodies[sel];
+    if (!tmpl) return;
+    const reEl = document.getElementById("fdaLetterRe");
+    const bodyEl = document.getElementById("fdaLetterBody");
+    if (reEl) reEl.innerHTML = isCN ? tmpl.reCN : tmpl.reEN;
+    if (bodyEl) bodyEl.innerHTML = isCN ? tmpl.bodyCN : tmpl.bodyEN;
+  });
+
   document.getElementById("fdaExportLetter")?.addEventListener("click", () => {
-    const letter = body.querySelector(".fda-letter");
+    const letter = document.getElementById("fdaLetterPreview");
     if (!letter) return;
+    const selEl = document.getElementById("fdaQsubTypeSelect") as HTMLSelectElement | null;
+    const selType = selEl?.value || "pre-sub-meeting";
     const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Q-Sub Cover Letter — ${pName}</title>
-    <style>body{font-family:Georgia,serif;max-width:700px;margin:40px auto;padding:20px;line-height:1.7;color:#1e293b}
-    hr{border:none;border-top:1px solid #ccc;margin:16px 0} strong{color:#0f172a}</style></head>
+    <style>body{font-family:Helvetica,Arial,sans-serif;max-width:700px;margin:40px auto;padding:20px;line-height:1.7;color:#1e293b}
+    hr{border:none;border-top:1px solid #ccc;margin:16px 0} strong{color:#0f172a}
+    .fda-letterhead-company{font-size:1.3rem;font-weight:bold;color:#1e40af}
+    .fda-letterhead-addr{font-size:0.85rem;color:#475569}
+    .fda-letterhead-rule{border-top:2px solid #1e40af;margin:12px 0 20px}</style></head>
     <body>${letter.innerHTML}</body></html>`;
     const blob = new Blob([html], { type: "text/html" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `QSub_Cover_Letter_${pName.replace(/\s+/g, "_")}.html`;
+    a.download = `QSub_${selType}_${pName.replace(/\s+/g, "_")}.html`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

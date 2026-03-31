@@ -15,6 +15,10 @@ export interface Project {
   subtitle: LocalizedString;
   submissionType: string;
   applicant: LocalizedString;
+  applicantAddress: string;
+  applicantPhone: string;
+  contactName: string;
+  contactEmail: string;
   manufacturer: LocalizedString;
   preparedDate: string;
   currentMonth: number;
