@@ -3420,10 +3420,6 @@ const CREDENTIAL_HASHES: Record<string, { role: UserRole; admin: boolean }> = {
     role: "pmp",
     admin: true,
   },
-  "4b355cd6cc19844a3c8fd44cf16c6c168a2eb81eba0fb74bec0f5f21687c2acc": {
-    role: "business",
-    admin: false,
-  },
 };
 
 async function sha256(message: string): Promise<string> {
