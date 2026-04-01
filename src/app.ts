@@ -645,6 +645,7 @@ function renderAll(): void {
     ["DocLibrary", renderDocLibrary],
     ["QaSheet", renderQaSheet],
     ["FdaComms", renderFdaComms],
+    ["PredicateFinder", renderPredicateFinder],
   ];
   for (const [name, fn] of renderers) {
     try {
@@ -2291,6 +2292,7 @@ const ROLE_TABS: Record<string, Set<string>> = {
     "suppliers",
     "qa-sheet",
     "fda-comms",
+    "predicate-finder",
   ]),
   tech: new Set([
     "dual-track",
@@ -2303,6 +2305,7 @@ const ROLE_TABS: Record<string, Set<string>> = {
     "resources",
     "suppliers",
     "qa-sheet",
+    "predicate-finder",
   ]),
   business: new Set([
     "dual-track",
@@ -2314,6 +2317,7 @@ const ROLE_TABS: Record<string, Set<string>> = {
     "cap-table",
     "actions",
     "qa-sheet",
+    "predicate-finder",
   ]),
   accounting: new Set([
     "cash-runway",
@@ -2323,6 +2327,7 @@ const ROLE_TABS: Record<string, Set<string>> = {
     "us-investment",
     "cap-table",
     "qa-sheet",
+    "predicate-finder",
   ]),
 };
 
@@ -5332,6 +5337,17 @@ function exportQaThread(): void {
 
 // ══════════════════════════════════════════════════
 // FDA COMMUNICATIONS CENTER (PMP-Only)
+// ══════════════════════════════════════════════════
+
+function renderPredicateFinder(): void {
+  const iframe = document.getElementById("pfIframe") as HTMLIFrameElement | null;
+  if (!iframe) return;
+  // Lazy-load: set src only on first render
+  if (!iframe.src || iframe.src === "about:blank") {
+    iframe.src = "/predicate-finder/";
+  }
+}
+
 // ══════════════════════════════════════════════════
 
 function renderFdaComms(): void {

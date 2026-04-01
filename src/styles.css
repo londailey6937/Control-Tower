@@ -4071,6 +4071,15 @@ body {
   border: 1px solid #e11d4833;
 }
 
+/* Predicate Finder iframe */
+.pf-iframe {
+  width: 100%;
+  min-height: calc(100vh - 200px);
+  border: none;
+  border-radius: 8px;
+  background: #0f172a;
+}
+
 /* Owner */
 .mb-owner {
   font-size: 0.68rem;
