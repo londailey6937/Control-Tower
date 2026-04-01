@@ -293,7 +293,9 @@ body {
   padding: var(--sp-sm) var(--sp-lg);
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border);
-  overflow-x: auto;
+  overflow: visible;
+  position: relative;
+  z-index: 50;
 }
 /* ── Dropdown tab groups ────────────────────── */
 .tab-group {
@@ -339,12 +341,12 @@ body {
   position: absolute;
   top: 100%;
   left: 0;
-  min-width: 200px;
+  min-width: 220px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 0 var(--radius-md) var(--radius-md) var(--radius-md);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-  z-index: 100;
+  z-index: 200;
   padding: var(--sp-xs) 0;
 }
 .tab-group.open > .tab-dropdown {

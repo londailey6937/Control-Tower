@@ -2508,20 +2508,17 @@ function applyRoleRestrictions(): void {
   });
 
   // Gray out group triggers if ALL their sub-tabs are restricted
-  document
-    .querySelectorAll<HTMLElement>(".tab-group")
-    .forEach((group) => {
-      const trigger = group.querySelector<HTMLButtonElement>(
-        ".tab-group-trigger",
-      );
-      if (!trigger) return;
-      const btns = group.querySelectorAll<HTMLButtonElement>(".tab-btn");
-      const allRestricted = Array.from(btns).every(
-        (b) => b.disabled || b.style.display === "none",
-      );
-      trigger.classList.toggle("tab-restricted", allRestricted);
-      trigger.disabled = allRestricted;
-    });
+  document.querySelectorAll<HTMLElement>(".tab-group").forEach((group) => {
+    const trigger =
+      group.querySelector<HTMLButtonElement>(".tab-group-trigger");
+    if (!trigger) return;
+    const btns = group.querySelectorAll<HTMLButtonElement>(".tab-btn");
+    const allRestricted = Array.from(btns).every(
+      (b) => b.disabled || b.style.display === "none",
+    );
+    trigger.classList.toggle("tab-restricted", allRestricted);
+    trigger.disabled = allRestricted;
+  });
 
   // If on a restricted tab, fall back to the first allowed tab
   const currentAllowed = tierAllowed.has(activeTab) && roleTabs.has(activeTab);
