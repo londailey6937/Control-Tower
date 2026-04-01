@@ -235,9 +235,11 @@ export async function fetchAllowedTabs(projectId: string): Promise<string[]> {
   });
   if (error) {
     console.warn("fetchAllowedTabs:", error.message);
-    return ["dual-track", "gates", "timeline", "budget"];
+    return ["dual-track", "gates", "timeline", "budget", "predicate-finder"];
   }
-  return data ?? ["dual-track", "gates", "timeline", "budget"];
+  return (
+    data ?? ["dual-track", "gates", "timeline", "budget", "predicate-finder"]
+  );
 }
 
 // ── Document Control — DHF Upload ───────────────

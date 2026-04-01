@@ -750,13 +750,13 @@
           <div class="doc-lib-filters" id="docLibFilters"></div>
           <button
             class="btn-primary doc-lib-add-btn"
-            onclick="window._openAddDocForm()"
+            data-action="openAddDocForm"
           >
             ＋ <span data-i18n="docLibAddDoc">Add Document</span>
           </button>
           <button
             class="btn-secondary"
-            onclick="window._syncDocsToServer()"
+            data-action="syncDocsToServer"
             title="Upload approved/effective documents to Supabase"
           >
             ☁️ <span data-i18n="docLibSync">Sync to Server</span>
@@ -833,7 +833,7 @@
             </select>
           </div>
           <div class="mb-actions">
-            <button class="btn-primary" onclick="window._mbCreateThread()">
+            <button class="btn-primary" data-action="mbCreateThread">
               ✚ <span data-i18n="mbNewThread">New Thread</span>
             </button>
             <span class="action-sep">│</span>
@@ -841,7 +841,7 @@
               📤 <span data-i18n="qaExportAnswers">Export</span>
             </button>
             <span class="action-sep">│</span>
-            <button class="btn-secondary" onclick="window._openQaSettings()">
+            <button class="btn-secondary" data-action="openQaSettings">
               ⚙️ <span data-i18n="qaSettings">Settings</span>
             </button>
           </div>

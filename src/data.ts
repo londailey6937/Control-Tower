@@ -3385,6 +3385,7 @@ export let ALLOWED_TABS: Set<string> = new Set([
   "gates",
   "timeline",
   "budget",
+  "predicate-finder",
 ]);
 
 export function setActiveTier(tier: SaasTier): void {

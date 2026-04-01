@@ -429,6 +429,82 @@ function setupEventDelegation(): void {
       case "deleteTeamMember":
         window._deleteTeamMember(a.tmid!);
         break;
+      case "clearForm": {
+        const f = document.getElementById(a.formid!);
+        if (f) f.innerHTML = "";
+        break;
+      }
+      case "hideForm": {
+        const hf = document.getElementById(a.formid!);
+        if (hf) (hf as HTMLElement).style.display = "none";
+        break;
+      }
+      case "closeDocHistory":
+        window._closeDocHistory();
+        break;
+      case "addDocLibItem":
+        window._addDocLibItem();
+        break;
+      case "openDocHistory":
+        window._openDocHistory(a.did!);
+        break;
+      case "cycleDocStatus":
+        window._cycleDocStatus(a.did!);
+        break;
+      case "deleteDocLibItem":
+        window._deleteDocLibItem(a.did!);
+        break;
+      case "saveQaSettings":
+        window._saveQaSettings();
+        break;
+      case "markQaRead":
+        window._markQaRead(a.mid!);
+        break;
+      case "mbResolveThread":
+        window._mbResolveThread(Number(a.tid!));
+        break;
+      case "mbReopenThread":
+        window._mbReopenThread(Number(a.tid!));
+        break;
+      case "mbLogDecision":
+        window._mbLogDecision(Number(a.tid!));
+        break;
+      case "mbCreateAction":
+        window._mbCreateAction(Number(a.tid!));
+        break;
+      case "mbLinkItem":
+        window._mbLinkItem(Number(a.tid!));
+        break;
+      case "archiveQaMessages":
+        window._archiveQaMessages(Number(a.tid!));
+        break;
+      case "mbDeleteThread":
+        window._mbDeleteThread(Number(a.tid!));
+        break;
+      case "sendQaMessage":
+        window._sendQaMessage(Number(a.tid!));
+        break;
+      case "closeQaArchive":
+        window._closeQaArchive();
+        break;
+      case "deleteQaArchive":
+        window._deleteQaArchive(Number(a.aidx!));
+        break;
+      case "goToDocLibrary":
+        document.querySelector<HTMLElement>("[data-tab=doc-library]")?.click();
+        break;
+      case "openAddDocForm":
+        window._openAddDocForm();
+        break;
+      case "syncDocsToServer":
+        window._syncDocsToServer();
+        break;
+      case "mbCreateThread":
+        window._mbCreateThread();
+        break;
+      case "openQaSettings":
+        window._openQaSettings();
+        break;
     }
   });
   document.addEventListener("change", (e) => {
@@ -441,6 +517,9 @@ function setupEventDelegation(): void {
         break;
       case "setRiskField":
         window._setRiskField(el.dataset.rid!, el.dataset.rfield!, val);
+        break;
+      case "toggleQaTestMode":
+        window._toggleQaTestMode((el as HTMLInputElement).checked);
         break;
     }
   });
@@ -1993,7 +2072,7 @@ window._openAddBudgetForm = function (): void {
       <input type="number" id="budgetFormPlanned" placeholder="${t("budgetFormPlanned")}" min="0" />
       <input type="number" id="budgetFormActual" placeholder="${t("budgetFormActual")}" min="0" value="0" />
       <button class="btn-add-funding" data-action="addBudgetCategory">${t("budgetFormAdd")}</button>
-      <button class="btn-secondary" onclick="document.getElementById('budgetAddForm').innerHTML=''">${t("budgetFormCancel")}</button>
+      <button class="btn-secondary" data-action="clearForm" data-formid="budgetAddForm">${t("budgetFormCancel")}</button>
     </div>
   `;
 };
@@ -3216,7 +3295,7 @@ window._openAddInvestorForm = function (): void {
       <input type="number" id="invFormAmount" placeholder="${t("usInvestAmount")}" min="0" />
       <input type="text" id="invFormNotes" placeholder="${t("usInvestNotes")}" />
       <button class="btn-add-funding" data-action="addInvestor">${t("usInvestFormAdd")}</button>
-      <button class="btn-secondary" onclick="document.getElementById('investorAddForm').innerHTML=''">${t("usInvestFormCancel")}</button>
+      <button class="btn-secondary" data-action="clearForm" data-formid="investorAddForm">${t("usInvestFormCancel")}</button>
     </div>
   `;
 };
@@ -3303,7 +3382,7 @@ window._openAddIRActivityForm = function (): void {
       <input type="date" id="iraFormDate" />
       <input type="text" id="iraFormActivity" placeholder="${t("usInvestIrTitle")}" style="flex:2" />
       <button class="btn-add-funding" data-action="addIRActivity">${t("usInvestFormAdd")}</button>
-      <button class="btn-secondary" onclick="document.getElementById('iraAddForm').innerHTML=''">${t("usInvestFormCancel")}</button>
+      <button class="btn-secondary" data-action="clearForm" data-formid="iraAddForm">${t("usInvestFormCancel")}</button>
     </div>
   `;
   const dateInput = document.getElementById("iraFormDate") as HTMLInputElement;
@@ -3579,7 +3658,7 @@ window._openAddShareholderForm = function (): void {
       <input type="number" id="shFormShares" placeholder="${t("capTableShares")}" min="1" />
       <input type="text" id="shFormNotes" placeholder="${t("capTableNotes")}" />
       <button class="btn-add-funding" data-action="addShareholder">${t("capTableFormAdd")}</button>
-      <button class="btn-secondary" onclick="document.getElementById('shareholderAddForm').innerHTML=''">${t("capTableFormCancel")}</button>
+      <button class="btn-secondary" data-action="clearForm" data-formid="shareholderAddForm">${t("capTableFormCancel")}</button>
     </div>
   `;
 };
@@ -3643,7 +3722,7 @@ window._openAddEquityEventForm = function (): void {
       <input type="number" id="eqFormTotal" placeholder="${t("capTableEventTotal")}" min="0" />
       <input type="text" id="eqFormNotes" placeholder="${t("capTableNotes")}" />
       <button class="btn-add-funding" data-action="addEquityEvent">${t("capTableFormAdd")}</button>
-      <button class="btn-secondary" onclick="document.getElementById('eqEventAddForm').innerHTML=''">${t("capTableFormCancel")}</button>
+      <button class="btn-secondary" data-action="clearForm" data-formid="eqEventAddForm">${t("capTableFormCancel")}</button>
     </div>
   `;
   const dateInput = document.getElementById("eqFormDate") as HTMLInputElement;
@@ -3722,7 +3801,7 @@ window._openAddVestingForm = function (): void {
       <input type="number" id="vsFormTerm" placeholder="${t("capTableVestTerm")} (${t("capTableMonths")})" min="1" value="48" />
       <input type="text" id="vsFormNotes" placeholder="${t("capTableNotes")}" />
       <button class="btn-add-funding" data-action="addVesting">${t("capTableFormAdd")}</button>
-      <button class="btn-secondary" onclick="document.getElementById('vestingAddForm').innerHTML=''">${t("capTableFormCancel")}</button>
+      <button class="btn-secondary" data-action="clearForm" data-formid="vestingAddForm">${t("capTableFormCancel")}</button>
     </div>
   `;
   const dateInput = document.getElementById("vsFormStart") as HTMLInputElement;
@@ -4243,7 +4322,7 @@ function openDocHistory(id: string): void {
       <div class="doc-history-header">
         <h3>${localizedText(doc.name)}</h3>
         <span class="doc-dcn-label">${doc.dcn}</span>
-        <button class="modal-close" onclick="window._closeDocHistory()">✕</button>
+        <button class="modal-close" data-action="closeDocHistory">✕</button>
       </div>
       <div class="doc-history-meta">
         <div><strong>${t("docLibOwner")}:</strong> ${doc.owner}</div>
@@ -4338,8 +4417,8 @@ function openAddDocForm(): void {
       </label>
     </div>
     <div class="doc-form-actions">
-      <button class="btn-primary" onclick="window._addDocLibItem()">${t("docLibFormAdd")}</button>
-      <button class="btn-secondary" onclick="document.getElementById('docLibAddForm').style.display='none'">${t("docLibFormCancel")}</button>
+      <button class="btn-primary" data-action="addDocLibItem">${t("docLibFormAdd")}</button>
+      <button class="btn-secondary" data-action="hideForm" data-formid="docLibAddForm">${t("docLibFormCancel")}</button>
     </div>
   `;
 }
@@ -4480,7 +4559,7 @@ function renderDocLibTable(): void {
       <td><span class="doc-cat-badge doc-cat-${d.cat}">${catLabel(d.cat)}</span></td>
       <td class="doc-dcn-cell">${d.dcn}</td>
       <td class="doc-name-cell">
-        <button class="doc-name-link" onclick="window._openDocHistory('${d.id}')">${localizedText(d.name)}</button>
+        <button class="doc-name-link" data-action="openDocHistory" data-did="${d.id}">${localizedText(d.name)}</button>
       </td>
       <td>v${d.version}</td>
       <td>${d.date}</td>
@@ -4488,10 +4567,10 @@ function renderDocLibTable(): void {
       <td>${d.linkedMilestone || "—"}</td>
       <td class="doc-sourceref-cell" title="${d.sourceRef || ""}">${d.sourceRef ? `<span class="doc-sourceref-badge">🔗 ${d.sourceRef}</span>` : "—"}</td>
       <td>
-        <button class="doc-status-btn ${docStatusClass(d.status)}" onclick="window._cycleDocStatus('${d.id}')" title="${ACTIVE_ROLE === "pmp" ? t("clickToChangeStatus") : ""}">${docStatusLabel(d.status)}</button>
+        <button class="doc-status-btn ${docStatusClass(d.status)}" data-action="cycleDocStatus" data-did="${d.id}" title="${ACTIVE_ROLE === "pmp" ? t("clickToChangeStatus") : ""}">${docStatusLabel(d.status)}</button>
         ${overdue ? `<span class="doc-overdue-badge" title="${t("docLibOverdue")}">⚠</span>` : ""}
       </td>
-      <td>${ACTIVE_ROLE === "pmp" ? `<button class="doc-remove-btn" onclick="window._deleteDocLibItem('${d.id}')" title="${t("docLibRemove")}">✕</button>` : ""}</td>
+      <td>${ACTIVE_ROLE === "pmp" ? `<button class="doc-remove-btn" data-action="deleteDocLibItem" data-did="${d.id}" title="${t("docLibRemove")}">✕</button>` : ""}</td>
     </tr>`;
     })
     .join("");
@@ -4918,13 +4997,13 @@ function openQaSettings(): void {
       </label>
     </div>
     <div class="qa-settings-actions">
-      <button class="btn-primary" onclick="window._saveQaSettings()">${t("qaSettingsSave")}</button>
+      <button class="btn-primary" data-action="saveQaSettings">${t("qaSettingsSave")}</button>
       <span class="qa-settings-separator">|</span>
-      <button class="btn-secondary" onclick="document.getElementById('qaSettingsPanel').style.display='none'">${t("qaSettingsCancel")}</button>
+      <button class="btn-secondary" data-action="hideForm" data-formid="qaSettingsPanel">${t("qaSettingsCancel")}</button>
     </div>
     <div class="qa-test-mode-row">
       <label class="qa-test-toggle">
-        <input type="checkbox" id="qaTestModeToggle" ${qaTestMode ? "checked" : ""} onchange="window._toggleQaTestMode(this.checked)" />
+        <input type="checkbox" id="qaTestModeToggle" ${qaTestMode ? "checked" : ""} data-change="toggleQaTestMode" />
         <span>${qaTestMode ? t("qaTestModeOn") : t("qaTestModeOff")}</span>
       </label>
       ${qaTestMode ? `<span class="qa-test-badge">${t("qaTestMode")}</span>` : ""}
@@ -5108,7 +5187,7 @@ function renderQaThread(threadId: number): void {
           : "";
       const markReadBtn =
         !isReadByViewer && senderNorm !== normalizeRole(qaPostingRole)
-          ? `<button class="qa-mark-read-btn" onclick="window._markQaRead('${m.id}')" title="${t("qaMarkRead")}">&#x2709;</button>`
+          ? `<button class="qa-mark-read-btn" data-action="markQaRead" data-mid="${m.id}" title="${t("qaMarkRead")}">&#x2709;</button>`
           : "";
 
       // Highlight decisions and actions
@@ -5192,13 +5271,13 @@ function threadCardHtml(thread: MBThread): string {
   // Thread actions row
   const isPmp = qaPostingRole === "pmp";
   const actionsHtml = `<div class="mb-thread-actions">
-    ${thread.lifecycle === "open" ? `<button class="mb-action-btn mb-btn-resolve" onclick="window._mbResolveThread(${thread.id})" title="${t("mbResolve")}">✅ ${t("mbResolve")}</button>` : ""}
-    ${thread.lifecycle === "resolved" ? `<button class="mb-action-btn" onclick="window._mbReopenThread(${thread.id})" title="${t("mbReopen")}">🔄 ${t("mbReopen")}</button>` : ""}
-    <button class="mb-action-btn" onclick="window._mbLogDecision(${thread.id})" title="${t("mbLogDecision")}">⚖️ ${t("mbLogDecision")}</button>
-    <button class="mb-action-btn" onclick="window._mbCreateAction(${thread.id})" title="${t("mbCreateAction")}">⚡ ${t("mbCreateAction")}</button>
-    <button class="mb-action-btn" onclick="window._mbLinkItem(${thread.id})" title="${t("mbLinkArtifact")}">🔗 ${t("mbLinkArtifact")}</button>
-    ${msgCount > 0 ? `<button class="mb-action-btn" onclick="window._archiveQaMessages(${thread.id})" title="${t("qaArchive")}">📦</button>` : ""}
-    ${isPmp ? `<button class="mb-action-btn mb-btn-delete" onclick="window._mbDeleteThread(${thread.id})" title="${t("mbDelete")}">🗑️</button>` : ""}
+    ${thread.lifecycle === "open" ? `<button class="mb-action-btn mb-btn-resolve" data-action="mbResolveThread" data-tid="${thread.id}" title="${t("mbResolve")}">✅ ${t("mbResolve")}</button>` : ""}
+    ${thread.lifecycle === "resolved" ? `<button class="mb-action-btn" data-action="mbReopenThread" data-tid="${thread.id}" title="${t("mbReopen")}">🔄 ${t("mbReopen")}</button>` : ""}
+    <button class="mb-action-btn" data-action="mbLogDecision" data-tid="${thread.id}" title="${t("mbLogDecision")}">⚖️ ${t("mbLogDecision")}</button>
+    <button class="mb-action-btn" data-action="mbCreateAction" data-tid="${thread.id}" title="${t("mbCreateAction")}">⚡ ${t("mbCreateAction")}</button>
+    <button class="mb-action-btn" data-action="mbLinkItem" data-tid="${thread.id}" title="${t("mbLinkArtifact")}">🔗 ${t("mbLinkArtifact")}</button>
+    ${msgCount > 0 ? `<button class="mb-action-btn" data-action="archiveQaMessages" data-tid="${thread.id}" title="${t("qaArchive")}">📦</button>` : ""}
+    ${isPmp ? `<button class="mb-action-btn mb-btn-delete" data-action="mbDeleteThread" data-tid="${thread.id}" title="${t("mbDelete")}">🗑️</button>` : ""}
   </div>`;
 
   return `
@@ -5235,7 +5314,7 @@ function threadCardHtml(thread: MBThread): string {
         <div class="mb-compose-hints">${t("mbComposeHint")}</div>
         <textarea id="qa-input-${thread.id}" class="qa-compose-input" rows="2" placeholder="${t("qaAnswerPlaceholder")}"></textarea>
         <div class="qa-compose-actions">
-          <button class="qa-send-btn" onclick="window._sendQaMessage(${thread.id})">${t("qaSend")} \u27a4</button>
+          <button class="qa-send-btn" data-action="sendQaMessage" data-tid="${thread.id}">${t("qaSend")} \u27a4</button>
         </div>
       </div>`
           : ""
@@ -5852,7 +5931,7 @@ function renderFdaComms(): void {
         ? `${unsyncedCount} 份已批准/生效文档尚未上传至服务器 — 请前往 Document Control 同步以保护您的DHF`
         : `${unsyncedCount} approved/effective document(s) not yet synced to server — go to Document Control and click "Sync to Server" to protect your DHF`
     }</span>
-    <button class="fda-sync-alert-btn" onclick="document.querySelector('[data-tab=doc-library]')?.click()">📂 ${isCN ? "前往文档控制" : "Go to Document Control"}</button>
+    <button class="fda-sync-alert-btn" data-action="goToDocLibrary">📂 ${isCN ? "前往文档控制" : "Go to Document Control"}</button>
   </div>`
       : ""
   }
@@ -6447,7 +6526,7 @@ function viewQaArchive(): void {
   body.innerHTML = `
     <div class="qa-archive-header">
       <h3>${t("qaArchiveTitle")}</h3>
-      <button class="btn-secondary" onclick="window._closeQaArchive()">${t("qaArchiveBack")}</button>
+      <button class="btn-secondary" data-action="closeQaArchive">${t("qaArchiveBack")}</button>
     </div>
     ${archive
       .map((entry, idx) => {
@@ -6458,7 +6537,7 @@ function viewQaArchive(): void {
         return `<div class="qa-archive-entry">
         <div class="qa-archive-entry-header">
           <span class="qa-archive-date">📦 ${dateStr} — ${entry.messages.length} ${t("qaMessages")}</span>
-          <button class="doc-remove-btn" onclick="window._deleteQaArchive(${idx})" title="${t("docLibRemove")}">✕</button>
+          <button class="doc-remove-btn" data-action="deleteQaArchive" data-aidx="${idx}" title="${t("docLibRemove")}">✕</button>
         </div>
         <div class="qa-archive-messages">
           ${entry.messages
@@ -7399,7 +7478,7 @@ window._openAddTeamMemberForm = function (): void {
       <input type="text" id="tmFormEmail" placeholder="${t("resourceFormEmail")}" />
       <input type="text" id="tmFormWorkstreams" placeholder="${t("resourceFormWorkstreams")}" />
       <button class="btn-add-funding" data-action="addTeamMember">${t("resourceFormAdd")}</button>
-      <button class="btn-secondary" onclick="document.getElementById('resourceAddForm').innerHTML=''">${t("resourceFormCancel")}</button>
+      <button class="btn-secondary" data-action="clearForm" data-formid="resourceAddForm">${t("resourceFormCancel")}</button>
     </div>
   `;
 };
@@ -7539,7 +7618,7 @@ window._openAddSupplierForm = function (): void {
       <input type="text" id="supFormPO" placeholder="${t("supplierFormPO")}" />
       <input type="text" id="supFormMilestone" placeholder="${t("supplierFormMilestone")}" />
       <button class="btn-add-funding" data-action="addSupplier">${t("supplierFormAdd")}</button>
-      <button class="btn-secondary" onclick="document.getElementById('supplierAddForm').innerHTML=''">${t("supplierFormCancel")}</button>
+      <button class="btn-secondary" data-action="clearForm" data-formid="supplierAddForm">${t("supplierFormCancel")}</button>
     </div>
   `;
 };
