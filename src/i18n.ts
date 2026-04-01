@@ -521,7 +521,8 @@ export const I18N: I18nMessages = {
     tabFdaComms: "FDA Comms",
     tabPredicateFinder: "Predicate Finder",
     pfTitle: "510(k) Predicate Finder",
-    pfDesc: "Search FDA's 510(k) database, trace predicate chains, compare devices, and generate SE arguments.",
+    pfDesc:
+      "Search FDA's 510(k) database, trace predicate chains, compare devices, and generate SE arguments.",
     fdaTitle: "FDA Communications Center",
     fdaDesc:
       "Q-Sub package generation, RTA checklist, and FDA interaction timeline \u2014 PMP eyes only",
@@ -1140,7 +1141,8 @@ export const I18N: I18nMessages = {
     tabFdaComms: "FDA通信",
     tabPredicateFinder: "先导器械查找器",
     pfTitle: "510(k) 先导器械查找器",
-    pfDesc: "搜索FDA 510(k)数据库，追踪先导器械链，比较设备，生成实质等同性论证。",
+    pfDesc:
+      "搜索FDA 510(k)数据库，追踪先导器械链，比较设备，生成实质等同性论证。",
     fdaTitle: "FDA通信中心",
     fdaDesc: "Q-Sub包生成、RTA清单和FDA交互时间线 — 仅PMP可见",
     qaTitle: "留言板",

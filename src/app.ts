@@ -5340,7 +5340,9 @@ function exportQaThread(): void {
 // ══════════════════════════════════════════════════
 
 function renderPredicateFinder(): void {
-  const iframe = document.getElementById("pfIframe") as HTMLIFrameElement | null;
+  const iframe = document.getElementById(
+    "pfIframe",
+  ) as HTMLIFrameElement | null;
   if (!iframe) return;
   // Lazy-load: set src only on first render
   if (!iframe.src || iframe.src === "about:blank") {
