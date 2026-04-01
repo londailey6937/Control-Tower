@@ -413,6 +413,7 @@ declare global {
     _deleteDocLibItem: (id: string) => void;
     _openAddDocForm: () => void;
     _addDocLibItem: () => void;
+    _syncDocsToServer: () => Promise<void>;
     _cycleDocStatus: (id: string) => void;
     _openDocHistory: (id: string) => void;
     _closeDocHistory: () => void;
