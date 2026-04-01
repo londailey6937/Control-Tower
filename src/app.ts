@@ -2434,7 +2434,8 @@ function applyRoleRestrictions(): void {
       const panel = document.getElementById("panel-fda-comms");
       if (panel && hidden) panel.classList.remove("active");
     } else {
-      const tierOk = tierAllowed.has(tab);
+      // predicate-finder is a free lead-magnet — always tier-allowed
+      const tierOk = tierAllowed.has(tab) || tab === "predicate-finder";
       const roleOk = roleTabs.has(tab);
       const allowed = tierOk && roleOk;
       btn.classList.toggle("tab-restricted", !allowed);
