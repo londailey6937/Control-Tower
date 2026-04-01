@@ -1,0 +1,3 @@
+# Redirect pages.dev to custom domain
+https://control-tower-bmx.pages.dev/* https://ct.510kbridge.com/:splat 301
+https://*.control-tower-bmx.pages.dev/* https://ct.510kbridge.com/:splat 301
