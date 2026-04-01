@@ -222,7 +222,11 @@ def build():
         "  Insurance -- Product liability, general liability, D&O\n\n"
         "Pricing: $1K-$5K one-time setup or $200/mo SaaS.\n"
         "Revenue kicker: Referral partnerships with immigration attorneys, corporate "
-        "service providers, and registered agent companies.")
+        "service providers, and registered agent companies.\n\n"
+        "Future Expansion: China WFOE checklist module -- a natural complement since "
+        "some Chinese clients setting up US operations will also need a China "
+        "presence (US parent needing a China subsidiary), creating referral "
+        "partnerships with China company formation agents.")
 
     pdf.sub("3.5 Lead Magnets & Content")
     pdf.txt(
@@ -458,6 +462,61 @@ def build():
         "  Strategic acquisition by QMS vendor (Greenlight Guru, Qualio, MasterControl)\n"
         "  Private equity roll-up of regulatory tech platforms\n"
         "  Continue as lifestyle business at $5-11M ARR with 75% gross margins")
+
+    # -- 11. China WFOE Strategy --
+    pdf.add_page()
+    pdf.sec(11, "China WFOE Strategy")
+
+    pdf.sub("11.1 Is a China WFOE the Right Move?")
+    pdf.txt(
+        "A China WFOE (Wholly Foreign-Owned Enterprise) is not an obvious early-stage "
+        "need and may be premature in Years 1-2. 510k Bridge's customers are Chinese "
+        "companies going to the US -- not a US company selling into China domestically. "
+        "The revenue model is USD-denominated SaaS + professional services contracts. "
+        "You do not need a Chinese legal entity to sell to Chinese customers, run a "
+        "WeChat account, or hire a China-based BD person.\n\n"
+        "A WFOE becomes relevant if you:\n"
+        "  - Want to hire employees on a Chinese payroll directly (vs. using an EOR)\n"
+        "  - Need to issue Chinese VAT invoices (fapiao) to enterprise clients who "
+        "require them for accounting\n"
+        "  - Are pursuing Chinese government grants, biotech park subsidies, or FTZ "
+        "incentives\n"
+        "  - Want to open a Chinese bank account for RMB collections")
+
+    pdf.sub("11.2 Cheaper Alternatives (Year 1-2)")
+    pdf.txt(
+        "EOR/PEO (Employer of Record)\n"
+        "For the 'Sales / BD (China)' hire, an EOR like Velocity Global, Deel, or "
+        "Atlas lets you hire a China-based employee legally without forming an entity. "
+        "Cost: roughly $300-$600/month per employee in management fees on top of salary. "
+        "This is almost certainly the right call for Year 1 given the $2,500 startup budget.\n\n"
+        "WeChat Official Account\n"
+        "Registerable as a foreign business without a WFOE. Requires a Chinese business "
+        "license or a foreign company registration certificate. Delaware C-corp documents "
+        "(apostilled) may suffice depending on the account type.")
+
+    pdf.sub("11.3 When a WFOE Makes Sense")
+    pdf.txt(
+        "Probably Year 3+, when you have enterprise clients requiring fapiao, retainer "
+        "revenue in RMB, or a team of 3+ in China. At that point budget:\n\n"
+        "  Agent/setup fees (services WFOE):               $2,500 - $5,000\n"
+        "  Registered address (virtual, economic zone):     $500 - $1,500/yr\n"
+        "  Document legalization (DE C-corp apostille):      $500 - $1,000\n"
+        "  Company chops:                                   ~$200\n"
+        "  Ongoing accounting/compliance:                   $2,000 - $4,000/yr\n"
+        "  Total Year 1 of WFOE:                            ~$6,000 - $12,000\n\n"
+        "Registered capital commitment: plan for RMB 500K-1M (~$70K-$140K) as a "
+        "reasonable amount for a services WFOE in a tier-1 city, contributed over "
+        "5 years.")
+
+    pdf.sub("11.4 Strategic Product Opportunity")
+    pdf.txt(
+        "The Cross-Border Entity Setup Tracker (Section 3.4) already covers Delaware "
+        "C-Corp, OR, and WA registration for clients. A natural expansion is adding "
+        "a China WFOE Checklist Module -- some Chinese clients setting up US operations "
+        "will also have the reverse question (US parent needing a China presence). "
+        "This creates referral partnership opportunities with China company formation "
+        "agents, mirroring the US immigration attorney referral model.")
 
     path = os.path.join(OUT_DIR, "510kBridge_5Year_Business_Strategy_EN.pdf")
     pdf.output(path)
