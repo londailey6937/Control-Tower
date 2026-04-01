@@ -2,11 +2,12 @@
 // Type Definitions — Medical Device Development Control Tower
 // ============================================================
 
-export type Lang = "en" | "cn";
+export type Lang = "en" | "cn" | "ko";
 
 export interface LocalizedString {
   en: string;
   cn: string;
+  ko?: string;
 }
 
 // ── Project ─────────────────────────────────────

@@ -659,16 +659,22 @@ function initTabs(): void {
 function initLangToggle(): void {
   const btn = document.getElementById("langToggle")!;
   const label = document.getElementById("langLabel")!;
-  function updateLangBtn(lang: "en" | "cn"): void {
-    label.textContent = lang === "en" ? "EN" : "中";
-    btn.title =
-      lang === "en"
-        ? "Switch to Chinese / 切换中文"
-        : "Switch to English / 切换英文";
+  const langCycle: Array<"en" | "cn" | "ko"> = ["en", "cn", "ko"];
+  const langLabels: Record<string, string> = { en: "EN", cn: "中", ko: "한" };
+  const langTitles: Record<string, string> = {
+    en: "Switch to Chinese / 切换中文",
+    cn: "Switch to Korean / 한국어로 전환",
+    ko: "Switch to English / 切换英文",
+  };
+  function updateLangBtn(lang: "en" | "cn" | "ko"): void {
+    label.textContent = langLabels[lang];
+    btn.title = langTitles[lang];
   }
   updateLangBtn(getLang());
   btn.addEventListener("click", () => {
-    const newLang = getLang() === "en" ? ("cn" as const) : ("en" as const);
+    const cur = getLang();
+    const idx = langCycle.indexOf(cur);
+    const newLang = langCycle[(idx + 1) % langCycle.length];
     setLang(newLang);
     updateLangBtn(newLang);
     applyLanguage(newLang);
