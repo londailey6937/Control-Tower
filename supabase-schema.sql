@@ -145,13 +145,13 @@ BEGIN
 
   CASE v_tier
     WHEN 'starter' THEN
-      RETURN ARRAY['dual-track', 'gates', 'timeline', 'budget'];
+      RETURN ARRAY['dual-track', 'gates', 'timeline', 'budget', 'predicate-finder'];
     WHEN 'growth' THEN
       RETURN ARRAY[
         'dual-track', 'gates', 'timeline', 'budget',
         'regulatory', 'risks', 'audit', 'doc-library',
         'cash-runway', 'cap-table', 'us-investment',
-        'actions', 'qa-sheet'
+        'actions', 'qa-sheet', 'predicate-finder'
       ];
     WHEN 'scale' THEN
       RETURN ARRAY[
@@ -159,10 +159,10 @@ BEGIN
         'regulatory', 'risks', 'audit', 'doc-library',
         'cash-runway', 'cap-table', 'us-investment',
         'actions', 'qa-sheet', 'resources', 'suppliers',
-        'fda-comms'
+        'fda-comms', 'predicate-finder'
       ];
     ELSE
-      RETURN ARRAY['dual-track', 'gates', 'timeline', 'budget'];
+      RETURN ARRAY['dual-track', 'gates', 'timeline', 'budget', 'predicate-finder'];
   END CASE;
 END;
 $$ LANGUAGE plpgsql STABLE SECURITY DEFINER;

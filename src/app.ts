@@ -634,25 +634,89 @@ function bootDashboard(): void {
 }
 
 // ── TAB NAVIGATION ────────────────────────────
+
+// Map each sub-tab to its parent group name
+const TAB_TO_GROUP: Record<string, string> = {
+  "dual-track": "program",
+  gates: "program",
+  timeline: "program",
+  actions: "program",
+  regulatory: "regulatory",
+  risks: "regulatory",
+  "fda-comms": "regulatory",
+  "predicate-finder": "regulatory",
+  "doc-library": "documents",
+  audit: "documents",
+  "qa-sheet": "documents",
+  budget: "finance",
+  "cash-runway": "finance",
+  "us-investment": "finance",
+  "cap-table": "finance",
+  resources: "operations",
+  suppliers: "operations",
+};
+
+function closeAllDropdowns(): void {
+  document
+    .querySelectorAll(".tab-group.open")
+    .forEach((g) => g.classList.remove("open"));
+}
+
 function initTabs(): void {
+  // Group triggers — toggle dropdown
+  document
+    .querySelectorAll<HTMLButtonElement>(".tab-group-trigger")
+    .forEach((trigger) => {
+      trigger.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const group = trigger.closest(".tab-group")!;
+        const wasOpen = group.classList.contains("open");
+        closeAllDropdowns();
+        if (!wasOpen) group.classList.add("open");
+      });
+    });
+
+  // Sub-tab buttons — switch panel
   document.querySelectorAll<HTMLButtonElement>(".tab-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
       const tab = btn.dataset.tab;
-      if (!tab || tab === activeTab) return;
+      if (!tab || tab === activeTab) {
+        closeAllDropdowns();
+        return;
+      }
       activeTab = tab;
 
+      // Clear active from all sub-tab buttons
       document
         .querySelectorAll(".tab-btn")
         .forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
 
+      // Highlight the parent group trigger
+      document
+        .querySelectorAll(".tab-group-trigger")
+        .forEach((t) => t.classList.remove("active"));
+      const groupName = TAB_TO_GROUP[tab];
+      if (groupName) {
+        const trigger = document.querySelector<HTMLButtonElement>(
+          `.tab-group-trigger[data-group="${groupName}"]`,
+        );
+        if (trigger) trigger.classList.add("active");
+      }
+
+      // Switch panel
       document
         .querySelectorAll(".tab-panel")
         .forEach((p) => p.classList.remove("active"));
       const panel = document.getElementById("panel-" + tab);
       if (panel) panel.classList.add("active");
+
+      closeAllDropdowns();
     });
   });
+
+  // Click outside closes dropdowns
+  document.addEventListener("click", () => closeAllDropdowns());
 }
 
 // ── LANGUAGE TOGGLE ───────────────────────────
@@ -2442,6 +2506,22 @@ function applyRoleRestrictions(): void {
       btn.disabled = !allowed;
     }
   });
+
+  // Gray out group triggers if ALL their sub-tabs are restricted
+  document
+    .querySelectorAll<HTMLElement>(".tab-group")
+    .forEach((group) => {
+      const trigger = group.querySelector<HTMLButtonElement>(
+        ".tab-group-trigger",
+      );
+      if (!trigger) return;
+      const btns = group.querySelectorAll<HTMLButtonElement>(".tab-btn");
+      const allRestricted = Array.from(btns).every(
+        (b) => b.disabled || b.style.display === "none",
+      );
+      trigger.classList.toggle("tab-restricted", allRestricted);
+      trigger.disabled = allRestricted;
+    });
 
   // If on a restricted tab, fall back to the first allowed tab
   const currentAllowed = tierAllowed.has(activeTab) && roleTabs.has(activeTab);

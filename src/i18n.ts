@@ -13,6 +13,12 @@ export const I18N: I18nMessages = {
     pmpBadge: "PMP Authority",
     currentMonth: "Current",
 
+    groupProgram: "Program",
+    groupRegulatory: "Regulatory",
+    groupDocuments: "Documents",
+    groupFinance: "Finance",
+    groupOperations: "Operations",
+
     tabDualTrack: "Dual-Track",
     tabGates: "Gate System",
     tabRisks: "Risk Dashboard",
@@ -658,6 +664,12 @@ export const I18N: I18nMessages = {
     pmpBadge: "PMP权限",
     currentMonth: "当前",
 
+    groupProgram: "项目管理",
+    groupRegulatory: "法规",
+    groupDocuments: "文档",
+    groupFinance: "财务",
+    groupOperations: "运营",
+
     tabDualTrack: "双轨视图",
     tabGates: "门控系统",
     tabRisks: "风险仪表盘",
@@ -1273,6 +1285,12 @@ export const I18N: I18nMessages = {
     masterQuestion: "FDA 인허가 일정에 차질은 없는가 — 위험 요소는 무엇인가?",
     pmpBadge: "PMP 권한",
     currentMonth: "현재",
+
+    groupProgram: "프로그램",
+    groupRegulatory: "규제",
+    groupDocuments: "문서",
+    groupFinance: "재무",
+    groupOperations: "운영",
 
     tabDualTrack: "듀얼트랙",
     tabGates: "게이트 시스템",

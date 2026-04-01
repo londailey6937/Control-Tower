@@ -118,74 +118,124 @@
     <!-- NAVIGATION TABS                              -->
     <!-- ============================================ -->
     <nav class="tab-nav" id="tabNav">
-      <button class="tab-btn active" data-tab="dual-track">
-        <span class="tab-icon">📊</span>
-        <span data-i18n="tabDualTrack">Dual-Track</span>
-      </button>
-      <button class="tab-btn" data-tab="gates">
-        <span class="tab-icon">🚦</span>
-        <span data-i18n="tabGates">Gate System</span>
-      </button>
-      <button class="tab-btn" data-tab="regulatory">
-        <span class="tab-icon">📑</span>
-        <span data-i18n="tabRegulatory">Regulatory Tracker</span>
-      </button>
-      <button class="tab-btn" data-tab="risks">
-        <span class="tab-icon">⚠️</span>
-        <span data-i18n="tabRisks">Risk Dashboard</span>
-      </button>
-      <button class="tab-btn" data-tab="audit">
-        <span class="tab-icon">📋</span>
-        <span data-i18n="tabAudit">Audit Trail</span>
-      </button>
-      <button class="tab-btn" data-tab="doc-library">
-        <span class="tab-icon">📚</span>
-        <span data-i18n="tabDocLibrary">Document Control</span>
-      </button>
-      <button class="tab-btn" data-tab="actions">
-        <span class="tab-icon">✅</span>
-        <span data-i18n="tabActions">Actions</span>
-      </button>
-      <button class="tab-btn" data-tab="timeline">
-        <span class="tab-icon">📅</span>
-        <span data-i18n="tabTimeline">Timeline</span>
-      </button>
-      <button class="tab-btn" data-tab="budget">
-        <span class="tab-icon">📈</span>
-        <span data-i18n="tabBudget">Budget</span>
-      </button>
-      <button class="tab-btn" data-tab="cash-runway">
-        <span class="tab-icon">💰</span>
-        <span data-i18n="tabCashRunway">Cash / Runway</span>
-      </button>
-      <button class="tab-btn" data-tab="us-investment">
-        <span class="tab-icon">🇺🇸</span>
-        <span data-i18n="tabUsInvestment">US Investment</span>
-      </button>
-      <button class="tab-btn" data-tab="cap-table">
-        <span class="tab-icon">📊</span>
-        <span data-i18n="tabCapTable">Cap Table</span>
-      </button>
-      <button class="tab-btn" data-tab="resources">
-        <span class="tab-icon">👥</span>
-        <span data-i18n="tabResources">Resources</span>
-      </button>
-      <button class="tab-btn" data-tab="suppliers">
-        <span class="tab-icon">🏭</span>
-        <span data-i18n="tabSuppliers">Suppliers</span>
-      </button>
-      <button class="tab-btn" data-tab="qa-sheet">
-        <span class="tab-icon">📝</span>
-        <span data-i18n="tabQaSheet">Message Board</span>
-      </button>
-      <button class="tab-btn" data-tab="fda-comms" id="tabFdaComms">
-        <span class="tab-icon">🏛️</span>
-        <span data-i18n="tabFdaComms">FDA Comms</span>
-      </button>
-      <button class="tab-btn" data-tab="predicate-finder">
-        <span class="tab-icon">🔍</span>
-        <span data-i18n="tabPredicateFinder">Predicate Finder</span>
-      </button>
+      <!-- ── Program ──────────────────────── -->
+      <div class="tab-group">
+        <button class="tab-group-trigger active" data-group="program">
+          <span class="tab-icon">📊</span>
+          <span data-i18n="groupProgram">Program</span>
+          <span class="tab-caret">▾</span>
+        </button>
+        <div class="tab-dropdown">
+          <button class="tab-btn active" data-tab="dual-track">
+            <span class="tab-icon">📊</span>
+            <span data-i18n="tabDualTrack">Dual-Track</span>
+          </button>
+          <button class="tab-btn" data-tab="gates">
+            <span class="tab-icon">🚦</span>
+            <span data-i18n="tabGates">Gate System</span>
+          </button>
+          <button class="tab-btn" data-tab="timeline">
+            <span class="tab-icon">📅</span>
+            <span data-i18n="tabTimeline">Timeline</span>
+          </button>
+          <button class="tab-btn" data-tab="actions">
+            <span class="tab-icon">✅</span>
+            <span data-i18n="tabActions">Actions</span>
+          </button>
+        </div>
+      </div>
+      <!-- ── Regulatory ───────────────────── -->
+      <div class="tab-group">
+        <button class="tab-group-trigger" data-group="regulatory">
+          <span class="tab-icon">📑</span>
+          <span data-i18n="groupRegulatory">Regulatory</span>
+          <span class="tab-caret">▾</span>
+        </button>
+        <div class="tab-dropdown">
+          <button class="tab-btn" data-tab="regulatory">
+            <span class="tab-icon">📑</span>
+            <span data-i18n="tabRegulatory">Regulatory Tracker</span>
+          </button>
+          <button class="tab-btn" data-tab="risks">
+            <span class="tab-icon">⚠️</span>
+            <span data-i18n="tabRisks">Risk Dashboard</span>
+          </button>
+          <button class="tab-btn" data-tab="fda-comms" id="tabFdaComms">
+            <span class="tab-icon">🏛️</span>
+            <span data-i18n="tabFdaComms">FDA Comms</span>
+          </button>
+          <button class="tab-btn" data-tab="predicate-finder">
+            <span class="tab-icon">🔍</span>
+            <span data-i18n="tabPredicateFinder">Predicate Finder</span>
+          </button>
+        </div>
+      </div>
+      <!-- ── Documents ────────────────────── -->
+      <div class="tab-group">
+        <button class="tab-group-trigger" data-group="documents">
+          <span class="tab-icon">📚</span>
+          <span data-i18n="groupDocuments">Documents</span>
+          <span class="tab-caret">▾</span>
+        </button>
+        <div class="tab-dropdown">
+          <button class="tab-btn" data-tab="doc-library">
+            <span class="tab-icon">📚</span>
+            <span data-i18n="tabDocLibrary">Document Control</span>
+          </button>
+          <button class="tab-btn" data-tab="audit">
+            <span class="tab-icon">📋</span>
+            <span data-i18n="tabAudit">Audit Trail</span>
+          </button>
+          <button class="tab-btn" data-tab="qa-sheet">
+            <span class="tab-icon">📝</span>
+            <span data-i18n="tabQaSheet">Message Board</span>
+          </button>
+        </div>
+      </div>
+      <!-- ── Finance ──────────────────────── -->
+      <div class="tab-group">
+        <button class="tab-group-trigger" data-group="finance">
+          <span class="tab-icon">💰</span>
+          <span data-i18n="groupFinance">Finance</span>
+          <span class="tab-caret">▾</span>
+        </button>
+        <div class="tab-dropdown">
+          <button class="tab-btn" data-tab="budget">
+            <span class="tab-icon">📈</span>
+            <span data-i18n="tabBudget">Budget</span>
+          </button>
+          <button class="tab-btn" data-tab="cash-runway">
+            <span class="tab-icon">💰</span>
+            <span data-i18n="tabCashRunway">Cash / Runway</span>
+          </button>
+          <button class="tab-btn" data-tab="us-investment">
+            <span class="tab-icon">🇺🇸</span>
+            <span data-i18n="tabUsInvestment">US Investment</span>
+          </button>
+          <button class="tab-btn" data-tab="cap-table">
+            <span class="tab-icon">📊</span>
+            <span data-i18n="tabCapTable">Cap Table</span>
+          </button>
+        </div>
+      </div>
+      <!-- ── Operations ───────────────────── -->
+      <div class="tab-group">
+        <button class="tab-group-trigger" data-group="operations">
+          <span class="tab-icon">👥</span>
+          <span data-i18n="groupOperations">Operations</span>
+          <span class="tab-caret">▾</span>
+        </button>
+        <div class="tab-dropdown">
+          <button class="tab-btn" data-tab="resources">
+            <span class="tab-icon">👥</span>
+            <span data-i18n="tabResources">Resources</span>
+          </button>
+          <button class="tab-btn" data-tab="suppliers">
+            <span class="tab-icon">🏭</span>
+            <span data-i18n="tabSuppliers">Suppliers</span>
+          </button>
+        </div>
+      </div>
     </nav>
 
     <!-- ============================================ -->
