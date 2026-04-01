@@ -6185,23 +6185,47 @@ function renderFdaComms(): void {
   document
     .getElementById("fdaExportQuestions")
     ?.addEventListener("click", () => {
-      const questions = QA_SECTIONS.flatMap((s) =>
-        s.questions.map((q) => ({
-          section: localizedText(s.title),
-          question: localizedText(q.question),
-          why: localizedText(q.why),
-        })),
+      // Pull questions from "pre-sub" workstream threads on the Message Board
+      const preSubThreads = loadMBThreads().filter(
+        (th) => th.workstream === "pre-sub" && th.lifecycle === "open",
       );
+
+      if (preSubThreads.length === 0) {
+        alert(
+          isCN
+            ? "\u6D88\u606F\u677F\u4E0A\u6CA1\u6709Pre-Sub\u95EE\u9898\u7EBF\u7A0B\u3002\n\u8BF7\u5148\u5728\u6D88\u606F\u677F\u4E0A\u521B\u5EFA\u5DE5\u4F5C\u6D41\u4E3A\u300CPre-Sub\u95EE\u9898\u300D\u7684\u7EBF\u7A0B\u3002"
+            : 'No Pre-Sub question threads found on the Message Board.\nCreate threads with the "Pre-Sub Questions" workstream first.',
+        );
+        return;
+      }
+
       let html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Pre-Sub Questions — ${pName}</title>
     <style>body{font-family:Georgia,serif;max-width:700px;margin:40px auto;padding:20px;line-height:1.7;color:#1e293b}
     h1{color:#1e40af;border-bottom:2px solid #1e40af;padding-bottom:8px}
     h2{color:#334155;margin-top:28px} .q{margin:12px 0;padding:8px 0;border-bottom:1px solid #e2e8f0}
-    .q-num{color:#1e40af;font-weight:bold} .q-why{color:#64748b;font-size:0.9em;font-style:italic}</style></head><body>
-    <h1>Pre-Submission Questions — ${pName}</h1>
-    <p><strong>Applicant:</strong> ${pApplicant}<br><strong>Date:</strong> ${pDate || new Date().toLocaleDateString()}</p>`;
+    .q-num{color:#1e40af;font-weight:bold} .q-ctx{color:#64748b;font-size:0.9em;font-style:italic}
+    .q-msgs{margin:8px 0 0 20px;font-size:0.92em;color:#334155}
+    .q-msg-sender{font-weight:bold;color:#1e40af}</style></head><body>
+    <h1>${isCN ? "Pre-Submission 问题" : "Pre-Submission Questions"} — ${pName}</h1>
+    <p><strong>${isCN ? "申请人" : "Applicant"}:</strong> ${pApplicant}<br>
+    <strong>${isCN ? "日期" : "Date"}:</strong> ${pDate || new Date().toLocaleDateString()}</p>`;
+
       let n = 1;
-      questions.forEach((q) => {
-        html += `<div class="q"><span class="q-num">Q${n}.</span> ${q.question}<br><span class="q-why">Context: ${q.why}</span></div>`;
+      preSubThreads.forEach((th) => {
+        html += `<div class="q"><span class="q-num">Q${n}.</span> ${th.title}`;
+        if (th.objective) {
+          html += `<br><span class="q-ctx">${isCN ? "背景" : "Context"}: ${th.objective}</span>`;
+        }
+        // Include thread messages as discussion context
+        const msgs = _qaCache.filter((m) => m.qNum === th.id);
+        if (msgs.length > 0) {
+          html += `<div class="q-msgs">`;
+          msgs.forEach((m) => {
+            html += `<p><span class="q-msg-sender">${m.sender}:</span> ${m.text}</p>`;
+          });
+          html += `</div>`;
+        }
+        html += `</div>`;
         n++;
       });
       html += `</body></html>`;
@@ -6536,6 +6560,7 @@ function mbCreateThread(): void {
     "clinical",
     "business",
     "operations",
+    "pre-sub",
   ];
   const wsChoice = prompt(
     `${t("mbWorkstream")} (${wsOptions.join(", ")})`,

@@ -425,21 +425,27 @@ const GUIDE: HelpSection[] = [
       en: `<p>The Message Board is a purpose-driven messaging system for cross-functional communication. It supports threaded discussions with lifecycle management, decisions tracking, and action item creation.</p>
 <h4>Threads</h4>
 <p>Create threads with a title, workstream assignment, priority level, and intent (Discuss, Decide, Inform, Escalate). Threads flow through an Open &rarr; Resolved lifecycle.</p>
+<h4>Pre-Sub Questions Workstream</h4>
+<p>Use the <strong>Pre-Sub Questions</strong> workstream to author questions for your FDA Pre-Submission package. Any team member can create threads under this workstream &mdash; each thread becomes one question in the exported package. Use the thread objective field for context/rationale, and add messages to discuss the question with your team.</p>
+<p>Once questions are finalized, the PMP exports them from the FDA Comms tab using the <em>Export Question Package</em> button. The export includes the question title, context, and any discussion messages.</p>
 <h4>Posting Messages</h4>
 <p>Select your posting role from the role picker toolbar. Type your message and press Send. Use [DECISION] or [ACTION] prefixes to tag messages with special intent.</p>
 <h4>Settings</h4>
 <p>Click the Settings gear icon to configure email addresses for each role. Toggle Test Mode for development. Click Settings again to close the panel.</p>
 <h4>Views &amp; Filters</h4>
-<ul><li>All Threads: Complete thread list</li><li>My Items: Threads where you are owner or assignee</li><li>Decisions: Threads with active decisions</li><li>Executive: High-priority and decision threads</li><li>Workstream filter: Filter by workstream category</li><li>Lifecycle filter: Open, Resolved, or All</li></ul>`,
+<ul><li>All Threads: Complete thread list</li><li>My Items: Threads where you are owner or assignee</li><li>Decisions: Threads with active decisions</li><li>Executive: High-priority and decision threads</li><li>Workstream filter: Filter by workstream category (including Pre-Sub Questions)</li><li>Lifecycle filter: Open, Resolved, or All</li></ul>`,
       cn: `<p>消息板是跨职能沟通的专用消息系统。它支持带生命周期管理、决策跟踪和行动项创建的线程讨论。</p>
 <h4>线程</h4>
 <p>创建线程时设置标题、工作流分配、优先级和意图（讨论、决定、通知、升级）。线程经历 打开 → 已解决 的生命周期。</p>
+<h4>Pre-Sub问题工作流</h4>
+<p>使用<strong>Pre-Sub问题</strong>工作流来撰写FDA Pre-Submission包的问题。任何团队成员都可以在此工作流下创建线程——每个线程成为导出包中的一个问题。使用线程目标字段填写背景/理由，并添加消息与团队讨论问题。</p>
+<p>问题确定后，PMP从FDA通信标签页使用<em>导出问题包</em>按钮导出。导出内容包括问题标题、背景和所有讨论消息。</p>
 <h4>发送消息</h4>
 <p>从角色选择工具栏中选择您的发布角色。输入消息并按发送。使用[DECISION]或[ACTION]前缀标记具有特殊意图的消息。</p>
 <h4>设置</h4>
 <p>点击设置齿轮图标配置每个角色的电子邮件地址。切换测试模式用于开发。再次点击设置关闭面板。</p>
 <h4>视图与筛选</h4>
-<ul><li>所有线程：完整线程列表</li><li>我的项目：您是所有者或负责人的线程</li><li>决策：有活跃决策的线程</li><li>高管：高优先级和决策线程</li><li>工作流筛选：按工作流类别筛选</li><li>生命周期筛选：打开、已解决或全部</li></ul>`,
+<ul><li>所有线程：完整线程列表</li><li>我的项目：您是所有者或负责人的线程</li><li>决策：有活跃决策的线程</li><li>高管：高优先级和决策线程</li><li>工作流筛选：按工作流类别筛选（包括Pre-Sub问题）</li><li>生命周期筛选：打开、已解决或全部</li></ul>`,
     },
   },
   {
@@ -449,6 +455,10 @@ const GUIDE: HelpSection[] = [
       en: `<p>The FDA Comms tab is PMP-only and provides tools for FDA regulatory interactions.</p>
 <h4>Q-Sub Cover Letter Generator</h4>
 <p>Select from 5 Q-Sub types (Pre-Sub Meeting, Pre-Sub Written, SIR, Informational Meeting, Study Risk Determination) to auto-generate a cover letter with your company letterhead. Export as HTML for final formatting.</p>
+<h4>Export Question Package</h4>
+<p>Exports all open <strong>Pre-Sub Questions</strong> threads from the Message Board into a formatted HTML document. Each thread becomes a numbered question. The thread title is the question text, the objective field provides context, and any discussion messages are included below.</p>
+<p><strong>Workflow:</strong> Team members author questions on the Message Board (Pre-Sub Questions workstream) &rarr; PMP reviews and curates &rarr; PMP exports the final package from FDA Comms.</p>
+<p>If no Pre-Sub Questions threads exist, the export will prompt you to create them on the Message Board first.</p>
 <h4>Q-Submission Types Reference</h4>
 <p>Overview of all 5 FDA CDRH Q-Sub types with purpose, timeline, and "When to Use" guidance. Includes a "How to Choose the Right Q-Sub Type" decision guide.</p>
 <h4>Refuse-to-Accept (RTA) Checklist</h4>
@@ -462,6 +472,10 @@ const GUIDE: HelpSection[] = [
       cn: `<p>FDA通讯标签页仅限PMP使用，提供FDA法规互动工具。</p>
 <h4>Q-Sub附信生成器</h4>
 <p>从5种Q-Sub类型中选择（Pre-Sub会议、Pre-Sub书面、SIR、信息会议、研究风险判定），自动生成带公司抬头的附信。导出为HTML进行最终格式化。</p>
+<h4>导出问题包</h4>
+<p>将消息板上所有打开的<strong>Pre-Sub问题</strong>线程导出为格式化HTML文档。每个线程成为一个编号问题。线程标题为问题文本，目标字段提供背景，所有讨论消息包含在下方。</p>
+<p><strong>工作流：</strong>团队成员在消息板上撰写问题（Pre-Sub问题工作流）→ PMP审核和整理 → PMP从FDA通信导出最终包。</p>
+<p>如果没有Pre-Sub问题线程，导出时会提示您先在消息板上创建。</p>
 <h4>Q-Sub类型参考</h4>
 <p>全部5种FDA CDRH Q-Sub类型概览，包含用途、时间线和"何时使用"指南。包括"如何选择正确的Q-Sub类型"决策指南。</p>
 <h4>RTA自检清单</h4>

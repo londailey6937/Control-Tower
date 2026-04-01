@@ -543,7 +543,8 @@ export type MBWorkstream =
   | "engineering"
   | "clinical"
   | "business"
-  | "operations";
+  | "operations"
+  | "pre-sub";
 export type MBMessageIntent = "inform" | "decide" | "act";
 export type MBThreadLifecycle = "open" | "resolved" | "archived";
 export type MBPriority = "normal" | "urgent" | "escalated";
