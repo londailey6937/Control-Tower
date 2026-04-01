@@ -193,6 +193,22 @@ def build():
     )
 
     pdf.txt(
+        "Since we last talked, I have built a four-product technology suite:\n\n"
+        "  Control Tower -- The 17-tab PM command dashboard for managing the entire "
+        "510(k) pathway, from dual-track milestones through FDA submission.\n"
+        "  Predicate Finder -- An FDA database search tool (embedded in Control Tower "
+        "and available as a free standalone tool) that helps identify predicate devices "
+        "for substantial equivalence arguments.\n"
+        "  QMS-Lite -- A lightweight quality management system designed for 510(k)-stage "
+        "startups who cannot afford enterprise QMS platforms like Greenlight Guru.\n"
+        "  Entity Setup Tracker -- Helps Chinese companies form their US entity (Delaware "
+        "C-Corp, EIN, registered agent, bank account) with step-by-step tracking.\n\n"
+        "Each product generates recurring SaaS revenue and feeds clients into higher "
+        "service tiers. The Predicate Finder alone is a lead-generation machine -- "
+        "companies start with a free search and upgrade when they see the value."
+    )
+
+    pdf.txt(
         "Here is the additional benefit I want you to consider: as we onboard clients "
         "seeking FDA clearance, you can look through the client list and see if there "
         "are better valuations that you could be interested in. Instead of being locked "
@@ -245,17 +261,22 @@ def build():
     pdf.table(
         ["Tier", "What We Provide", "Monthly Fee"],
         [
-            ["Starter", "Control Tower SaaS license, read-only dashboard", "$500-$2,000"],
+            ["Predicate Finder Pro", "Unlimited searches, chain tracing, SE drafts", "$99"],
+            ["QMS-Lite", "Quality system for FDA audit readiness", "$200-$500"],
+            ["Starter", "Control Tower SaaS + Entity Setup Tracker", "$500-$2,000"],
             ["Professional", "Full PM engagement, manage gates & submissions", "$10,000-$25,000"],
-            ["Enterprise", "End-to-end: regulatory + PM + suppliers + US setup", "$50,000+/project"],
+            ["Enterprise", "End-to-end: regulatory + PM + suppliers + entity", "$50,000+/project"],
         ],
         [40, 75, 45]
     )
 
     pdf.txt(
-        "Most clients start at the Professional tier. A single Professional client at "
-        "$15,000/month generates $180,000 per year. With just 3-5 clients, the company "
-        "is generating $500K-$900K annually."
+        "Revenue comes from multiple streams. SaaS subscriptions (Predicate Finder Pro, "
+        "QMS-Lite, Starter dashboards) provide predictable monthly recurring revenue. "
+        "Professional and Enterprise clients bring in $10K-$50K+ per month each. A single "
+        "Professional client at $15,000/month generates $180,000 per year. With SaaS "
+        "subscribers plus 3-5 Professional clients, the company could reach $500K-$900K "
+        "annually."
     )
 
     pdf.sub("How Fees Are Used")
@@ -279,24 +300,26 @@ def build():
         "with the first client."
     )
 
-    pdf.sub("Example: Year 2 with 5 Active Clients")
+    pdf.sub("Example: Year 2 with SaaS + 5 Active PM Clients")
     pdf.table(
         ["Item", "Annual Amount"],
         [
-            ["Revenue (5 clients x $15K/mo avg)", "$900,000"],
-            ["Salaries & Benefits (50%)", "$450,000"],
-            ["Operations (15%)", "$135,000"],
-            ["Business Development (10%)", "$90,000"],
-            ["Technology (5%)", "$45,000"],
-            ["Owner Distributions (20%)", "$180,000"],
+            ["SaaS Revenue (PF Pro + QMS + Starter)", "$120,000"],
+            ["PM Revenue (5 clients x $15K/mo avg)", "$900,000"],
+            ["Total Revenue", "$1,020,000"],
+            ["Salaries & Benefits (50%)", "$510,000"],
+            ["Operations (15%)", "$153,000"],
+            ["Business Development (10%)", "$102,000"],
+            ["Technology (5%)", "$51,000"],
+            ["Owner Distributions (20%)", "$204,000"],
         ],
         [95, 65]
     )
 
     pdf.txt(
-        "At 5 clients, the company supports competitive salaries for the entire team "
-        "and distributes $180,000 to shareholders. As we add clients in Year 3-5, "
-        "both salaries and distributions grow."
+        "At 5 PM clients plus SaaS subscribers, the company supports competitive "
+        "salaries for the entire team and distributes over $200,000 to shareholders. "
+        "As we add clients in Year 3-5, both salaries and distributions grow."
     )
 
     # ── EB-5 BASICS ──────────────────────────────
@@ -361,6 +384,7 @@ def build():
             ["Capital required", "$800K (Camas TEA)", "$1M+ at set valuation"],
             ["Valuation", "You build it from zero", "Pre-set by others"],
             ["Control", "Full -- you are CEO", "Limited, makes you uneasy"],
+            ["Technology IP", "4-product suite (CT, PF, QMS, EST)", "None"],
             ["US operations", "Lon handles it", "You navigate alone"],
             ["Revenue starts", "First client (Year 1)", "18-23 months (FDA wait)"],
             ["Risk", "Portfolio of clients", "Single product bet"],

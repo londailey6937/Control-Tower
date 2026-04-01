@@ -290,7 +290,8 @@ def build_english():
         ("20", "Setup Wizard & Templates"),
         ("21", "Keyboard Shortcuts & Tips"),
         ("22", "Troubleshooting"),
-        ("23", "Glossary of FDA & Regulatory Terms"),
+        ("23", "510(k) Predicate Finder"),
+        ("24", "Glossary of FDA & Regulatory Terms"),
     ]
     pdf.set_font("Helvetica", "", 11)
     for num, title in toc:
@@ -334,7 +335,7 @@ def build_english():
     pdf.sec(2, "Dashboard Overview")
     pdf.txt(
         "The dashboard consists of a header bar with role/tier selectors, a horizontal "
-        "tab navigation bar with 16 functional tabs, and a main content area. Each tab "
+        "tab navigation bar with 17 functional tabs, and a main content area. Each tab "
         "focuses on a specific aspect of the 510(k) project lifecycle."
     )
 
@@ -344,7 +345,7 @@ def build_english():
     pdf.bul("Tier indicator: Shows your current subscription tier (Starter/Growth/Scale)")
     pdf.bul("Language toggle: Switch between English and Chinese interface")
 
-    pdf.sub("The 16 Tabs")
+    pdf.sub("The 17 Tabs")
     tabs = [
         ("Dual-Track", "Technical and regulatory milestone tracking"),
         ("Gate System", "Phase-gate reviews with criteria checklists"),
@@ -362,6 +363,7 @@ def build_english():
         ("Suppliers", "Supplier qualification and lead-time tracking"),
         ("Message Board", "Threaded discussions with decisions and action tracking"),
         ("FDA Comms", "Q-Sub generator, RTA checklist, and regulatory timelines (PMP only)"),
+        ("Predicate Finder", "Embedded 510(k) predicate search, chain tracing, and SE argument tool"),
     ]
     for name, desc in tabs:
         pdf.kv(name, desc)
@@ -383,7 +385,7 @@ def build_english():
     pdf.txt("Tab access is server-controlled via Supabase RLS. The tier determines which tabs are available:")
     pdf.kv("Starter ($500/mo)", "2 seats, 4 tabs: Dual-Track, Gates, Timeline, Budget")
     pdf.kv("Growth ($1,000/mo)", "5 seats, 13 tabs: All except Cap Table, FDA Comms, and US Investment")
-    pdf.kv("Scale ($2,000/mo)", "10 seats, all 16 tabs including FDA Comms and Cap Table")
+    pdf.kv("Scale ($2,000/mo)", "10 seats, all 17 tabs including FDA Comms, Cap Table, and embedded Predicate Finder")
 
     pdf.tip_box("Your tier is managed server-side and cannot be changed from the dashboard UI.")
 
@@ -878,10 +880,14 @@ def build_english():
     pdf.add_page()
     pdf.sec(23, "510(k) Predicate Finder")
     pdf.txt(
-        "The 510(k) Predicate Finder is a companion SaaS tool that connects to the "
-        "FDA openFDA database. It helps PMPs and regulatory teams identify predicate "
-        "devices, trace predicate chains, and draft Substantial Equivalence arguments "
-        "-- tasks that are critical to planning a 510(k) submission.")
+        "The 510(k) Predicate Finder is now embedded directly in the Control Tower "
+        "as a dedicated tab. It connects to the FDA openFDA database and helps PMPs "
+        "and regulatory teams identify predicate devices, trace predicate chains, and "
+        "draft Substantial Equivalence arguments -- tasks that are critical to planning "
+        "a 510(k) submission.\n\n"
+        "The Predicate Finder tab loads an iframe from the same deployment origin, "
+        "so all data stays within the Control Tower environment. The iframe loads "
+        "lazily -- it fetches on first tab visit to keep initial dashboard load fast.")
 
     pdf.sub("Free vs Pro")
     pdf.txt(
@@ -894,10 +900,11 @@ def build_english():
         "Free users provide their email to unlock the tool, creating a "
         "natural upgrade funnel to Control Tower subscriptions.")
 
-    pdf.sub("Integration with Control Tower (Scale Tier)")
+    pdf.sub("Integration with Control Tower")
     pdf.txt(
-        "On the Scale tier ($2,000/mo), the Predicate Finder is embedded directly "
-        "in the Control Tower dashboard. Predicate research informs:"
+        "The Predicate Finder is embedded as a full tab in the Control Tower dashboard, "
+        "available to all roles (PMP, Technology, Business, Accounting). Predicate "
+        "research informs:"
     )
     pdf.bul("Regulatory Tracker -- predicate device references and SE strategy")
     pdf.bul("Risk Dashboard -- risks identified during predicate comparison")

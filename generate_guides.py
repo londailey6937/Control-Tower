@@ -248,7 +248,7 @@ def build_english():
     # 4. Navigation Tabs
     pdf.add_page()
     pdf.sec(4, "Navigation Tabs")
-    pdf.txt("Sixteen tabs provide access to the main dashboard panels. The active tab has a blue underline.")
+    pdf.txt("Seventeen tabs provide access to the main dashboard panels. The active tab has a blue underline.")
     pdf.ln(2)
     pdf.kv("Dual-Track", "Side-by-side view of Technical + Regulatory milestones")
     pdf.kv("Gate System", "Decision checkpoints with PMP authority controls")
@@ -266,6 +266,7 @@ def build_english():
     pdf.kv("Suppliers", "Hardware component vendor tracking")
     pdf.kv("Message Board", "Purpose-driven messaging with structured threads, decision logging, workstream filtering, and accountability")
     pdf.kv("FDA Comms", "FDA Communications Center -- Q-Sub tracking, DICE correspondence, RTA checklist, and Pre-Submission meeting management (PMP-only)")
+    pdf.kv("Predicate Finder", "Embedded 510(k) predicate search, chain tracing, and SE argument tool")
 
     # 5. Dual-Track
     pdf.add_page()
@@ -540,7 +541,7 @@ def build_english():
     pdf.txt(
         "A dropdown menu in the top bar lets you switch between roles:\n\n"
         "  PMP (Full Authority) -- Can directly change any status, approve/reject change requests, "
-        "make gate decisions, and access all 16 tabs.\n"
+        "make gate decisions, and access all 17 tabs.\n"
         "  Technology Team -- Isolated to technical & regulatory tabs only. Financial data "
         "(budget, cash/runway, investment, cap table) is restricted. Must submit a "
         "Change Request for status modifications.\n"
@@ -1439,10 +1440,13 @@ def build_english():
     pdf.add_page()
     pdf.sec(32, "510(k) Predicate Finder Integration")
     pdf.txt(
-        "The 510(k) Predicate Finder is a companion SaaS tool that connects directly "
-        "to the FDA openFDA database to help teams identify and analyse predicate devices "
-        "for their substantial equivalence (SE) argument. It is available as a standalone "
-        "free tool and is embedded in the Scale tier of Control Tower.")
+        "The 510(k) Predicate Finder is now embedded directly in the Control Tower "
+        "as a dedicated tab. It connects to the FDA openFDA database to help teams "
+        "identify and analyse predicate devices for their substantial equivalence (SE) "
+        "argument. It is also available as a standalone free tool at 510kbridge.com.\n\n"
+        "The Predicate Finder tab loads an iframe from the same deployment origin, "
+        "keeping all data within the Control Tower environment. The iframe loads "
+        "lazily on first tab visit to keep initial dashboard load fast.")
 
     pdf.sub("32.1 Free Tier")
     pdf.txt(
@@ -1472,10 +1476,10 @@ def build_english():
 
     pdf.sub("32.4 Integration with Control Tower")
     pdf.txt(
-        "On the Scale tier ($2,000/mo), the Predicate Finder is embedded directly in the "
-        "Control Tower dashboard. Predicate research results can inform the Regulatory "
-        "Tracker, Risk Dashboard, and FDA Communications Center tabs, keeping all 510(k) "
-        "intelligence in one place.")
+        "The Predicate Finder is embedded as a full tab in the Control Tower, available "
+        "to all four roles (PMP, Technology, Business, Accounting). Predicate research "
+        "results can inform the Regulatory Tracker, Risk Dashboard, and FDA Communications "
+        "Center tabs, keeping all 510(k) intelligence in one place.")
 
     # 33. QMS-Lite for Startups
     pdf.add_page()
@@ -1839,7 +1843,7 @@ def build_chinese():
     pdf.add_page()
     pdf.sec(4, "\u5bfc\u822a\u9009\u9879\u5361")
     pdf.txt(
-        "\u5341\u516d\u4e2a\u9009\u9879\u5361\u63d0\u4f9b\u4e3b\u8981\u4eea\u8868\u76d8\u9762\u677f\u7684\u8bbf\u95ee\u3002"
+        "\u5341\u4e03\u4e2a\u9009\u9879\u5361\u63d0\u4f9b\u4e3b\u8981\u4eea\u8868\u76d8\u9762\u677f\u7684\u8bbf\u95ee\u3002"
         "\u6d3b\u52a8\u9009\u9879\u5361\u4ee5\u84dd\u8272\u4e0b\u5212\u7ebf\u9ad8\u4eae\u663e\u793a\u3002")
     pdf.ln(2)
     pdf.kv("\u53cc\u8f68\u89c6\u56fe", "\u6280\u672f+\u6cd5\u89c4\u91cc\u7a0b\u7891\u5e76\u6392\u663e\u793a")
@@ -1858,6 +1862,7 @@ def build_chinese():
     pdf.kv("\u4f9b\u5e94\u5546", "\u786c\u4ef6\u7ec4\u4ef6\u4f9b\u5e94\u5546\u8ffd\u8e2a")
     pdf.kv("\u7559\u8a00\u677f", "\u76ee\u6807\u9a71\u52a8\u7684\u7ed3\u6784\u5316\u7ebf\u7a0b\u6d88\u606f\u3001\u51b3\u7b56\u8bb0\u5f55\u3001\u5de5\u4f5c\u6d41\u7b5b\u9009\u548c\u8d23\u4efb\u5236")
     pdf.kv("FDA\u901a\u4fe1", "FDA\u901a\u4fe1\u4e2d\u5fc3" + EM + EM + "Q-Sub\u8ffd\u8e2a\u3001DICE\u901a\u4fe1\u3001RTA\u68c0\u67e5\u8868\u548c\u9884\u63d0\u4ea4\u4f1a\u8bae\u7ba1\u7406\uff08\u4ec5PMP\uff09")
+    pdf.kv("Predicate Finder", "\u5d4c\u5165\u5f0f510(k)\u5148\u5bfc\u641c\u7d22\u3001\u94fe\u8ffd\u6eaf\u548cSE\u8bba\u8bc1\u5de5\u5177")
 
     # 5
     pdf.add_page()
@@ -2120,7 +2125,7 @@ def build_chinese():
     pdf.txt(
         "\u9876\u90e8\u680f\u4e2d\u7684\u4e0b\u62c9\u83dc\u5355\u5141\u8bb8\u60a8\u5207\u6362\u89d2\u8272\uff1a\n\n"
         "  PMP\uff08\u5b8c\u5168\u6743\u9650\uff09" + EM + " \u53ef\u76f4\u63a5\u4fee\u6539\u4efb\u4f55\u72b6\u6001\uff0c\u5ba1\u6279/\u62d2\u7edd\u53d8\u66f4\u8bf7\u6c42\uff0c"
-        "\u505a\u51fa\u95e8\u63a7\u51b3\u7b56\uff0c\u8bbf\u95ee\u6240\u670916\u4e2a\u9009\u9879\u5361\u3002\n"
+        "\u505a\u51fa\u95e8\u63a7\u51b3\u7b56\uff0c\u8bbf\u95ee\u6240\u670917\u4e2a\u9009\u9879\u5361\u3002\n"
         "  \u6280\u672f\u56e2\u961f " + EM + " \u4ec5\u9650\u6280\u672f\u548c\u6cd5\u89c4\u9009\u9879\u5361\u3002\u8d22\u52a1\u6570\u636e\uff08\u9884\u7b97\u3001\u8d44\u91d1/\u8dd1\u9053\u3001"
         "\u6295\u8d44\u3001\u80a1\u6743\u8868\uff09\u53d7\u9650\u3002\u72b6\u6001\u53d8\u66f4\u5fc5\u987b\u63d0\u4ea4\u53d8\u66f4\u8bf7\u6c42\u3002\n"
         "  \u5546\u4e1a/\u6295\u8d44\u65b9 " + EM + " \u4ec5\u9650\u8d22\u52a1\u548c\u89c4\u5212\u9009\u9879\u5361\u3002\u6280\u672fIP\uff08\u6cd5\u89c4\u8ffd\u8e2a\u5668\u3001"
@@ -2960,9 +2965,13 @@ def build_chinese():
     pdf.add_page()
     pdf.sec(32, "510(k) Predicate Finder \u96c6\u6210")
     pdf.txt(
-        "510(k) Predicate Finder\u662f\u4e00\u6b3e\u914d\u5957SaaS\u5de5\u5177\uff0c\u76f4\u63a5\u8fde\u63a5FDA openFDA\u6570\u636e\u5e93\uff0c"
-        "\u5e2e\u52a9\u56e2\u961f\u8bc6\u522b\u548c\u5206\u6790\u5148\u5bfc\u5668\u68b0\uff0c\u7528\u4e8e\u5b9e\u8d28\u7b49\u6548\u6027\uff08SE\uff09\u8bba\u8bc1\u3002"
-        "\u5b83\u4f5c\u4e3a\u72ec\u7acb\u7684\u514d\u8d39\u5de5\u5177\u63d0\u4f9b\uff0c\u5e76\u5d4c\u5165\u5728Control Tower\u7684Scale\u5c42\u7ea7\u4e2d\u3002")
+        "510(k) Predicate Finder现已作为专用选项卡直接嵌入Control Tower。"
+        "它连接FDA openFDA数据库，"
+        "帮助团队识别和分析先导器械，用于实质等效性（SE）论证。"
+        "它也可以作为独立的免费工具在510kbridge.com上使用。\n\n"
+        "Predicate Finder选项卡从相同的部署源加载iframe，"
+        "所有数据保留在Control Tower环境中。"
+        "iframe在首次访问选项卡时延迟加载，以保持初始仪表板加载快速。")
 
     pdf.sub("32.1 \u514d\u8d39\u7248")
     pdf.txt(
@@ -2989,10 +2998,11 @@ def build_chinese():
 
     pdf.sub("32.4 \u4e0eControl Tower\u7684\u96c6\u6210")
     pdf.txt(
-        "\u5728Scale\u5c42\u7ea7\uff08$2,000/\u6708\uff09\u4e0a\uff0cPredicate Finder\u76f4\u63a5\u5d4c\u5165\u5728"
-        "Control Tower\u4eea\u8868\u677f\u4e2d\u3002\u5148\u5bfc\u7814\u7a76\u7ed3\u679c\u53ef\u4ee5\u4e3a"
-        "\u6cd5\u89c4\u8ddf\u8e2a\u5668\u3001\u98ce\u9669\u4eea\u8868\u677f\u548cFDA\u901a\u4fe1\u4e2d\u5fc3\u9009\u9879\u5361\u63d0\u4f9b\u4fe1\u606f\uff0c"
-        "\u5c06\u6240\u6709510(k)\u667a\u80fd\u96c6\u4e2d\u5728\u4e00\u4e2a\u5730\u65b9\u3002")
+        "Predicate Finder作为完整选项卡嵌入Control Tower，"
+        "所有四个角色（PMP、技术、业务、财务）均可使用。"
+        "先导研究结果可以为"
+        "法规跟踪器、风险仪表板和FDA通信中心选项卡提供信息，"
+        "将所有510(k)智能集中在一个地方。")
 
     # 33 QMS-Lite 创业版
     pdf.add_page()
