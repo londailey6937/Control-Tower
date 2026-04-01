@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>510(k) Predicate Finder — 510k Bridge</title>
+    <script type="module" crossorigin src="/predicate-finder/assets/index-Ct9zKrzJ.js"></script>
+    <link rel="stylesheet" crossorigin href="/predicate-finder/assets/index-1h_2n_EM.css">
+  </head>
+  <body class="bg-gray-950 text-gray-100 min-h-screen">
+    <header
+      class="border-b border-gray-800 bg-gray-900/80 backdrop-blur sticky top-0 z-50"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between"
+      >
+        <div class="flex items-center gap-3">
+          <div
+            class="w-8 h-8 rounded bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-white font-bold text-sm"
+          >
+            PF
+          </div>
+          <h1 class="text-lg font-semibold tracking-tight">
+            <span data-i18n="appTitle">510(k) Predicate Finder</span>
+          </h1>
+        </div>
+        <div class="flex items-center gap-4">
+          <span
+            id="tierBadge"
+            class="text-xs px-2 py-0.5 rounded-full bg-gray-700 text-gray-300 font-semibold"
+            >FREE</span
+          >
+          <button
+            id="langToggle"
+            class="text-xs px-2 py-1 rounded border border-gray-700 hover:border-blue-500 transition"
+          >
+            EN / 中文
+          </button>
+          <span class="text-xs text-gray-500">510k Bridge</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8">
+      <!-- Search Section -->
+      <section id="searchSection" class="mb-10">
+        <h2 class="text-2xl font-bold mb-2" data-i18n="searchTitle">
+          Find Your Predicate Device
+        </h2>
+        <p class="text-gray-400 mb-6" data-i18n="searchDesc">
+          Search FDA's 510(k) database by product code, applicant, device name,
+          or K-number.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-3 mb-4">
+          <div class="flex-1 relative">
+            <input
+              id="searchInput"
+              type="text"
+              placeholder="e.g. IKN, K231234, ventilator, Medtronic..."
+              class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition placeholder:text-gray-600"
+            />
+          </div>
+          <select
+            id="searchField"
+            class="bg-gray-900 border border-gray-700 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-blue-500"
+          >
+            <option value="all" data-i18n="fieldAll">All Fields</option>
+            <option value="product_code">Product Code</option>
+            <option value="applicant">Applicant</option>
+            <option value="device_name">Device Name</option>
+            <option value="knumber">K-Number</option>
+          </select>
+          <button
+            id="searchBtn"
+            class="bg-blue-600 hover:bg-blue-500 text-white font-medium px-6 py-3 rounded-lg transition text-sm"
+          >
+            <span data-i18n="searchBtn">Search</span>
+          </button>
+        </div>
+
+        <!-- Filters -->
+        <div class="flex flex-wrap gap-3 text-xs">
+          <div class="flex items-center gap-2">
+            <label class="text-gray-500" data-i18n="filterYear"
+              >Year Range:</label
+            >
+            <input
+              id="yearFrom"
+              type="number"
+              min="1976"
+              max="2026"
+              placeholder="1976"
+              class="w-20 bg-gray-900 border border-gray-700 rounded px-2 py-1 text-xs"
+            />
+            <span class="text-gray-600">–</span>
+            <input
+              id="yearTo"
+              type="number"
+              min="1976"
+              max="2026"
+              placeholder="2026"
+              class="w-20 bg-gray-900 border border-gray-700 rounded px-2 py-1 text-xs"
+            />
+          </div>
+          <div class="flex items-center gap-2">
+            <label class="text-gray-500" data-i18n="filterDecision"
+              >Decision:</label
+            >
+            <select
+              id="decisionFilter"
+              class="bg-gray-900 border border-gray-700 rounded px-2 py-1 text-xs"
+            >
+              <option value="">All</option>
+              <option value="SESE">SE (Substantially Equivalent)</option>
+              <option value="SESP">SE with Post-Market</option>
+              <option value="SEST">SE with Conditions</option>
+              <option value="NSE">NSE (Not Substantially Equivalent)</option>
+            </select>
+          </div>
+          <div class="flex items-center gap-2">
+            <label class="text-gray-500" data-i18n="filterType"
+              >Review Type:</label
+            >
+            <select
+              id="typeFilter"
+              class="bg-gray-900 border border-gray-700 rounded px-2 py-1 text-xs"
+            >
+              <option value="">All</option>
+              <option value="Traditional">Traditional</option>
+              <option value="Special">Special</option>
+              <option value="Abbreviated">Abbreviated</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Status Bar -->
+      <div
+        id="statusBar"
+        class="hidden mb-6 p-3 rounded-lg bg-gray-900 border border-gray-800 text-sm text-gray-400 flex items-center gap-2"
+      >
+        <span
+          id="statusIcon"
+          class="inline-block w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"
+        ></span>
+        <span id="statusText">Searching...</span>
+      </div>
+
+      <!-- Results Table -->
+      <section id="resultsSection" class="hidden mb-10">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold">
+            <span data-i18n="results">Results</span>
+            <span
+              id="resultCount"
+              class="text-sm font-normal text-gray-500 ml-2"
+            ></span>
+          </h3>
+          <button
+            id="compareBtn"
+            class="hidden bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
+            data-i18n="compareSelected"
+          >
+            Compare Selected
+          </button>
+        </div>
+        <div class="overflow-x-auto rounded-lg border border-gray-800">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-900 text-gray-400 text-xs uppercase">
+              <tr>
+                <th class="px-3 py-2 text-left w-8">
+                  <input
+                    type="checkbox"
+                    id="selectAll"
+                    class="accent-blue-500"
+                  />
+                </th>
+                <th class="px-3 py-2 text-left" data-i18n="colKNumber">
+                  K-Number
+                </th>
+                <th class="px-3 py-2 text-left" data-i18n="colDevice">
+                  Device Name
+                </th>
+                <th class="px-3 py-2 text-left" data-i18n="colApplicant">
+                  Applicant
+                </th>
+                <th class="px-3 py-2 text-left" data-i18n="colProductCode">
+                  Product Code
+                </th>
+                <th class="px-3 py-2 text-left" data-i18n="colDecision">
+                  Decision
+                </th>
+                <th class="px-3 py-2 text-left" data-i18n="colDate">
+                  Decision Date
+                </th>
+                <th class="px-3 py-2 text-left" data-i18n="colType">Type</th>
+              </tr>
+            </thead>
+            <tbody id="resultsBody" class="divide-y divide-gray-800"></tbody>
+          </table>
+        </div>
+        <div
+          id="pagination"
+          class="flex items-center justify-center gap-2 mt-4 text-sm"
+        ></div>
+      </section>
+
+      <!-- Comparison Panel -->
+      <section id="compareSection" class="hidden mb-10">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold" data-i18n="comparison">
+            Device Comparison
+          </h3>
+          <button
+            id="closeCompare"
+            class="text-gray-500 hover:text-gray-300 text-sm"
+            data-i18n="closeCompare"
+          >
+            ✕ Close
+          </button>
+        </div>
+        <div id="compareGrid" class="grid gap-4"></div>
+      </section>
+
+      <!-- Device Detail Modal -->
+      <div
+        id="detailModal"
+        class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+      >
+        <div
+          class="bg-gray-900 border border-gray-700 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6"
+        >
+          <div class="flex items-center justify-between mb-4">
+            <h3 id="detailTitle" class="text-lg font-bold"></h3>
+            <button
+              id="closeDetail"
+              class="text-gray-500 hover:text-gray-300 text-xl"
+            >
+              &times;
+            </button>
+          </div>
+          <div id="detailContent"></div>
+        </div>
+      </div>
+
+      <!-- Predicate Chain Visualization -->
+      <section id="chainSection" class="hidden mb-10">
+        <h3 class="text-lg font-semibold mb-4" data-i18n="predicateChain">
+          Predicate Chain
+        </h3>
+        <p class="text-gray-400 text-sm mb-4" data-i18n="chainDesc">
+          Trace the predicate lineage backward from any cleared device.
+        </p>
+        <div
+          id="chainViz"
+          class="bg-gray-900 border border-gray-800 rounded-lg p-6 min-h-[200px]"
+        ></div>
+      </section>
+
+      <!-- SE Argument Generator -->
+      <section id="seSection" class="hidden mb-10">
+        <h3 class="text-lg font-semibold mb-4" data-i18n="seGenerator">
+          Substantial Equivalence Argument Draft
+        </h3>
+        <div
+          id="seContent"
+          class="bg-gray-900 border border-gray-800 rounded-lg p-6 prose prose-invert prose-sm max-w-none"
+        ></div>
+        <div class="flex gap-3 mt-4">
+          <button
+            id="copySeBtn"
+            class="bg-gray-800 hover:bg-gray-700 text-sm px-4 py-2 rounded-lg transition"
+            data-i18n="copySE"
+          >
+            Copy to Clipboard
+          </button>
+          <button
+            id="exportSeBtn"
+            class="bg-gray-800 hover:bg-gray-700 text-sm px-4 py-2 rounded-lg transition"
+            data-i18n="exportSE"
+          >
+            Export as PDF
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer
+      class="border-t border-gray-800 mt-16 py-6 text-center text-xs text-gray-600"
+    >
+      <p>510k Bridge, Inc.</p>
+      <p class="mt-1">
+        Data sourced from FDA openFDA API &amp; 510(k) Premarket Notification
+        Database
+      </p>
+    </footer>
+
+    <!-- Email Gate Modal -->
+    <div
+      id="gateModal"
+      class="hidden fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+    >
+      <div
+        class="bg-gray-900 border border-gray-700 rounded-xl max-w-md w-full p-6"
+      >
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-bold">Unlock Premium Features</h3>
+          <button
+            id="closeGateModal"
+            class="text-gray-500 hover:text-gray-300 text-xl"
+          >
+            &times;
+          </button>
+        </div>
+        <p id="gateFeatureDesc" class="text-sm text-gray-400 mb-4">
+          Enter your email to unlock all premium features.
+        </p>
+        <form id="gateForm" class="space-y-3">
+          <input
+            id="gateEmail"
+            type="email"
+            required
+            placeholder="your@email.com"
+            class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition placeholder:text-gray-600"
+          />
+          <button
+            type="submit"
+            class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-3 rounded-lg transition text-sm"
+          >
+            Unlock Free — No Credit Card
+          </button>
+        </form>
+        <p class="text-xs text-gray-600 mt-3 text-center">
+          We'll send you the 510(k) Pathway Guide + PMP Course link.
+        </p>
+      </div>
+    </div>
+
+  </body>
+</html>
