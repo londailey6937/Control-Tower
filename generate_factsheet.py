@@ -435,9 +435,225 @@ def build_factsheet_cn():
     return path
 
 
+# ═══════════════════════════════════════════
+#  KOREAN FACT SHEET
+# ═══════════════════════════════════════════
+
+class FactKO(FPDF):
+    CARDINAL = (140, 21, 21)
+    DARK = (35, 35, 40)
+    GRAY = (110, 110, 120)
+    ACCENT = (0, 98, 71)
+    WHITE = (255, 255, 255)
+    LIGHT_BG = (248, 248, 252)
+
+    def __init__(self):
+        super().__init__()
+        font_path = "/Library/Fonts/Arial Unicode.ttf"
+        self.add_font("ARUNI", "", font_path, uni=True)
+        self.add_font("ARUNI", "B", font_path, uni=True)
+        self.add_font("ARUNI", "I", font_path, uni=True)
+
+    def header(self):
+        pass
+
+    def footer(self):
+        self.set_y(-10)
+        self.set_font("ARUNI", "I", 7)
+        self.set_text_color(*self.GRAY)
+        self.cell(0, 4, "510k Bridge  |  info@510kbridge.com  |  510kbridge.com", align="C")
+
+    def section_bar(self, title):
+        self.set_fill_color(*self.CARDINAL)
+        w = self.w - self.l_margin - self.r_margin
+        self.rect(self.l_margin, self.get_y(), w, 7, style="F")
+        self.set_font("ARUNI", "B", 9)
+        self.set_text_color(*self.WHITE)
+        self.set_x(self.l_margin + 2)
+        self.cell(0, 7, title)
+        self.ln(9)
+
+    def txt(self, text, sz=8.5):
+        self.set_font("ARUNI", "", sz)
+        self.set_text_color(*self.DARK)
+        self.multi_cell(0, 4.2, text, align="L")
+        self.ln(1.5)
+
+    def bul(self, text, sz=8.5):
+        self.set_font("ARUNI", "", sz)
+        self.set_text_color(*self.DARK)
+        self.cell(4, 4.2, "- ")
+        self.multi_cell(0, 4.2, text, align="L")
+        self.ln(0.3)
+
+    def kv_line(self, key, val, sz=8.5):
+        self.set_font("ARUNI", "B", sz)
+        self.set_text_color(*self.ACCENT)
+        self.cell(38, 4.2, key)
+        self.set_font("ARUNI", "", sz)
+        self.set_text_color(*self.DARK)
+        self.multi_cell(0, 4.2, val, align="L")
+        self.ln(0.5)
+
+
+def build_factsheet_ko():
+    pdf = FactKO()
+    pdf.set_auto_page_break(auto=True, margin=14)
+    pdf.add_page()
+
+    # ── Banner ──
+    pdf.set_fill_color(*FactKO.CARDINAL)
+    pdf.rect(0, 0, pdf.w, 28, style="F")
+    pdf.set_y(6)
+    pdf.set_font("ARUNI", "B", 20)
+    pdf.set_text_color(*FactKO.WHITE)
+    pdf.cell(0, 8, "510k Bridge", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.set_font("ARUNI", "", 10)
+    pdf.cell(0, 6, "\uc11c\ube44\uc2a4 \uac1c\uc694 \ubc0f \ud575\uc2ec \uc5ed\ub7c9", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.set_y(32)
+
+    # ── Who We Serve ──
+    pdf.section_bar("\ub300\uc0c1 \uace0\uac1d")
+    pdf.txt(
+        "FDA 510(k) \uc778\ud5c8\uac00\ub97c \ud1b5\ud574 \ubbf8\uad6d \uc2dc\uc7a5\uc5d0 \uc9c4\ucd9c\ud558\ub824\ub294 \ud55c\uad6d \uc758\ub8cc\uae30\uae30 \uae30\uc5c5. "
+        "Class II \ube44\uce68\uc2b5\uc801 \uae30\uae30 \uc804\ubb38: \ud658\uc790 \ubaa8\ub2c8\ud130, \uc601\uc0c1 \uc2dc\uc2a4\ud15c, "
+        "\uc7ac\ud65c \uc7a5\ube44, \uc9c4\ub2e8 \ub3c4\uad6c \ubc0f SaMD(\uc758\ub8cc\uae30\uae30 \uc18c\ud504\ud2b8\uc6e8\uc5b4). "
+        "\ubbf8\uad6d \uce74\ub9c8\uc2a4(WA) \ubc0f \uc911\uad6d \uc0c1\ud558\uc774 \uc624\ud53c\uc2a4.")
+
+    # ── The Problem ──
+    pdf.section_bar("\uc5c5\uacc4 \ubb38\uc81c\uc810")
+    pdf.bul("\uad6d\ub0b4 \uaddc\uc81c\uc640 FDA \ud504\ub85c\uc138\uc2a4 \uac04\uc758 \uc5b8\uc5b4 \ubc0f \uaddc\uc81c \ubb38\ud654 \ucc28\uc774")
+    pdf.bul("\ubd84\uc0b0\ub41c \ud300(\ud55c\uad6d + \ubbf8\uad6d) \uac04 \ud504\ub85c\uc81d\ud2b8 \uc0c1\ud0dc \ubd88\ud22c\uba85")
+    pdf.bul("\uc2dc\ud5d8 \uc5f0\uad6c\uc18c, \ubbf8\uad6d \ub300\ub9ac\uc778, \uaddc\uc81c \ucee8\uc124\ud134\ud2b8 \uc870\uc728 \uc5b4\ub824\uc6c0")
+    pdf.bul("\ub192\uc740 \uc2e4\ud328\uc728: 510(k) \uc81c\ucd9c\uc758 \uc57d 30%\uac00 AI(Additional Information) \uc694\uccad \uc218\uc2e0")
+    pdf.bul("\uc608\ubc29 \uac00\ub2a5\ud55c \uc624\ub958(\uc798\ubabb\ub41c \ub4f1\uac00\uae30\uae30, \ub204\ub77d\ub41c \uc2dc\ud5d8 \ub370\uc774\ud130, RTA)\ub85c \uc778\ud55c \uace0\ube44\uc6a9 \uc9c0\uc5f0")
+    pdf.bul("\uc2a4\ud0c0\ud2b8\uc5c5\uc744 \uc704\ud55c \uacbd\ub7c9 QMS \ubd80\uc7ac -- \uc5d4\ud130\ud504\ub77c\uc774\uc988 \uc2dc\uc2a4\ud15c\uc740 \uacfc\ub3c4")
+
+    # ── Our Solution ──
+    pdf.section_bar("\uc6b0\ub9ac\uc758 \uc194\ub8e8\uc158")
+    pdf.txt(
+        "\ub2e4\uad6d\uc5b4(EN/KO/CN) 510(k) \ud504\ub85c\uc81d\ud2b8 \uad00\ub9ac \ud50c\ub7ab\ud3fc\uacfc "
+        "\uacbd\ud5d8 \ud48d\ubd80\ud55c \uaddc\uc81c \uc804\ubb38\uac00 \ud300. "
+        "\ub4f1\uac00\uae30\uae30 \uc870\uc0ac\ubd80\ud130 FDA \uc778\ud5c8\uae30\uae30\uac00\uc9c0, \uc5b8\uc5b4, \ud504\ub85c\uc138\uc2a4, "
+        "\ucef4\ud50c\ub77c\uc774\uc5b8\uc2a4 \uaca9\ucc28\ub97c \ud574\uc18c\ud569\ub2c8\ub2e4 -- "
+        "QMS, \ubc95\uc778 \uc124\ub9bd, \ud22c\uc790\uc790 \uad00\uacc4 \ud3ec\ud568.")
+
+    # ── Platform Highlights ──
+    pdf.section_bar("\ud50c\ub7ab\ud3fc \ud558\uc774\ub77c\uc774\ud2b8")
+    col_w = (pdf.w - pdf.l_margin - pdf.r_margin) / 2 - 2
+    x_left = pdf.l_margin
+    x_right = pdf.l_margin + col_w + 4
+    y0 = pdf.get_y()
+    items_left = [
+        "16\ud0ed Control Tower \ub300\uc2dc\ubcf4\ub4dc",
+        "\ub2e4\uad6d\uc5b4 9\ub2e8\uacc4 \uc124\uc815 \ub9c8\ubc95\uc0ac",
+        "AI \uae30\ubc18 \ub4f1\uac00\uae30\uae30 \uac80\uc0c9\uae30",
+        "FDA \ucee4\ubba4\ub2c8\ucf00\uc774\uc158 \uc13c\ud130",
+        "Q-Sub \uc0dd\uc131 \ubc0f RTA \uc790\uac00\uc810\uac80",
+        "QMS-Lite (21 CFR 820 / ISO 13485)",
+        "\uad6d\uacbd\uac04 \ubc95\uc778 \uc124\ub9bd \ud2b8\ub798\ucee4",
+    ]
+    items_right = [
+        "\ub4c0\uc5bc\ud2b8\ub799 \ub9c8\uc77c\uc2a4\ud1a4 \ucd94\uc801",
+        "\ubc84\uc804 \uad00\ub9ac \ubb38\uc11c \ud1b5\uc81c",
+        "\ub9ac\uc2a4\ud06c \ubc0f \uc608\uc0b0 \ubaa8\ub2c8\ud130\ub9c1 (USD/KRW)",
+        "\uc2a4\ub808\ub4dc \uae30\ubc18 \ud300 \uba54\uc2dc\uc9d5 (EN/KO/CN)",
+        "SE \uc758\uc0ac\uacb0\uc815 \ubc0f DHF \uc900\ube44 \uc0c1\ud0dc",
+        "CAPA, DMR \ubc0f \uacf5\uae09\uc5c5\uccb4 \uc790\uaca9 \uad00\ub9ac",
+        "\uac10\uc0ac \ucd94\uc801\uc131 \ub370\uc774\ud130 \uc18c\uc2a4 \ucc38\uc870",
+    ]
+    pdf.set_font("ARUNI", "", 8.5)
+    pdf.set_text_color(*FactKO.DARK)
+    for i, (l, r) in enumerate(zip(items_left, items_right)):
+        pdf.set_xy(x_left, y0 + i * 4.5)
+        pdf.cell(col_w, 4.5, "  -  " + l)
+        pdf.set_xy(x_right, y0 + i * 4.5)
+        pdf.cell(col_w, 4.5, "  -  " + r)
+    pdf.set_y(y0 + len(items_left) * 4.5 + 2)
+
+    # ── By The Numbers ──
+    pdf.section_bar("\ud575\uc2ec \uc218\uce58")
+    col3_w = (pdf.w - pdf.l_margin - pdf.r_margin) / 3
+    y0 = pdf.get_y()
+    stats = [
+        ("12-18\uac1c\uc6d4", "\uc77c\ubc18\uc801 \uc778\ud5c8\uae30\uae30 \ud0c0\uc784\ub77c\uc778"),
+        ("90-120\uc77c", "\ud3c9\uade0 FDA \uc2ec\uc0ac \uae30\uac04"),
+        ("$150K-$400K", "\uc5d4\ub4dc\ud22c\uc5d4\ub4dc \uc608\uc0b0 \ubc94\uc704"),
+    ]
+    for i, (big, small) in enumerate(stats):
+        pdf.set_xy(pdf.l_margin + col3_w * i, y0)
+        pdf.set_font("ARUNI", "B", 16)
+        pdf.set_text_color(*FactKO.CARDINAL)
+        pdf.cell(col3_w, 8, big, align="C", new_x="LMARGIN", new_y="NEXT")
+        pdf.set_xy(pdf.l_margin + col3_w * i, y0 + 8)
+        pdf.set_font("ARUNI", "", 7.5)
+        pdf.set_text_color(*FactKO.GRAY)
+        pdf.cell(col3_w, 4, small, align="C")
+    pdf.set_y(y0 + 16)
+
+    # ── Service Tiers ──
+    pdf.section_bar("\uc11c\ube44\uc2a4 \ud2f0\uc5b4")
+    tiers = [
+        ("Control Tower", "\uc6d4 $500\ubd80\ud130",
+         ["16\ud0ed PM \ub300\uc2dc\ubcf4\ub4dc", "\ub2e4\uad6d\uc5b4 \uc124\uc815 \ub9c8\ubc95\uc0ac", "\ub4c0\uc5bc\ud2b8\ub799 \ub9c8\uc77c\uc2a4\ud1a4",
+          "\ubb38\uc11c \ud1b5\uc81c \ubc0f \uba54\uc2dc\uc9d5", "\ub9ac\uc2a4\ud06c \ubc0f \uc608\uc0b0 \ucd94\uc801", "\ub4f1\uac00\uae30\uae30 \uac80\uc0c9\uae30 \ud3ec\ud568"]),
+        ("QMS-Lite", "\uc6d4 $200-500 (\uc804\ubb38\uac00/\uc5d4\ud130\ud504\ub77c\uc774\uc988 \ud3ec\ud568)",
+         ["21 CFR 820 & ISO 13485 \uc815\ub82c", "\ubb38\uc11c \ud1b5\uc81c \ubc0f CAPA",
+          "\uad50\uc721 \uae30\ub85d \uad00\ub9ac", "\uacf5\uae09\uc5c5\uccb4 \uc790\uaca9",
+          "\ubd88\ub9cc \ucc98\ub9ac", "Control Tower \ud1b5\ud569"]),
+        ("\uc804\ubb38 PM \uc11c\ube44\uc2a4", "\uc6d4 $10,000-$25,000",
+         ["SaaS \uc804\uccb4 + QMS-Lite \ud3ec\ud568", "\uc804\ub2f4 PMP \ud504\ub85c\uc81d\ud2b8 \ub9e4\ub2c8\uc800", "FDA \ucee4\ubba4\ub2c8\ucf00\uc774\uc158 & Q-Sub",
+          "\ubbf8\uad6d \ub300\ub9ac\uc778 \uc11c\ube44\uc2a4", "\uac8c\uc774\ud2b8 \ub9ac\ubdf0 \uad00\ub9ac", "\uc81c\ucd9c \uac10\ub3c5"]),
+    ]
+    col_w = (pdf.w - pdf.l_margin - pdf.r_margin - 6) / 3
+    y0 = pdf.get_y()
+    for idx, (name, price, features) in enumerate(tiers):
+        x = pdf.l_margin + idx * (col_w + 3)
+        pdf.set_xy(x, y0)
+        pdf.set_fill_color(*FactKO.LIGHT_BG)
+        box_h = 4.5 + 5 + len(features) * 4 + 2
+        pdf.rect(x, y0, col_w, box_h, style="F")
+        pdf.set_xy(x + 1, y0 + 1)
+        pdf.set_font("ARUNI", "B", 8.5)
+        pdf.set_text_color(*FactKO.CARDINAL)
+        pdf.cell(col_w - 2, 4.5, name, align="C", new_x="LMARGIN", new_y="NEXT")
+        pdf.set_xy(x + 1, y0 + 5)
+        pdf.set_font("ARUNI", "B", 8)
+        pdf.set_text_color(*FactKO.ACCENT)
+        pdf.cell(col_w - 2, 4.5, price, align="C", new_x="LMARGIN", new_y="NEXT")
+        for j, feat in enumerate(features):
+            pdf.set_xy(x + 2, y0 + 10 + j * 4)
+            pdf.set_font("ARUNI", "", 7.5)
+            pdf.set_text_color(*FactKO.DARK)
+            pdf.cell(col_w - 4, 4, "- " + feat)
+    pdf.set_y(y0 + 4.5 + 5 + max(len(t[2]) for t in tiers) * 4 + 5)
+
+    # ── Additional Products ──
+    pdf.section_bar("\ucd94\uac00 \uc81c\ud488")
+    pdf.bul("\ub4f1\uac00\uae30\uae30 \uac80\uc0c9\uae30 -- AI \uae30\ubc18 openFDA \ub370\uc774\ud130\ubca0\uc774\uc2a4 \uac80\uc0c9, SE \ubd84\uc11d, \ube44\uad50 \ubcf4\uace0\uc11c (\uc11c\ube44\uc2a4 \ud3ec\ud568)")
+    pdf.bul("\uad6d\uacbd\uac04 \ubc95\uc778 \uc124\ub9bd \ud2b8\ub798\ucee4 -- Delaware C-Corp \uc124\ub9bd, \uc8fc \ub4f1\ub85d, EIN, \uc740\ud589 \uacc4\uc88c, FDA \uc2dc\uc124 \ub4f1\ub85d ($1K-5K \ub610\ub294 \uc6d4 $200)")
+    pdf.bul("\uc5d4\ud130\ud504\ub77c\uc774\uc988 -- \uc5d4\ub4dc\ud22c\uc5d4\ub4dc: \uaddc\uc81c \uc804\ub7b5 + PM + QMS-Lite + RTA/DHF \uc900\ube44 + \ubbf8\uad6d \ubc95\uc778 \uc124\ub9bd + \ud22c\uc790\uc790 \ubb38\uc11c (\ud504\ub85c\uc81d\ud2b8 \uae30\ubc18 \uac00\uaca9)")
+
+    # ── Contact ──
+    pdf.section_bar("\uc2dc\uc791\ud558\uae30")
+    pdf.set_font("ARUNI", "", 9)
+    pdf.set_text_color(*FactKO.DARK)
+    pdf.cell(0, 5, "info@510kbridge.com  |  510kbridge.com  |  \ubbf8\uad6d \uce74\ub9c8\uc2a4(WA) & \uc911\uad6d \uc0c1\ud558\uc774", align="C")
+    pdf.ln(3)
+    pdf.set_font("ARUNI", "", 8)
+    pdf.set_text_color(*FactKO.GRAY)
+    pdf.cell(0, 4, "510kBridge, Delaware \ubc95\uc778. \uc624\ub298 \ubb34\ub8cc 30\ubd84 \uc0c1\ub2f4\uc744 \uc608\uc57d\ud558\uc138\uc694.", align="C")
+
+    path = os.path.join(OUT, "510k_Bridge_Factsheet_KO.pdf")
+    pdf.output(path)
+    return path
+
+
 if __name__ == "__main__":
     en = build_factsheet_en()
     print(f"EN Factsheet: {en}")
     cn = build_factsheet_cn()
     print(f"CN Factsheet: {cn}")
+    ko = build_factsheet_ko()
+    print(f"KO Factsheet: {ko}")
     print("Done.")
