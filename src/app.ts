@@ -1920,6 +1920,7 @@ function renderGuardrails(): void {
   const panel = document.getElementById("guardrailsPanel");
   if (!panel) return;
   const isCN = getLang() === "cn";
+  const isKO = getLang() === "ko";
 
   // ── Predicate Selection Guardrails ──
   const hasPredicate =
@@ -1932,21 +1933,27 @@ function renderGuardrails(): void {
   );
   const predicateChecks = [
     {
-      label: isCN
-        ? "等效器械已在向导中定义"
-        : "Predicate device(s) identified in wizard",
+      label: isKO
+        ? "등등 기기가 마법사에서 정의됨"
+        : isCN
+          ? "等效器械已在向导中定义"
+          : "Predicate device(s) identified in wizard",
       pass: hasPredicate,
     },
     {
-      label: isCN
-        ? "设备描述文档已完成"
-        : "Device Description document completed",
+      label: isKO
+        ? "기기 설명 문서 완료"
+        : isCN
+          ? "设备描述文档已完成"
+          : "Device Description document completed",
       pass: predicateDocApproved,
     },
     {
-      label: isCN
-        ? "Pre-Sub(Q-Sub)已提交以确认等效器械"
-        : "Pre-Sub (Q-Sub) filed to confirm predicate with FDA",
+      label: isKO
+        ? "Pre-Sub(Q-Sub) FDA에 등등 기기 확인 제출됨"
+        : isCN
+          ? "Pre-Sub(Q-Sub)已提交以确认等效器械"
+          : "Pre-Sub (Q-Sub) filed to confirm predicate with FDA",
       pass: (PROJECT as any).currentMonth >= 3,
     },
   ];
@@ -1961,15 +1968,19 @@ function renderGuardrails(): void {
   // ── Testing Gap Analysis ──
   const testingChecks = [
     {
-      label: isCN
-        ? "IEC 60601-1 安全测试进行中"
-        : "IEC 60601-1 safety testing underway",
+      label: isKO
+        ? "IEC 60601-1 안전 테스트 진행 중"
+        : isCN
+          ? "IEC 60601-1 安全测试进行中"
+          : "IEC 60601-1 safety testing underway",
       pass: STANDARDS.find((s) => s.id === "STD-01")!.status !== "not-started",
     },
     {
-      label: isCN
-        ? "EMC测试(IEC 60601-1-2)已规划"
-        : "EMC testing (IEC 60601-1-2) planned or in progress",
+      label: isKO
+        ? "EMC 테스트(IEC 60601-1-2) 계획 또는 진행 중"
+        : isCN
+          ? "EMC测试(IEC 60601-1-2)已规划"
+          : "EMC testing (IEC 60601-1-2) planned or in progress",
       pass:
         STANDARDS.find((s) => s.id === "STD-02")!.status !== "not-started" ||
         DHF_DOCUMENTS.some(
@@ -1977,21 +1988,29 @@ function renderGuardrails(): void {
         ),
     },
     {
-      label: isCN
-        ? "软件验证(IEC 62304)匹配分类要求"
-        : "Software validation (IEC 62304) matches classification rigor",
+      label: isKO
+        ? "소프트웨어 검증(IEC 62304) 분류 요구사항 충족"
+        : isCN
+          ? "软件验证(IEC 62304)匹配分类要求"
+          : "Software validation (IEC 62304) matches classification rigor",
       pass: STANDARDS.find((s) => s.id === "STD-11")!.progress >= 20,
     },
     {
-      label: isCN ? "设计验证报告已启动" : "Design Verification Report started",
+      label: isKO
+        ? "설계 검증 보고서 시작됨"
+        : isCN
+          ? "设计验证报告已启动"
+          : "Design Verification Report started",
       pass: DHF_DOCUMENTS.some(
         (d) => d.code === "DHF-DV" && d.status !== "not-started",
       ),
     },
     {
-      label: isCN
-        ? "风险分析(ISO 14971)活跃"
-        : "Risk Analysis (ISO 14971) active",
+      label: isKO
+        ? "위험 분석(ISO 14971) 활성"
+        : isCN
+          ? "风险分析(ISO 14971)活跃"
+          : "Risk Analysis (ISO 14971) active",
       pass: DHF_DOCUMENTS.some(
         (d) => d.code === "DHF-RA" && d.status !== "not-started",
       ),
@@ -2012,23 +2031,29 @@ function renderGuardrails(): void {
   ).length;
   const translationChecks = [
     {
-      label: isCN
-        ? "DHF文档使用英文编写或翻译"
-        : "DHF documents authored or translated in English",
+      label: isKO
+        ? "DHF 문서 영어로 작성 또는 번역됨"
+        : isCN
+          ? "DHF文档使用英文编写或翻译"
+          : "DHF documents authored or translated in English",
       pass: dhfWithContent > 0,
     },
     {
-      label: isCN
-        ? "标签(21 CFR 801)使用英文"
-        : "Labeling (21 CFR 801) in English",
+      label: isKO
+        ? "라벨링(21 CFR 801) 영어"
+        : isCN
+          ? "标签(21 CFR 801)使用英文"
+          : "Labeling (21 CFR 801) in English",
       pass: DHF_DOCUMENTS.some(
         (d) => d.code === "DHF-LBL" && d.status !== "not-started",
       ),
     },
     {
-      label: isCN
-        ? "术语一致性——双语术语表可用"
-        : "Terminology consistency — bilingual glossary available",
+      label: isKO
+        ? "용어 일관성 — 이중 언어 용어집 사용 가능"
+        : isCN
+          ? "术语一致性——双语术语表可用"
+          : "Terminology consistency — bilingual glossary available",
       pass: dhfWithContent >= Math.floor(dhfTotal * 0.5),
     },
   ];
@@ -5641,7 +5666,9 @@ function renderFdaComms(): void {
     body.innerHTML = "";
     return;
   }
-  const isCN = getLang() === "cn";
+  const lang = getLang();
+  const isCN = lang === "cn";
+  const isKO = lang === "ko";
 
   // ── Gather project data ──────────────────────
   const pName = localizedText(PROJECT.name);
@@ -5706,24 +5733,28 @@ function renderFdaComms(): void {
       key: "ecopy",
       en: "eCopy (exact electronic duplicate of paper submission)",
       cn: "eCopy（纸质提交的完整电子副本）",
+      ko: "eCopy (종이 제출물의 정확한 전자 사본)",
       check: () => true,
     },
     {
       key: "userfee",
       en: "User Fee Payment (received before submission)",
       cn: "用户费已支付（提交前到账）",
+      ko: "사용자 수수료 납부 (제출 전 수령)",
       check: () => true,
     },
     {
       key: "cover",
       en: "510(k) Cover Letter (signed, FDA Form 3514)",
       cn: "510(k)附信（已签署, FDA表格3514）",
+      ko: "510(k) 커버 레터 (서명 완료, FDA 양식 3514)",
       check: () => true,
     },
     {
       key: "indications",
       en: "Indications for Use Statement (FDA Form 3881)",
       cn: "适用范围声明（FDA表格3881）",
+      ko: "사용 목적 명세서 (FDA 양식 3881)",
       check: () =>
         DHF_DOCUMENTS.some(
           (d) => d.code === "DHF-DD" && d.status !== "not-started",
@@ -5733,18 +5764,21 @@ function renderFdaComms(): void {
       key: "truthful",
       en: "Truthful & Accuracy Statement",
       cn: "真实与准确性声明",
+      ko: "진실성 및 정확성 성명서",
       check: () => true,
     },
     {
       key: "class3",
       en: "Class III Summary / Certification (if applicable)",
       cn: "III类摘要/认证（如适用）",
+      ko: "클래스 III 요약 / 인증 (해당 시)",
       check: () => pSub.includes("pma"),
     },
     {
       key: "summary",
       en: "510(k) Summary or Statement (21 CFR 807.92)",
       cn: "510(k)摘要或声明 (21 CFR 807.92)",
+      ko: "510(k) 요약 또는 성명서 (21 CFR 807.92)",
       check: () =>
         DHF_DOCUMENTS.some(
           (d) => d.code === "DHF-CL" && d.status !== "not-started",
@@ -5754,6 +5788,7 @@ function renderFdaComms(): void {
       key: "devicedesc",
       en: "Device Description (design, materials, energy sources, diagrams)",
       cn: "器械描述（设计、材料、能源、图示）",
+      ko: "기기 설명 (설계, 재료, 에너지원, 도면)",
       check: () =>
         DHF_DOCUMENTS.some(
           (d) => d.code === "DHF-DD" && d.status !== "not-started",
@@ -5763,6 +5798,7 @@ function renderFdaComms(): void {
       key: "predicate",
       en: "Predicate Comparison & SE Discussion (decision flow chart)",
       cn: "前置器械对比与实质等效性论证（决策流程图）",
+      ko: "선행 기기 비교 및 SE 논의 (결정 흐름도)",
       check: () =>
         DHF_DOCUMENTS.some(
           (d) => d.code === "DHF-DD" && d.status === "approved",
@@ -5772,12 +5808,14 @@ function renderFdaComms(): void {
       key: "standards",
       en: "Standards Data & Declarations (FDA Form 3654)",
       cn: "标准数据与合格声明（FDA表格3654）",
+      ko: "표준 데이터 및 적합성 선언 (FDA 양식 3654)",
       check: () => stdComplete === stdTotal && stdTotal > 0,
     },
     {
       key: "labels",
       en: "Proposed Labeling — final draft (21 CFR 801)",
       cn: "拟定标签——终稿 (21 CFR 801)",
+      ko: "제안 라벨링 — 최종 초안 (21 CFR 801)",
       check: () =>
         DHF_DOCUMENTS.some(
           (d) => d.code === "DHF-LBL" && d.status === "approved",
@@ -5787,6 +5825,7 @@ function renderFdaComms(): void {
       key: "biocompat",
       en: "Biocompatibility (ISO 10993, if patient-contacting)",
       cn: "生物相容性（ISO 10993, 如有患者接触）",
+      ko: "생체적합성 (ISO 10993, 환자 접촉 시)",
       check: () =>
         DHF_DOCUMENTS.some(
           (d) => d.code === "DHF-BIO" && d.status !== "not-started",
@@ -5796,6 +5835,7 @@ function renderFdaComms(): void {
       key: "software",
       en: "Software Documentation (IEC 62304 lifecycle)",
       cn: "软件文档 (IEC 62304生命周期)",
+      ko: "소프트웨어 문서 (IEC 62304 생명주기)",
       check: () =>
         DHF_DOCUMENTS.some(
           (d) => d.code === "DHF-SW" && d.status === "approved",
@@ -5805,6 +5845,7 @@ function renderFdaComms(): void {
       key: "emc",
       en: "EMC / Electrical Safety (IEC 60601-1-2)",
       cn: "EMC / 电气安全 (IEC 60601-1-2)",
+      ko: "EMC / 전기 안전 (IEC 60601-1-2)",
       check: () =>
         DHF_DOCUMENTS.some(
           (d) => d.code === "DHF-EMC" && d.status === "approved",
@@ -5814,12 +5855,14 @@ function renderFdaComms(): void {
       key: "sterility",
       en: "Sterilization Validation (if applicable)",
       cn: "灭菌验证（如适用）",
+      ko: "멸균 밸리데이션 (해당 시)",
       check: () => true,
     },
     {
       key: "risk",
       en: "Risk Analysis (ISO 14971 — full risk management file)",
       cn: "风险分析（ISO 14971——完整风险管理文件）",
+      ko: "위험 분석 (ISO 14971 — 전체 위험 관리 파일)",
       check: () =>
         DHF_DOCUMENTS.some(
           (d) => d.code === "DHF-RA" && d.status === "approved",
@@ -5829,6 +5872,7 @@ function renderFdaComms(): void {
       key: "performance",
       en: "Performance Testing — Bench / Animal / Clinical",
       cn: "性能测试——台架/动物/临床",
+      ko: "성능 시험 — 벤치 / 동물 / 임상",
       check: () =>
         DHF_DOCUMENTS.some(
           (d) => d.code === "DHF-DV" && d.status === "approved",
@@ -5846,42 +5890,72 @@ function renderFdaComms(): void {
   const preSubMilestones = [
     {
       day: 0,
-      label: isCN ? "Pre-Sub包提交" : "Pre-Sub Package Submitted",
-      detail: isCN
-        ? "Q-Sub附信 + 议题/问题 + 器械描述"
-        : "Q-Sub cover letter + agenda/questions + device description",
+      label: isKO
+        ? "Pre-Sub 패키지 제출"
+        : isCN
+          ? "Pre-Sub包提交"
+          : "Pre-Sub Package Submitted",
+      detail: isKO
+        ? "Q-Sub 커버 레터 + 안건/질문 + 기기 설명"
+        : isCN
+          ? "Q-Sub附信 + 议题/问题 + 器械描述"
+          : "Q-Sub cover letter + agenda/questions + device description",
       status: pMonth >= 1 ? "done" : "future",
     },
     {
       day: 15,
-      label: isCN ? "FDA确认接收" : "FDA Acknowledgment & Acceptance",
-      detail: isCN
-        ? "FDA确认Pre-Sub完整性并指定审核团队"
-        : "FDA confirms completeness & assigns review team",
+      label: isKO
+        ? "FDA 접수 확인"
+        : isCN
+          ? "FDA确认接收"
+          : "FDA Acknowledgment & Acceptance",
+      detail: isKO
+        ? "FDA가 완전성을 확인하고 심사팀을 배정"
+        : isCN
+          ? "FDA确认Pre-Sub完整性并指定审核团队"
+          : "FDA confirms completeness & assigns review team",
       status: pMonth >= 2 ? "done" : "future",
     },
     {
       day: 30,
-      label: isCN ? "会议日期确认" : "Meeting Date Communicated",
-      detail: isCN
-        ? "通常在第60-75天之间"
-        : "Typically scheduled for Day 60–75",
+      label: isKO
+        ? "회의 일정 통보"
+        : isCN
+          ? "会议日期确认"
+          : "Meeting Date Communicated",
+      detail: isKO
+        ? "보통 60~75일 사이에 예정"
+        : isCN
+          ? "通常在第60-75天之间"
+          : "Typically scheduled for Day 60–75",
       status: pMonth >= 2 ? "done" : "future",
     },
     {
       day: 70,
-      label: isCN ? "书面反馈/会议" : "Written Feedback / Meeting",
-      detail: isCN
-        ? "FDA提供书面回复或召开Pre-Sub会议"
-        : "FDA provides written response or holds Pre-Sub meeting",
+      label: isKO
+        ? "서면 피드백 / 회의"
+        : isCN
+          ? "书面反馈/会议"
+          : "Written Feedback / Meeting",
+      detail: isKO
+        ? "FDA가 서면 답변 제공 또는 Pre-Sub 회의 개최"
+        : isCN
+          ? "FDA提供书面回复或召开Pre-Sub会议"
+          : "FDA provides written response or holds Pre-Sub meeting",
       status: pMonth >= 3 ? "done" : "future",
     },
     {
       day: 75,
-      label: isCN ? "最终会议纪要" : "Final Meeting Minutes",
-      detail: isCN
-        ? "FDA发送正式的会议纪要（如有会议）"
-        : "FDA sends official meeting minutes (if meeting held)",
+      label: isKO
+        ? "최종 회의록"
+        : isCN
+          ? "最终会议纪要"
+          : "Final Meeting Minutes",
+      detail: isKO
+        ? "FDA가 공식 회의록 발송 (회의 개최 시)"
+        : isCN
+          ? "FDA发送正式的会议纪要（如有会议）"
+          : "FDA sends official meeting minutes (if meeting held)",
       status: pMonth >= 4 ? "done" : "future",
     },
   ];
@@ -5890,52 +5964,78 @@ function renderFdaComms(): void {
   const mdufaMilestones = [
     {
       day: 1,
-      label: isCN ? "提交接收" : "Submission Received",
-      detail: isCN
-        ? "FDA Document Control Center接收510(k)"
-        : "FDA Document Control Center receives 510(k)",
+      label: isKO ? "제출 접수" : isCN ? "提交接收" : "Submission Received",
+      detail: isKO
+        ? "FDA 문서관리센터가 510(k) 접수"
+        : isCN
+          ? "FDA Document Control Center接收510(k)"
+          : "FDA Document Control Center receives 510(k)",
       status: pMonth >= Math.round(totalDur * 0.8) ? "done" : "future",
     },
     {
       day: 7,
-      label: isCN ? "接收确认" : "Receipt Acknowledgment",
-      detail: isCN
-        ? "分配K编号并发送确认函"
-        : "K-number assigned & acknowledgment letter sent",
+      label: isKO ? "접수 확인" : isCN ? "接收确认" : "Receipt Acknowledgment",
+      detail: isKO
+        ? "K번호 부여 및 확인 서한 발송"
+        : isCN
+          ? "分配K编号并发送确认函"
+          : "K-number assigned & acknowledgment letter sent",
       status: pMonth >= Math.round(totalDur * 0.8) ? "done" : "future",
     },
     {
       day: 15,
-      label: isCN ? "RTA筛查完成" : "RTA Screening Complete",
-      detail: isCN
-        ? "FDA完成行政审查——接受或拒绝"
-        : "FDA completes administrative review — accept or refuse",
+      label: isKO
+        ? "RTA 심사 완료"
+        : isCN
+          ? "RTA筛查完成"
+          : "RTA Screening Complete",
+      detail: isKO
+        ? "FDA 행정 심사 완료 — 접수 또는 거부"
+        : isCN
+          ? "FDA完成行政审查——接受或拒绝"
+          : "FDA completes administrative review — accept or refuse",
       status: pMonth >= Math.round(totalDur * 0.85) ? "done" : "future",
     },
     {
       day: 60,
-      label: isCN
-        ? "实质性审查/互动审查"
-        : "Substantive Review / Interactive Review",
-      detail: isCN
-        ? "技术评审；可能发出AI信函（额外180天）"
-        : "Technical evaluation; may issue AI letter (+180 days)",
+      label: isKO
+        ? "실질 심사 / 상호 심사"
+        : isCN
+          ? "实质性审查/互动审查"
+          : "Substantive Review / Interactive Review",
+      detail: isKO
+        ? "기술 평가; AI 서한 발행 가능 (+180일)"
+        : isCN
+          ? "技术评审；可能发出AI信函（额外180天）"
+          : "Technical evaluation; may issue AI letter (+180 days)",
       status: pMonth >= Math.round(totalDur * 0.9) ? "done" : "future",
     },
     {
       day: 90,
-      label: isCN ? "MDUFA决定目标" : "MDUFA Decision Goal",
-      detail: isCN
-        ? "SE/NSE/MDUFA目标日期（如无AI）"
-        : "SE/NSE determination — MDUFA goal date (if no AI)",
+      label: isKO
+        ? "MDUFA 결정 목표"
+        : isCN
+          ? "MDUFA决定目标"
+          : "MDUFA Decision Goal",
+      detail: isKO
+        ? "SE/NSE 판정 — MDUFA 목표일 (AI 미발행 시)"
+        : isCN
+          ? "SE/NSE/MDUFA目标日期（如无AI）"
+          : "SE/NSE determination — MDUFA goal date (if no AI)",
       status: pMonth >= totalDur ? "done" : "future",
     },
     {
       day: 100,
-      label: isCN ? "MDUFA逾期追踪" : "MDUFA Overdue Tracking",
-      detail: isCN
-        ? "超出MDUFA目标——上报至部门主管"
-        : "Past MDUFA goal — escalate to division director",
+      label: isKO
+        ? "MDUFA 초과 추적"
+        : isCN
+          ? "MDUFA逾期追踪"
+          : "MDUFA Overdue Tracking",
+      detail: isKO
+        ? "MDUFA 목표 초과 — 부서장에게 에스컬레이션"
+        : isCN
+          ? "超出MDUFA目标——上报至部门主管"
+          : "Past MDUFA goal — escalate to division director",
       status: "future" as const,
     },
   ];
@@ -5948,36 +6048,69 @@ function renderFdaComms(): void {
     {
       q: "Is the device legally marketed (predicate identified)?",
       qCN: "器械是否已合法上市（已确定前置器械）？",
-      yes: isCN ? "继续" : "Continue",
-      no: isCN
-        ? "不能走510(k)通路，考虑De Novo或PMA"
-        : "Cannot use 510(k) pathway — consider De Novo or PMA",
+      qKO: "기기가 합법적으로 시판되고 있는가 (선행 기기 확인)?",
+      yes: isKO ? "계속" : isCN ? "继续" : "Continue",
+      no: isKO
+        ? "510(k) 경로 불가 — De Novo 또는 PMA 고려"
+        : isCN
+          ? "不能走510(k)通路，考虑De Novo或PMA"
+          : "Cannot use 510(k) pathway — consider De Novo or PMA",
     },
     {
       q: "Same intended use as predicate?",
       qCN: "与前置器械预期用途相同？",
-      yes: isCN ? "继续" : "Continue",
-      no: isCN ? "不是实质等效 (NSE)" : "Not Substantially Equivalent (NSE)",
+      qKO: "선행 기기와 사용 목적이 동일한가?",
+      yes: isKO ? "계속" : isCN ? "继续" : "Continue",
+      no: isKO
+        ? "실질적 동등성 아님 (NSE)"
+        : isCN
+          ? "不是实质等效 (NSE)"
+          : "Not Substantially Equivalent (NSE)",
     },
     {
       q: "Same technological characteristics?",
       qCN: "技术特征相同？",
-      yes: isCN ? "实质等效 (SE)" : "Substantially Equivalent (SE)",
-      no: isCN ? "继续评估差异" : "Continue — evaluate differences",
+      qKO: "기술적 특성이 동일한가?",
+      yes: isKO
+        ? "실질적 동등성 (SE)"
+        : isCN
+          ? "实质等效 (SE)"
+          : "Substantially Equivalent (SE)",
+      no: isKO
+        ? "계속 — 차이점 평가"
+        : isCN
+          ? "继续评估差异"
+          : "Continue — evaluate differences",
     },
     {
       q: "Do different characteristics raise new questions of safety/effectiveness?",
       qCN: "不同特征是否引发新的安全性/有效性问题？",
-      yes: isCN
-        ? "需要额外数据证明"
-        : "Additional data required to demonstrate equivalence",
-      no: isCN ? "实质等效 (SE)" : "Substantially Equivalent (SE)",
+      qKO: "상이한 특성이 안전성/유효성에 대한 새로운 문제를 제기하는가?",
+      yes: isKO
+        ? "동등성 입증을 위한 추가 데이터 필요"
+        : isCN
+          ? "需要额外数据证明"
+          : "Additional data required to demonstrate equivalence",
+      no: isKO
+        ? "실질적 동등성 (SE)"
+        : isCN
+          ? "实质等效 (SE)"
+          : "Substantially Equivalent (SE)",
     },
     {
       q: "Do accepted test methods exist and does data demonstrate SE?",
       qCN: "是否存在公认的测试方法且数据证明SE？",
-      yes: isCN ? "实质等效 (SE)" : "Substantially Equivalent (SE)",
-      no: isCN ? "不是实质等效 (NSE)" : "Not Substantially Equivalent (NSE)",
+      qKO: "공인된 시험 방법이 존재하며 데이터가 SE를 입증하는가?",
+      yes: isKO
+        ? "실질적 동등성 (SE)"
+        : isCN
+          ? "实质等效 (SE)"
+          : "Substantially Equivalent (SE)",
+      no: isKO
+        ? "실질적 동등성 아님 (NSE)"
+        : isCN
+          ? "不是实质等效 (NSE)"
+          : "Not Substantially Equivalent (NSE)",
     },
   ];
 
@@ -5994,8 +6127,8 @@ function renderFdaComms(): void {
   const letterhead = `<div class="fda-letterhead">
     <div class="fda-letterhead-company">${pApplicant}</div>
     ${pAddr ? `<div class="fda-letterhead-addr">${pAddr}</div>` : ""}
-    ${pPhone ? `<div class="fda-letterhead-addr">${isCN ? "电话" : "Tel"}: ${pPhone}</div>` : ""}
-    ${pEmail ? `<div class="fda-letterhead-addr">${isCN ? "邮箱" : "Email"}: ${pEmail}</div>` : ""}
+    ${pPhone ? `<div class="fda-letterhead-addr">${isKO ? "전화" : isCN ? "电话" : "Tel"}: ${pPhone}</div>` : ""}
+    ${pEmail ? `<div class="fda-letterhead-addr">${isKO ? "이메일" : isCN ? "邮箱" : "Email"}: ${pEmail}</div>` : ""}
     <hr class="fda-letterhead-rule">
   </div>`;
 
@@ -6007,11 +6140,19 @@ function renderFdaComms(): void {
 
   const letterBodies: Record<
     string,
-    { reEN: string; reCN: string; bodyEN: string; bodyCN: string }
+    {
+      reEN: string;
+      reCN: string;
+      reKO: string;
+      bodyEN: string;
+      bodyCN: string;
+      bodyKO: string;
+    }
   > = {
     "pre-sub-meeting": {
       reEN: `Pre-Submission Meeting Request — ${pName}`,
       reCN: `Pre-Submission会议请求 — ${pName}`,
+      reKO: `Pre-Submission 회의 요청 — ${pName}`,
       bodyEN: `<p>${pApplicant} respectfully requests a Pre-Submission meeting to discuss a planned ${subLabel} submission for the ${pName}.</p>
         <p><strong>Device Description:</strong> ${deviceDesc}</p>
         <p><strong>Submission Type:</strong> ${subLabel}</p>
@@ -6024,10 +6165,17 @@ function renderFdaComms(): void {
         <p><strong>制造商:</strong> ${pMfr}</p>
         <p><strong>希望的会议形式:</strong> 电话会议</p>
         <p><strong>具体问题见附件。</strong></p>`,
+      bodyKO: `<p>${pApplicant}은(는) ${pName}에 대한 ${subLabel} 제출을 논의하기 위해 Pre-Submission 회의를 정중히 요청합니다.</p>
+        <p><strong>기기 설명:</strong> ${deviceDesc}</p>
+        <p><strong>제출 유형:</strong> ${subLabel}</p>
+        <p><strong>제조업체:</strong> ${pMfr}</p>
+        <p><strong>희망 회의 형태:</strong> 원격회의</p>
+        <p><strong>구체적인 질문이 첨부되어 있습니다.</strong></p>`,
     },
     "pre-sub-written": {
       reEN: `Pre-Submission Written Feedback Request — ${pName}`,
       reCN: `Pre-Submission书面反馈请求 — ${pName}`,
+      reKO: `Pre-Submission 서면 피드백 요청 — ${pName}`,
       bodyEN: `<p>${pApplicant} respectfully requests written-only feedback (no meeting) on a planned ${subLabel} submission for the ${pName}.</p>
         <p><strong>Device Description:</strong> ${deviceDesc}</p>
         <p><strong>Submission Type:</strong> ${subLabel}</p>
@@ -6038,10 +6186,16 @@ function renderFdaComms(): void {
         <p><strong>提交类型:</strong> ${subLabel}</p>
         <p><strong>制造商:</strong> ${pMfr}</p>
         <p>我们请求对所附具体问题提供书面反馈。此次不请求正式会议。</p>`,
+      bodyKO: `<p>${pApplicant}은(는) ${pName}에 대한 ${subLabel} 제출에 관해 서면 피드백만(회의 없이) 정중히 요청합니다.</p>
+        <p><strong>기기 설명:</strong> ${deviceDesc}</p>
+        <p><strong>제출 유형:</strong> ${subLabel}</p>
+        <p><strong>제조업체:</strong> ${pMfr}</p>
+        <p>첨부된 구체적 질문에 대한 서면 피드백을 요청합니다. 현재 공식 회의는 요청하지 않습니다.</p>`,
     },
     sir: {
       reEN: `Submission Issue Request (SIR) — ${pName}`,
       reCN: `提交问题请求 (SIR) — ${pName}`,
+      reKO: `제출 문제 요청 (SIR) — ${pName}`,
       bodyEN: `<p>${pApplicant} respectfully submits this Submission Issue Request (SIR) regarding our pending ${subLabel} submission for the ${pName}.</p>
         <p><strong>Device Description:</strong> ${deviceDesc}</p>
         <p><strong>Pending Submission Reference:</strong> [Insert 510(k) number, e.g. K261234]</p>
@@ -6054,10 +6208,17 @@ function renderFdaComms(): void {
         <p><strong>制造商:</strong> ${pMfr}</p>
         <p>我们收到日期为[请插入日期]的补充信息(AI)函，在回复前就以下问题寻求澄清：</p>
         <p><strong>需要澄清的具体问题详见下文。</strong></p>`,
+      bodyKO: `<p>${pApplicant}은(는) ${pName}에 대한 계류 중인 ${subLabel} 제출에 관해 이 제출 문제 요청(SIR)을 정중히 제출합니다.</p>
+        <p><strong>기기 설명:</strong> ${deviceDesc}</p>
+        <p><strong>계류 중인 제출 참조번호:</strong> [510(k) 번호 입력, 예: K261234]</p>
+        <p><strong>제조업체:</strong> ${pMfr}</p>
+        <p>[날짜 입력] 자 추가 정보(AI) 서한을 수령하였으며, 응답 전 다음 사항에 대한 명확한 설명을 구합니다:</p>
+        <p><strong>명확한 설명이 필요한 구체적 사항은 아래에 상세히 기술되어 있습니다.</strong></p>`,
     },
     informational: {
       reEN: `Informational Meeting Request — ${pName}`,
       reCN: `信息会议请求 — ${pName}`,
+      reKO: `정보 회의 요청 — ${pName}`,
       bodyEN: `<p>${pApplicant} respectfully requests an Informational Meeting to discuss general regulatory topics related to the ${pName}.</p>
         <p><strong>Device Description:</strong> ${deviceDesc}</p>
         <p><strong>Manufacturer:</strong> ${pMfr}</p>
@@ -6068,10 +6229,16 @@ function renderFdaComms(): void {
         <p><strong>制造商:</strong> ${pMfr}</p>
         <p>此请求仅用于信息性讨论。我们理解信息会议中提供的反馈不具有约束力，不构成正式FDA建议。</p>
         <p><strong>讨论主题概述如下。</strong></p>`,
+      bodyKO: `<p>${pApplicant}은(는) ${pName}과(와) 관련된 일반 규제 주제를 논의하기 위한 정보 회의를 정중히 요청합니다.</p>
+        <p><strong>기기 설명:</strong> ${deviceDesc}</p>
+        <p><strong>제조업체:</strong> ${pMfr}</p>
+        <p>이 요청은 정보 제공 목적의 논의만을 위한 것입니다. 정보 회의에서 제공된 피드백은 구속력이 없으며 공식 FDA 자문을 구성하지 않음을 이해합니다.</p>
+        <p><strong>논의 주제는 아래에 개요되어 있습니다.</strong></p>`,
     },
     "study-risk": {
       reEN: `Study Risk Determination Request — ${pName}`,
       reCN: `研究风险判定请求 — ${pName}`,
+      reKO: `연구 위험 판정 요청 — ${pName}`,
       bodyEN: `<p>${pApplicant} respectfully requests a Study Risk Determination for a planned clinical study supporting the ${subLabel} submission for the ${pName}.</p>
         <p><strong>Device Description:</strong> ${deviceDesc}</p>
         <p><strong>Submission Type:</strong> ${subLabel}</p>
@@ -6084,6 +6251,12 @@ function renderFdaComms(): void {
         <p><strong>制造商:</strong> ${pMfr}</p>
         <p>我们请求FDA根据21 CFR 812判定拟定临床研究是否构成显著风险(SR)或非显著风险(NSR)研究。</p>
         <p><strong>研究方案摘要和风险分析见附件。</strong></p>`,
+      bodyKO: `<p>${pApplicant}은(는) ${pName}에 대한 ${subLabel} 제출을 지원하는 계획된 임상 연구에 대한 연구 위험 판정을 정중히 요청합니다.</p>
+        <p><strong>기기 설명:</strong> ${deviceDesc}</p>
+        <p><strong>제출 유형:</strong> ${subLabel}</p>
+        <p><strong>제조업체:</strong> ${pMfr}</p>
+        <p>21 CFR 812에 따라 제안된 임상 조사가 유의한 위험(SR) 또는 비유의한 위험(NSR) 연구에 해당하는지 FDA의 판정을 구합니다.</p>
+        <p><strong>연구 프로토콜 요약 및 위험 분석이 첨부되어 있습니다.</strong></p>`,
     },
   };
 
@@ -6093,211 +6266,242 @@ function renderFdaComms(): void {
       value: "pre-sub-meeting",
       labelEN: "Pre-Sub (Meeting Request)",
       labelCN: "Pre-Sub（会议请求）",
+      labelKO: "Pre-Sub (회의 요청)",
     },
     {
       value: "pre-sub-written",
       labelEN: "Pre-Sub (Written Feedback)",
       labelCN: "Pre-Sub（书面反馈）",
+      labelKO: "Pre-Sub (서면 피드백)",
     },
     {
       value: "sir",
       labelEN: "Submission Issue Request (SIR)",
       labelCN: "提交问题请求 (SIR)",
+      labelKO: "제출 문제 요청 (SIR)",
     },
     {
       value: "informational",
       labelEN: "Informational Meeting",
       labelCN: "信息会议",
+      labelKO: "정보 회의",
     },
     {
       value: "study-risk",
       labelEN: "Study Risk Determination",
       labelCN: "研究风险判定",
+      labelKO: "연구 위험 판정",
     },
   ];
 
   // Build default letter
   const defaultType = "pre-sub-meeting";
   const defaultBody = letterBodies[defaultType];
-  const defaultRe = isCN ? defaultBody.reCN : defaultBody.reEN;
-  const defaultContent = isCN ? defaultBody.bodyCN : defaultBody.bodyEN;
+  const defaultRe = isKO
+    ? defaultBody.reKO
+    : isCN
+      ? defaultBody.reCN
+      : defaultBody.reEN;
+  const defaultContent = isKO
+    ? defaultBody.bodyKO
+    : isCN
+      ? defaultBody.bodyCN
+      : defaultBody.bodyEN;
 
   body.innerHTML = `
-  <div class="fda-pmp-badge">🔒 ${isCN ? "PMP专属 — 对技术/商务角色不可见" : "PMP Eyes Only — Not visible to Tech/Business roles"}</div>
+  <div class="fda-pmp-badge">🔒 ${isKO ? "PMP 전용 — 기술/비즈니스 역할에 표시되지 않음" : isCN ? "PMP专属 — 对技术/商务角色不可见" : "PMP Eyes Only — Not visible to Tech/Business roles"}</div>
 
   ${
     unsyncedCount > 0
       ? `<div class="fda-sync-alert">
     <span class="fda-sync-alert-icon">⚠️</span>
     <span>${
-      isCN
-        ? `${unsyncedCount} 份已批准/生效文档尚未上传至服务器 — 请前往 Document Control 同步以保护您的DHF`
-        : `${unsyncedCount} approved/effective document(s) not yet synced to server — go to Document Control and click "Sync to Server" to protect your DHF`
+      isKO
+        ? `${unsyncedCount}개의 승인/유효 문서가 아직 서버에 동기화되지 않았습니다 — Document Control에서 "서버 동기화"를 클릭하여 DHF를 보호하세요`
+        : isCN
+          ? `${unsyncedCount} 份已批准/生效文档尚未上传至服务器 — 请前往 Document Control 同步以保护您的DHF`
+          : `${unsyncedCount} approved/effective document(s) not yet synced to server — go to Document Control and click "Sync to Server" to protect your DHF`
     }</span>
-    <button class="fda-sync-alert-btn" data-action="goToDocLibrary">📂 ${isCN ? "前往文档控制" : "Go to Document Control"}</button>
+    <button class="fda-sync-alert-btn" data-action="goToDocLibrary">📂 ${isKO ? "문서 관리로 이동" : isCN ? "前往文档控制" : "Go to Document Control"}</button>
   </div>`
       : ""
   }
 
   <!-- Summary Metrics -->
   <div class="fda-metrics">
-    ${mc(isCN ? "RTA就绪" : "RTA Ready", `${rtaPct}%`, rtaPct >= 80 ? "#22c55e" : rtaPct >= 50 ? "#f59e0b" : "#ef4444")}
-    ${mc(isCN ? "DHF完成度" : "DHF Completion", `${dhfPct}%`, dhfPct >= 80 ? "#22c55e" : dhfPct >= 50 ? "#f59e0b" : "#ef4444")}
-    ${mc(isCN ? "DMR完成度" : "DMR Completion", `${dmrPct}%`, dmrPct >= 80 ? "#22c55e" : dmrPct >= 50 ? "#f59e0b" : "#ef4444")}
-    ${mc(isCN ? "门控通过" : "Gates Passed", `${completedGates}/${GATES.length}`, completedGates === GATES.length ? "#22c55e" : "#38bdf8")}
-    ${mc(isCN ? "标准合规" : "Standards Met", `${stdComplete}/${stdTotal}`, stdComplete === stdTotal ? "#22c55e" : "#f59e0b")}
-    ${mc(isCN ? "红色风险" : "Red Risks", String(redRisks), redRisks > 0 ? "#ef4444" : "#22c55e")}
-    ${mc(isCN ? "黄色风险" : "Yellow Risks", String(yellowRisks), yellowRisks > 0 ? "#f59e0b" : "#22c55e")}
+    ${mc(isKO ? "RTA 준비" : isCN ? "RTA就绪" : "RTA Ready", `${rtaPct}%`, rtaPct >= 80 ? "#22c55e" : rtaPct >= 50 ? "#f59e0b" : "#ef4444")}
+    ${mc(isKO ? "DHF 완료율" : isCN ? "DHF完成度" : "DHF Completion", `${dhfPct}%`, dhfPct >= 80 ? "#22c55e" : dhfPct >= 50 ? "#f59e0b" : "#ef4444")}
+    ${mc(isKO ? "DMR 완료율" : isCN ? "DMR完成度" : "DMR Completion", `${dmrPct}%`, dmrPct >= 80 ? "#22c55e" : dmrPct >= 50 ? "#f59e0b" : "#ef4444")}
+    ${mc(isKO ? "게이트 통과" : isCN ? "门控通过" : "Gates Passed", `${completedGates}/${GATES.length}`, completedGates === GATES.length ? "#22c55e" : "#38bdf8")}
+    ${mc(isKO ? "표준 충족" : isCN ? "标准合规" : "Standards Met", `${stdComplete}/${stdTotal}`, stdComplete === stdTotal ? "#22c55e" : "#f59e0b")}
+    ${mc(isKO ? "적색 위험" : isCN ? "红色风险" : "Red Risks", String(redRisks), redRisks > 0 ? "#ef4444" : "#22c55e")}
+    ${mc(isKO ? "황색 위험" : isCN ? "黄色风险" : "Yellow Risks", String(yellowRisks), yellowRisks > 0 ? "#f59e0b" : "#22c55e")}
   </div>
 
   <div class="fda-grid">
     <!-- Q-Sub Cover Letter Generator -->
     <div class="fda-card fda-card-wide">
-      <h3>📋 ${isCN ? "Q-Sub附信生成器" : "Q-Sub Cover Letter Generator"}</h3>
+      <h3>📋 ${isKO ? "Q-Sub 커버 레터 생성기" : isCN ? "Q-Sub附信生成器" : "Q-Sub Cover Letter Generator"}</h3>
       <p class="fda-card-hint">${
-        isCN
-          ? "选择Q-Sub类型，自动生成带公司抬头的FDA附信——支持全部5种Q-Sub类型"
-          : "Select a Q-Sub type to auto-generate an FDA cover letter with your company letterhead — all 5 Q-Sub types supported"
+        isKO
+          ? "Q-Sub 유형을 선택하면 회사 레터헤드가 포함된 FDA 커버 레터가 자동 생성됩니다 — 5가지 Q-Sub 유형 모두 지원"
+          : isCN
+            ? "选择Q-Sub类型，自动生成带公司抬头的FDA附信——支持全部5种Q-Sub类型"
+            : "Select a Q-Sub type to auto-generate an FDA cover letter with your company letterhead — all 5 Q-Sub types supported"
       }</p>
       <div class="fda-qsub-selector">
-        <label>${isCN ? "选择Q-Sub类型" : "Select Q-Sub Type"}:</label>
+        <label>${isKO ? "Q-Sub 유형 선택" : isCN ? "选择Q-Sub类型" : "Select Q-Sub Type"}:</label>
         <select id="fdaQsubTypeSelect">
-          ${qsubSelectOptions.map((o) => `<option value="${o.value}">${isCN ? o.labelCN : o.labelEN}</option>`).join("")}
+          ${qsubSelectOptions.map((o) => `<option value="${o.value}">${isKO ? o.labelKO : isCN ? o.labelCN : o.labelEN}</option>`).join("")}
         </select>
       </div>
       <div class="fda-preview">
         <div class="fda-letter" id="fdaLetterPreview">
           ${letterhead}
-          <p><strong>${isCN ? "致" : "To"}:</strong> Division of Industry and Consumer Education (DICE)<br>
+          <p><strong>${isKO ? "수신" : isCN ? "致" : "To"}:</strong> Division of Industry and Consumer Education (DICE)<br>
           Center for Devices and Radiological Health<br>
           Food and Drug Administration</p>
-          <p><strong>${isCN ? "发件人" : "From"}:</strong> ${pApplicant}${pContact ? `<br>${isCN ? "联系人" : "Contact"}: ${pContact}` : ""}</p>
-          <p><strong>${isCN ? "日期" : "Date"}:</strong> ${pDate || new Date().toLocaleDateString()}</p>
-          <p><strong>${isCN ? "主题" : "Re"}:</strong> <span id="fdaLetterRe">${defaultRe}</span></p>
+          <p><strong>${isKO ? "발신" : isCN ? "发件人" : "From"}:</strong> ${pApplicant}${pContact ? `<br>${isKO ? "담당자" : isCN ? "联系人" : "Contact"}: ${pContact}` : ""}</p>
+          <p><strong>${isKO ? "날짜" : isCN ? "日期" : "Date"}:</strong> ${pDate || new Date().toLocaleDateString()}</p>
+          <p><strong>${isKO ? "제목" : isCN ? "主题" : "Re"}:</strong> <span id="fdaLetterRe">${defaultRe}</span></p>
           <hr>
-          <p>${isCN ? "尊敬的先生/女士：" : "Dear Sir or Madam:"}</p>
+          <p>${isKO ? "귀하께:" : isCN ? "尊敬的先生/女士：" : "Dear Sir or Madam:"}</p>
           <div id="fdaLetterBody">${defaultContent}</div>
-          <p>${isCN ? "此致敬礼" : "Sincerely"},<br>${pContact || pApplicant}<br>${pContact ? pApplicant : ""}</p>
+          <p>${isKO ? "경의를 표하며" : isCN ? "此致敬礼" : "Sincerely"},<br>${pContact || pApplicant}<br>${pContact ? pApplicant : ""}</p>
         </div>
       </div>
       <div class="fda-card-actions">
-        <button class="fda-btn" id="fdaExportLetter">📥 ${isCN ? "导出附信 (HTML)" : "Export Cover Letter (HTML)"}</button>
-        <button class="fda-btn fda-btn-secondary" id="fdaExportQuestions">📋 ${isCN ? "导出问题包" : "Export Question Package"}</button>
+        <button class="fda-btn" id="fdaExportLetter">📥 ${isKO ? "커버 레터 내보내기 (HTML)" : isCN ? "导出附信 (HTML)" : "Export Cover Letter (HTML)"}</button>
+        <button class="fda-btn fda-btn-secondary" id="fdaExportQuestions">📋 ${isKO ? "질문 패키지 내보내기" : isCN ? "导出问题包" : "Export Question Package"}</button>
       </div>
     </div>
 
     <!-- Q-Sub Reference Guide -->
     <div class="fda-card fda-card-wide">
-      <h3>📚 ${isCN ? "Q-Sub类型参考" : "Q-Submission Types Reference"}</h3>
+      <h3>📚 ${isKO ? "Q-Sub 유형 참조" : isCN ? "Q-Sub类型参考" : "Q-Submission Types Reference"}</h3>
       <p class="fda-card-hint">${
-        isCN
-          ? "FDA CDRH五种Q-Sub类型概览——选择最适合您项目阶段的类型"
-          : "Overview of 5 FDA CDRH Q-Sub types — choose the right one for your project stage"
+        isKO
+          ? "FDA CDRH 5가지 Q-Sub 유형 개요 — 프로젝트 단계에 맞는 유형을 선택하세요"
+          : isCN
+            ? "FDA CDRH五种Q-Sub类型概览——选择最适合您项目阶段的类型"
+            : "Overview of 5 FDA CDRH Q-Sub types — choose the right one for your project stage"
       }</p>
       <table class="fda-qsub-table">
         <thead>
           <tr>
-            <th>${isCN ? "类型" : "Type"}</th>
-            <th>${isCN ? "用途" : "Purpose"}</th>
-            <th>${isCN ? "时间线" : "Timeline"}</th>
-            <th>${isCN ? "何时使用" : "When to Use"}</th>
+            <th>${isKO ? "유형" : isCN ? "类型" : "Type"}</th>
+            <th>${isKO ? "목적" : isCN ? "用途" : "Purpose"}</th>
+            <th>${isKO ? "타임라인" : isCN ? "时间线" : "Timeline"}</th>
+            <th>${isKO ? "사용 시기" : isCN ? "何时使用" : "When to Use"}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><strong>${isCN ? "Pre-Sub（会议）" : "Pre-Sub (Meeting)"}</strong></td>
-            <td>${isCN ? "请求与FDA审评部门进行反馈会议" : "Request feedback meeting with FDA review division"}</td>
-            <td>${isCN ? "75天窗口" : "75-day window"}</td>
-            <td>${isCN ? "首次申请前——确认等效器械策略、测试计划和临床需求" : "Before first submission — confirm predicate strategy, testing plan & clinical needs"}</td>
+            <td><strong>${isKO ? "Pre-Sub (회의)" : isCN ? "Pre-Sub（会议）" : "Pre-Sub (Meeting)"}</strong></td>
+            <td>${isKO ? "FDA 심사 부서와의 피드백 회의 요청" : isCN ? "请求与FDA审评部门进行反馈会议" : "Request feedback meeting with FDA review division"}</td>
+            <td>${isKO ? "75일 기간" : isCN ? "75天窗口" : "75-day window"}</td>
+            <td>${isKO ? "첫 제출 전 — 선행 기기 전략, 시험 계획 및 임상 요구사항 확인" : isCN ? "首次申请前——确认等效器械策略、测试计划和临床需求" : "Before first submission — confirm predicate strategy, testing plan & clinical needs"}</td>
           </tr>
           <tr>
-            <td><strong>${isCN ? "Pre-Sub（仅书面）" : "Pre-Sub (Written Only)"}</strong></td>
-            <td>${isCN ? "仅书面反馈，不要求会议" : "Written-only feedback, no meeting requested"}</td>
-            <td>${isCN ? "75天窗口" : "75-day window"}</td>
-            <td>${isCN ? "问题明确、无需讨论——如确认标准或特定测试方法" : "Clear-cut questions needing no discussion — e.g. confirming standards or specific test methods"}</td>
+            <td><strong>${isKO ? "Pre-Sub (서면만)" : isCN ? "Pre-Sub（仅书面）" : "Pre-Sub (Written Only)"}</strong></td>
+            <td>${isKO ? "서면 피드백만, 회의 요청 없음" : isCN ? "仅书面反馈，不要求会议" : "Written-only feedback, no meeting requested"}</td>
+            <td>${isKO ? "75일 기간" : isCN ? "75天窗口" : "75-day window"}</td>
+            <td>${isKO ? "명확한 질문으로 논의 불필요 — 예: 표준 확인 또는 특정 시험 방법" : isCN ? "问题明确、无需讨论——如确认标准或特定测试方法" : "Clear-cut questions needing no discussion — e.g. confirming standards or specific test methods"}</td>
           </tr>
           <tr>
-            <td><strong>${isCN ? "提交问题请求 (SIR)" : "Submission Issue Request (SIR)"}</strong></td>
-            <td>${isCN ? "收到AI信函后对待审510(k)的澄清" : "Clarification on pending 510(k) after AI letter"}</td>
-            <td>${isCN ? "提交后≤60天: 21天; >60天: 70天" : "≤60 days post-sub: 21 days; >60 days: 70 days"}</td>
-            <td>${isCN ? "收到补充信息(AI)函后——在回复前澄清FDA要求" : "After receiving an AI letter — clarify FDA's request before responding"}</td>
+            <td><strong>${isKO ? "제출 문제 요청 (SIR)" : isCN ? "提交问题请求 (SIR)" : "Submission Issue Request (SIR)"}</strong></td>
+            <td>${isKO ? "AI 서한 수령 후 계류 중인 510(k)에 대한 명확화" : isCN ? "收到AI信函后对待审510(k)的澄清" : "Clarification on pending 510(k) after AI letter"}</td>
+            <td>${isKO ? "제출 후 ≤60일: 21일; >60일: 70일" : isCN ? "提交后≤60天: 21天; >60天: 70天" : "≤60 days post-sub: 21 days; >60 days: 70 days"}</td>
+            <td>${isKO ? "AI 서한 수령 후 — 응답 전 FDA 요구사항 명확화" : isCN ? "收到补充信息(AI)函后——在回复前澄清FDA要求" : "After receiving an AI letter — clarify FDA's request before responding"}</td>
           </tr>
           <tr>
-            <td><strong>${isCN ? "信息会议" : "Informational Meeting"}</strong></td>
-            <td>${isCN ? "一般性讨论，无约束力反馈" : "General discussion, no binding feedback"}</td>
-            <td>${isCN ? "时间协商" : "Timing negotiated"}</td>
-            <td>${isCN ? "早期探索——当您尚未确定法规路径或需要总体指导时" : "Early exploration — when you haven't committed to a regulatory path or need general guidance"}</td>
+            <td><strong>${isKO ? "정보 회의" : isCN ? "信息会议" : "Informational Meeting"}</strong></td>
+            <td>${isKO ? "일반 논의, 구속력 없는 피드백" : isCN ? "一般性讨论，无约束力反馈" : "General discussion, no binding feedback"}</td>
+            <td>${isKO ? "일정 협의" : isCN ? "时间协商" : "Timing negotiated"}</td>
+            <td>${isKO ? "초기 탐색 — 규제 경로가 아직 정해지지 않았거나 전반적 지침이 필요할 때" : isCN ? "早期探索——当您尚未确定法规路径或需要总体指导时" : "Early exploration — when you haven't committed to a regulatory path or need general guidance"}</td>
           </tr>
           <tr>
-            <td><strong>${isCN ? "研究风险判定" : "Study Risk Determination"}</strong></td>
-            <td>${isCN ? "确定临床研究是SR还是NSR" : "Determine if clinical study is SR or NSR"}</td>
-            <td>${isCN ? "75天窗口" : "75-day window"}</td>
-            <td>${isCN ? "临床研究计划前——确定IDE要求和IRB审查级别" : "Before planning a clinical study — determines IDE requirements and IRB review level"}</td>
+            <td><strong>${isKO ? "연구 위험 판정" : isCN ? "研究风险判定" : "Study Risk Determination"}</strong></td>
+            <td>${isKO ? "임상 연구가 SR인지 NSR인지 판정" : isCN ? "确定临床研究是SR还是NSR" : "Determine if clinical study is SR or NSR"}</td>
+            <td>${isKO ? "75일 기간" : isCN ? "75天窗口" : "75-day window"}</td>
+            <td>${isKO ? "임상 연구 계획 전 — IDE 요구사항 및 IRB 심사 수준 결정" : isCN ? "临床研究计划前——确定IDE要求和IRB审查级别" : "Before planning a clinical study — determines IDE requirements and IRB review level"}</td>
           </tr>
         </tbody>
       </table>
 
       <div class="fda-tips">
-        <h4>🧭 ${isCN ? "如何选择正确的Q-Sub类型" : "How to Choose the Right Q-Sub Type"}</h4>
+        <h4>🧭 ${isKO ? "올바른 Q-Sub 유형 선택 방법" : isCN ? "如何选择正确的Q-Sub类型" : "How to Choose the Right Q-Sub Type"}</h4>
         <ul>
           <li>${
-            isCN
-              ? "📋 <strong>首次FDA互动？</strong> → Pre-Sub（会议）——始终首选会议形式"
-              : "📋 <strong>First FDA interaction?</strong> → Pre-Sub (Meeting) — always prefer the meeting option"
+            isKO
+              ? "📋 <strong>첫 FDA 접촉?</strong> → Pre-Sub (회의) — 항상 회의 옵션을 우선 선택"
+              : isCN
+                ? "📋 <strong>首次FDA互动？</strong> → Pre-Sub（会议）——始终首选会议形式"
+                : "📋 <strong>First FDA interaction?</strong> → Pre-Sub (Meeting) — always prefer the meeting option"
           }</li>
           <li>${
-            isCN
-              ? "✉️ <strong>简单确认？</strong> → Pre-Sub（仅书面）——标准确认或简单技术问题"
-              : "✉️ <strong>Simple confirmation?</strong> → Pre-Sub (Written Only) — standards confirmation or simple technical questions"
+            isKO
+              ? "✉️ <strong>간단한 확인?</strong> → Pre-Sub (서면만) — 표준 확인 또는 간단한 기술 질문"
+              : isCN
+                ? "✉️ <strong>简单确认？</strong> → Pre-Sub（仅书面）——标准确认或简单技术问题"
+                : "✉️ <strong>Simple confirmation?</strong> → Pre-Sub (Written Only) — standards confirmation or simple technical questions"
           }</li>
           <li>${
-            isCN
-              ? "⚠️ <strong>收到AI信函？</strong> → SIR——在回复前澄清FDA要求（窗口期有限！）"
-              : "⚠️ <strong>Got an AI letter?</strong> → SIR — clarify what FDA wants before responding (limited window!)"
+            isKO
+              ? "⚠️ <strong>AI 서한을 받았나요?</strong> → SIR — 응답 전 FDA 요구사항 명확화 (기한 제한!)"
+              : isCN
+                ? "⚠️ <strong>收到AI信函？</strong> → SIR——在回复前澄清FDA要求（窗口期有限！）"
+                : "⚠️ <strong>Got an AI letter?</strong> → SIR — clarify what FDA wants before responding (limited window!)"
           }</li>
           <li>${
-            isCN
-              ? "💬 <strong>还在探索？</strong> → 信息会议——无约束力，但有助于确定方向"
-              : "💬 <strong>Still exploring?</strong> → Informational Meeting — non-binding but helps set direction"
+            isKO
+              ? "💬 <strong>아직 탐색 중?</strong> → 정보 회의 — 구속력 없지만 방향 설정에 도움"
+              : isCN
+                ? "💬 <strong>还在探索？</strong> → 信息会议——无约束力，但有助于确定方向"
+                : "💬 <strong>Still exploring?</strong> → Informational Meeting — non-binding but helps set direction"
           }</li>
           <li>${
-            isCN
-              ? "🔬 <strong>计划临床研究？</strong> → 研究风险判定——确定SR vs NSR，影响IDE要求"
-              : "🔬 <strong>Planning a clinical study?</strong> → Study Risk Determination — SR vs NSR affects IDE requirements"
+            isKO
+              ? "🔬 <strong>임상 연구 계획?</strong> → 연구 위험 판정 — SR vs NSR이 IDE 요구사항에 영향"
+              : isCN
+                ? "🔬 <strong>计划临床研究？</strong> → 研究风险判定——确定SR vs NSR，影响IDE要求"
+                : "🔬 <strong>Planning a clinical study?</strong> → Study Risk Determination — SR vs NSR affects IDE requirements"
           }</li>
         </ul>
       </div>
 
       <div class="fda-tips">
-        <h4>💡 ${isCN ? "实用贴士" : "Practical Tips"}</h4>
+        <h4>💡 ${isKO ? "실용 팁" : isCN ? "实用贴士" : "Practical Tips"}</h4>
         <ul>
-          <li>${isCN ? "始终请求会议——即使FDA建议仅书面回复，也比不请求好" : "Always request a meeting upfront — even if FDA offers written-only, it's better than not asking"}</li>
-          <li>${isCN ? "每次Pre-Sub限制3-4个议题——FDA对每个议题有更充分的时间" : "Limit to 3–4 focused topics per Pre-Sub — FDA has more time per question that way"}</li>
-          <li>${isCN ? "Pre-Sub没有费用——可以提交多次Pre-Sub" : "No user fee for Pre-Subs — you can file multiple Pre-Subs over the project lifecycle"}</li>
-          <li>${isCN ? 'Pre-Sub反馈构成"承诺"——FDA在后续510(k)审查中会参考' : 'Pre-Sub feedback constitutes a "commitment" — FDA will reference it during subsequent 510(k) review'}</li>
-          <li>${isCN ? "提交后75天内获得反馈/会议" : "Feedback/meeting within 75 calendar days of submission"}</li>
-          <li>${isCN ? "附信模板现在支持所有5种类型——使用上方选择器切换" : "Cover letter templates now support all 5 types — use the selector above to switch"}</li>
+          <li>${isKO ? "항상 회의를 먼저 요청하세요 — FDA가 서면만 제안하더라도 요청하지 않는 것보다 낫습니다" : isCN ? "始终请求会议——即使FDA建议仅书面回复，也比不请求好" : "Always request a meeting upfront — even if FDA offers written-only, it's better than not asking"}</li>
+          <li>${isKO ? "Pre-Sub당 3~4개 주제로 제한하세요 — FDA가 각 질문에 더 많은 시간을 할애합니다" : isCN ? "每次Pre-Sub限制3-4个议题——FDA对每个议题有更充分的时间" : "Limit to 3–4 focused topics per Pre-Sub — FDA has more time per question that way"}</li>
+          <li>${isKO ? "Pre-Sub은 수수료가 없습니다 — 프로젝트 기간 동안 여러 번 제출할 수 있습니다" : isCN ? "Pre-Sub没有费用——可以提交多次Pre-Sub" : "No user fee for Pre-Subs — you can file multiple Pre-Subs over the project lifecycle"}</li>
+          <li>${isKO ? 'Pre-Sub 피드백은 "약속"을 구성합니다 — FDA가 후속 510(k) 심사 시 참조합니다' : isCN ? 'Pre-Sub反馈构成"承诺"——FDA在后续510(k)审查中会参考' : 'Pre-Sub feedback constitutes a "commitment" — FDA will reference it during subsequent 510(k) review'}</li>
+          <li>${isKO ? "제출 후 75일 이내에 피드백/회의 예정" : isCN ? "提交后75天内获得反馈/会议" : "Feedback/meeting within 75 calendar days of submission"}</li>
+          <li>${isKO ? "커버 레터 템플릿이 5가지 유형을 모두 지원합니다 — 위 선택기를 사용하여 전환하세요" : isCN ? "附信模板现在支持所有5种类型——使用上方选择器切换" : "Cover letter templates now support all 5 types — use the selector above to switch"}</li>
         </ul>
       </div>
     </div>
 
     <!-- RTA Checklist -->
     <div class="fda-card">
-      <h3>✅ ${isCN ? "RTA自检清单" : "Refuse-to-Accept Checklist"}</h3>
+      <h3>✅ ${isKO ? "RTA 자체 점검 체크리스트" : isCN ? "RTA自检清单" : "Refuse-to-Accept Checklist"}</h3>
       <p class="fda-card-hint">${
-        isCN
-          ? "FDA的RTA清单 (21 CFR 807)——提交前自检。绿色 = 从DHF/标准跟踪器自动检测。Day 15前FDA依此决定接受或拒绝。"
-          : "FDA's RTA checklist (21 CFR 807) — self-check before filing. Green = auto-detected from DHF/Standards trackers. FDA uses this by Day 15 to accept or refuse your 510(k)."
+        isKO
+          ? "FDA RTA 체크리스트 (21 CFR 807) — 제출 전 자체 점검. 녹색 = DHF/표준 추적기에서 자동 감지. FDA는 15일까지 이를 기준으로 접수 또는 거부를 결정합니다."
+          : isCN
+            ? "FDA的RTA清单 (21 CFR 807)——提交前自检。绿色 = 从DHF/标准跟踪器自动检测。Day 15前FDA依此决定接受或拒绝。"
+            : "FDA's RTA checklist (21 CFR 807) — self-check before filing. Green = auto-detected from DHF/Standards trackers. FDA uses this by Day 15 to accept or refuse your 510(k)."
       }</p>
       <div class="fda-progress-bar"><div class="fda-progress-fill" style="width:${rtaPct}%;background:${rtaPct >= 80 ? "#22c55e" : rtaPct >= 50 ? "#f59e0b" : "#ef4444"}"></div></div>
-      <div style="text-align:right;font-size:0.8rem;color:#94a3b8;margin-bottom:8px">${rtaPassed}/${rtaItems.length} ${isCN ? "已通过" : "passed"}</div>
+      <div style="text-align:right;font-size:0.8rem;color:#94a3b8;margin-bottom:8px">${rtaPassed}/${rtaItems.length} ${isKO ? "통과" : isCN ? "已通过" : "passed"}</div>
       <div class="fda-rta-list">
         ${rtaItems
           .map((r) => {
             const passed = r.check();
             return `<div class="fda-rta-item ${passed ? "rta-pass" : "rta-fail"}">
             <span class="rta-icon">${passed ? "✅" : "⬜"}</span>
-            <span>${isCN ? r.cn : r.en}</span>
+            <span>${isKO ? r.ko : isCN ? r.cn : r.en}</span>
           </div>`;
           })
           .join("")}
@@ -6306,11 +6510,13 @@ function renderFdaComms(): void {
 
     <!-- SE Decision Flowchart -->
     <div class="fda-card">
-      <h3>🔀 ${isCN ? "实质等效性(SE)决策流程" : "Substantial Equivalence Decision Flow"}</h3>
+      <h3>🔀 ${isKO ? "실질적 동등성(SE) 결정 흐름" : isCN ? "实质等效性(SE)决策流程" : "Substantial Equivalence Decision Flow"}</h3>
       <p class="fda-card-hint">${
-        isCN
-          ? "FDA 510(k)审查的5个关键决策点（基于FDA附录A流程图）"
-          : "5 key decision points in FDA's 510(k) review (based on FDA Appendix A flowchart)"
+        isKO
+          ? "FDA 510(k) 심사의 5가지 핵심 결정 포인트 (FDA 부록 A 흐름도 기반)"
+          : isCN
+            ? "FDA 510(k)审查的5个关键决策点（基于FDA附录A流程图）"
+            : "5 key decision points in FDA's 510(k) review (based on FDA Appendix A flowchart)"
       }</p>
       <div class="fda-se-flow">
         ${seDecisionPoints
@@ -6318,10 +6524,10 @@ function renderFdaComms(): void {
             (pt, i) => `<div class="fda-se-step">
           <div class="fda-se-num">${i + 1}</div>
           <div class="fda-se-body">
-            <div class="fda-se-question">${isCN ? pt.qCN : pt.q}</div>
+            <div class="fda-se-question">${isKO ? pt.qKO : isCN ? pt.qCN : pt.q}</div>
             <div class="fda-se-paths">
-              <span class="fda-se-yes">✅ ${isCN ? "是" : "Yes"}: ${pt.yes}</span>
-              <span class="fda-se-no">❌ ${isCN ? "否" : "No"}: ${pt.no}</span>
+              <span class="fda-se-yes">✅ ${isKO ? "예" : isCN ? "是" : "Yes"}: ${pt.yes}</span>
+              <span class="fda-se-no">❌ ${isKO ? "아니오" : isCN ? "否" : "No"}: ${pt.no}</span>
             </div>
           </div>
         </div>`,
@@ -6332,11 +6538,13 @@ function renderFdaComms(): void {
 
     <!-- Pre-Sub Timeline -->
     <div class="fda-card fda-card-wide">
-      <h3>📅 ${isCN ? "Pre-Sub互动时间线" : "Pre-Submission Timeline"}</h3>
+      <h3>📅 ${isKO ? "Pre-Submission 타임라인" : isCN ? "Pre-Sub互动时间线" : "Pre-Submission Timeline"}</h3>
       <p class="fda-card-hint">${
-        isCN
-          ? "FDA Pre-Sub流程里程碑（75天窗口）。可提交多次Pre-Sub，每次无费用。"
-          : "FDA Pre-Sub process milestones (75-day window). Multiple Pre-Subs allowed, no user fee."
+        isKO
+          ? "FDA Pre-Sub 프로세스 마일스톤 (75일 기간). 여러 번 Pre-Sub 제출 가능, 사용자 수수료 없음."
+          : isCN
+            ? "FDA Pre-Sub流程里程碑（75天窗口）。可提交多次Pre-Sub，每次无费用。"
+            : "FDA Pre-Sub process milestones (75-day window). Multiple Pre-Subs allowed, no user fee."
       }</p>
       <div class="fda-timeline">
         ${preSubMilestones
@@ -6344,7 +6552,7 @@ function renderFdaComms(): void {
             (m) => `<div class="fda-tl-item fda-tl-${m.status}">
           <div class="fda-tl-dot"></div>
           <div class="fda-tl-content">
-            <span class="fda-tl-month">${isCN ? "第" : "Day "}${m.day}${isCN ? "天" : ""}</span>
+            <span class="fda-tl-month">${isKO ? `${m.day}일` : isCN ? "第" : "Day "}${isCN ? `${m.day}天` : isKO ? "" : m.day}</span>
             <span class="fda-tl-label">${m.label}</span>
             <span class="fda-tl-detail">${m.detail}</span>
           </div>
@@ -6356,11 +6564,13 @@ function renderFdaComms(): void {
 
     <!-- 510(k) MDUFA Review Timeline -->
     <div class="fda-card fda-card-wide">
-      <h3>⏱️ ${isCN ? "510(k) MDUFA审查时间线" : "510(k) MDUFA Review Timeline"}</h3>
+      <h3>⏱️ ${isKO ? "510(k) MDUFA 심사 타임라인" : isCN ? "510(k) MDUFA审查时间线" : "510(k) MDUFA Review Timeline"}</h3>
       <p class="fda-card-hint">${
-        isCN
-          ? "MDUFA V审查目标：标准510(k)为90天。AI通知增加180天。"
-          : "MDUFA V review goals: 90 calendar days for standard 510(k). AI letter adds 180 days."
+        isKO
+          ? "MDUFA V 심사 목표: 표준 510(k)의 경우 90일. AI 서한 시 180일 추가."
+          : isCN
+            ? "MDUFA V审查目标：标准510(k)为90天。AI通知增加180天。"
+            : "MDUFA V review goals: 90 calendar days for standard 510(k). AI letter adds 180 days."
       }</p>
       <div class="fda-timeline">
         ${mdufaMilestones
@@ -6368,7 +6578,7 @@ function renderFdaComms(): void {
             (m) => `<div class="fda-tl-item fda-tl-${m.status}">
           <div class="fda-tl-dot"></div>
           <div class="fda-tl-content">
-            <span class="fda-tl-month">${isCN ? "第" : "Day "}${m.day}${isCN ? "天" : ""}</span>
+            <span class="fda-tl-month">${isKO ? `${m.day}일` : isCN ? "第" : "Day "}${isCN ? `${m.day}天` : isKO ? "" : m.day}</span>
             <span class="fda-tl-label">${m.label}</span>
             <span class="fda-tl-detail">${m.detail}</span>
           </div>
@@ -6380,62 +6590,64 @@ function renderFdaComms(): void {
 
     <!-- Disagreement Escalation -->
     <div class="fda-card">
-      <h3>⚖️ ${isCN ? "分歧升级路径" : "Disagreement Escalation Path"}</h3>
+      <h3>⚖️ ${isKO ? "이의 에스컬레이션 경로" : isCN ? "分歧升级路径" : "Disagreement Escalation Path"}</h3>
       <p class="fda-card-hint">${
-        isCN
-          ? "当您不同意FDA审查决定时的正式升级路径（仅在收到AI信函后）"
-          : "Formal escalation path when you disagree with FDA review decisions (only after AI letter received)"
+        isKO
+          ? "FDA 심사 결정에 동의하지 않을 때의 공식 에스컬레이션 경로 (AI 서한 수령 후에만)"
+          : isCN
+            ? "当您不同意FDA审查决定时的正式升级路径（仅在收到AI信函后）"
+            : "Formal escalation path when you disagree with FDA review decisions (only after AI letter received)"
       }</p>
       <div class="fda-escalation">
         <div class="fda-esc-step">
           <div class="fda-esc-icon">1️⃣</div>
           <div>
-            <strong>${isCN ? "主审评员" : "Lead Reviewer"}</strong>
-            <p>${isCN ? "通过互动审查（电话/邮件）直接沟通解决" : "Resolve via interactive review (phone/email) directly"}</p>
+            <strong>${isKO ? "수석 심사관" : isCN ? "主审评员" : "Lead Reviewer"}</strong>
+            <p>${isKO ? "대화형 심사(전화/이메일)를 통해 직접 해결" : isCN ? "通过互动审查（电话/邮件）直接沟通解决" : "Resolve via interactive review (phone/email) directly"}</p>
           </div>
         </div>
         <div class="fda-esc-arrow">↓</div>
         <div class="fda-esc-step">
           <div class="fda-esc-icon">2️⃣</div>
           <div>
-            <strong>${isCN ? "副主任" : "Assistant Director"}</strong>
-            <p>${isCN ? "如与审评员无法达成一致，可请求副主任审查" : "If unresolved with reviewer, request assistant director review"}</p>
+            <strong>${isKO ? "부국장" : isCN ? "副主任" : "Assistant Director"}</strong>
+            <p>${isKO ? "심사관과 해결되지 않으면 부국장 심사 요청" : isCN ? "如与审评员无法达成一致，可请求副主任审查" : "If unresolved with reviewer, request assistant director review"}</p>
           </div>
         </div>
         <div class="fda-esc-arrow">↓</div>
         <div class="fda-esc-step">
           <div class="fda-esc-icon">3️⃣</div>
           <div>
-            <strong>${isCN ? "部门主管" : "Division Director"}</strong>
-            <p>${isCN ? "最终升级——部门主管做出最终决定" : "Final escalation — division director makes final determination"}</p>
+            <strong>${isKO ? "부서장" : isCN ? "部门主管" : "Division Director"}</strong>
+            <p>${isKO ? "최종 에스컬레이션 — 부서장이 최종 결정" : isCN ? "最终升级——部门主管做出最终决定" : "Final escalation — division director makes final determination"}</p>
           </div>
         </div>
       </div>
       <div class="fda-tips">
-        <h4>⚠️ ${isCN ? "重要提示" : "Important Notes"}</h4>
+        <h4>⚠️ ${isKO ? "중요 참고사항" : isCN ? "重要提示" : "Important Notes"}</h4>
         <ul>
-          <li>${isCN ? "仅在收到AI信函（Additional Information letter）后才能启动正式分歧流程" : "Formal disagreement process can only start after receiving an AI (Additional Information) letter"}</li>
-          <li>${isCN ? '引用"least burdensome"原则——FDA有义务使用最少负担的方法' : 'Invoke "least burdensome" principle — FDA is required to use the least burdensome approach'}</li>
-          <li>${isCN ? "SIR (Submission Issue Request) 时间线：提交后≤60天内提出→21天回复；>60天→70天回复" : "SIR timeline: filed ≤60 days post-submission → 21-day response; >60 days → 70-day response"}</li>
+          <li>${isKO ? "공식 이의 절차는 AI(추가 정보) 서한 수령 후에만 시작할 수 있습니다" : isCN ? "仅在收到AI信函（Additional Information letter）后才能启动正式分歧流程" : "Formal disagreement process can only start after receiving an AI (Additional Information) letter"}</li>
+          <li>${isKO ? '"최소 부담" 원칙을 인용하세요 — FDA는 최소 부담 접근 방식을 사용할 의무가 있습니다' : isCN ? '引用"least burdensome"原则——FDA有义务使用最少负担的方法' : 'Invoke "least burdensome" principle — FDA is required to use the least burdensome approach'}</li>
+          <li>${isKO ? "SIR 타임라인: 제출 후 ≤60일 내 제출 → 21일 응답; >60일 → 70일 응답" : isCN ? "SIR (Submission Issue Request) 时间线：提交后≤60天内提出→21天回复；>60天→70天回复" : "SIR timeline: filed ≤60 days post-submission → 21-day response; >60 days → 70-day response"}</li>
         </ul>
       </div>
     </div>
 
     <!-- DHF Readiness Snapshot -->
     <div class="fda-card">
-      <h3>📁 ${isCN ? "DHF就绪快照" : "DHF Readiness Snapshot"}</h3>
+      <h3>📁 ${isKO ? "DHF 준비 상태 스냅샷" : isCN ? "DHF就绪快照" : "DHF Readiness Snapshot"}</h3>
       <div class="fda-dhf-stats">
         <div class="fda-dhf-bar">
-          <div class="fda-dhf-seg" style="width:${dhfTotal ? (dhfApproved / dhfTotal) * 100 : 0}%;background:#22c55e" title="${isCN ? "已批准" : "Approved"}"></div>
-          <div class="fda-dhf-seg" style="width:${dhfTotal ? (dhfInReview / dhfTotal) * 100 : 0}%;background:#3b82f6" title="${isCN ? "审核中" : "In Review"}"></div>
-          <div class="fda-dhf-seg" style="width:${dhfTotal ? (dhfDraft / dhfTotal) * 100 : 0}%;background:#f59e0b" title="${isCN ? "草稿" : "Draft"}"></div>
-          <div class="fda-dhf-seg" style="width:${dhfTotal ? (dhfNotStarted / dhfTotal) * 100 : 0}%;background:#475569" title="${isCN ? "未开始" : "Not Started"}"></div>
+          <div class="fda-dhf-seg" style="width:${dhfTotal ? (dhfApproved / dhfTotal) * 100 : 0}%;background:#22c55e" title="${isKO ? "승인됨" : isCN ? "已批准" : "Approved"}"></div>
+          <div class="fda-dhf-seg" style="width:${dhfTotal ? (dhfInReview / dhfTotal) * 100 : 0}%;background:#3b82f6" title="${isKO ? "검토 중" : isCN ? "审核中" : "In Review"}"></div>
+          <div class="fda-dhf-seg" style="width:${dhfTotal ? (dhfDraft / dhfTotal) * 100 : 0}%;background:#f59e0b" title="${isKO ? "초안" : isCN ? "草稿" : "Draft"}"></div>
+          <div class="fda-dhf-seg" style="width:${dhfTotal ? (dhfNotStarted / dhfTotal) * 100 : 0}%;background:#475569" title="${isKO ? "미시작" : isCN ? "未开始" : "Not Started"}"></div>
         </div>
         <div class="fda-dhf-legend">
-          <span><i style="background:#22c55e"></i> ${isCN ? "已批准" : "Approved"} (${dhfApproved})</span>
-          <span><i style="background:#3b82f6"></i> ${isCN ? "审核中" : "In Review"} (${dhfInReview})</span>
-          <span><i style="background:#f59e0b"></i> ${isCN ? "草稿" : "Draft"} (${dhfDraft})</span>
-          <span><i style="background:#475569"></i> ${isCN ? "未开始" : "Not Started"} (${dhfNotStarted})</span>
+          <span><i style="background:#22c55e"></i> ${isKO ? "승인됨" : isCN ? "已批准" : "Approved"} (${dhfApproved})</span>
+          <span><i style="background:#3b82f6"></i> ${isKO ? "검토 중" : isCN ? "审核중" : "In Review"} (${dhfInReview})</span>
+          <span><i style="background:#f59e0b"></i> ${isKO ? "초안" : isCN ? "草稿" : "Draft"} (${dhfDraft})</span>
+          <span><i style="background:#475569"></i> ${isKO ? "미시작" : isCN ? "未开始" : "Not Started"} (${dhfNotStarted})</span>
         </div>
       </div>
     </div>
@@ -6453,8 +6665,14 @@ function renderFdaComms(): void {
       if (!tmpl) return;
       const reEl = document.getElementById("fdaLetterRe");
       const bodyEl = document.getElementById("fdaLetterBody");
-      if (reEl) reEl.innerHTML = isCN ? tmpl.reCN : tmpl.reEN;
-      if (bodyEl) bodyEl.innerHTML = isCN ? tmpl.bodyCN : tmpl.bodyEN;
+      if (reEl)
+        reEl.innerHTML = isKO ? tmpl.reKO : isCN ? tmpl.reCN : tmpl.reEN;
+      if (bodyEl)
+        bodyEl.innerHTML = isKO
+          ? tmpl.bodyKO
+          : isCN
+            ? tmpl.bodyCN
+            : tmpl.bodyEN;
     });
 
   document.getElementById("fdaExportLetter")?.addEventListener("click", () => {
@@ -6492,9 +6710,11 @@ function renderFdaComms(): void {
 
       if (preSubThreads.length === 0) {
         alert(
-          isCN
-            ? "\u6D88\u606F\u677F\u4E0A\u6CA1\u6709Pre-Sub\u95EE\u9898\u7EBF\u7A0B\u3002\n\u8BF7\u5148\u5728\u6D88\u606F\u677F\u4E0A\u521B\u5EFA\u5DE5\u4F5C\u6D41\u4E3A\u300CPre-Sub\u95EE\u9898\u300D\u7684\u7EBF\u7A0B\u3002"
-            : 'No Pre-Sub question threads found on the Message Board.\nCreate threads with the "Pre-Sub Questions" workstream first.',
+          isKO
+            ? '메시지 보드에 Pre-Sub 질문 스레드가 없습니다.\n먼저 "Pre-Sub 질문" 워크스트림으로 스레드를 생성하세요.'
+            : isCN
+              ? "\u6D88\u606F\u677F\u4E0A\u6CA1\u6709Pre-Sub\u95EE\u9898\u7EBF\u7A0B\u3002\n\u8BF7\u5148\u5728\u6D88\u606F\u677F\u4E0A\u521B\u5EFA\u5DE5\u4F5C\u6D41\u4E3A\u300CPre-Sub\u95EE\u9898\u300D\u7684\u7EBF\u7A0B\u3002"
+              : 'No Pre-Sub question threads found on the Message Board.\nCreate threads with the "Pre-Sub Questions" workstream first.',
         );
         return;
       }
@@ -6506,15 +6726,15 @@ function renderFdaComms(): void {
     .q-num{color:#1e40af;font-weight:bold} .q-ctx{color:#64748b;font-size:0.9em;font-style:italic}
     .q-msgs{margin:8px 0 0 20px;font-size:0.92em;color:#334155}
     .q-msg-sender{font-weight:bold;color:#1e40af}</style></head><body>
-    <h1>${isCN ? "Pre-Submission 问题" : "Pre-Submission Questions"} — ${pName}</h1>
-    <p><strong>${isCN ? "申请人" : "Applicant"}:</strong> ${pApplicant}<br>
-    <strong>${isCN ? "日期" : "Date"}:</strong> ${pDate || new Date().toLocaleDateString()}</p>`;
+    <h1>${isKO ? "Pre-Submission 질문" : isCN ? "Pre-Submission 问题" : "Pre-Submission Questions"} — ${pName}</h1>
+    <p><strong>${isKO ? "신청자" : isCN ? "申请人" : "Applicant"}:</strong> ${pApplicant}<br>
+    <strong>${isKO ? "날짜" : isCN ? "日期" : "Date"}:</strong> ${pDate || new Date().toLocaleDateString()}</p>`;
 
       let n = 1;
       preSubThreads.forEach((th) => {
         html += `<div class="q"><span class="q-num">Q${n}.</span> ${th.title}`;
         if (th.objective) {
-          html += `<br><span class="q-ctx">${isCN ? "背景" : "Context"}: ${th.objective}</span>`;
+          html += `<br><span class="q-ctx">${isKO ? "배경" : isCN ? "背景" : "Context"}: ${th.objective}</span>`;
         }
         // Include thread messages as discussion context
         const msgs = _qaCache.filter((m) => m.qNum === th.id);
