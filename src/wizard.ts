@@ -1,6 +1,6 @@
 // ============================================================
 // PROJECT SETUP WIZARD — Interactive onboarding questionnaire
-// Fully bilingual: EN / CN based on user's first selection
+// Fully trilingual: EN / CN / KO based on user's first selection
 // ============================================================
 
 import {
@@ -79,230 +79,388 @@ const WIZARD_CSS = `
 .wiz-tmpl-scratch:hover { border-color: #38bdf8; color: #e2e8f0; }
 `;
 
-// ── Bilingual helpers ────────────────────────────
-type L = { en: string; cn: string };
-function tx(label: L, lang: "en" | "cn"): string {
-  return lang === "cn" ? label.cn : label.en;
+// ── Trilingual helpers ───────────────────────────
+type L = { en: string; cn: string; ko?: string };
+function tx(label: L, lang: "en" | "cn" | "ko"): string {
+  return lang === "ko"
+    ? label.ko || label.en
+    : lang === "cn"
+      ? label.cn
+      : label.en;
 }
 
 const TXT = {
   wizTitle: {
     en: "⚕ Control Tower — Project Setup",
     cn: "⚕ 控制塔 — 项目设置",
+    ko: "⚕ 컨트롤 타워 — 프로젝트 설정",
   },
-  stepOf: { en: "Step {0} of {1}", cn: "第 {0} 步，共 {1} 步" },
-  back: { en: "← Back", cn: "← 返回" },
-  next: { en: "Next →", cn: "下一步 →" },
-  finish: { en: "✓ Generate Dashboard", cn: "✓ 生成仪表板" },
-  skipStep: { en: "Skip →", cn: "跳过 →" },
-  addAnother: { en: "+ Add Another", cn: "+ 添加" },
-  remove: { en: "✕", cn: "✕" },
+  stepOf: {
+    en: "Step {0} of {1}",
+    cn: "第 {0} 步，共 {1} 步",
+    ko: "{1}단계 중 {0}단계",
+  },
+  back: { en: "← Back", cn: "← 返回", ko: "← 뒤로" },
+  next: { en: "Next →", cn: "下一步 →", ko: "다음 →" },
+  finish: {
+    en: "✓ Generate Dashboard",
+    cn: "✓ 生成仪表板",
+    ko: "✓ 대시보드 생성",
+  },
+  skipStep: { en: "Skip →", cn: "跳过 →", ko: "건너뛰기 →" },
+  addAnother: { en: "+ Add Another", cn: "+ 添加", ko: "+ 추가" },
+  remove: { en: "✕", cn: "✕", ko: "✕" },
 
-  tmplTitle: { en: "Choose a Device Category", cn: "选择设备类别" },
+  tmplTitle: {
+    en: "Choose a Device Category",
+    cn: "选择设备类别",
+    ko: "기기 범주 선택",
+  },
   tmplHint: {
     en: "Select a template to pre-fill regulatory, risk, and standards data — or start from scratch.",
     cn: "选择模板预填法规、风险和标准数据，或从头开始。",
+    ko: "규제, 위험 및 표준 데이터를 미리 채울 템플릿을 선택하거나 처음부터 시작하세요.",
   },
-  tmplScratch: { en: "✎ Start from Scratch", cn: "✎ 从头开始" },
+  tmplScratch: {
+    en: "✎ Start from Scratch",
+    cn: "✎ 从头开始",
+    ko: "✎ 처음부터 시작",
+  },
   tmplScratchDesc: {
     en: "Enter all project details manually without a template.",
     cn: "不使用模板，手动输入所有项目信息。",
+    ko: "템플릿 없이 모든 프로젝트 세부 정보를 수동으로 입력합니다.",
   },
 
-  s1Title: { en: "Project Basics", cn: "项目基本信息" },
+  s1Title: {
+    en: "Project Basics",
+    cn: "项目基本信息",
+    ko: "프로젝트 기본 정보",
+  },
   s1Hint: {
     en: "Tell us about the medical device project.",
     cn: "请介绍医疗器械项目。",
+    ko: "의료기기 프로젝트에 대해 알려주세요.",
   },
-  projectName: { en: "Project / Device Name *", cn: "项目 / 设备名称 *" },
+  projectName: {
+    en: "Project / Device Name *",
+    cn: "项目 / 设备名称 *",
+    ko: "프로젝트 / 기기 이름 *",
+  },
   projectNamePh: {
     en: "e.g. TiO₂ Medical Air Purification System",
     cn: "例: TiO₂医用空气净化系统",
+    ko: "예: TiO₂ 의료용 공기 정화 시스템",
   },
-  projectNameCn: { en: "Project Name (Chinese)", cn: "项目名称（中文）" },
-  subtitle: { en: "Project Subtitle / Description", cn: "项目副标题 / 描述" },
+  projectNameCn: {
+    en: "Project Name (Chinese)",
+    cn: "项目名称（中文）",
+    ko: "프로젝트 이름 (중국어)",
+  },
+  subtitle: {
+    en: "Project Subtitle / Description",
+    cn: "项目副标题 / 描述",
+    ko: "프로젝트 부제 / 설명",
+  },
   subtitlePh: {
     en: "e.g. UV-C Photocatalytic Air Cleaning Platform",
     cn: "例: UV-C光催化空气清洁平台",
+    ko: "예: UV-C 광촉매 공기 청정 플랫폼",
   },
-  preparedDate: { en: "Prepared Date", cn: "准备日期" },
-  preparedDatePh: { en: "e.g. March 2026", cn: "例: 2026年3月" },
-  contactEmail: { en: "Primary Contact Email *", cn: "主要联系人邮箱 *" },
+  preparedDate: { en: "Prepared Date", cn: "准备日期", ko: "준비 날짜" },
+  preparedDatePh: {
+    en: "e.g. March 2026",
+    cn: "例: 2026年3月",
+    ko: "예: 2026년 3월",
+  },
+  contactEmail: {
+    en: "Primary Contact Email *",
+    cn: "主要联系人邮箱 *",
+    ko: "주요 연락처 이메일 *",
+  },
   contactEmailPh: {
     en: "e.g. project@company.com",
     cn: "例: project@company.com",
+    ko: "예: project@company.com",
   },
 
-  s2Title: { en: "Regulatory Classification", cn: "法规分类" },
+  s2Title: { en: "Regulatory Classification", cn: "法规分类", ko: "규제 분류" },
   s2Hint: {
     en: "FDA submission pathway and classification details.",
     cn: "FDA提交途径和分类详情。",
+    ko: "FDA 제출 경로 및 분류 세부 사항.",
   },
-  submissionType: { en: "Submission Type", cn: "提交类型" },
-  deviceClass: { en: "Device Class", cn: "设备分类" },
-  productCode: { en: "Product Code", cn: "产品代码" },
-  productCodePh: { en: "e.g. FRA, IKN, QEI", cn: "例: FRA, IKN, QEI" },
-  regulationSection: { en: "Regulation Section (CFR)", cn: "法规章节 (CFR)" },
-  regulationSectionPh: { en: "e.g. § 880.6500", cn: "例: § 880.6500" },
-  predicateDevices: { en: "Predicate Device(s)", cn: "前置器械" },
+  submissionType: { en: "Submission Type", cn: "提交类型", ko: "제출 유형" },
+  deviceClass: { en: "Device Class", cn: "设备分类", ko: "기기 등급" },
+  productCode: { en: "Product Code", cn: "产品代码", ko: "제품 코드" },
+  productCodePh: {
+    en: "e.g. FRA, IKN, QEI",
+    cn: "例: FRA, IKN, QEI",
+    ko: "예: FRA, IKN, QEI",
+  },
+  regulationSection: {
+    en: "Regulation Section (CFR)",
+    cn: "法规章节 (CFR)",
+    ko: "규정 조항 (CFR)",
+  },
+  regulationSectionPh: {
+    en: "e.g. § 880.6500",
+    cn: "例: § 880.6500",
+    ko: "예: § 880.6500",
+  },
+  predicateDevices: {
+    en: "Predicate Device(s)",
+    cn: "前置器械",
+    ko: "선행 기기",
+  },
   predicateDevicesPh: {
     en: "One per line: Name (K-number)\ne.g. AiroCide TiO2 (K023830)",
     cn: "每行一个: 名称 (K编号)\n例: AiroCide TiO2 (K023830)",
+    ko: "한 줄에 하나: 이름 (K번호)\n예: AiroCide TiO2 (K023830)",
   },
 
-  s3Title: { en: "Applicant & Manufacturer", cn: "申请人和制造商" },
+  s3Title: {
+    en: "Applicant & Manufacturer",
+    cn: "申请人和制造商",
+    ko: "신청자 및 제조사",
+  },
   s3Hint: {
     en: "Who is filing and who is building?",
     cn: "谁在申请？谁在制造？",
+    ko: "누가 신청하고 누가 제조합니까?",
   },
   applicantName: {
     en: "Applicant / Sponsor Name *",
     cn: "申请人 / 发起人名称 *",
+    ko: "신청자 / 후원자 이름 *",
   },
   applicantNamePh: {
     en: "e.g. Titania Labs, LLC",
     cn: "例: Titania Labs, LLC",
+    ko: "예: Titania Labs, LLC",
   },
-  applicantNameCn: { en: "Applicant Name (Chinese)", cn: "申请人名称（中文）" },
+  applicantNameCn: {
+    en: "Applicant Name (Chinese)",
+    cn: "申请人名称（中文）",
+    ko: "신청자 이름 (중국어)",
+  },
   applicantAddress: {
     en: "Applicant Address",
     cn: "申请人地址",
+    ko: "신청자 주소",
   },
   applicantAddressPh: {
     en: "e.g. 123 Main St, Suite 100, Camas, WA 98607",
     cn: "例: 123 Main St, Suite 100, Camas, WA 98607",
+    ko: "예: 123 Main St, Suite 100, Camas, WA 98607",
   },
   applicantPhone: {
     en: "Applicant Phone",
     cn: "申请人电话",
+    ko: "신청자 전화번호",
   },
   applicantPhonePh: {
     en: "e.g. (503) 555-1234",
     cn: "例: (503) 555-1234",
+    ko: "예: (503) 555-1234",
   },
   contactName: {
     en: "Contact Person Name",
     cn: "联系人姓名",
+    ko: "담당자 이름",
   },
   contactNamePh: {
     en: "e.g. John Smith, VP Regulatory Affairs",
     cn: "例: 张三, 法规事务副总裁",
+    ko: "예: 홍길동, 규제 담당 부사장",
   },
   manufacturerName: {
     en: "Manufacturer Name & Location",
     cn: "制造商名称和地点",
+    ko: "제조사 이름 및 위치",
   },
   manufacturerNamePh: {
     en: "e.g. Titania Labs, LLC (Gresham, OR)",
     cn: "例: Titania Labs, LLC (Gresham, OR)",
+    ko: "예: Titania Labs, LLC (Gresham, OR)",
   },
   manufacturerNameCn: {
     en: "Manufacturer Name (Chinese)",
     cn: "制造商名称（中文）",
+    ko: "제조사 이름 (중국어)",
   },
 
-  s4Title: { en: "Team & Resource Allocation", cn: "团队和资源分配" },
+  s4Title: {
+    en: "Team & Resource Allocation",
+    cn: "团队和资源分配",
+    ko: "팀 및 자원 배분",
+  },
   s4Hint: {
     en: "Add team members with roles, emails, and workstream allocations.",
     cn: "添加团队成员及其角色、邮箱和工作流分配。",
+    ko: "역할, 이메일 및 업무 배분과 함께 팀원을 추가하세요.",
   },
-  memberName: { en: "Name", cn: "姓名" },
-  memberRole: { en: "Role", cn: "角色" },
-  memberEmail: { en: "Email", cn: "邮箱" },
+  memberName: { en: "Name", cn: "姓名", ko: "이름" },
+  memberRole: { en: "Role", cn: "角色", ko: "역할" },
+  memberEmail: { en: "Email", cn: "邮箱", ko: "이메일" },
   memberWorkstreams: {
     en: "Workstreams (one per line — Name: Allocation %)",
     cn: "工作流（每行一个 — 名称: 分配%）",
+    ko: "업무 영역 (한 줄에 하나 — 이름: 배분 %)",
   },
   memberWorkstreamsPh: {
     en: "e.g.\nProject Management: 40\nRegulatory: 30\nEngineering: 30",
     cn: "例:\n项目管理: 40\n法规: 30\n工程: 30",
+    ko: "예:\n프로젝트 관리: 40\n규제: 30\n엔지니어링: 30",
   },
 
-  s5Title: { en: "Budget Categories", cn: "预算类别" },
+  s5Title: { en: "Budget Categories", cn: "预算类别", ko: "예산 항목" },
   s5Hint: {
     en: "Set planned budget amounts per category. Actual spend tracked in dashboard.",
     cn: "设置每个类别的计划预算。实际支出在仪表板中跟踪。",
+    ko: "항목별 계획 예산을 설정하세요. 실제 지출은 대시보드에서 추적됩니다.",
   },
-  budgetLabel: { en: "Category", cn: "类别" },
-  budgetPlanned: { en: "Planned ($)", cn: "计划 ($)" },
-  cashOnHand: { en: "Cash On Hand ($)", cn: "现金余额 ($)" },
-  cashOnHandPh: { en: "e.g. 165000", cn: "例: 165000" },
-  currency: { en: "Currency", cn: "货币" },
+  budgetLabel: { en: "Category", cn: "类别", ko: "항목" },
+  budgetPlanned: { en: "Planned ($)", cn: "计划 ($)", ko: "계획 ($)" },
+  cashOnHand: {
+    en: "Cash On Hand ($)",
+    cn: "现金余额 ($)",
+    ko: "보유 현금 ($)",
+  },
+  cashOnHandPh: { en: "e.g. 165000", cn: "例: 165000", ko: "예: 165000" },
+  currency: { en: "Currency", cn: "货币", ko: "통화" },
 
-  s6Title: { en: "Probable Timeline", cn: "预计时间线" },
+  s6Title: { en: "Probable Timeline", cn: "预计时间线", ko: "예상 일정" },
   s6Hint: {
     en: "Estimate project duration and key technical workstreams.",
     cn: "估计项目工期和关键技术工作流。",
+    ko: "프로젝트 기간과 주요 기술 업무를 추정하세요.",
   },
   projectDuration: {
     en: "Total Project Duration (months)",
     cn: "项目总工期（月）",
+    ko: "총 프로젝트 기간 (개월)",
   },
-  projectDurationPh: { en: "e.g. 12", cn: "例: 12" },
-  currentMonth: { en: "Current Month (M+?)", cn: "当前月份 (M+?)" },
-  currentMonthPh: { en: "e.g. 0", cn: "例: 0" },
-  techAreas: { en: "Key Technical Workstreams", cn: "关键技术工作流" },
+  projectDurationPh: { en: "e.g. 12", cn: "例: 12", ko: "예: 12" },
+  currentMonth: {
+    en: "Current Month (M+?)",
+    cn: "当前月份 (M+?)",
+    ko: "현재 월 (M+?)",
+  },
+  currentMonthPh: { en: "e.g. 0", cn: "例: 0", ko: "예: 0" },
+  techAreas: {
+    en: "Key Technical Workstreams",
+    cn: "关键技术工作流",
+    ko: "주요 기술 업무 영역",
+  },
   techAreasPh: {
     en: "One per line, e.g.:\nUV-C Reactor Design\nHEPA Filtration\nElectrical Safety",
     cn: "每行一个，例:\nUV-C反应器设计\nHEPA过滤\n电气安全",
+    ko: "한 줄에 하나, 예:\nUV-C 반응기 설계\nHEPA 여과\n전기 안전",
   },
 
-  s7Title: { en: "Suppliers / Vendors (optional)", cn: "供应商（可选）" },
+  s7Title: {
+    en: "Suppliers / Vendors (optional)",
+    cn: "供应商（可选）",
+    ko: "공급업체 (선택 사항)",
+  },
   s7Hint: {
     en: "Add key suppliers. You can skip this and add them later.",
     cn: "添加关键供应商。可跳过，稍后在仪表板中添加。",
+    ko: "주요 공급업체를 추가하세요. 건너뛰고 나중에 추가할 수 있습니다.",
   },
-  supplierName: { en: "Supplier Name", cn: "供应商名称" },
-  supplierComponent: { en: "Component / Service", cn: "组件 / 服务" },
-  supplierLead: { en: "Lead Time (days)", cn: "交货期（天）" },
+  supplierName: { en: "Supplier Name", cn: "供应商名称", ko: "공급업체 이름" },
+  supplierComponent: {
+    en: "Component / Service",
+    cn: "组件 / 服务",
+    ko: "부품 / 서비스",
+  },
+  supplierLead: {
+    en: "Lead Time (days)",
+    cn: "交货期（天）",
+    ko: "리드 타임 (일)",
+  },
 
-  s8Title: { en: "DHF Documents (Pre-loaded)", cn: "设计历史文件 (预加载)" },
+  s8Title: {
+    en: "DHF Documents (Pre-loaded)",
+    cn: "设计历史文件 (预加载)",
+    ko: "DHF 문서 (사전 로드)",
+  },
   s8Hint: {
     en: "Standard regulatory documents are pre-loaded. Uncheck any that don't apply.",
     cn: "标准法规文件已预加载。取消勾选不适用的文件。",
+    ko: "표준 규제 문서가 사전 로드되었습니다. 해당되지 않는 항목은 선택 해제하세요.",
   },
 };
 
 const DEFAULT_BUDGET_CATS: L[] = [
-  { en: "Prototype & Materials", cn: "原型和材料" },
-  { en: "Lab Testing & Validation", cn: "实验室测试和验证" },
-  { en: "Regulatory & Legal", cn: "法规和法律" },
-  { en: "Personnel", cn: "人员" },
-  { en: "Clinical Studies", cn: "临床研究" },
-  { en: "Equipment & Software", cn: "设备和软件" },
-  { en: "Manufacturing Setup", cn: "生产线建设" },
-  { en: "Travel & Conferences", cn: "差旅和会议" },
+  { en: "Prototype & Materials", cn: "原型和材料", ko: "프로토타입 및 재료" },
+  {
+    en: "Lab Testing & Validation",
+    cn: "实验室测试和验证",
+    ko: "실험실 테스트 및 검증",
+  },
+  { en: "Regulatory & Legal", cn: "法规和法律", ko: "규제 및 법률" },
+  { en: "Personnel", cn: "人员", ko: "인력" },
+  { en: "Clinical Studies", cn: "临床研究", ko: "임상 연구" },
+  { en: "Equipment & Software", cn: "设备和软件", ko: "장비 및 소프트웨어" },
+  { en: "Manufacturing Setup", cn: "生产线建设", ko: "제조 설비" },
+  { en: "Travel & Conferences", cn: "差旅和会议", ko: "출장 및 컨퍼런스" },
 ];
 
 export const DEFAULT_DHF_DOCS = [
-  { code: "DHF-DP", en: "Design Plan", cn: "设计计划" },
-  { code: "DHF-DI", en: "Design Inputs", cn: "设计输入" },
-  { code: "DHF-DO", en: "Design Outputs", cn: "设计输出" },
-  { code: "DHF-DV", en: "Design Verification Report", cn: "设计验证报告" },
-  { code: "DHF-VAL", en: "Design Validation Report", cn: "设计确认报告" },
+  { code: "DHF-DP", en: "Design Plan", cn: "设计计划", ko: "설계 계획" },
+  { code: "DHF-DI", en: "Design Inputs", cn: "设计输入", ko: "설계 입력" },
+  { code: "DHF-DO", en: "Design Outputs", cn: "设计输出", ko: "설계 출력" },
+  {
+    code: "DHF-DV",
+    en: "Design Verification Report",
+    cn: "设计验证报告",
+    ko: "설계 검증 보고서",
+  },
+  {
+    code: "DHF-VAL",
+    en: "Design Validation Report",
+    cn: "设计确认报告",
+    ko: "설계 확인 보고서",
+  },
   {
     code: "DHF-RA",
     en: "Risk Analysis (ISO 14971)",
     cn: "风险分析 (ISO 14971)",
+    ko: "위험 분석 (ISO 14971)",
   },
   {
     code: "DHF-SW",
     en: "Software Documentation (IEC 62304)",
     cn: "软件文档 (IEC 62304)",
+    ko: "소프트웨어 문서 (IEC 62304)",
   },
-  { code: "DHF-BIO", en: "Biocompatibility Report", cn: "生物相容性报告" },
+  {
+    code: "DHF-BIO",
+    en: "Biocompatibility Report",
+    cn: "生物相容性报告",
+    ko: "생체적합성 보고서",
+  },
   {
     code: "DHF-EMC",
     en: "EMC Test Report (IEC 60601-1-2)",
     cn: "EMC测试报告 (IEC 60601-1-2)",
+    ko: "EMC 시험 보고서 (IEC 60601-1-2)",
   },
   {
     code: "DHF-LBL",
     en: "Labeling & IFU (21 CFR 801)",
     cn: "标签和IFU (21 CFR 801)",
+    ko: "라벨링 및 IFU (21 CFR 801)",
   },
-  { code: "DHF-CL", en: "Submission Cover Letter", cn: "提交附信" },
-  { code: "DHF-DD", en: "Device Description", cn: "设备描述" },
+  {
+    code: "DHF-CL",
+    en: "Submission Cover Letter",
+    cn: "提交附信",
+    ko: "제출 커버 레터",
+  },
+  { code: "DHF-DD", en: "Device Description", cn: "设备描述", ko: "기기 설명" },
 ];
 
 // ── HTML helpers ─────────────────────────────────
@@ -338,7 +496,11 @@ function gv(data: Record<string, unknown>, key: string): string {
 // ── Step renderers ──────────────────────────────
 type WizData = Record<string, unknown>;
 
-function renderBasics(el: HTMLElement, d: WizData, lang: "en" | "cn"): void {
+function renderBasics(
+  el: HTMLElement,
+  d: WizData,
+  lang: "en" | "cn" | "ko",
+): void {
   el.innerHTML = `<h2>${tx(TXT.s1Title, lang)}</h2><p class="hint">${tx(TXT.s1Hint, lang)}</p>
   ${fld(tx(TXT.projectName, lang), inp("projectName", gv(d, "projectName"), tx(TXT.projectNamePh, lang), "text", true))}
   ${lang === "cn" ? fld(tx(TXT.projectNameCn, lang), inp("projectNameCn", gv(d, "projectNameCn"), "")) : ""}
@@ -350,7 +512,7 @@ function renderBasics(el: HTMLElement, d: WizData, lang: "en" | "cn"): void {
 function renderRegulatory(
   el: HTMLElement,
   d: WizData,
-  lang: "en" | "cn",
+  lang: "en" | "cn" | "ko",
 ): void {
   el.innerHTML = `<h2>${tx(TXT.s2Title, lang)}</h2><p class="hint">${tx(TXT.s2Hint, lang)}</p>
   ${fld(
@@ -377,7 +539,11 @@ function renderRegulatory(
   ${fld(tx(TXT.predicateDevices, lang), ta("predicateDevices", gv(d, "predicateDevices"), tx(TXT.predicateDevicesPh, lang)))}`;
 }
 
-function renderApplicant(el: HTMLElement, d: WizData, lang: "en" | "cn"): void {
+function renderApplicant(
+  el: HTMLElement,
+  d: WizData,
+  lang: "en" | "cn" | "ko",
+): void {
   el.innerHTML = `<h2>${tx(TXT.s3Title, lang)}</h2><p class="hint">${tx(TXT.s3Hint, lang)}</p>
   ${fld(tx(TXT.applicantName, lang), inp("applicantName", gv(d, "applicantName"), tx(TXT.applicantNamePh, lang), "text", true))}
   ${lang === "cn" ? fld(tx(TXT.applicantNameCn, lang), inp("applicantNameCn", gv(d, "applicantNameCn"), "")) : ""}
@@ -388,7 +554,11 @@ function renderApplicant(el: HTMLElement, d: WizData, lang: "en" | "cn"): void {
   ${lang === "cn" ? fld(tx(TXT.manufacturerNameCn, lang), inp("manufacturerNameCn", gv(d, "manufacturerNameCn"), "")) : ""}`;
 }
 
-function renderTeam(el: HTMLElement, d: WizData, lang: "en" | "cn"): void {
+function renderTeam(
+  el: HTMLElement,
+  d: WizData,
+  lang: "en" | "cn" | "ko",
+): void {
   const team = (d.team as TeamEntry[] | undefined) || [];
   if (!team.length) {
     team.push({ name: "", role: "", email: "", workstreams: "" });
@@ -422,7 +592,7 @@ function collectTeam(ov: HTMLElement, d: WizData): void {
 function renderBudgetStep(
   el: HTMLElement,
   d: WizData,
-  lang: "en" | "cn",
+  lang: "en" | "cn" | "ko",
 ): void {
   const budgets =
     (d.budgets as BudgetEntry[] | undefined) ||
@@ -464,7 +634,7 @@ function collectBudget(ov: HTMLElement, d: WizData): void {
 function renderTimelineStep(
   el: HTMLElement,
   d: WizData,
-  lang: "en" | "cn",
+  lang: "en" | "cn" | "ko",
 ): void {
   el.innerHTML = `<h2>${tx(TXT.s6Title, lang)}</h2><p class="hint">${tx(TXT.s6Hint, lang)}</p>
   <div class="wiz-row">${fld(tx(TXT.projectDuration, lang), inp("projectDurationMonths", gv(d, "projectDurationMonths"), tx(TXT.projectDurationPh, lang), "number"))}
@@ -475,7 +645,7 @@ function renderTimelineStep(
 function renderSuppliersStep(
   el: HTMLElement,
   d: WizData,
-  lang: "en" | "cn",
+  lang: "en" | "cn" | "ko",
 ): void {
   const suppliers = (d.suppliers as SupplierEntry[] | undefined) || [];
   if (!suppliers.length) {
@@ -506,7 +676,11 @@ function collectSuppliers(ov: HTMLElement, d: WizData): void {
   });
 }
 
-function renderDocsStep(el: HTMLElement, d: WizData, lang: "en" | "cn"): void {
+function renderDocsStep(
+  el: HTMLElement,
+  d: WizData,
+  lang: "en" | "cn" | "ko",
+): void {
   const flags = (d.docFlags as boolean[]) || DEFAULT_DHF_DOCS.map(() => true);
   d.docFlags = flags;
   let h = `<h2>${tx(TXT.s8Title, lang)}</h2><p class="hint">${tx(TXT.s8Hint, lang)}</p>`;
@@ -538,7 +712,7 @@ function collectSimple(ov: HTMLElement, d: WizData): void {
 }
 
 // Step definitions
-type Renderer = (el: HTMLElement, d: WizData, lang: "en" | "cn") => void;
+type Renderer = (el: HTMLElement, d: WizData, lang: "en" | "cn" | "ko") => void;
 type Collector = (ov: HTMLElement, d: WizData) => void;
 const RENDERERS: Renderer[] = [
   renderBasics,
@@ -602,7 +776,7 @@ export function showWizard(onComplete: (answers: WizardAnswers) => void): void {
   let step = 0;
   const data: WizData = { lang: "en" };
 
-  function applyTemplate(tmpl: DeviceTemplate, lang: "en" | "cn"): void {
+  function applyTemplate(tmpl: DeviceTemplate, lang: "en" | "cn" | "ko"): void {
     data.templateId = tmpl.id;
     data.submissionType = tmpl.submissionType;
     data.deviceClass = tmpl.deviceClass;
@@ -627,13 +801,14 @@ export function showWizard(onComplete: (answers: WizardAnswers) => void): void {
       ov.innerHTML = `<div class="wizard-card">
         <h1>${TXT.wizTitle.en}</h1>
         <div class="wiz-step" style="display:block">
-          <h2>${TXT.s1Title.en} / ${TXT.s1Title.cn}</h2>
-          <p class="hint">Choose your preferred language for the wizard and dashboard.<br>为向导和仪表板选择您的首选语言。</p>
+          <h2>${TXT.s1Title.en} / ${TXT.s1Title.cn} / ${TXT.s1Title.ko}</h2>
+          <p class="hint">Choose your preferred language for the wizard and dashboard.<br>为向导和仪表板选择您的首选语言。<br>마법사와 대시보드의 언어를 선택하세요.</p>
           <div class="wiz-lang-choice">
             <button class="wiz-lang-btn" data-lang="en"><span class="flag">🇺🇸</span>English</button>
             <button class="wiz-lang-btn" data-lang="cn"><span class="flag">🇨🇳</span>中文</button>
+            <button class="wiz-lang-btn" data-lang="ko"><span class="flag">🇰🇷</span>한국어</button>
           </div>
-          <div class="wiz-actions"><div><button class="wiz-btn wiz-btn-skip" id="wiz-demo">Load Demo Data / 加载演示数据</button></div><div></div></div>
+          <div class="wiz-actions"><div><button class="wiz-btn wiz-btn-skip" id="wiz-demo">Load Demo Data / 加载演示数据 / 데모 데이터 로드</button></div><div></div></div>
         </div></div>`;
       document.body.appendChild(ov);
       ov.querySelectorAll<HTMLButtonElement>("[data-lang]").forEach((b) => {
@@ -715,7 +890,7 @@ export function showWizard(onComplete: (answers: WizardAnswers) => void): void {
     }
 
     if (phase === "template") {
-      const lang = data.lang as "en" | "cn";
+      const lang = data.lang as "en" | "cn" | "ko";
       let cards = "";
       TEMPLATE_LIST.forEach((t) => {
         cards += `<button class="wiz-tmpl-card" data-tmpl="${t.id}">
@@ -761,7 +936,7 @@ export function showWizard(onComplete: (answers: WizardAnswers) => void): void {
       return;
     }
 
-    const lang = data.lang as "en" | "cn";
+    const lang = data.lang as "en" | "cn" | "ko";
     const total = RENDERERS.length;
     const isLast = step === total - 1;
     const dots = RENDERERS.map(
@@ -827,7 +1002,7 @@ export function showWizard(onComplete: (answers: WizardAnswers) => void): void {
   function bindDynamic(
     ov: HTMLElement,
     body: HTMLElement,
-    lang: "en" | "cn",
+    lang: "en" | "cn" | "ko",
   ): void {
     const rebind = () => {
       RENDERERS[step](body, data, lang);
