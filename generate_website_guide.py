@@ -742,9 +742,370 @@ def build_cn():
     return path
 
 
+# ═══════════════════════════════════════════
+#  KOREAN GUIDE
+# ═══════════════════════════════════════════
+
+class GuideKO(FPDF):
+    CARDINAL = (140, 21, 21)
+    DARK = (35, 35, 40)
+    GRAY = (110, 110, 120)
+    ACCENT = (0, 98, 71)
+    BLUE = (30, 90, 200)
+    WHITE = (255, 255, 255)
+
+    def __init__(self):
+        super().__init__()
+        font_path = "/Library/Fonts/Arial Unicode.ttf"
+        self.add_font("ARUNI", "", font_path, uni=True)
+        self.add_font("ARUNI", "B", font_path, uni=True)
+        self.add_font("ARUNI", "I", font_path, uni=True)
+
+    def header(self):
+        if self.page_no() == 1:
+            return
+        self.set_font("ARUNI", "I", 7)
+        self.set_text_color(*self.GRAY)
+        self.cell(0, 4, "510k Bridge  |  중국 의료기기 기업을 위한 510(k) 경로 가이드", align="R")
+        self.ln(5)
+
+    def footer(self):
+        self.set_y(-12)
+        self.set_font("ARUNI", "I", 7)
+        self.set_text_color(*self.GRAY)
+        self.cell(0, 4, f"페이지 {self.page_no()}/{{nb}}", align="C")
+
+    def sec(self, title):
+        if self.get_y() > self.h - self.b_margin - 30:
+            self.add_page()
+        self.ln(3)
+        self.set_fill_color(*self.CARDINAL)
+        w = self.w - self.l_margin - self.r_margin
+        self.rect(self.l_margin, self.get_y(), w, 10, style="F")
+        self.set_font("ARUNI", "B", 12)
+        self.set_text_color(*self.WHITE)
+        self.set_x(self.l_margin + 3)
+        self.cell(0, 10, title)
+        self.ln(12)
+
+    def sub(self, title):
+        if self.get_y() > self.h - self.b_margin - 25:
+            self.add_page()
+        self.ln(1)
+        self.set_font("ARUNI", "B", 10)
+        self.set_text_color(*self.ACCENT)
+        self.cell(0, 6, title, new_x="LMARGIN", new_y="NEXT")
+        self.set_draw_color(*self.ACCENT)
+        self.set_line_width(0.3)
+        self.line(self.l_margin, self.get_y(), self.l_margin + 50, self.get_y())
+        self.ln(2)
+
+    def txt(self, text):
+        self.set_font("ARUNI", "", 9.5)
+        self.set_text_color(*self.DARK)
+        self.multi_cell(0, 5, text, align="L")
+        self.ln(2)
+
+    def bul(self, text):
+        self.set_font("ARUNI", "", 9.5)
+        self.set_text_color(*self.DARK)
+        self.cell(5, 5, "- ")
+        self.multi_cell(0, 5, text, align="L")
+        self.ln(0.5)
+
+    def kv(self, key, val):
+        self.set_font("ARUNI", "B", 9.5)
+        self.set_text_color(*self.BLUE)
+        self.cell(42, 5, key)
+        self.set_font("ARUNI", "", 9.5)
+        self.set_text_color(*self.DARK)
+        self.multi_cell(0, 5, val, align="L")
+        self.ln(0.5)
+
+    def callout(self, text):
+        self.set_fill_color(240, 250, 245)
+        self.set_draw_color(*self.ACCENT)
+        self.set_line_width(0.5)
+        x0, y0, w = self.l_margin, self.get_y(), self.w - self.l_margin - self.r_margin
+        self.set_font("ARUNI", "I", 9)
+        self.set_text_color(*self.ACCENT)
+        self.set_x(x0 + 3)
+        self.multi_cell(w - 6, 5, text, align="L", fill=True)
+        y1 = self.get_y()
+        self.line(x0, y0, x0, y1)
+        self.ln(3)
+
+
+def build_ko():
+    pdf = GuideKO()
+    pdf.alias_nb_pages()
+    pdf.set_auto_page_break(auto=True, margin=18)
+    pdf.add_page()
+
+    # ── Cover ──
+    pdf.ln(30)
+    pdf.set_font("ARUNI", "B", 28)
+    pdf.set_text_color(*GuideKO.CARDINAL)
+    pdf.cell(0, 14, "510(k) 경로 가이드", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(3)
+    pdf.set_font("ARUNI", "", 16)
+    pdf.set_text_color(*GuideKO.DARK)
+    pdf.cell(0, 8, "미국 시장 진출을 위한", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 8, "중국 의료기기 기업 실용 안내서", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(10)
+    pdf.set_font("ARUNI", "I", 11)
+    pdf.set_text_color(*GuideKO.GRAY)
+    pdf.cell(0, 7, "510k Bridge 제공", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "info@510kbridge.com  |  510kbridge.com", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(6)
+    pdf.set_font("ARUNI", "", 10)
+    pdf.set_text_color(*GuideKO.GRAY)
+    pdf.cell(0, 6, "2026년 3월  |  버전 1.0", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(15)
+    pdf.set_font("ARUNI", "I", 9)
+    pdf.set_text_color(*GuideKO.GRAY)
+    pdf.multi_cell(0, 5,
+        "본 가이드는 중국 의료기기 기업을 위한 FDA 510(k) 허가 경로의 실용적 개요를 제공합니다. "
+        "핵심 개념, 일정, 일반적인 함정 및 전략적 권장 사항을 다루어 "
+        "미국 시장 진출을 성공적으로 계획하는 데 도움을 드립니다.",
+        align="C")
+
+    # ── 1 ──
+    pdf.add_page()
+    pdf.sec("1.  510(k)가 귀사에 적합한가요?")
+    pdf.txt(
+        "FDA는 위험도에 따라 의료기기를 세 가지 등급으로 분류합니다. "
+        "규제 경로는 기기 분류에 따라 결정됩니다:")
+    pdf.kv("Class I", "저위험 (예: 붕대, 설압자). 대부분 510(k) 면제. 단순 등록만 필요.")
+    pdf.kv("Class II", "중간 위험 (예: 전동 휠체어, 주입 펌프, 환자 모니터). "
+           "대부분 '선행 기기'(predicate)와의 '실질적 동등성'을 입증하여 510(k) 허가가 필요.")
+    pdf.kv("Class III", "고위험 (예: 이식형 심박조율기, 심장 판막). PMA(시판전 승인) 필요 -- "
+           "훨씬 더 길고 비용이 많이 드는 절차.")
+    pdf.ln(2)
+    pdf.callout(
+        "미국 시장에 진출하는 대부분의 중국 의료기기 기업은 Class II 제품을 보유하고 있습니다. "
+        "제품이 Class II라면 510(k) 경로가 거의 확실한 선택입니다.")
+    pdf.sub("분류 확인 방법")
+    pdf.txt("기기의 FDA 분류를 확인하는 단계:")
+    pdf.bul("FDA 제품 분류 데이터베이스 검색 (accessdata.fda.gov)")
+    pdf.bul("제품 코드 확인 (예: sEMG는 IKN, EIT는 DQS)")
+    pdf.bul("규정 번호 및 분류 패널 확인")
+    pdf.bul("확실하지 않은 경우, FDA에 Pre-Submission (Q-Sub) 요청 제출")
+
+    # ── 2 ──
+    pdf.add_page()
+    pdf.sec("2.  510(k) 일정: 예상 타임라인")
+    pdf.txt(
+        "비침습적 Class II 기기의 510(k)는 프로젝트 시작부터 FDA 허가까지 일반적으로 12-18개월이 소요됩니다. "
+        "일반적인 단계별 일정은 다음과 같습니다:")
+    pdf.kv("0-2개월", "규제 전략: 선행 기기, 제품 코드 및 적용 표준 확인. "
+           "Pre-Submission (Q-Sub) 요청 준비 및 제출.")
+    pdf.kv("2-4개월", "FDA Pre-Sub 회의: 테스트 전략, 선행 기기 선정 및 "
+           "사용 목적 설명에 대한 FDA 피드백 수령.")
+    pdf.kv("3-8개월", "설계 관리 및 테스트: 벤치 테스트, 생체적합성 (해당시), "
+           "소프트웨어 검증, 전기 안전 (IEC 60601) 및 EMC 테스트 완료.")
+    pdf.kv("6-10개월", "임상 근거: 임상 데이터 수집 -- 문헌 검토, 벤치 연구 보고서 "
+           "및/또는 임상 연구 (비침습 기기는 보통 불필요).")
+    pdf.kv("10-13개월", "제출 준비: 성능 데이터, 실질적 동등성 논증, "
+           "라벨링 및 소프트웨어 문서를 포함한 510(k) 패키지 편성.")
+    pdf.kv("13-18개월", "FDA 검토: FDA에 제출. 추가 정보 (AI) 요청에 응답. "
+           "전통적 510(k) 평균 검토 기간은 90-120일.")
+    pdf.ln(2)
+    pdf.callout(
+        "핵심 인사이트: 2-4개월의 Pre-Submission (Q-Sub) 회의가 가장 중요한 단계입니다. "
+        "비용이 많이 드는 테스트에 투자하기 전에 FDA와 방향을 맞출 수 있습니다.")
+
+    # ── 3 ──
+    pdf.add_page()
+    pdf.sec("3.  Pre-Submission 전략: FDA와 조기 협의")
+    pdf.txt(
+        "Pre-Submission (Q-Sub)은 실제 510(k) 제출 전에 규제 전략을 논의하기 위해 "
+        "FDA에 공식적으로 회의를 요청하는 것입니다. 선택 사항이지만 강력히 권장됩니다 -- "
+        "특히 미국 시장에 처음 진출하는 기업의 경우.")
+    pdf.sub("Q-Sub에 포함해야 할 내용")
+    pdf.bul("기기 설명 및 사용 목적")
+    pdf.bul("제안된 선행 기기 및 실질적 동등성 근거")
+    pdf.bul("제안된 테스트 계획 (벤치, 생체적합성, 임상)")
+    pdf.bul("FDA에 대한 구체적 질문 (예: '이 선행 기기가 적절한가요?', "
+            "'테스트 방법에 동의하시나요?')")
+    pdf.sub("Q-Sub 절차")
+    pdf.bul("CDRH (기기방사선보건센터)에 Q-Sub 패키지 제출")
+    pdf.bul("FDA가 75일 이내에 응답서 발송 (보통 서면 답변 포함)")
+    pdf.bul("회의 요청 시, 일반적으로 70-75일차에 진행")
+    pdf.bul("회의는 원격 화상회의 (미국 방문 불필요)")
+    pdf.sub("핵심 이점")
+    pdf.bul("실제 제출 시 RTA (접수 거부) 위험 감소")
+    pdf.bul("선행 기기 선정이 FDA에 수용 가능한지 확인")
+    pdf.bul("비용이 많이 드는 실험실 테스트 전에 테스트 갭 발견")
+    pdf.bul("적극적인 규제 소통을 보여주는 FDA 기록 생성")
+
+    # ── 4 ──
+    pdf.add_page()
+    pdf.sec("4.  주요 규제 표준")
+    pdf.txt(
+        "FDA는 Class II 기기가 공인된 합의 표준을 준수할 것을 기대합니다. "
+        "구체적인 표준은 기기 유형에 따라 다르지만, 대부분의 비침습 "
+        "의료 전기 장비는 다음이 필요합니다:")
+    pdf.kv("IEC 60601-1", "의료 전기 장비의 기본 안전 및 필수 성능에 대한 일반 요구사항. 기본 표준.")
+    pdf.kv("IEC 60601-1-2", "전자기 적합성 (EMC) -- 내성 및 방출 테스트. "
+           "전자 부품이 포함된 모든 기기에 필수.")
+    pdf.kv("ISO 14971", "위험 관리. 모든 의료기기에 의무. 체계적인 위해 요소 식별 및 완화 요구.")
+    pdf.kv("IEC 62304", "소프트웨어 수명주기 프로세스. 소프트웨어 포함 기기에 필수. "
+           "위험도에 따라 소프트웨어 개발 등급 (A, B, C) 정의.")
+    pdf.kv("ISO 10993", "생체적합성 테스트. 환자 접촉 부품에 필수. "
+           "비침습 표면 접촉 기기는 일반적으로 일부 테스트만 필요.")
+    pdf.kv("IEC 62366-1", "사용성 공학. 형성적 및 총괄적 사용성 연구를 통해 "
+           "사용자 인터페이스가 안전하고 효과적임을 입증.")
+    pdf.ln(2)
+    pdf.callout(
+        "팁: FDA 목록의 모든 표준에 대해 테스트할 필요는 없습니다. "
+        "Q-Sub 회의 (섹션 3)가 귀사의 특정 기기에 FDA가 기대하는 표준을 정확히 파악하는 데 도움이 됩니다.")
+
+    # ── 5 ──
+    pdf.add_page()
+    pdf.sec("5.  일반적인 함정 및 회피 방법")
+    pdf.sub("5.1 RTA (접수 거부)")
+    pdf.txt(
+        "FDA는 510(k) 제출 접수 후 15일 이내에 RTA 체크리스트를 사용하여 심사합니다. "
+        "핵심 요소가 누락된 경우, 실질적 검토가 시작되기도 전에 제출이 거부됩니다. "
+        "일반적인 RTA 트리거:")
+    pdf.bul("사용 목적 설명서 누락 또는 불완전")
+    pdf.bul("선행 기기 비교 불충분 (기술적 특성)")
+    pdf.bul("소프트웨어 문서 누락 (해당시)")
+    pdf.bul("성능 테스트 요약 불완전")
+    pdf.bul("라벨링 결함")
+
+    pdf.sub("5.2 선행 기기 선정 오류")
+    pdf.txt("잘못된 선행 기기를 선택하는 것은 가장 비용이 많이 드는 실수 중 하나입니다:")
+    pdf.bul("선행 기기는 귀사 기기와 동일한 사용 목적을 가져야 함")
+    pdf.bul("기술적 차이가 새로운 안전성 또는 유효성 문제를 제기하지 않아야 함")
+    pdf.bul("'선행 기기 체인' 회피 -- 여러 선행 기기를 통한 체인 참조는 논증을 약화시킴")
+    pdf.bul("FDA가 선행 기기 선택에 동의하지 않을 수 있음 -- Q-Sub으로 조기 해결")
+
+    pdf.sub("5.3 테스트 갭")
+    pdf.txt("불충분한 테스트 데이터는 추가 정보 (AI) 요청의 주요 원인입니다:")
+    pdf.bul("벤치 테스트가 Q-Sub에서 논의된 테스트 계획과 일치하는지 확인")
+    pdf.bul("소프트웨어 검증은 IEC 62304 분류 엄격성을 따라야 함")
+    pdf.bul("EMC 테스트는 최신 IEC 60601-1-2 판을 사용해야 함")
+    pdf.bul("임상 데이터가 필요한 경우 조기 시작 -- 임상 연구는 6-12개월 추가")
+
+    pdf.sub("5.4 번역 및 문화적 차이")
+    pdf.txt(
+        "FDA 제출 문서는 영어로 작성해야 합니다. 번역의 기술적 정확성이 중요합니다 -- "
+        "용어가 잘못 번역되면 거부 또는 오해를 초래할 수 있습니다. "
+        "양국 언어와 FDA 용어에 능통한 규제 팀과 협력하세요.")
+
+    # ── 6 ──
+    pdf.add_page()
+    pdf.sec("6.  미국 법인 요건")
+    pdf.txt("미국에서 의료기기를 판매하려면 여러 등록 요건을 충족해야 합니다:")
+    pdf.sub("6.1 FDA 시설 등록")
+    pdf.bul("의료기기를 제조, 유통 또는 수입하는 모든 시설은 매년 FDA에 등록해야 함")
+    pdf.bul("FDA 통합 등록 및 리스팅 시스템 (FURLS)을 통해 등록 완료")
+    pdf.bul("제조업체가 미국 외에 위치한 경우 미국 대리인 지정 필수")
+
+    pdf.sub("6.2 미국 대리인 (US Agent)")
+    pdf.bul("미국에 제품을 판매하는 모든 해외 제조업체에 필수")
+    pdf.bul("미국 대리인은 FDA가 귀사에 연락하는 창구 역할")
+    pdf.bul("미국 내에 위치하고 업무 시간 중 연락 가능해야 함")
+    pdf.bul("회사 또는 개인 -- 이 서비스를 전문으로 하는 업체가 있음")
+
+    pdf.sub("6.3 기기 리스팅")
+    pdf.bul("각 기기는 제품 코드 및 기기 등급을 포함하여 FDA에 리스팅해야 함")
+    pdf.bul("기기 추가, 삭제 또는 변경 시 리스팅 업데이트 필요")
+
+    pdf.sub("6.4 미국 법인 설립 (선택)")
+    pdf.txt(
+        "FDA에서 요구하지는 않지만, 많은 중국 기업이 사업, 법률 및 투자자 관계 목적으로 "
+        "미국 자회사 (일반적으로 Delaware LLC 또는 C-Corp)를 설립합니다. "
+        "이는 계약, 은행 업무를 간소화하고 미국 시장에 대한 의지를 보여줍니다.")
+
+    # ── 7 ──
+    pdf.add_page()
+    pdf.sec("7.  비용 계획")
+    pdf.txt(
+        "예산 계획은 필수적입니다. 다음은 Class II 비침습적 510(k) 제출의 "
+        "일반적인 비용 범위입니다 (단위: USD):")
+    pdf.kv("FDA 사용자 수수료", "$22,000-$23,000 (표준 510(k), 매년 갱신; 소기업 면제 가능)")
+    pdf.kv("테스트 (IEC 60601)", "$30,000-$80,000, 기기 복잡도 및 해당 특정 표준 수에 따라 상이")
+    pdf.kv("EMC 테스트", "$15,000-$30,000, IEC 60601-1-2 적합")
+    pdf.kv("소프트웨어 (IEC 62304)", "$10,000-$40,000, 문서화 및 검증, 소프트웨어 안전 등급에 따라 상이")
+    pdf.kv("생체적합성", "$10,000-$50,000, 환자 접촉 특성에 따라 상이")
+    pdf.kv("규제 컨설팅", "$50,000-$150,000, 전체 프로젝트 관리, 전략, 제출 준비 및 FDA 연락")
+    pdf.kv("미국 대리인", "$3,000-$6,000/년")
+    pdf.kv("미국 법인 설립", "$2,000-$5,000 (1회, 해당시)")
+    pdf.ln(2)
+    pdf.callout(
+        "총 예산: 일반적인 Class II 510(k) 제출에 $150,000-$400,000을 계획하세요. "
+        "가장 큰 변수는 테스트입니다 -- Q-Sub 회의가 필요한 테스트를 정확히 정의하여 "
+        "과다 또는 과소 테스트를 방지합니다.")
+
+    # ── 8 ──
+    pdf.add_page()
+    pdf.sec("8.  510k Bridge가 도움을 드리는 방법")
+    pdf.txt(
+        "510k Bridge는 중국 의료기기 기업이 FDA 510(k) 절차를 탐색하는 것을 전문으로 합니다. "
+        "이중 언어 팀이 중미 간의 언어, 규제 및 비즈니스 문화 격차를 해소합니다.")
+
+    pdf.sub("Control Tower 라이선스 -- 월 $500부터")
+    pdf.bul("16개 탭의 Control Tower 플랫폼이 포함된 전용 프로젝트 대시보드")
+    pdf.bul("다국어 설정 마법사 (EN/中文/한국어)로 빠른 프로젝트 온보딩")
+    pdf.bul("듀얼 트랙 마일스톤 추적 (규제 + 엔지니어링)")
+    pdf.bul("규제 문서 관리 및 위험 모니터링")
+    pdf.bul("실시간 다국어 팀 메시징")
+
+    pdf.sub("7개 기기 카테고리 템플릿")
+    pdf.txt(
+        "Control Tower에는 가장 일반적인 510(k) 기기 카테고리에 대한 사전 구성 프로젝트 템플릿이 포함되어 있습니다. "
+        "템플릿을 선택하면 FDA 제품 코드, 규정 섹션, 적용 표준, 위험 등록부, "
+        "예산 카테고리 및 예상 일정이 자동으로 구성됩니다 -- 수 주의 설정 시간 절약.")
+    pdf.bul("호흡기 기기 (CFR Part 868) -- 인공호흡기, CPAP/BiPAP, 모니터")
+    pdf.bul("심혈관 기기 (CFR Part 870) -- ECG, 혈압, 심장 모니터")
+    pdf.bul("정형외과 기기 (CFR Part 888) -- 임플란트, 고정장치, 관절 치환")
+    pdf.bul("체외 진단 / IVD (CFR Parts 862-864) -- 분석기, 시약")
+    pdf.bul("영상 및 모니터링 (CFR Part 892) -- 초음파, X선, 환자 모니터")
+    pdf.bul("재활 기기 (CFR Part 890) -- 자극기, 보행 보조기, 치료 장비")
+    pdf.bul("의료기기 소프트웨어 / SaMD (CFR 892.2020) -- 임상 AI/ML, 원격의료")
+    pdf.txt(
+        "각 템플릿은 기기 유형별 규제 프레임워크, 기술 업무 흐름 및 위험 카테고리를 "
+        "사전 입력합니다 -- 또는 '처음부터 시작'을 선택하여 모든 항목을 수동 구성할 수 있습니다.")
+
+    pdf.sub("전문 PM 서비스 -- 월 $10,000-$25,000")
+    pdf.bul("SaaS의 모든 기능 + QMS-Lite 포함, 전담 PMP 프로젝트 관리자 배정")
+    pdf.bul("FDA 커뮤니케이션 센터 및 Q-Sub 자동화")
+    pdf.bul("미국 대리인 대행 (모든 해외 제조업체 필수)")
+    pdf.bul("게이트 리뷰 관리 및 규제 제출 감독")
+    pdf.bul("공급업체 조정 및 이해관계자 관리")
+
+    pdf.sub("엔터프라이즈 -- 프로젝트 기반 가격")
+    pdf.bul("프로페셔널의 모든 기능 + 엔드투엔드 510(k) 관리")
+    pdf.bul("규제 전략 및 경로 개발")
+    pdf.bul("자동화된 RTA 자가 점검 및 DHF 준비 상태 평가")
+    pdf.bul("미국 대리인 대행 (모든 해외 제조업체 필수)")
+    pdf.bul("미국 법인 설립 지원")
+    pdf.bul("투자자 대비 문서 준비")
+
+    pdf.ln(4)
+    pdf.set_font("ARUNI", "B", 12)
+    pdf.set_text_color(*GuideKO.CARDINAL)
+    pdf.cell(0, 8, "510(k) 여정을 시작할 준비가 되셨나요?", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(2)
+    pdf.set_font("ARUNI", "", 11)
+    pdf.set_text_color(*GuideKO.DARK)
+    pdf.cell(0, 6, "info@510kbridge.com", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 6, "510kbridge.com", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 6, "무료 상담을 지금 예약하세요.", align="C", new_x="LMARGIN", new_y="NEXT")
+
+    path = os.path.join(OUT, "510k_Pathway_Guide_KO.pdf")
+    pdf.output(path)
+    return path
+
+
 if __name__ == "__main__":
     en = build_en()
     print(f"EN Guide: {en}")
     cn = build_cn()
     print(f"CN Guide: {cn}")
+    ko = build_ko()
+    print(f"KO Guide: {ko}")
     print("Done.")

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-510k Bridge Certificate Course in Project Management (Chinese)
+510k Bridge Course in Project Management (Chinese)
 ===============================================================
 Chinese translation of generate_course.py.
 Uses the ICU Respiratory Digital Twin System as the central case study.
@@ -47,7 +47,7 @@ class CoursePDF(FPDF):
             return
         self.set_font("CJK", "I", 8)
         self.set_text_color(*GRAY)
-        self.cell(0, 5, _a("510k Bridge 项目管理认证  |  ICU数字孪生案例研究"), align="L")
+        self.cell(0, 5, _a("510k Bridge 项目管理课程  |  ICU数字孪生案例研究"), align="L")
         self.ln(8)
 
     def footer(self):
@@ -162,7 +162,7 @@ def build():
     pdf.set_font("CJK", "B", 32)
     pdf.set_text_color(*PRIMARY)
     pdf.cell(0, 14, _a("项目管理"), align="C", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 14, _a("认证课程"), align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 14, _a("课程"), align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(6)
     pdf.set_font("CJK", "", 14)
     pdf.set_text_color(*NAVY)
@@ -179,7 +179,7 @@ def build():
     pdf.ln(20)
     pdf.set_font("CJK", "", 10)
     pdf.set_text_color(*GRAY)
-    pdf.cell(0, 6, _a("12模块认证课程"), align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 6, _a("12模块专业课程"), align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 6, _a("2026年3月版"), align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(30)
     pdf.set_font("CJK", "I", 9)
@@ -225,6 +225,25 @@ def build():
         pdf.cell(0, 7, _a(title), new_x="LMARGIN", new_y="NEXT")
 
     # ================================================================
+    # FROM THE FOUNDER
+    # ================================================================
+    pdf.add_page()
+    pdf.set_font("CJK", "B", 18)
+    pdf.set_text_color(*NAVY)
+    pdf.cell(0, 10, "创始人寄语", new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(4)
+    pdf.set_font("CJK", "I", 11)
+    pdf.set_text_color(*TEXT)
+    pdf.multi_cell(0, 6,
+        "本课程以我在2000年于斯坦福大学学习的一门认证课程为蓝本。"
+        "如果您希望自行管理项目，本课程将为您提供所需的指导。",
+        align="L")
+    pdf.ln(4)
+    pdf.set_font("CJK", "", 10)
+    pdf.set_text_color(*GRAY)
+    pdf.cell(0, 6, "-- Lon Dailey, 510k Bridge 创始人", new_x="LMARGIN", new_y="NEXT")
+
+    # ================================================================
     # COURSE INTRODUCTION
     # ================================================================
     pdf.add_page()
@@ -235,8 +254,8 @@ def build():
 
     pdf.sec("适用对象")
     pdf.txt(
-        "本认证课程面向希望掌握项目管理学科、达到能够管理任何项目水平的专业人士 -- "
-        "从软件发布到建设项目再到FDA监管的医疗器械。无需事先具备PM认证，"
+        "本课程面向希望掌握项目管理学科、达到能够管理任何项目水平的专业人士 -- "
+        "从软件发布到建设项目再到FDA监管的医疗器械。无需事先具备PM资质，"
         "但需具备基本的商业概念知识。")
     pdf.txt(
         "本课程以一个真实的、正在进行的项目作为核心案例研究: ICU呼吸数字孪生系统，"
@@ -917,11 +936,11 @@ def build():
         "  - 专业性 (清晰、简洁、可展示)\n"
         "  - 判断力 (决策展示PM思维，而非仅数据汇编)\n\n"
         "每个可交付成果需要75%或以上才能通过。"
-        "毕业设计占认证总成绩的40%。")
+        "毕业设计占课程总成绩的40%。")
 
     pdf.sec("12.3 课程结束后")
     pdf.txt(
-        "完成本认证后，您应该能够:\n\n"
+        "完成本课程后，您应该能够:\n\n"
         "  1. 以适当的章程和干系人登记册启动任何项目\n"
         "  2. 构建覆盖100%范围的WBS\n"
         "  3. 创建网络图并识别关键路径\n"
@@ -1115,7 +1134,7 @@ def build():
         pdf.cell(0, 5.5, _a(title), new_x="LMARGIN", new_y="NEXT")
 
     # ---- Save ----
-    out_path = os.path.join(OUT_DIR, "PMP_Certificate_Course_CN.pdf")
+    out_path = os.path.join(OUT_DIR, "PMP_Course_CN.pdf")
     pdf.output(out_path)
     print(f"Course PDF (CN): {out_path}")
     print(f"Pages: {pdf.page_no()}")

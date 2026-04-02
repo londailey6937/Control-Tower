@@ -176,12 +176,12 @@ def build_factsheet_en():
         ("Control Tower", "From $500/mo",
          ["16-tab PM dashboard", "Bilingual setup wizard", "Dual-track milestones",
           "Document control & messaging", "Risk & budget tracking", "Predicate Finder included"]),
-        ("QMS-Lite", "$200-500/mo",
+        ("QMS-Lite", "$200-500/mo (included in Professional & Enterprise)",
          ["21 CFR 820 & ISO 13485 aligned", "Document control & CAPA",
           "Training records mgmt", "Supplier qualification",
           "Complaint handling", "Integrates with Control Tower"]),
         ("Professional PM", "$10-25K/mo",
-         ["All SaaS features", "Dedicated PMP project manager", "FDA Comms Center & Q-Sub",
+         ["All SaaS features + QMS-Lite included", "Dedicated PMP project manager", "FDA Comms Center & Q-Sub",
           "US Agent representation", "Gate review management", "Submission oversight"]),
     ]
     col_w = (pdf.w - pdf.l_margin - pdf.r_margin - 6) / 3
@@ -211,7 +211,7 @@ def build_factsheet_en():
     pdf.section_bar("ADDITIONAL PRODUCTS")
     pdf.bul("Predicate Finder -- AI-powered search of openFDA database for predicate devices, SE analysis, comparison reports (included with services)")
     pdf.bul("Entity Setup Tracker -- Delaware C-Corp formation, state registration, EIN, bank account, FDA establishment registration ($1K-5K or $200/mo)")
-    pdf.bul("Enterprise -- End-to-end: regulatory strategy + PM + RTA/DHF readiness + US entity formation + investor documentation (project-based pricing)")
+    pdf.bul("Enterprise -- End-to-end: regulatory strategy + PM + QMS-Lite + RTA/DHF readiness + US entity formation + investor documentation (project-based pricing)")
 
     # ── Contact ──
     pdf.section_bar("GET STARTED")
@@ -383,12 +383,12 @@ def build_factsheet_cn():
         ("Control Tower", "起步价$500/月",
          ["16选项卡PM仪表板", "双语设置向导", "双轨里程碑",
           "文档控制与消息", "风险与预算跟踪", "Predicate Finder包含"]),
-        ("QMS-Lite", "$200-500/月",
+        ("QMS-Lite", "$200-500/月 (专业版和企业版已包含)",
          ["21 CFR 820 & ISO 13485对齐", "文档控制与CAPA",
           "培训记录管理", "供应商资质",
           "投诉处理", "与Control Tower集成"]),
         ("专业PM服务", "$10,000-$25,000/月",
-         ["SaaS全部功能", "专属PMP项目经理", "FDA通信中心与Q-Sub",
+         ["SaaS全部功能 + QMS-Lite包含", "专属PMP项目经理", "FDA通信中心与Q-Sub",
           "美国代理人服务", "门控评审管理", "提交监督"]),
     ]
     col_w = (pdf.w - pdf.l_margin - pdf.r_margin - 6) / 3
@@ -418,7 +418,7 @@ def build_factsheet_cn():
     pdf.section_bar("额外产品")
     pdf.bul("Predicate Finder -- AI驱动的openFDA数据库先导器械搜索、SE分析、比较报告（服务包含）")
     pdf.bul("跨境实体设立追踪器 -- 特拉华C-Corp注册、州登记、EIN、银行账户、FDA机构注册 ($1K-5K或$200/月)")
-    pdf.bul("企业级 -- 端到端: 法规策略 + PM + RTA/DHF就绪 + 美国实体设立 + 投资者文档 (项目定价)")
+    pdf.bul("企业级 -- 端到端: 法规策略 + PM + QMS-Lite + RTA/DHF就绪 + 美国实体设立 + 投资者文档 (项目定价)")
 
     # ── Contact ──
     pdf.section_bar("立即开始")

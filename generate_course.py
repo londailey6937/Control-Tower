@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-510k Bridge Certificate Course in Project Management
+510k Bridge Course in Project Management
 ========================================================
 Uses the ICU Respiratory Digital Twin System as the central case study.
-Generates a comprehensive PDF suitable for a certificate-level program.
+Generates a comprehensive PDF suitable for a professional education program.
 """
 
 import os
@@ -32,7 +32,7 @@ class CoursePDF(FPDF):
             return
         self.set_font("Helvetica", "I", 8)
         self.set_text_color(*GRAY)
-        self.cell(0, 5, "510k Bridge Certificate in Project Management  |  ICU Digital Twin Case Study", align="L")
+        self.cell(0, 5, "510k Bridge Course in Project Management  |  ICU Digital Twin Case Study", align="L")
         self.ln(8)
 
     def footer(self):
@@ -151,7 +151,7 @@ def build():
     pdf.ln(35)
     pdf.set_font("Helvetica", "B", 32)
     pdf.set_text_color(*PRIMARY)
-    pdf.cell(0, 14, "Certificate in", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 14, "Course in", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 14, "Project Management", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(6)
     pdf.set_font("Helvetica", "", 14)
@@ -169,7 +169,7 @@ def build():
     pdf.ln(20)
     pdf.set_font("Helvetica", "", 10)
     pdf.set_text_color(*GRAY)
-    pdf.cell(0, 6, "12-Module Certificate Program", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 6, "12-Module Professional Program", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 6, "March 2026 Edition", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(30)
     pdf.set_font("Helvetica", "I", 9)
@@ -215,6 +215,26 @@ def build():
         pdf.cell(0, 7, title, new_x="LMARGIN", new_y="NEXT")
 
     # ================================================================
+    # FROM THE FOUNDER
+    # ================================================================
+    pdf.add_page()
+    pdf.set_font("Helvetica", "B", 18)
+    pdf.set_text_color(*NAVY)
+    pdf.cell(0, 10, "From the Founder", new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(4)
+    pdf.set_font("Helvetica", "I", 11)
+    pdf.set_text_color(*TEXT)
+    pdf.multi_cell(0, 6,
+        "This course is modeled off a certificate course I took at Stanford University "
+        "in the year 2000. It should provide you with the necessary guidance should you "
+        "want to manage the project yourself.",
+        align="L")
+    pdf.ln(4)
+    pdf.set_font("Helvetica", "", 10)
+    pdf.set_text_color(*GRAY)
+    pdf.cell(0, 6, "-- Lon Dailey, Founder, 510k Bridge", new_x="LMARGIN", new_y="NEXT")
+
+    # ================================================================
     # COURSE INTRODUCTION
     # ================================================================
     pdf.add_page()
@@ -225,7 +245,7 @@ def build():
 
     pdf.sec("Who This Course Is For")
     pdf.txt(
-        "This certificate program is designed for professionals seeking to master the discipline "
+        "This program is designed for professionals seeking to master the discipline "
         "of project management at a level sufficient to manage any project -- from software "
         "launches to construction programs to FDA-regulated medical devices. No prior PM "
         "certification is required, though familiarity with basic business concepts is assumed.")
@@ -938,11 +958,11 @@ def build():
         "  - Professionalism (clear, concise, presentation-ready)\n"
         "  - Judgment (decisions show PM thinking, not just data compilation)\n\n"
         "A passing score requires 75% or higher on each deliverable. "
-        "The capstone constitutes 40% of the certificate grade.")
+        "The capstone constitutes 40% of the course grade.")
 
     pdf.sec("12.3 After This Course")
     pdf.txt(
-        "Upon completing this certificate, you should be able to:\n\n"
+        "Upon completing this course, you should be able to:\n\n"
         "  1. Initiate any project with a proper charter and stakeholder register\n"
         "  2. Build a WBS that captures 100% of scope\n"
         "  3. Create a network diagram and identify the critical path\n"
@@ -1169,7 +1189,7 @@ def build():
         pdf.cell(0, 5.5, title, new_x="LMARGIN", new_y="NEXT")
 
     # ---- Save ----
-    out_path = os.path.join(OUT_DIR, "PMP_Certificate_Course.pdf")
+    out_path = os.path.join(OUT_DIR, "PMP_Course.pdf")
     pdf.output(out_path)
     print(f"Course PDF: {out_path}")
     print(f"Pages: {pdf.page_no()}")
