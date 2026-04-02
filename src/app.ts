@@ -2417,20 +2417,30 @@ function initRoleSwitcher(): void {
   if (IS_ADMIN) {
     const btn = document.createElement("button");
     btn.id = "newProjectBtn";
-    const isCN = getLang() === "cn";
-    btn.textContent = isCN ? "⊕ 新建项目" : "⊕ New Project";
-    btn.title = isCN
-      ? "开始新项目（清除当前数据）"
-      : "Start a new project (clears current data)";
+    const lang = getLang();
+    btn.textContent =
+      lang === "ko"
+        ? "⊕ 새 프로젝트"
+        : lang === "cn"
+          ? "⊕ 新建项目"
+          : "⊕ New Project";
+    btn.title =
+      lang === "ko"
+        ? "새 프로젝트 시작 (현재 데이터 삭제)"
+        : lang === "cn"
+          ? "开始新项目（清除当前数据）"
+          : "Start a new project (clears current data)";
     btn.style.cssText =
       "margin-left:12px;padding:4px 12px;border-radius:6px;border:1px solid #475569;" +
       "background:#1e293b;color:#94a3b8;font-size:0.78rem;cursor:pointer;";
     btn.addEventListener("click", () => {
       if (
         !confirm(
-          isCN
-            ? "开始新项目？这将清除所有当前项目数据。"
-            : "Start a new project? This will clear all current project data.",
+          lang === "ko"
+            ? "새 프로젝트를 시작하시겠습니까? 현재 프로젝트 데이터가 모두 삭제됩니다."
+            : lang === "cn"
+              ? "开始新项目？这将清除所有当前项目数据。"
+              : "Start a new project? This will clear all current project data.",
         )
       )
         return;
@@ -2620,11 +2630,22 @@ window._openChangeRequestForm = function (
   // Build proposed value input — dropdown for status fields, text for others
   let proposedInput: string;
   if (type === "milestone-status" || type === "standard-status") {
-    const isCN = getLang() === "cn";
+    const lang = getLang();
     const opts = [
-      { value: "not-started", label: isCN ? "未开始" : "Not Started" },
-      { value: "in-progress", label: isCN ? "进行中" : "In Progress" },
-      { value: "complete", label: isCN ? "完成" : "Complete" },
+      {
+        value: "not-started",
+        label:
+          lang === "ko" ? "미시작" : lang === "cn" ? "未开始" : "Not Started",
+      },
+      {
+        value: "in-progress",
+        label:
+          lang === "ko" ? "진행 중" : lang === "cn" ? "进行中" : "In Progress",
+      },
+      {
+        value: "complete",
+        label: lang === "ko" ? "완료" : lang === "cn" ? "完成" : "Complete",
+      },
     ];
     const options = opts
       .filter((o) => o.value !== oldVal)
@@ -2632,11 +2653,22 @@ window._openChangeRequestForm = function (
       .join("");
     proposedInput = `<select id="crNewValue" class="cr-select">${options}</select>`;
   } else if (type === "funding-status") {
-    const isCN = getLang() === "cn";
+    const lang = getLang();
     const opts = [
-      { value: "pipeline", label: isCN ? "洽谈中" : "Pipeline" },
-      { value: "committed", label: isCN ? "已承诺" : "Committed" },
-      { value: "received", label: isCN ? "已到账" : "Received" },
+      {
+        value: "pipeline",
+        label:
+          lang === "ko" ? "파이프라인" : lang === "cn" ? "洽谈中" : "Pipeline",
+      },
+      {
+        value: "committed",
+        label:
+          lang === "ko" ? "확약됨" : lang === "cn" ? "已承诺" : "Committed",
+      },
+      {
+        value: "received",
+        label: lang === "ko" ? "수령됨" : lang === "cn" ? "已到账" : "Received",
+      },
     ];
     const options = opts
       .filter((o) => o.value !== oldVal)
@@ -2644,12 +2676,25 @@ window._openChangeRequestForm = function (
       .join("");
     proposedInput = `<select id="crNewValue" class="cr-select">${options}</select>`;
   } else if (type === "action-status") {
-    const isCN = getLang() === "cn";
+    const lang = getLang();
     const opts = [
-      { value: "todo", label: isCN ? "待办" : "Todo" },
-      { value: "in-progress", label: isCN ? "进行中" : "In Progress" },
-      { value: "blocked", label: isCN ? "受阻" : "Blocked" },
-      { value: "done", label: isCN ? "完成" : "Done" },
+      {
+        value: "todo",
+        label: lang === "ko" ? "할 일" : lang === "cn" ? "待办" : "Todo",
+      },
+      {
+        value: "in-progress",
+        label:
+          lang === "ko" ? "진행 중" : lang === "cn" ? "进行中" : "In Progress",
+      },
+      {
+        value: "blocked",
+        label: lang === "ko" ? "차단됨" : lang === "cn" ? "受阻" : "Blocked",
+      },
+      {
+        value: "done",
+        label: lang === "ko" ? "완료" : lang === "cn" ? "完成" : "Done",
+      },
     ];
     const options = opts
       .filter((o) => o.value !== oldVal)
@@ -2657,12 +2702,26 @@ window._openChangeRequestForm = function (
       .join("");
     proposedInput = `<select id="crNewValue" class="cr-select">${options}</select>`;
   } else if (type === "dhf-status") {
-    const isCN = getLang() === "cn";
+    const lang = getLang();
     const opts = [
-      { value: "not-started", label: isCN ? "未开始" : "Not Started" },
-      { value: "draft", label: isCN ? "草稿" : "Draft" },
-      { value: "in-review", label: isCN ? "审核中" : "In Review" },
-      { value: "approved", label: isCN ? "已批准" : "Approved" },
+      {
+        value: "not-started",
+        label:
+          lang === "ko" ? "미시작" : lang === "cn" ? "未开始" : "Not Started",
+      },
+      {
+        value: "draft",
+        label: lang === "ko" ? "초안" : lang === "cn" ? "草稿" : "Draft",
+      },
+      {
+        value: "in-review",
+        label:
+          lang === "ko" ? "검토 중" : lang === "cn" ? "审核中" : "In Review",
+      },
+      {
+        value: "approved",
+        label: lang === "ko" ? "승인됨" : lang === "cn" ? "已批准" : "Approved",
+      },
     ];
     const options = opts
       .filter((o) => o.value !== oldVal)
@@ -2670,12 +2729,25 @@ window._openChangeRequestForm = function (
       .join("");
     proposedInput = `<select id="crNewValue" class="cr-select">${options}</select>`;
   } else if (type === "capa-status") {
-    const isCN = getLang() === "cn";
+    const lang = getLang();
     const opts = [
-      { value: "open", label: isCN ? "开放" : "Open" },
-      { value: "in-progress", label: isCN ? "进行中" : "In Progress" },
-      { value: "closed", label: isCN ? "关闭" : "Closed" },
-      { value: "verified", label: isCN ? "已验证" : "Verified" },
+      {
+        value: "open",
+        label: lang === "ko" ? "열림" : lang === "cn" ? "开放" : "Open",
+      },
+      {
+        value: "in-progress",
+        label:
+          lang === "ko" ? "진행 중" : lang === "cn" ? "进行中" : "In Progress",
+      },
+      {
+        value: "closed",
+        label: lang === "ko" ? "닫힘" : lang === "cn" ? "关闭" : "Closed",
+      },
+      {
+        value: "verified",
+        label: lang === "ko" ? "검증됨" : lang === "cn" ? "已验证" : "Verified",
+      },
     ];
     const options = opts
       .filter((o) => o.value !== oldVal)
@@ -2683,12 +2755,25 @@ window._openChangeRequestForm = function (
       .join("");
     proposedInput = `<select id="crNewValue" class="cr-select">${options}</select>`;
   } else if (type === "supplier-status") {
-    const isCN = getLang() === "cn";
+    const lang = getLang();
     const opts = [
-      { value: "under-review", label: isCN ? "审核中" : "Under Review" },
-      { value: "qualified", label: isCN ? "合格" : "Qualified" },
-      { value: "active", label: isCN ? "活跃" : "Active" },
-      { value: "risk", label: isCN ? "风险" : "Risk" },
+      {
+        value: "under-review",
+        label:
+          lang === "ko" ? "심사 중" : lang === "cn" ? "审核中" : "Under Review",
+      },
+      {
+        value: "qualified",
+        label: lang === "ko" ? "적격" : lang === "cn" ? "合格" : "Qualified",
+      },
+      {
+        value: "active",
+        label: lang === "ko" ? "활성" : lang === "cn" ? "活跃" : "Active",
+      },
+      {
+        value: "risk",
+        label: lang === "ko" ? "위험" : lang === "cn" ? "风险" : "Risk",
+      },
     ];
     const options = opts
       .filter((o) => o.value !== oldVal)
@@ -4474,6 +4559,9 @@ function openDocHistory(id: string): void {
     </div>
   `;
   overlay.classList.add("open");
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) closeDocHistory();
+  });
 }
 
 function closeDocHistory(): void {

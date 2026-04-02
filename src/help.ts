@@ -1,5 +1,5 @@
 // ============================================================
-// HELP — In-App User Guide (EN + CN), searchable HTML overlay
+// HELP — In-App User Guide (EN + CN + KO), searchable HTML overlay
 // ============================================================
 
 import { localizedText } from "./i18n";
@@ -15,7 +15,7 @@ interface HelpSection {
 const GUIDE: HelpSection[] = [
   {
     num: 1,
-    title: { en: "Getting Started", cn: "入门指南" },
+    title: { en: "Getting Started", cn: "入门指南", ko: "시작하기" },
     content: {
       en: `<p>The Control Tower PM Dashboard is a comprehensive project management platform designed specifically for FDA 510(k) medical device development. It provides real-time visibility across regulatory, technical, and business workstreams.</p>
 <h4>System Requirements</h4>
@@ -33,11 +33,19 @@ const GUIDE: HelpSection[] = [
 <h4>登录与身份验证</h4>
 <p>仪表板使用基于角色的登录。输入项目管理员提供的密码。认证后，您将看到与您分配的角色和订阅层级相对应的标签页。</p>
 <div class="help-tip">💡 收藏仪表板URL以便快速访问。您的项目数据会自动保存。</div>`,
+      ko: `<p>Control Tower PM 대시보드는 FDA 510(k) 의료기기 개발을 위해 특별히 설계된 종합 프로젝트 관리 플랫폼입니다. 규제, 기술 및 비즈니스 워크스트림 전반에 대한 실시간 가시성을 제공합니다.</p>
+<h4>시스템 요구사항</h4>
+<ul><li>최신 웹 브라우저 (Chrome, Firefox, Safari, Edge)</li><li>Supabase 동기화를 위한 인터넷 연결 (오프라인 모드 가능)</li><li>화면 해상도 1280x720 이상 권장</li></ul>
+<h4>첫 실행</h4>
+<p>대시보드를 처음 열면 설정 마법사가 프로젝트 구성을 안내합니다. 7개의 기기 템플릿(호흡기, 심혈관, 정형외과, IVD, 영상, 재활, SaMD) 중에서 선택하거나 처음부터 시작할 수 있습니다. 또는 '데모 데이터 로드'를 클릭하여 샘플 데이터로 탐색할 수 있습니다.</p>
+<h4>로그인 및 인증</h4>
+<p>대시보드는 역할 기반 로그인을 사용합니다. 프로젝트 관리자가 제공한 비밀번호를 입력하세요. 인증 후 할당된 역할과 구독 등급에 적합한 탭이 있는 대시보드가 표시됩니다.</p>
+<div class="help-tip">💡 빠른 접근을 위해 대시보드 URL을 북마크하세요. 프로젝트 데이터는 자동으로 저장됩니다.</div>`,
     },
   },
   {
     num: 2,
-    title: { en: "Dashboard Overview", cn: "仪表板概览" },
+    title: { en: "Dashboard Overview", cn: "仪表板概览", ko: "대시보드 개요" },
     content: {
       en: `<p>The dashboard consists of a header bar with role/tier selectors, a horizontal tab navigation bar with 16 functional tabs, and a main content area. Each tab focuses on a specific aspect of the 510(k) project lifecycle.</p>
 <h4>Header Bar</h4>
@@ -85,6 +93,29 @@ const GUIDE: HelpSection[] = [
 <tr><td><strong>FDA通讯</strong></td><td>Q-Sub生成器、RTA清单、法规时间线（仅PMP）</td></tr>
 </tbody></table>
 <div class="help-warn">⚠️ 部分标签页可能因您的角色或订阅层级而受限。</div>`,
+      ko: `<p>대시보드는 역할/등급 선택기가 있는 헤더 바, 16개의 기능 탭이 있는 수평 탭 내비게이션 바, 그리고 메인 콘텐츠 영역으로 구성됩니다. 각 탭은 510(k) 프로젝트 수명주기의 특정 측면에 중점을 둡니다.</p>
+<h4>헤더 바</h4>
+<ul><li>프로젝트 이름 및 부제목 (다국어 EN/CN/KO)</li><li>역할 선택기: PMP, 기술, 비즈니스, 회계 뷰 간 전환</li><li>등급 표시기: 현재 구독 등급 표시 (Starter/Growth/Scale)</li><li>언어 전환: 영어, 중국어, 한국어 인터페이스 간 전환</li></ul>
+<h4>16개 탭</h4>
+<table class="help-table"><thead><tr><th>탭</th><th>설명</th></tr></thead><tbody>
+<tr><td><strong>듀얼 트랙</strong></td><td>기술 및 규제 마일스톤 추적</td></tr>
+<tr><td><strong>게이트 시스템</strong></td><td>기준 체크리스트를 포함한 단계별 게이트 심사</td></tr>
+<tr><td><strong>규제 추적기</strong></td><td>표준 준수 및 진행 상황 모니터링</td></tr>
+<tr><td><strong>위험 대시보드</strong></td><td>심각도/발생확률을 포함한 ISO 14971 위험 매트릭스</td></tr>
+<tr><td><strong>감사 추적</strong></td><td>모든 대시보드 변경의 타임스탬프 로그</td></tr>
+<tr><td><strong>문서 관리</strong></td><td>ISO 13485 기반 문서 수명주기 관리</td></tr>
+<tr><td><strong>조치 항목</strong></td><td>작업 보드, DHF 추적기, DMR 추적기, CAPA 로그</td></tr>
+<tr><td><strong>타임라인</strong></td><td>월별 프로젝트 타임라인 뷰</td></tr>
+<tr><td><strong>예산</strong></td><td>계획 대비 실제 예산 범주별 추적</td></tr>
+<tr><td><strong>현금/런웨이</strong></td><td>현금 보유 현황, 소진율, 런웨이 예측</td></tr>
+<tr><td><strong>미국 투자</strong></td><td>투자자 파이프라인 및 IR 활동 추적</td></tr>
+<tr><td><strong>지분 현황표</strong></td><td>주주 등록, 지분 이벤트, 베스팅</td></tr>
+<tr><td><strong>리소스</strong></td><td>팀 배정 및 활용도 모니터링</td></tr>
+<tr><td><strong>공급업체</strong></td><td>공급업체 자격 심사 및 리드타임 추적</td></tr>
+<tr><td><strong>게시판</strong></td><td>의사결정 및 조치 추적이 포함된 스레드 토론</td></tr>
+<tr><td><strong>FDA 커뮤니케이션</strong></td><td>Q-Sub 생성기, RTA 체크리스트, 규제 타임라인 (PMP 전용)</td></tr>
+</tbody></table>
+<div class="help-warn">⚠️ 일부 탭은 역할 또는 구독 등급에 따라 제한될 수 있습니다.</div>`,
     },
   },
   {
@@ -92,6 +123,7 @@ const GUIDE: HelpSection[] = [
     title: {
       en: "Role-Based Access & Tier System",
       cn: "基于角色的访问与层级系统",
+      ko: "역할 기반 접근 및 구독 등급",
     },
     content: {
       en: `<h4>User Roles</h4>
@@ -126,11 +158,31 @@ const GUIDE: HelpSection[] = [
 <tr><td><strong>规模</strong></td><td>$2,000/月</td><td>10</td><td>全部16个标签页，包括FDA通讯和股权表</td></tr>
 </tbody></table>
 <div class="help-tip">💡 您的层级由服务器端管理，无法从仪表板UI更改。</div>`,
+      ko: `<h4>사용자 역할</h4>
+<p>대시보드는 각기 다른 접근 수준을 가진 네 가지 주요 역할을 지원합니다:</p>
+<table class="help-table"><thead><tr><th>역할</th><th>접근 권한</th></tr></thead><tbody>
+<tr><td><strong>PMP (프로젝트 매니저)</strong></td><td>모든 탭에 대한 전체 접근. 마일스톤, 게이트, 위험, 예산, 문서, 팀을 편집할 수 있습니다. FDA 커뮤니케이션을 볼 수 있는 유일한 역할입니다.</td></tr>
+<tr><td><strong>기술</strong></td><td>기술 마일스톤, 위험, 문서를 조회 및 업데이트할 수 있습니다. 게시판 참여 가능. 재무 탭 접근 불가.</td></tr>
+<tr><td><strong>비즈니스</strong></td><td>비즈니스 마일스톤, 예산, 투자, 지분 현황표에 접근할 수 있습니다. 게시판 참여 가능.</td></tr>
+<tr><td><strong>회계</strong></td><td>예산, 현금/런웨이, 지분 현황표에 대한 읽기 전용 접근. 제한된 편집 기능.</td></tr>
+</tbody></table>
+<h4>구독 등급</h4>
+<p>탭 접근은 Supabase RLS를 통해 서버에서 제어됩니다. 등급에 따라 사용 가능한 탭이 결정됩니다:</p>
+<table class="help-table"><thead><tr><th>등급</th><th>가격</th><th>사용자 수</th><th>탭</th></tr></thead><tbody>
+<tr><td><strong>Starter</strong></td><td>$500/월</td><td>2</td><td>듀얼 트랙, 게이트, 타임라인, 예산</td></tr>
+<tr><td><strong>Growth</strong></td><td>$1,000/월</td><td>5</td><td>지분 현황표, FDA 커뮤니케이션, 미국 투자 제외 전체</td></tr>
+<tr><td><strong>Scale</strong></td><td>$2,000/월</td><td>10</td><td>FDA 커뮤니케이션 및 지분 현황표를 포함한 전체 16개 탭</td></tr>
+</tbody></table>
+<div class="help-tip">💡 구독 등급은 서버에서 관리되며 대시보드 UI에서 변경할 수 없습니다.</div>`,
     },
   },
   {
     num: 4,
-    title: { en: "Dual-Track Milestones", cn: "双轨制里程碑" },
+    title: {
+      en: "Dual-Track Milestones",
+      cn: "双轨制里程碑",
+      ko: "듀얼 트랙 마일스톤",
+    },
     content: {
       en: `<p>The Dual-Track tab displays parallel regulatory and technical milestone tracks. This mirrors the actual FDA 510(k) process where engineering development and regulatory preparation run concurrently.</p>
 <h4>Technical Milestones</h4>
@@ -146,11 +198,18 @@ const GUIDE: HelpSection[] = [
 <p>法规里程碑跟踪FDA交付成果：Pre-Submission会议、510(k)准备和提交申报。这些基于项目持续时间自动生成。</p>
 <h4>编辑里程碑</h4>
 <p>点击里程碑状态徽章可循环切换：未开始、进行中、完成和阻塞。只有PMP和对应角色可以更改状态。所有更改都记录在审计追踪中。</p>`,
+      ko: `<p>듀얼 트랙 탭은 규제와 기술 마일스톤 트랙을 병렬로 표시합니다. 이는 엔지니어링 개발과 규제 준비가 동시에 진행되는 실제 FDA 510(k) 절차를 반영합니다.</p>
+<h4>기술 마일스톤</h4>
+<p>기술 마일스톤은 엔지니어링 산출물을 추적합니다: 설계 동결, 프로토타입 테스트, 검증 및 확인 활동, 설계 이전. 각 마일스톤은 월별, 상태, 담당자 및 카테고리를 표시합니다.</p>
+<h4>규제 마일스톤</h4>
+<p>규제 마일스톤은 FDA 산출물을 추적합니다: Pre-Submission 미팅, 510(k) 준비, 제출 신청. 이들은 프로젝트 기간에 따라 자동 생성됩니다.</p>
+<h4>마일스톤 편집</h4>
+<p>마일스톤 상태 배지를 클릭하면 순차적으로 전환됩니다: 미시작, 진행 중, 완료, 차단. PMP와 해당 역할의 담당자만 상태를 변경할 수 있습니다. 모든 변경 사항은 감사 추적에 기록됩니다.</p>`,
     },
   },
   {
     num: 5,
-    title: { en: "Gate System", cn: "门控系统" },
+    title: { en: "Gate System", cn: "门控系统", ko: "게이트 시스템" },
     content: {
       en: `<p>The Gate System implements a phase-gate review process. Gates are automatically generated based on project duration (2-6 gates). Each gate has criteria that must be met before the project can proceed.</p>
 <h4>Gate Criteria</h4>
@@ -166,11 +225,18 @@ const GUIDE: HelpSection[] = [
 <p>PMP可以记录门控决定：通过、不通过或有条件通过。决定带有时间戳和归属。门控备注可以记录讨论要点和有条件批准的条件。</p>
 <h4>利益相关方输入</h4>
 <p>技术和商务利益相关方可以提交门控输入。这些出现在门控评审面板中，为门控决定提供完整的信息。</p>`,
+      ko: `<p>게이트 시스템은 단계별 게이트 심사 프로세스를 구현합니다. 게이트는 프로젝트 기간에 따라 자동으로 생성됩니다(2~6개 게이트). 각 게이트에는 프로젝트가 진행되기 전에 충족해야 하는 기준이 있습니다.</p>
+<h4>게이트 기준</h4>
+<p>각 게이트에는 기준 체크리스트가 있습니다(예: '기술 산출물 완료', '예산 정상', '위험 완화 확인'). 기준을 클릭하여 개별적으로 확인합니다. 게이트 상태는 기준 완료에 따라 업데이트됩니다.</p>
+<h4>게이트 결정</h4>
+<p>PMP는 게이트 결정을 기록할 수 있습니다: 진행(Go), 중단(No-Go), 또는 조건부 진행(Conditional Go). 결정에는 타임스탬프와 귀속 정보가 포함됩니다. 게이트 노트에 논의 사항과 조건부 승인 조건을 기록할 수 있습니다.</p>
+<h4>이해관계자 입력</h4>
+<p>기술 및 비즈니스 이해관계자가 게이트 입력을 제출할 수 있습니다. 이는 게이트 심사 패널에 표시되어 게이트 결정을 위한 완전한 정보를 제공합니다.</p>`,
     },
   },
   {
     num: 6,
-    title: { en: "Regulatory Tracker", cn: "法规跟踪" },
+    title: { en: "Regulatory Tracker", cn: "法规跟踪", ko: "규제 추적기" },
     content: {
       en: `<p>The Regulatory Tracker monitors compliance with applicable standards. Standards are pre-populated based on your device template (e.g., IEC 60601-1 for electrical devices, ISO 10993 for biocompatibility) or entered manually.</p>
 <h4>Tracking Standards</h4>
@@ -180,11 +246,15 @@ const GUIDE: HelpSection[] = [
 <h4>标准跟踪</h4>
 <ul><li>状态：未开始、进行中、完成</li><li>进度条：0-100%完成百分比</li><li>条款级别跟踪，实现详细合规</li></ul>
 <p>点击状态徽章可循环切换状态。更新进度滑块以反映实际完成情况。FDA通讯标签页使用这些值自动填充RTA清单。</p>`,
+      ko: `<p>규제 추적기는 적용 가능한 표준의 준수 여부를 모니터링합니다. 표준은 기기 템플릿(예: 전기 기기용 IEC 60601-1, 생체적합성용 ISO 10993)에 따라 자동으로 입력되거나 수동으로 입력할 수 있습니다.</p>
+<h4>표준 추적</h4>
+<ul><li>상태: 미시작, 진행 중, 완료</li><li>진행률 바: 0-100% 완료 백분율</li><li>세부 준수를 위한 조항 수준 추적</li></ul>
+<p>상태 배지를 클릭하여 상태를 순차적으로 전환합니다. 진행률 슬라이더를 업데이트하여 실제 완료 상황을 반영하세요. FDA 커뮤니케이션 탭에서 이 값을 사용하여 RTA 체크리스트를 자동으로 채웁니다.</p>`,
     },
   },
   {
     num: 7,
-    title: { en: "Risk Dashboard", cn: "风险看板" },
+    title: { en: "Risk Dashboard", cn: "风险看板", ko: "위험 대시보드" },
     content: {
       en: `<p>The Risk Dashboard implements ISO 14971 risk management. Risks are displayed in a color-coded matrix showing severity, probability, and risk level. Template-specific risks are auto-populated from your device category.</p>
 <h4>Risk Fields</h4>
@@ -208,11 +278,22 @@ const GUIDE: HelpSection[] = [
 <tr><td><strong>缓解状态</strong></td><td>未开始、进行中、完成</td></tr>
 </tbody></table>
 <div class="help-tip">💡 红色风险会在FDA通讯面板中触发警报，应在510(k)提交前解决。</div>`,
+      ko: `<p>위험 대시보드는 ISO 14971 위험 관리를 구현합니다. 위험은 심각도, 발생확률, 위험 수준을 보여주는 색상 코드 매트릭스로 표시됩니다. 템플릿별 위험은 기기 카테고리에서 자동으로 채워집니다.</p>
+<h4>위험 필드</h4>
+<table class="help-table"><thead><tr><th>필드</th><th>설명</th></tr></thead><tbody>
+<tr><td><strong>심각도</strong></td><td>위해의 심각한 정도 (낮음/중간/높음)</td></tr>
+<tr><td><strong>발생확률</strong></td><td>위험 상황이 발생할 가능성 (낮음/중간/높음)</td></tr>
+<tr><td><strong>위험 수준</strong></td><td>색상 코드: 녹색 (허용 가능), 노란색 (ALARP), 빨간색 (허용 불가)</td></tr>
+<tr><td><strong>통제 조치</strong></td><td>구현된 위험 통제 조치</td></tr>
+<tr><td><strong>잔여 위험</strong></td><td>통제 후 남은 위험</td></tr>
+<tr><td><strong>완화 상태</strong></td><td>미시작, 진행 중, 완료</td></tr>
+</tbody></table>
+<div class="help-tip">💡 빨간색 위험은 FDA 커뮤니케이션 패널에서 경고를 트리거하며 510(k) 제출 전에 해결해야 합니다.</div>`,
     },
   },
   {
     num: 8,
-    title: { en: "Audit Trail", cn: "审计追踪" },
+    title: { en: "Audit Trail", cn: "审计追踪", ko: "감사 추적" },
     content: {
       en: `<p>Every change made in the dashboard is recorded in the Audit Trail with a timestamp, user role, action type, field changed, old value, new value, and detail description. This supports 21 CFR Part 11 traceability requirements.</p>
 <h4>Supabase Sync</h4>
@@ -224,11 +305,16 @@ const GUIDE: HelpSection[] = [
 <p>审计条目自动同步到Supabase后端。如果您离线，条目会在本地排队，并在连接恢复时刷新。</p>
 <h4>筛选</h4>
 <p>审计追踪支持按操作类型筛选和按关键字搜索。最近的条目优先显示。导出功能允许下载完整的审计历史记录。</p>`,
+      ko: `<p>대시보드에서 이루어진 모든 변경 사항은 타임스탬프, 사용자 역할, 작업 유형, 변경된 필드, 이전 값, 새 값 및 상세 설명과 함께 감사 추적에 기록됩니다. 이는 21 CFR Part 11 추적성 요구사항을 지원합니다.</p>
+<h4>Supabase 동기화</h4>
+<p>감사 항목은 Supabase 백엔드에 자동으로 동기화됩니다. 오프라인 상태인 경우 항목이 로컬에 대기열로 저장되고 연결이 복원되면 전송됩니다.</p>
+<h4>필터링</h4>
+<p>감사 추적은 작업 유형별 필터링과 키워드 검색을 지원합니다. 최근 항목이 먼저 표시됩니다. 내보내기 기능을 통해 전체 감사 이력을 다운로드할 수 있습니다.</p>`,
     },
   },
   {
     num: 9,
-    title: { en: "Document Control", cn: "文档控制" },
+    title: { en: "Document Control", cn: "文档控制", ko: "문서 관리" },
     content: {
       en: `<p>Document Control provides ISO 13485-aligned document lifecycle management. Documents are tracked locally in the browser to protect intellectual property, with server sync available for approved/effective documents.</p>
 <h4>Document Lifecycle</h4>
@@ -262,11 +348,27 @@ const GUIDE: HelpSection[] = [
 <h4>同步到服务器</h4>
 <p>当文档达到"已批准"或"生效"状态时，使用"同步到服务器"按钮将其上传到Supabase dhf_documents表。FDA通讯标签页会在已批准的文档未同步时显示警报。</p>
 <div class="help-warn">⚠️ 文档存储在浏览器localStorage中。清除浏览器数据=丢失文档。请将关键文档同步到服务器。</div>`,
+      ko: `<p>문서 관리는 ISO 13485에 맞춘 문서 수명주기 관리를 제공합니다. 지적 재산을 보호하기 위해 문서는 브라우저에서 로컬로 추적되며, 승인/발효된 문서에 대해 서버 동기화가 가능합니다.</p>
+<h4>문서 수명주기</h4>
+<ul><li><strong>초안</strong> — 초기 문서 생성</li><li><strong>검토 중</strong> — 이해관계자 검토 중</li><li><strong>승인됨</strong> — 지정된 권한자에 의해 공식 승인</li><li><strong>발효</strong> — 활성 상태 및 관리 중 (발효일 자동 설정)</li><li><strong>폐기</strong> — 대체되었거나 철회됨</li></ul>
+<p>상태 배지를 클릭하여 수명주기를 순차적으로 전환합니다. PMP만 문서 상태를 변경할 수 있습니다.</p>
+<h4>문서 필드</h4>
+<table class="help-table"><thead><tr><th>필드</th><th>설명</th></tr></thead><tbody>
+<tr><td><strong>DCN</strong></td><td>문서 관리 번호 (자동 생성, 예: DCN-REG-001)</td></tr>
+<tr><td><strong>카테고리</strong></td><td>규제, 기술, 비즈니스, 법률, 재무, 템플릿</td></tr>
+<tr><td><strong>버전</strong></td><td>개정 이력을 포함한 버전 번호</td></tr>
+<tr><td><strong>담당자</strong></td><td>책임자 또는 역할</td></tr>
+<tr><td><strong>출처 참조</strong></td><td>외부 참조 (GitHub 커밋, SVN 리비전 등)</td></tr>
+<tr><td><strong>연결</strong></td><td>연결된 마일스톤 또는 게이트 (예: R8, T2)</td></tr>
+</tbody></table>
+<h4>서버에 동기화</h4>
+<p>문서가 '승인됨' 또는 '발효' 상태에 도달하면 '서버에 동기화' 버튼을 사용하여 Supabase dhf_documents 테이블에 업로드합니다. FDA 커뮤니케이션 탭에서 승인된 문서가 동기화되지 않은 경우 경고를 표시합니다.</p>
+<div class="help-warn">⚠️ 문서는 브라우저 localStorage에 저장됩니다. 브라우저 데이터 삭제 = 문서 손실. 중요한 문서는 서버에 동기화하세요.</div>`,
     },
   },
   {
     num: 10,
-    title: { en: "Actions", cn: "行动项" },
+    title: { en: "Actions", cn: "行动项", ko: "조치 항목" },
     content: {
       en: `<p>The Actions tab tracks action items arising from gate reviews, risk mitigation, and general project management.</p>
 <h4>Action Fields</h4>
@@ -298,19 +400,35 @@ const GUIDE: HelpSection[] = [
 <p>设备主记录(DMR)文档跟踪器也在行动项标签页内。它跟踪21 CFR 820.181要求的12份文档，涵盖设备规格、生产过程、质量程序和包装/标签。</p>
 <h4>CAPA日志</h4>
 <p>纠正和预防措施(CAPA)日志跟踪CAPA项目，包含类型（纠正或预防）、状态、负责人和关联门控。</p>`,
+      ko: `<p>조치 항목 탭은 게이트 심사, 위험 완화 및 일반 프로젝트 관리에서 발생하는 조치 항목을 추적합니다.</p>
+<h4>조치 항목 필드</h4>
+<table class="help-table"><thead><tr><th>필드</th><th>설명</th></tr></thead><tbody>
+<tr><td><strong>담당자</strong></td><td>책임 팀원</td></tr>
+<tr><td><strong>우선순위</strong></td><td>높음, 중간, 낮음</td></tr>
+<tr><td><strong>상태</strong></td><td>할 일, 진행 중, 완료, 차단</td></tr>
+<tr><td><strong>마감일</strong></td><td>목표 완료일</td></tr>
+<tr><td><strong>연결된 게이트</strong></td><td>관련 게이트 심사 (예: G1, G2)</td></tr>
+</tbody></table>
+<h4>DHF 문서 추적기</h4>
+<p>설계 이력 파일(DHF) 문서 추적기는 조치 항목 탭 내에 있습니다. 21 CFR 820.30에서 요구하는 모든 설계 단계 문서를 추적합니다. 문서의 상태 배지를 클릭하면 순차적으로 전환됩니다: 미시작, 초안, 검토 중, 승인됨.</p>
+<h4>DMR 문서 추적기</h4>
+<p>장치 마스터 레코드(DMR) 문서 추적기도 조치 항목 탭 내에 있습니다. 21 CFR 820.181에서 요구하는 12개 문서를 추적하며, 기기 사양, 생산 공정, 품질 절차, 포장/라벨링을 포함합니다.</p>
+<h4>CAPA 로그</h4>
+<p>시정 및 예방 조치(CAPA) 로그는 유형(시정 또는 예방), 상태, 담당자 및 연결된 게이트와 함께 CAPA 항목을 추적합니다.</p>`,
     },
   },
   {
     num: 11,
-    title: { en: "Timeline", cn: "时间线" },
+    title: { en: "Timeline", cn: "时间线", ko: "타임라인" },
     content: {
       en: `<p>The Timeline provides a month-by-month view of project events. Each entry shows technical and business activities with an impact indicator (positive/neutral/negative). Timeline events are auto-generated during wizard setup and can be edited.</p>`,
       cn: `<p>时间线提供按月份的项目事件视图。每个条目显示技术和业务活动，并带有影响指标（正面/中性/负面）。时间线事件在向导设置期间自动生成，可以编辑。</p>`,
+      ko: `<p>타임라인은 프로젝트 이벤트의 월별 뷰를 제공합니다. 각 항목은 영향 지표(긍정적/중립/부정적)와 함께 기술 및 비즈니스 활동을 표시합니다. 타임라인 이벤트는 마법사 설정 중에 자동 생성되며 편집할 수 있습니다.</p>`,
     },
   },
   {
     num: 12,
-    title: { en: "Budget", cn: "预算" },
+    title: { en: "Budget", cn: "预算", ko: "예산" },
     content: {
       en: `<p>The Budget tab tracks spending against planned budgets by category. Categories are defined during wizard setup (or from template budget lines). Each category shows planned amount, actual spend, and variance.</p>
 <h4>Budget Management</h4>
@@ -318,11 +436,14 @@ const GUIDE: HelpSection[] = [
       cn: `<p>预算标签页按类别跟踪支出与计划预算的对比。类别在向导设置期间定义（或来自模板预算行）。每个类别显示计划金额、实际支出和差异。</p>
 <h4>预算管理</h4>
 <ul><li>添加、编辑或删除预算类别</li><li>更新实际支出值以跟踪差异</li><li>货币显示在USD和CNY之间切换</li><li>所有更改记录在审计追踪中</li></ul>`,
+      ko: `<p>예산 탭은 카테고리별로 계획 예산 대비 지출을 추적합니다. 카테고리는 마법사 설정 중에 정의되거나 템플릿 예산 항목에서 가져옵니다. 각 카테고리는 계획 금액, 실제 지출 및 차이를 표시합니다.</p>
+<h4>예산 관리</h4>
+<ul><li>예산 카테고리 추가, 편집 또는 삭제</li><li>실제 지출 값을 업데이트하여 차이 추적</li><li>통화 표시를 USD와 CNY 간 전환</li><li>모든 변경 사항은 감사 추적에 기록</li></ul>`,
     },
   },
   {
     num: 13,
-    title: { en: "Cash / Runway", cn: "现金/跑道" },
+    title: { en: "Cash / Runway", cn: "现金/跑道", ko: "현금/런웨이" },
     content: {
       en: `<p>Cash/Runway provides financial health visibility: current cash position, monthly burn rate, and projected runway in months. It includes funding round tracking and burn history charts.</p>
 <h4>Key Metrics</h4>
@@ -342,11 +463,20 @@ const GUIDE: HelpSection[] = [
 </tbody></table>
 <h4>融资轮次</h4>
 <p>跟踪融资轮次状态（计划中、进行中、已到账）。每轮记录金额、日期和资金来源。</p>`,
+      ko: `<p>현금/런웨이는 재무 건전성 가시성을 제공합니다: 현재 현금 보유 현황, 월간 소진율, 예상 런웨이 개월 수. 펀딩 라운드 추적 및 소진 이력 차트를 포함합니다.</p>
+<h4>핵심 지표</h4>
+<table class="help-table"><thead><tr><th>지표</th><th>설명</th></tr></thead><tbody>
+<tr><td><strong>보유 현금</strong></td><td>현재 사용 가능한 현금 잔액</td></tr>
+<tr><td><strong>월간 소진율</strong></td><td>평균 월간 지출률</td></tr>
+<tr><td><strong>런웨이</strong></td><td>현재 소진율로 운영 가능한 개월 수</td></tr>
+</tbody></table>
+<h4>펀딩 라운드</h4>
+<p>펀딩 라운드를 상태별로 추적합니다 (계획, 진행 중, 수령). 각 라운드는 금액, 날짜 및 자금 출처를 기록합니다.</p>`,
     },
   },
   {
     num: 14,
-    title: { en: "US Investment", cn: "美国投资" },
+    title: { en: "US Investment", cn: "美国投资", ko: "미국 투자" },
     content: {
       en: `<p>The US Investment tab manages investor relations for medical device ventures seeking US market entry.</p>
 <h4>Target Investors</h4>
@@ -366,11 +496,20 @@ const GUIDE: HelpSection[] = [
 </tbody></table>
 <h4>IR活动</h4>
 <p>记录投资者关系活动：会议、演示、尽职调查、条款谈判。每项活动都有日期、类型和状态。</p>`,
+      ko: `<p>미국 투자 탭은 미국 시장 진출을 추진하는 의료기기 벤처의 투자자 관계를 관리합니다.</p>
+<h4>대상 투자자</h4>
+<table class="help-table"><thead><tr><th>필드</th><th>옵션</th></tr></thead><tbody>
+<tr><td><strong>유형</strong></td><td>VC, 엔젤 그룹, 전략적, PE, 정부</td></tr>
+<tr><td><strong>단계</strong></td><td>시드, 시리즈 A, 시리즈 B, 성장</td></tr>
+<tr><td><strong>연락 상태</strong></td><td>잠재, 연락 완료, 논의 중, 텀시트, 확약</td></tr>
+</tbody></table>
+<h4>IR 활동</h4>
+<p>투자자 관계 활동을 기록합니다: 미팅, 프레젠테이션, 실사 세션, 텀시트 협상. 각 활동에는 날짜, 유형 및 상태가 있습니다.</p>`,
     },
   },
   {
     num: 15,
-    title: { en: "Cap Table", cn: "股权表" },
+    title: { en: "Cap Table", cn: "股权表", ko: "지분 현황표" },
     content: {
       en: `<p>The Cap Table tracks equity ownership, equity events, and vesting schedules.</p>
 <h4>Shareholders</h4>
@@ -386,11 +525,18 @@ const GUIDE: HelpSection[] = [
 <ul><li>跟踪融资轮次、股票分割、期权授予、转换</li><li>每个事件记录发行的股份、每股价格和总融资额</li></ul>
 <h4>归属计划</h4>
 <ul><li>标准4年归属，1年悬崖期，或自定义计划</li><li>跟踪悬崖日期、总股份、已归属股份和下次归属日期</li></ul>`,
+      ko: `<p>지분 현황표는 지분 소유권, 지분 이벤트 및 베스팅 일정을 추적합니다.</p>
+<h4>주주</h4>
+<ul><li>이름, 주식 클래스 (보통주, 우선주 A/B/C, 옵션, 워런트)</li><li>주식 수 및 소유권 백분율</li><li>이사회 석, 베스팅 상태 및 메모</li></ul>
+<h4>지분 이벤트</h4>
+<ul><li>펀딩 라운드, 주식 분할, 옵션 부여, 전환 추적</li><li>각 이벤트는 발행 주식 수, 주당 가격, 총 조달 금액을 기록</li></ul>
+<h4>베스팅 일정</h4>
+<ul><li>1년 클리프가 포함된 4년 표준 베스팅, 또는 맞춤형 일정</li><li>클리프 날짜, 총 주식, 베스팅된 주식, 다음 베스팅 날짜 추적</li></ul>`,
     },
   },
   {
     num: 16,
-    title: { en: "Resources", cn: "资源" },
+    title: { en: "Resources", cn: "资源", ko: "리소스" },
     content: {
       en: `<p>The Resources tab displays team members with their role, allocation across workstreams, and utilization percentage.</p>
 <h4>Managing Team Members</h4>
@@ -404,11 +550,17 @@ const GUIDE: HelpSection[] = [
 <h4>工作流分配</h4>
 <p>每个团队成员可以分配到多个工作流。百分比可内联编辑。利用率指示自动更新。更改被审计记录。</p>
 <div class="help-tip">💡 将总分配保持在100%或以下以避免过劳。仪表板用红色标记过度分配。</div>`,
+      ko: `<p>리소스 탭은 팀원의 역할, 워크스트림 배정 및 활용률을 표시합니다.</p>
+<h4>팀원 관리</h4>
+<ul><li>이름, 역할, 이메일, 워크스트림 배정과 함께 팀원 추가</li><li>배정 백분율을 클릭하여 인라인 편집 (PMP/기술/비즈니스 역할)</li><li>활용도 게이지: 녹색 (&lt;85%), 노란색 (85-100%), 빨간색 (&gt;100% 과배정)</li><li>각 카드의 X 버튼으로 팀원 삭제</li></ul>
+<h4>워크스트림 배정</h4>
+<p>각 팀원은 여러 워크스트림에 배정할 수 있습니다. 백분율은 인라인 편집 가능합니다. 활용도 게이지가 자동으로 업데이트됩니다. 변경 사항은 감사 로그에 기록됩니다.</p>
+<div class="help-tip">💡 번아웃을 방지하려면 총 배정을 100% 이하로 유지하세요. 대시보드에서 과배정을 빨간색으로 표시합니다.</div>`,
     },
   },
   {
     num: 17,
-    title: { en: "Suppliers", cn: "供应商" },
+    title: { en: "Suppliers", cn: "供应商", ko: "공급업체" },
     content: {
       en: `<p>The Suppliers tab tracks supplier qualification status, lead times, purchase order status, and contract manufacturing milestones. This supports 21 CFR 820 supplier controls.</p>
 <h4>Supplier Status</h4>
@@ -416,11 +568,14 @@ const GUIDE: HelpSection[] = [
       cn: `<p>供应商标签页跟踪供应商资质审核状态、交期、采购订单状态和代工里程碑。这支持21 CFR 820供应商控制要求。</p>
 <h4>供应商状态</h4>
 <ul><li><strong>审核中</strong> — 初始评估</li><li><strong>已资质</strong> — 批准使用</li><li><strong>活跃</strong> — 当前供货中</li><li><strong>暂停</strong> — 临时暂停</li><li><strong>拒绝</strong> — 资质审核未通过</li></ul>`,
+      ko: `<p>공급업체 탭은 공급업체 자격 심사 상태, 리드타임, 구매 주문 상태 및 위탁 제조 마일스톤을 추적합니다. 이는 21 CFR 820 공급업체 관리 요구사항을 지원합니다.</p>
+<h4>공급업체 상태</h4>
+<ul><li><strong>심사 중</strong> — 초기 평가</li><li><strong>자격 충족</strong> — 사용 승인됨</li><li><strong>활성</strong> — 현재 공급 중</li><li><strong>보류</strong> — 일시적으로 중단</li><li><strong>거절</strong> — 자격 심사 미통과</li></ul>`,
     },
   },
   {
     num: 18,
-    title: { en: "Message Board", cn: "消息板" },
+    title: { en: "Message Board", cn: "消息板", ko: "게시판" },
     content: {
       en: `<p>The Message Board is a purpose-driven messaging system for cross-functional communication. It supports threaded discussions with lifecycle management, decisions tracking, and action item creation.</p>
 <h4>Threads</h4>
@@ -446,11 +601,27 @@ const GUIDE: HelpSection[] = [
 <p>点击设置齿轮图标配置每个角色的电子邮件地址。切换测试模式用于开发。再次点击设置关闭面板。</p>
 <h4>视图与筛选</h4>
 <ul><li>所有线程：完整线程列表</li><li>我的项目：您是所有者或负责人的线程</li><li>决策：有活跃决策的线程</li><li>高管：高优先级和决策线程</li><li>工作流筛选：按工作流类别筛选（包括Pre-Sub问题）</li><li>生命周期筛选：打开、已解决或全部</li></ul>`,
+      ko: `<p>게시판은 부서 간 커뮤니케이션을 위한 목적 지향 메시징 시스템입니다. 수명주기 관리, 의사결정 추적 및 조치 항목 생성이 포함된 스레드 토론을 지원합니다.</p>
+<h4>스레드</h4>
+<p>제목, 워크스트림 배정, 우선순위 및 의도(토론, 결정, 알림, 에스컬레이션)를 설정하여 스레드를 생성합니다. 스레드는 열림 → 해결됨 수명주기를 따릅니다.</p>
+<h4>Pre-Sub 질문 워크스트림</h4>
+<p><strong>Pre-Sub 질문</strong> 워크스트림을 사용하여 FDA Pre-Submission 패키지용 질문을 작성합니다. 모든 팀원이 이 워크스트림 아래에 스레드를 생성할 수 있으며, 각 스레드가 내보낸 패키지의 하나의 질문이 됩니다. 스레드 목표 필드에 배경/근거를 작성하고 메시지를 추가하여 팀과 질문을 논의합니다.</p>
+<p>질문이 확정되면 PMP가 FDA 커뮤니케이션 탭에서 <em>질문 패키지 내보내기</em> 버튼을 사용하여 내보냅니다. 내보내기에는 질문 제목, 맥락 및 모든 토론 메시지가 포함됩니다.</p>
+<h4>메시지 작성</h4>
+<p>역할 선택 도구 모음에서 작성 역할을 선택합니다. 메시지를 입력하고 보내기를 누릅니다. [DECISION] 또는 [ACTION] 접두사를 사용하여 특별한 의도를 가진 메시지를 태그합니다.</p>
+<h4>설정</h4>
+<p>설정 기어 아이콘을 클릭하여 각 역할의 이메일 주소를 설정합니다. 개발용 테스트 모드를 전환합니다. 설정을 다시 클릭하면 패널이 닫힙니다.</p>
+<h4>보기 및 필터</h4>
+<ul><li>모든 스레드: 전체 스레드 목록</li><li>내 항목: 소유자 또는 담당자인 스레드</li><li>결정: 활성 결정이 있는 스레드</li><li>경영진: 높은 우선순위 및 결정 스레드</li><li>워크스트림 필터: 워크스트림 카테고리별 필터 (Pre-Sub 질문 포함)</li><li>수명주기 필터: 열림, 해결됨, 또는 전체</li></ul>`,
     },
   },
   {
     num: 19,
-    title: { en: "FDA Communications Center", cn: "FDA通讯中心" },
+    title: {
+      en: "FDA Communications Center",
+      cn: "FDA通讯中心",
+      ko: "FDA 커뮤니케이션 센터",
+    },
     content: {
       en: `<p>The FDA Comms tab is PMP-only and provides tools for FDA regulatory interactions.</p>
 <h4>Q-Sub Cover Letter Generator</h4>
@@ -486,11 +657,32 @@ const GUIDE: HelpSection[] = [
 <p>跟踪510(k) MDUFA审查里程碑：提交收到、K编号分配（第7天）、RTA筛选（第15天）、实质性审查（第60天）和MDUFA决定目标（第90天）。</p>
 <h4>SE决策流程</h4>
 <p>FDA实质等效判定的可视化决策流程：前置器械识别、预期用途比较、技术特征分析和安全性/有效性评估。</p>`,
+      ko: `<p>FDA 커뮤니케이션 탭은 PMP 전용이며 FDA 규제 상호작용을 위한 도구를 제공합니다.</p>
+<h4>Q-Sub 커버 레터 생성기</h4>
+<p>5가지 Q-Sub 유형(Pre-Sub 미팅, Pre-Sub 서면, SIR, 정보 미팅, 연구 위험 판정) 중 선택하여 회사 레터헤드가 포함된 커버 레터를 자동 생성합니다. 최종 서식을 위해 HTML로 내보냅니다.</p>
+<h4>질문 패키지 내보내기</h4>
+<p>게시판의 모든 열린 <strong>Pre-Sub 질문</strong> 스레드를 형식화된 HTML 문서로 내보냅니다. 각 스레드가 번호가 매겨진 질문이 됩니다. 스레드 제목이 질문 텍스트이고, 목표 필드가 맥락을 제공하며, 모든 토론 메시지가 아래에 포함됩니다.</p>
+<p><strong>워크플로:</strong> 팀원이 게시판에서 질문을 작성 (Pre-Sub 질문 워크스트림) → PMP가 검토 및 정리 → PMP가 FDA 커뮤니케이션에서 최종 패키지를 내보냅니다.</p>
+<p>Pre-Sub 질문 스레드가 없으면 내보내기 시 게시판에서 먼저 생성하라는 안내가 표시됩니다.</p>
+<h4>Q-Submission 유형 참조</h4>
+<p>모든 5가지 FDA CDRH Q-Sub 유형 개요, 목적, 타임라인 및 "언제 사용" 가이드를 포함합니다. "올바른 Q-Sub 유형 선택 방법" 결정 가이드가 포함되어 있습니다.</p>
+<h4>접수 거부(RTA) 체크리스트</h4>
+<p>FDA의 17개 항목 RTA 체크리스트에 대한 자체 점검. 항목은 DHF 문서 및 표준 준수 데이터에서 자동으로 채워집니다. 진행률 바가 전체 준비 상태 백분율을 표시합니다.</p>
+<h4>문서 동기화 알림</h4>
+<p>문서 관리에서 승인 또는 발효된 문서가 서버에 동기화되지 않은 경우 황색 알림 배너가 표시됩니다. "문서 관리로 이동"을 클릭하여 이동 후 동기화합니다.</p>
+<h4>MDUFA 심사 타임라인</h4>
+<p>510(k) MDUFA 심사 마일스톤을 추적합니다: 제출 접수, K번호 할당(7일차), RTA 스크리닝(15일차), 실질 심사(60일차), MDUFA 결정 목표(90일차).</p>
+<h4>SE 결정 흐름도</h4>
+<p>FDA의 실질적 동등성 판정을 위한 시각적 결정 흐름: 선행기기 식별, 사용 목적 비교, 기술적 특성 분석, 안전성/유효성 평가.</p>`,
     },
   },
   {
     num: 20,
-    title: { en: "Setup Wizard & Templates", cn: "设置向导与模板" },
+    title: {
+      en: "Setup Wizard & Templates",
+      cn: "设置向导与模板",
+      ko: "설정 마법사 및 템플릿",
+    },
     content: {
       en: `<p>The Setup Wizard launches on first visit (or when no project data exists). It guides you through a 3-phase setup process.</p>
 <h4>Phase 1: Language Selection</h4>
@@ -510,11 +702,24 @@ const GUIDE: HelpSection[] = [
 <p>模板预填充：提交类型、设备分类、产品代码、法规段落、前置器械示例、技术领域、预算类别、标准和特定模板风险。</p>
 <h4>阶段3：项目详情（8个步骤）</h4>
 <ul><li>步骤1：项目名称和副标题</li><li>步骤2：法规详情（提交类型、设备分类、前置器械）</li><li>步骤3：申请人和制造商信息</li><li>步骤4：团队成员及角色和工作流分配</li><li>步骤5：预算类别和金额</li><li>步骤6：手头现金和项目持续时间</li><li>步骤7：供应商和组件</li><li>步骤8：DHF文档选择</li></ul>`,
+      ko: `<p>설정 마법사는 처음 방문 시(또는 프로젝트 데이터가 없을 때) 실행됩니다. 3단계 설정 프로세스를 안내합니다.</p>
+<h4>1단계: 언어 선택</h4>
+<p>마법사 및 대시보드 인터페이스의 언어를 영어, 중국어 또는 한국어 중에서 선택합니다.</p>
+<h4>2단계: 기기 템플릿</h4>
+<p>7개의 사전 구성된 기기 템플릿 중에서 선택하거나 처음부터 시작합니다:</p>
+<ul><li>호흡기 기기 (인공호흡기, CPAP, 네뷸라이저)</li><li>심혈관 (스텐트, 페이스메이커, 모니터)</li><li>정형외과 (임플란트, 기구, 고정장치)</li><li>IVD (체외진단, 분석키트, 분석기)</li><li>영상 (X선, 초음파, MRI 부속품)</li><li>재활 (치료기기, 보행보조기)</li><li>SaMD (의료기기 소프트웨어)</li></ul>
+<p>템플릿 자동 입력 항목: 제출 유형, 기기 등급, 제품 코드, 규제 조항, 선행기기 예시, 기술 영역, 예산 카테고리, 표준 및 템플릿별 위험.</p>
+<h4>3단계: 프로젝트 세부사항 (8단계)</h4>
+<ul><li>단계 1: 프로젝트 이름 및 부제목</li><li>단계 2: 규제 세부사항 (제출 유형, 기기 등급, 선행기기)</li><li>단계 3: 신청자 및 제조업체 정보</li><li>단계 4: 역할 및 워크스트림 배정이 포함된 팀원</li><li>단계 5: 예산 카테고리 및 금액</li><li>단계 6: 보유 현금 및 프로젝트 기간</li><li>단계 7: 공급업체 및 부품</li><li>단계 8: DHF 문서 선택</li></ul>`,
     },
   },
   {
     num: 21,
-    title: { en: "Keyboard Shortcuts & Tips", cn: "快捷操作与技巧" },
+    title: {
+      en: "Keyboard Shortcuts & Tips",
+      cn: "快捷操作与技巧",
+      ko: "단축키 및 팁",
+    },
     content: {
       en: `<h4>General Tips</h4>
 <ul><li>All data saves automatically to browser localStorage -- including full dashboard state</li><li>Dashboard state survives browser crashes and power outages</li><li>Supabase sync happens in real-time when online</li><li>Offline changes queue and sync when connection is restored</li><li>Currency display toggles between USD and CNY based on language setting</li><li>The floating action button (bottom-right) provides quick actions</li></ul>
@@ -538,11 +743,22 @@ const GUIDE: HelpSection[] = [
 <h4>数据持久化</h4>
 <ul><li><code>ctower_project_data</code> — 项目配置</li><li><code>ctower_live_state</code> — 完整仪表板状态（里程碑、门控、风险、预算等）</li><li><code>ctower_mb_threads</code> — 消息板线程</li><li><code>ctower_doclib_docs</code> — 文档</li><li>Supabase <code>messages</code>表 — 同步的消息</li><li>Supabase <code>audit_log</code>表 — 同步的审计条目</li></ul>
 <div class="help-tip">💡 所有仪表板状态在每次更改后自动保存到localStorage。如果断电或浏览器崩溃，您的数据会被保留。</div>`,
+      ko: `<h4>일반 팁</h4>
+<ul><li>모든 데이터는 브라우저 localStorage에 자동 저장됩니다 — 전체 대시보드 상태 포함</li><li>대시보드 상태는 브라우저 충돌 및 정전 후에도 유지됩니다</li><li>온라인 상태에서 Supabase 동기화가 실시간으로 이루어집니다</li><li>오프라인 변경 사항은 대기열에 저장되어 연결이 복원되면 동기화됩니다</li><li>통화 표시는 언어 설정에 따라 USD와 CNY 간 전환됩니다</li><li>플로팅 액션 버튼(우측 하단)이 빠른 조치를 제공합니다</li></ul>
+<h4>URL 매개변수</h4>
+<table class="help-table"><thead><tr><th>매개변수</th><th>효과</th></tr></thead><tbody>
+<tr><td><code>?test=respiratory</code></td><td>호흡기 템플릿의 테스트 데이터 로드</td></tr>
+<tr><td><code>?test=cardiovascular</code></td><td>심혈관 템플릿의 테스트 데이터 로드</td></tr>
+<tr><td><code>?test=&lt;templateId&gt;</code></td><td>7개 템플릿 중 하나의 사전 빌드된 테스트 데이터 로드</td></tr>
+</tbody></table>
+<h4>데이터 지속성</h4>
+<ul><li><code>ctower_project_data</code> — 프로젝트 구성</li><li><code>ctower_live_state</code> — 전체 대시보드 상태 (마일스톤, 게이트, 위험, 예산 등)</li><li><code>ctower_mb_threads</code> — 게시판 스레드</li><li><code>ctower_doclib_docs</code> — 문서</li><li>Supabase <code>messages</code> 테이블 — 동기화된 메시지</li><li>Supabase <code>audit_log</code> 테이블 — 동기화된 감사 항목</li></ul>
+<div class="help-tip">💡 모든 대시보드 상태는 매 변경 후 자동으로 localStorage에 저장됩니다. 정전이나 브라우저 충돌 시에도 데이터가 보존됩니다.</div>`,
     },
   },
   {
     num: 22,
-    title: { en: "Troubleshooting", cn: "故障排除" },
+    title: { en: "Troubleshooting", cn: "故障排除", ko: "문제 해결" },
     content: {
       en: `<h4>Dashboard won't load</h4>
 <ul><li>Check internet connection for initial Supabase authentication</li><li>Clear browser cache and reload</li><li>Verify the deployment URL is correct</li></ul>
@@ -568,11 +784,27 @@ const GUIDE: HelpSection[] = [
 <p>如果您看到以前项目的数据，向导的"加载演示数据"将清除所有现有数据并生成新的示例数据。</p>
 <h4>重置仪表板</h4>
 <p>要完全重置，清除以下localStorage键：ctower_project_data、ctower_live_state、ctower_mb_threads、ctower_mb_decisions、ctower_doclib_docs、ctower_qa_messages、ctower_qa_settings、ctower_qa_archive。或在浏览器设置中清除所有站点数据。</p>`,
+      ko: `<h4>대시보드가 로드되지 않음</h4>
+<ul><li>초기 Supabase 인증을 위한 인터넷 연결 확인</li><li>브라우저 캐시를 지우고 새로고침</li><li>배포 URL이 올바른지 확인</li></ul>
+<h4>탭이 회색으로 표시됨</h4>
+<p>탭 접근은 구독 등급에 의해 제어됩니다. 취소선 텍스트가 있는 회색 탭은 현재 등급에 포함되지 않음을 나타냅니다. 업그레이드하려면 관리자에게 문의하세요.</p>
+<h4>메시지가 동기화되지 않음</h4>
+<ul><li>인터넷 연결 확인 (녹색 표시기)</li><li>브라우저 콘솔에서 Supabase 오류 확인</li><li>연결이 복원되면 메시지가 자동으로 동기화됩니다</li></ul>
+<h4>설정 패널이 표시되지 않음</h4>
+<p>게시판에서 설정 기어 아이콘을 클릭하세요. 패널이 스레드 목록 위에 나타나고 화면에 스크롤됩니다. 설정을 다시 클릭하면 닫힙니다.</p>
+<h4>오래된 데모 데이터</h4>
+<p>이전 프로젝트의 데이터가 표시되면 마법사의 '데모 데이터 로드'가 모든 기존 데이터를 지우고 새로운 샘플 데이터를 생성합니다.</p>
+<h4>대시보드 초기화</h4>
+<p>완전히 초기화하려면 다음 localStorage 키를 지우세요: ctower_project_data, ctower_live_state, ctower_mb_threads, ctower_mb_decisions, ctower_doclib_docs, ctower_qa_messages, ctower_qa_settings, ctower_qa_archive. 또는 브라우저 설정에서 모든 사이트 데이터를 지우세요.</p>`,
     },
   },
   {
     num: 23,
-    title: { en: "510(k) Predicate Finder", cn: "510(k) Predicate Finder" },
+    title: {
+      en: "510(k) Predicate Finder",
+      cn: "510(k) Predicate Finder",
+      ko: "510(k) 선행기기 검색기",
+    },
     content: {
       en: `<p>The 510(k) Predicate Finder is a companion SaaS tool that connects to the FDA openFDA database. It helps PMPs and regulatory teams identify predicate devices, trace predicate chains, and draft Substantial Equivalence arguments.</p>
 <h4>Free vs Pro</h4>
@@ -590,11 +822,23 @@ const GUIDE: HelpSection[] = [
 <ul><li>法规跟踪器——前置器械参考和SE策略</li><li>风险看板——前置器械比较中识别的风险</li><li>FDA通讯中心——基于前置器械分析的Pre-Sub讨论要点</li><li>文档控制——前置器械比较报告作为DHF产出</li></ul>
 <h4>PMP工作流程</h4>
 <ol><li>使用Predicate Finder通过产品代码或关键字搜索候选前置器械</li><li>追踪前置器械链以了解法规谱系</li><li>并排比较最多4个设备（Pro）以选择最强的前置器械</li><li>生成SE论证草稿（Pro）作为法规团队的起点</li><li>将结果导出为PDF并附加到文档控制中的510(k)提交包</li></ol>`,
+      ko: `<p>510(k) 선행기기 검색기는 FDA openFDA 데이터베이스에 연결되는 동반 SaaS 도구입니다. PMP 및 규제 팀이 선행기기를 식별하고, 선행기기 체인을 추적하며, 실질적 동등성 논증 초안을 작성하는 데 도움을 줍니다.</p>
+<h4>무료 vs Pro</h4>
+<p>선행기기 검색기는 일일 제한(5회 검색, 1회 체인 추적, 2기기 비교)으로 무료 이용 가능합니다. Pro ($99/월)는 무제한 검색, 무제한 체인 추적, 4기기 비교, SE 논증 생성 및 PDF 내보내기를 이용할 수 있습니다.</p>
+<h4>Control Tower와의 통합 (Scale 등급)</h4>
+<p>Scale 등급($2,000/월)에서 선행기기 검색기는 Control Tower 대시보드에 직접 내장됩니다. 선행기기 연구는 다음에 정보를 제공합니다:</p>
+<ul><li>규제 추적기 — 선행기기 참조 및 SE 전략</li><li>위험 대시보드 — 선행기기 비교 중 식별된 위험</li><li>FDA 커뮤니케이션 센터 — 선행기기 분석에 기반한 Pre-Sub 논의 사항</li><li>문서 관리 — DHF 산출물로서의 선행기기 비교 보고서</li></ul>
+<h4>PMP 워크플로</h4>
+<ol><li>선행기기 검색기를 사용하여 제품 코드 또는 키워드로 후보 선행기기 검색</li><li>규제 계보를 이해하기 위해 선행기기 체인 추적</li><li>최대 4개 기기를 나란히 비교(Pro)하여 가장 강력한 선행기기 선택</li><li>규제 팀의 출발점으로 SE 논증 초안 생성(Pro)</li><li>결과를 PDF로 내보내고 문서 관리의 510(k) 제출 패키지에 첨부</li></ol>`,
     },
   },
   {
     num: 24,
-    title: { en: "Glossary of FDA & Regulatory Terms", cn: "FDA与法规术语表" },
+    title: {
+      en: "Glossary of FDA & Regulatory Terms",
+      cn: "FDA与法规术语表",
+      ko: "FDA 및 규제 용어 사전",
+    },
     content: {
       en: `<table class="help-table help-glossary"><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody>
 <tr><td><strong>510(k)</strong></td><td>Premarket Notification submitted to FDA to demonstrate a Class II device is substantially equivalent to a legally marketed predicate device.</td></tr>
@@ -642,6 +886,29 @@ const GUIDE: HelpSection[] = [
 <tr><td><strong>eSTAR</strong></td><td>FDA标准化电子提交格式，用于510(k)申请。</td></tr>
 <tr><td><strong>openFDA</strong></td><td>FDA的公共API，提供对510(k)许可、不良事件和召回的可搜索访问。</td></tr>
 </tbody></table>`,
+      ko: `<table class="help-table help-glossary"><thead><tr><th>용어</th><th>정의</th></tr></thead><tbody>
+<tr><td><strong>510(k)</strong></td><td>Class II 기기가 합법적으로 판매 중인 선행기기와 실질적으로 동등함을 입증하기 위해 FDA에 제출하는 시판 전 통지서.</td></tr>
+<tr><td><strong>PMA</strong></td><td>시판 전 승인. Class III 기기에 필요한 FDA의 가장 엄격한 경로.</td></tr>
+<tr><td><strong>De Novo</strong></td><td>선행기기가 없는 신규 저~중위험 기기를 위한 FDA 분류 경로.</td></tr>
+<tr><td><strong>SE</strong></td><td>실질적 동등성. 510(k) 허가의 법적 기준.</td></tr>
+<tr><td><strong>선행기기</strong></td><td>새로운 510(k) 제출의 비교 근거로 사용되는 합법적으로 판매 중인 기기.</td></tr>
+<tr><td><strong>RTA</strong></td><td>접수 거부. 510(k) 제출에 대한 FDA의 초기 행정 심사.</td></tr>
+<tr><td><strong>Pre-Sub (Q-Sub)</strong></td><td>제출 전 규제 전략을 논의하기 위한 공식 FDA 미팅 요청.</td></tr>
+<tr><td><strong>DICE</strong></td><td>산업 및 소비자 교육과. Pre-Sub 관련 행정을 처리.</td></tr>
+<tr><td><strong>MDUFA</strong></td><td>의료기기 사용자 수수료 수정안. 심사 타임라인 목표를 설정 (510(k)의 90일 목표).</td></tr>
+<tr><td><strong>21 CFR 820</strong></td><td>품질 시스템 규정(QSR). 의료기기에 대한 FDA의 cGMP 요구사항.</td></tr>
+<tr><td><strong>ISO 13485</strong></td><td>의료기기 품질 관리 시스템 국제 표준.</td></tr>
+<tr><td><strong>ISO 14971</strong></td><td>의료기기 위험 관리 국제 표준.</td></tr>
+<tr><td><strong>IEC 60601-1</strong></td><td>의료용 전기 기기의 기본 안전성 및 필수 성능.</td></tr>
+<tr><td><strong>IEC 62304</strong></td><td>의료기기 소프트웨어 수명주기 프로세스.</td></tr>
+<tr><td><strong>DHF</strong></td><td>설계 이력 파일. 설계 및 개발 기록의 전체 모음 (21 CFR 820.30).</td></tr>
+<tr><td><strong>DMR</strong></td><td>장치 마스터 레코드. 완제품 기기를 명시하는 문서.</td></tr>
+<tr><td><strong>CAPA</strong></td><td>시정 및 예방 조치 (21 CFR 820.90).</td></tr>
+<tr><td><strong>V&amp;V</strong></td><td>검증 및 확인. 설계가 입력 사항을 충족하는지(올바르게 구축) 및 사용자 요구를 충족하는지(올바른 것을 구축) 확인.</td></tr>
+<tr><td><strong>UDI</strong></td><td>고유 기기 식별. 기기 라벨에 FDA가 요구하는 식별자.</td></tr>
+<tr><td><strong>eSTAR</strong></td><td>510(k) 신청을 위한 FDA의 표준화된 전자 제출 형식.</td></tr>
+<tr><td><strong>openFDA</strong></td><td>510(k) 허가, 이상사례 및 리콜에 대한 검색 가능한 접근을 제공하는 FDA의 공개 API.</td></tr>
+</tbody></table>`,
     },
   },
 ];
@@ -667,17 +934,28 @@ export function renderHelp(): void {
     document.body.appendChild(overlay);
   }
 
-  const isCN = document.documentElement.lang === "zh";
+  const docLang = document.documentElement.lang;
+  const isCN =
+    docLang === "zh" || docLang === "zh-CN" || docLang.startsWith("zh");
+  const isKO = docLang === "ko";
+
+  const guideTitle = isKO ? "사용자 가이드" : isCN ? "用户指南" : "User Guide";
+  const searchPlaceholder = isKO
+    ? "가이드 검색..."
+    : isCN
+      ? "搜索指南..."
+      : "Search guide...";
+  const closeLabel = isKO ? "닫기" : isCN ? "关闭" : "Close";
 
   overlay.innerHTML = `
   <div class="help-backdrop" id="helpBackdrop"></div>
   <div class="help-panel">
     <div class="help-header">
-      <h2>📖 ${isCN ? "用户指南" : "User Guide"}</h2>
+      <h2>📖 ${guideTitle}</h2>
       <div class="help-search-wrap">
-        <input type="text" id="helpSearch" class="help-search" placeholder="${isCN ? "搜索指南..." : "Search guide..."}" />
+        <input type="text" id="helpSearch" class="help-search" placeholder="${searchPlaceholder}" />
       </div>
-      <button class="help-close" id="helpClose">${isCN ? "关闭" : "Close"}</button>
+      <button class="help-close" id="helpClose">${closeLabel}</button>
     </div>
     <div class="help-body">
       <nav class="help-toc" id="helpToc">
@@ -687,7 +965,7 @@ export function renderHelp(): void {
         ).join("")}
       </nav>
       <article class="help-content" id="helpContent">
-        ${renderSection(helpSection, isCN)}
+        ${renderSection(helpSection)}
       </article>
     </div>
   </div>`;
@@ -722,7 +1000,7 @@ export function renderHelp(): void {
 
     if (!q) {
       // Reset to current section
-      content.innerHTML = renderSection(helpSection, isCN);
+      content.innerHTML = renderSection(helpSection);
       toc.querySelectorAll(".help-toc-item").forEach((el) => {
         (el as HTMLElement).style.display = "";
       });
@@ -752,9 +1030,20 @@ export function renderHelp(): void {
       }
     });
 
+    const matchLabel = isKO
+      ? "개 매칭 섹션"
+      : isCN
+        ? "个匹配章节"
+        : "matching section(s)";
+    const noMatchLabel = isKO
+      ? "일치하는 결과 없음"
+      : isCN
+        ? "未找到匹配项"
+        : "No matches found";
+
     content.innerHTML = results.length
-      ? `<div class="help-search-count">${results.length} ${isCN ? "个匹配章节" : "matching section(s)"}</div>${results.join("")}`
-      : `<div class="help-search-empty">${isCN ? "未找到匹配项" : "No matches found"}</div>`;
+      ? `<div class="help-search-count">${results.length} ${matchLabel}</div>${results.join("")}`
+      : `<div class="help-search-empty">${noMatchLabel}</div>`;
 
     // Click search result navigates to section
     content.querySelectorAll(".help-search-result").forEach((el) => {
@@ -769,7 +1058,7 @@ export function renderHelp(): void {
   searchInput?.focus();
 }
 
-function renderSection(num: number, _isCN: boolean): string {
+function renderSection(num: number): string {
   const sec = GUIDE.find((s) => s.num === num);
   if (!sec) return "";
   return `<h2>${sec.num}. ${localizedText(sec.title)}</h2>${localizedText(sec.content)}`;
