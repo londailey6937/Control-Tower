@@ -229,6 +229,97 @@ class CNGuide(FPDF):
 
 
 # ────────────────────────────────────────────
+# Korean PDF class
+# ────────────────────────────────────────────
+class KOGuide(FPDF):
+    def __init__(self):
+        super().__init__()
+        self.add_font("CJK", "", CJK_FONT, uni=True)
+        self.add_font("CJK", "B", CJK_FONT, uni=True)
+        self.add_font("CJK", "I", CJK_FONT, uni=True)
+
+    def header(self):
+        if self.page_no() <= 2:
+            return
+        self.set_font("CJK", "I", 8)
+        self.set_text_color(*GRAY)
+        self.cell(0, 8, _a("Control Tower PM 대시보드 — PMP 사용자 가이드"), align="R", ln=True)
+        self.ln(2)
+
+    def footer(self):
+        self.set_y(-15)
+        self.set_font("CJK", "I", 8)
+        self.set_text_color(*GRAY)
+        self.cell(0, 10, _a(f"페이지 {self.page_no()}/{{nb}}"), align="C")
+
+    def sec(self, num, title):
+        self.set_font("CJK", "B", 15)
+        self.set_text_color(*NAVY)
+        self.cell(0, 9, _a(f"{num}. {title}"), ln=True)
+        self.set_draw_color(*ACCENT)
+        self.set_line_width(0.6)
+        self.line(10, self.get_y(), 200, self.get_y())
+        self.ln(5)
+
+    def sub(self, title):
+        self.set_font("CJK", "B", 11)
+        self.set_text_color(*DARK)
+        self.cell(0, 7, _a(title), ln=True)
+        self.ln(1)
+
+    def txt(self, text):
+        self.set_font("CJK", "", 10)
+        self.set_text_color(*TEXT)
+        self.multi_cell(0, 6, _a(text))
+        self.ln(2)
+
+    def bul(self, text):
+        self.set_font("CJK", "", 10)
+        self.set_text_color(*TEXT)
+        self.multi_cell(0, 6, _a(f"  - {text}"))
+        self.ln(1)
+
+    def kv(self, key, val):
+        self.set_font("CJK", "B", 10)
+        self.set_text_color(*ACCENT)
+        self.cell(55, 6, _a(key + ":"))
+        self.set_font("CJK", "", 10)
+        self.set_text_color(*TEXT)
+        self.multi_cell(0, 6, _a(val))
+        self.ln(1)
+
+    def tip_box(self, text):
+        self.set_fill_color(*LIGHT_BG)
+        self.set_draw_color(*GREEN)
+        self.set_line_width(0.4)
+        y = self.get_y()
+        self.rect(10, y, 190, 18, style="DF")
+        self.set_xy(14, y + 2)
+        self.set_font("CJK", "B", 9)
+        self.set_text_color(*GREEN)
+        self.cell(25, 5, _a("팁:"))
+        self.set_font("CJK", "", 9)
+        self.set_text_color(*TEXT)
+        self.multi_cell(155, 5, _a(text))
+        self.set_y(y + 20)
+
+    def warn_box(self, text):
+        self.set_fill_color(255, 248, 230)
+        self.set_draw_color(*AMBER)
+        self.set_line_width(0.4)
+        y = self.get_y()
+        self.rect(10, y, 190, 18, style="DF")
+        self.set_xy(14, y + 2)
+        self.set_font("CJK", "B", 9)
+        self.set_text_color(*AMBER)
+        self.cell(30, 5, _a("중요:"))
+        self.set_font("CJK", "", 9)
+        self.set_text_color(*TEXT)
+        self.multi_cell(152, 5, _a(text))
+        self.set_y(y + 20)
+
+
+# ────────────────────────────────────────────
 # Content builders
 # ────────────────────────────────────────────
 
@@ -334,41 +425,52 @@ def build_english():
     pdf.add_page()
     pdf.sec(2, "Dashboard Overview")
     pdf.txt(
-        "The dashboard consists of a header bar with role/tier selectors, a horizontal "
-        "tab navigation bar with 17 functional tabs, and a main content area. Each tab "
-        "focuses on a specific aspect of the 510(k) project lifecycle."
+        "The dashboard consists of a header bar with role/tier selectors, a grouped "
+        "navigation bar with 5 dropdown menus containing 17 functional panels, and a "
+        "main content area. Each panel focuses on a specific aspect of the 510(k) "
+        "project lifecycle."
     )
 
     pdf.sub("Header Bar")
     pdf.bul("Project name and subtitle (bilingual EN/CN)")
     pdf.bul("Role selector: Switch between PMP, Technology, Business, and Accounting views")
     pdf.bul("Tier indicator: Shows your current subscription tier (Starter/Growth/Scale)")
-    pdf.bul("Language toggle: Switch between English and Chinese interface")
+    pdf.bul("Language toggle: Switch between English, Chinese, and Korean interface")
 
-    pdf.sub("The 17 Tabs")
-    tabs = [
-        ("Dual-Track", "Technical and regulatory milestone tracking"),
-        ("Gate System", "Phase-gate reviews with criteria checklists"),
-        ("Regulatory Tracker", "Standards compliance and progress monitoring"),
-        ("Risk Dashboard", "ISO 14971 risk matrix with severity/probability"),
-        ("Audit Trail", "Timestamped log of all dashboard changes"),
-        ("Document Control", "ISO 13485-aligned document lifecycle management"),
-        ("Actions", "Task board, DHF Document Tracker, DMR Document Tracker, and CAPA Log"),
-        ("Timeline", "Month-by-month project timeline view"),
-        ("Budget", "Budget categories with planned vs. actual tracking"),
-        ("Cash / Runway", "Cash position, burn rate, and runway forecast"),
-        ("US Investment", "Investor pipeline and IR activity tracking"),
-        ("Cap Table", "Shareholder registry, equity events, vesting schedules"),
-        ("Resources", "Team allocation and utilization monitoring"),
-        ("Suppliers", "Supplier qualification and lead-time tracking"),
-        ("Message Board", "Threaded discussions with decisions and action tracking"),
-        ("FDA Comms", "Q-Sub generator, RTA checklist, and regulatory timelines (PMP only)"),
-        ("Predicate Finder", "Embedded 510(k) predicate search, chain tracing, and SE argument tool"),
-    ]
-    for name, desc in tabs:
-        pdf.kv(name, desc)
+    pdf.sub("Navigation Groups")
+    pdf.txt(
+        "The navigation bar organizes 17 panels into 5 dropdown groups. Click a group "
+        "name to open its dropdown menu, then select a panel."
+    )
 
-    pdf.warn_box("Some tabs may be restricted based on your role or subscription tier.")
+    pdf.sub("Program")
+    pdf.kv("Dual-Track", "Technical and regulatory milestone tracking")
+    pdf.kv("Gates", "Phase-gate reviews with criteria checklists")
+    pdf.kv("Timeline", "Month-by-month project timeline view")
+    pdf.kv("Actions", "Task board, DHF Document Tracker, DMR Document Tracker, and CAPA Log")
+
+    pdf.sub("Regulatory")
+    pdf.kv("Regulatory Tracker", "Standards compliance and progress monitoring")
+    pdf.kv("Risks", "ISO 14971 risk matrix with severity/probability")
+    pdf.kv("FDA Comms", "Q-Sub generator, RTA checklist, and regulatory timelines (PMP only)")
+    pdf.kv("Predicate Finder", "Embedded 510(k) predicate search, chain tracing, and SE argument tool")
+
+    pdf.sub("Documents")
+    pdf.kv("Doc Control", "ISO 13485-aligned document lifecycle management")
+    pdf.kv("Audit", "Timestamped log of all dashboard changes")
+    pdf.kv("Message Board", "Threaded discussions with decisions and action tracking")
+
+    pdf.sub("Finance")
+    pdf.kv("Budget", "Budget categories with planned vs. actual tracking")
+    pdf.kv("Cash/Runway", "Cash position, burn rate, and runway forecast")
+    pdf.kv("US Investment", "Investor pipeline and IR activity tracking")
+    pdf.kv("Cap Table", "Shareholder registry, equity events, vesting schedules")
+
+    pdf.sub("Operations")
+    pdf.kv("Resources", "Team allocation and utilization monitoring")
+    pdf.kv("Suppliers", "Supplier qualification and lead-time tracking")
+
+    pdf.warn_box("Some panels may be restricted based on your role or subscription tier. Entire groups appear grayed out when all their panels are restricted.")
 
     # ── 3. Role-Based Access ──
     pdf.add_page()
@@ -383,9 +485,9 @@ def build_english():
 
     pdf.sub("Subscription Tiers")
     pdf.txt("Tab access is server-controlled via Supabase RLS. The tier determines which tabs are available:")
-    pdf.kv("Starter ($500/mo)", "2 seats, 4 tabs: Dual-Track, Gates, Timeline, Budget")
-    pdf.kv("Growth ($1,000/mo)", "5 seats, 13 tabs: All except Cap Table, FDA Comms, and US Investment")
-    pdf.kv("Scale ($2,000/mo)", "10 seats, all 17 tabs including FDA Comms, Cap Table, and embedded Predicate Finder")
+    pdf.kv("Starter ($500/mo)", "2 seats, 4 panels: Dual-Track, Gates, Timeline, Budget (Program and Finance groups partially enabled)")
+    pdf.kv("Growth ($1,000/mo)", "5 seats, 13 panels: All except Cap Table, FDA Comms, and US Investment")
+    pdf.kv("Scale ($2,000/mo)", "10 seats, all 17 panels across all 5 groups, including FDA Comms, Cap Table, and embedded Predicate Finder")
 
     pdf.tip_box("Your tier is managed server-side and cannot be changed from the dashboard UI.")
 
@@ -843,10 +945,11 @@ def build_english():
     pdf.bul("Clear browser cache and reload")
     pdf.bul("Verify the deployment URL is correct")
 
-    pdf.sub("Tabs are grayed out")
+    pdf.sub("Groups or panels are grayed out")
     pdf.txt(
-        "Tab access is controlled by your subscription tier. Grayed-out tabs with "
-        "strikethrough text indicate they are not included in your tier. Contact your "
+        "Panel access is controlled by your subscription tier. If all panels within a "
+        "group are restricted, the entire group name appears grayed out. Individual "
+        "panels within a dropdown may also show strikethrough text. Contact your "
         "administrator to upgrade."
     )
 
@@ -1044,7 +1147,8 @@ def build_chinese():
         ("20", "设置向导与模板"),
         ("21", "快捷操作与技巧"),
         ("22", "故障排除"),
-        ("23", "FDA与法规术语表"),
+        ("23", "510(k) Predicate Finder"),
+        ("24", "FDA与法规术语表"),
     ]
     pdf.set_font("CJK", "", 11)
     for num, title in toc:
@@ -1084,39 +1188,49 @@ def build_chinese():
     pdf.add_page()
     pdf.sec(2, "仪表板概览")
     pdf.txt(
-        "仪表板由顶部导航栏（角色/层级选择器）、16个功能标签页的水平导航栏和"
-        "主内容区组成。每个标签页专注于510(k)项目生命周期的特定方面。"
+        "仪表板由顶部导航栏（角色/层级选择器）、包含17个功能面板的5个下拉导航组和"
+        "主内容区组成。每个面板专注于510(k)项目生命周期的特定方面。"
     )
 
     pdf.sub("顶部导航栏")
     pdf.bul("项目名称和副标题（双语 英文/中文）")
     pdf.bul("角色选择器: 在PMP、技术、商务和会计视图之间切换")
     pdf.bul("层级指示器: 显示当前订阅层级 (Starter/Growth/Scale)")
-    pdf.bul("语言切换: 在英文和中文界面之间切换")
+    pdf.bul("语言切换: 在英文、中文和韩文界面之间切换")
 
-    pdf.sub("16个标签页")
-    tabs_cn = [
-        ("双轨", "技术和监管里程碑跟踪"),
-        ("门控系统", "阶段门控审查与标准清单"),
-        ("监管追踪器", "标准合规性和进度监控"),
-        ("风险仪表板", "ISO 14971 风险矩阵（严重性/概率）"),
-        ("审计跟踪", "所有仪表板变更的时间戳记录"),
-        ("文档控制", "ISO 13485 对齐的文档生命周期管理"),
-        ("行动项", "任务看板、DHF文档追踪、DMR文档追踪和CAPA日志"),
-        ("时间线", "按月查看的项目时间线"),
-        ("预算", "预算类别的计划与实际对比"),
-        ("现金/续航", "现金状况、消耗率和续航预测"),
-        ("美国投资", "投资者管道和IR活动跟踪"),
-        ("股权结构表", "股东名册、股权事件、归属计划"),
-        ("资源", "团队分配和利用率监控"),
-        ("供应商", "供应商资质和交期跟踪"),
-        ("消息板", "线程讨论、决策和行动跟踪"),
-        ("FDA通信", "Q-Sub生成器、RTA清单和监管时间线（仅PMP）"),
-    ]
-    for name, desc in tabs_cn:
-        pdf.kv(name, desc)
+    pdf.sub("导航组")
+    pdf.txt(
+        "导航栏将17个面板组织为5个下拉组。点击组名打开下拉菜单，然后选择面板。"
+    )
 
-    pdf.warn_box("某些标签页可能因您的角色或订阅层级而受限。")
+    pdf.sub("项目 (Program)")
+    pdf.kv("双轨", "技术和监管里程碑跟踪")
+    pdf.kv("门控系统", "阶段门控审查与标准清单")
+    pdf.kv("时间线", "按月查看的项目时间线")
+    pdf.kv("行动项", "任务看板、DHF文档追踪、DMR文档追踪和CAPA日志")
+
+    pdf.sub("监管 (Regulatory)")
+    pdf.kv("监管追踪器", "标准合规性和进度监控")
+    pdf.kv("风险仪表板", "ISO 14971 风险矩阵（严重性/概率）")
+    pdf.kv("FDA通信", "Q-Sub生成器、RTA清单和监管时间线（仅PMP）")
+    pdf.kv("Predicate Finder", "嵌入式510(k)先导器械搜索、链追溯和SE论证工具")
+
+    pdf.sub("文档 (Documents)")
+    pdf.kv("文档控制", "ISO 13485 对齐的文档生命周期管理")
+    pdf.kv("审计跟踪", "所有仪表板变更的时间戳记录")
+    pdf.kv("消息板", "线程讨论、决策和行动跟踪")
+
+    pdf.sub("财务 (Finance)")
+    pdf.kv("预算", "预算类别的计划与实际对比")
+    pdf.kv("现金/续航", "现金状况、消耗率和续航预测")
+    pdf.kv("美国投资", "投资者管道和IR活动跟踪")
+    pdf.kv("股权结构表", "股东名册、股权事件、归属计划")
+
+    pdf.sub("运营 (Operations)")
+    pdf.kv("资源", "团队分配和利用率监控")
+    pdf.kv("供应商", "供应商资质和交期跟踪")
+
+    pdf.warn_box("某些面板可能因您的角色或订阅层级而受限。当组内所有面板均受限时，整个组名将显示为灰色。")
 
     # ── 3. 角色与层级 ──
     pdf.add_page()
@@ -1131,9 +1245,9 @@ def build_chinese():
 
     pdf.sub("订阅层级")
     pdf.txt("标签页访问由 Supabase RLS 在服务器端控制。层级决定可用的标签页:")
-    pdf.kv("Starter ($500/月)", "2个席位，4个标签页: 双轨、门控、时间线、预算")
-    pdf.kv("Growth ($1,000/月)", "5个席位，13个标签页: 除股权表、FDA通信和美国投资外全部")
-    pdf.kv("Scale ($2,000/月)", "10个席位，全部16个标签页，包括FDA通信和股权表")
+    pdf.kv("Starter ($500/月)", "2个席位，4个面板: 双轨、门控、时间线、预算（项目组和财务组部分启用）")
+    pdf.kv("Growth ($1,000/月)", "5个席位，13个面板: 除股权表、FDA通信和美国投资外全部")
+    pdf.kv("Scale ($2,000/月)", "10个席位，全部5组17个面板，包括FDA通信、股权表和嵌入式Predicate Finder")
 
     pdf.tip_box("您的层级由服务器端管理，无法从仪表板UI更改。")
 
@@ -1502,10 +1616,10 @@ def build_chinese():
     pdf.bul("清除浏览器缓存并重新加载")
     pdf.bul("验证部署URL是否正确")
 
-    pdf.sub("标签页变灰")
+    pdf.sub("导航组或面板变灰")
     pdf.txt(
-        "标签页访问由您的订阅层级控制。带有删除线文本的灰色标签页表示"
-        "未包含在您的层级中。联系管理员进行升级。"
+        "面板访问由您的订阅层级控制。如果组内所有面板均受限，整个组名将显示为灰色。"
+        "下拉菜单中的个别面板也可能显示删除线文本。联系管理员进行升级。"
     )
 
     pdf.sub("消息未同步")
@@ -1635,6 +1749,668 @@ def build_chinese():
     return out
 
 
+def build_korean():
+    pdf = KOGuide()
+    pdf.alias_nb_pages()
+    pdf.set_auto_page_break(auto=True, margin=20)
+
+    # ── Cover ──
+    pdf.add_page()
+    pdf.ln(50)
+    pdf.set_font("CJK", "B", 28)
+    pdf.set_text_color(*NAVY)
+    pdf.cell(0, 14, _a("Control Tower"), align="C", ln=True)
+    pdf.set_font("CJK", "", 18)
+    pdf.set_text_color(*ACCENT)
+    pdf.cell(0, 10, _a("PM 대시보드"), align="C", ln=True)
+    pdf.ln(8)
+    pdf.set_font("CJK", "B", 22)
+    pdf.set_text_color(*DARK)
+    pdf.cell(0, 12, _a("PMP 사용자 가이드"), align="C", ln=True)
+    pdf.ln(20)
+    pdf.set_font("CJK", "", 11)
+    pdf.set_text_color(*GRAY)
+    pdf.cell(0, 7, _a("의료기기 개발 프로젝트 관리"), align="C", ln=True)
+    pdf.cell(0, 7, _a("FDA 510(k) 규제 경로"), align="C", ln=True)
+    pdf.ln(30)
+    pdf.set_font("CJK", "", 10)
+    pdf.cell(0, 6, _a("510k Bridge"), align="C", ln=True)
+    pdf.cell(0, 6, _a("버전 1.0 -- 2026년 3월"), align="C", ln=True)
+
+    # ── Table of Contents ──
+    pdf.add_page()
+    pdf.set_font("CJK", "B", 16)
+    pdf.set_text_color(*NAVY)
+    pdf.cell(0, 10, _a("목차"), ln=True)
+    pdf.ln(5)
+    toc = [
+        ("1", "시작하기"),
+        ("2", "대시보드 개요"),
+        ("3", "역할 기반 접근 및 구독 등급"),
+        ("4", "듀얼 트랙 마일스톤"),
+        ("5", "게이트 시스템"),
+        ("6", "규제 추적기"),
+        ("7", "리스크 대시보드"),
+        ("8", "감사 추적"),
+        ("9", "문서 관리"),
+        ("10", "액션 항목"),
+        ("11", "타임라인"),
+        ("12", "예산"),
+        ("13", "현금/런웨이"),
+        ("14", "미국 투자"),
+        ("15", "지분 구조표"),
+        ("16", "리소스"),
+        ("17", "공급업체"),
+        ("18", "메시지 보드"),
+        ("19", "FDA 커뮤니케이션 센터"),
+        ("20", "설정 마법사 및 템플릿"),
+        ("21", "단축키 및 팁"),
+        ("22", "문제 해결"),
+        ("23", "510(k) Predicate Finder"),
+        ("24", "FDA 및 규제 용어집"),
+    ]
+    pdf.set_font("CJK", "", 11)
+    for num, title in toc:
+        pdf.set_text_color(*DARK)
+        pdf.cell(12, 7, _a(num + "."))
+        pdf.set_text_color(*TEXT)
+        pdf.cell(0, 7, _a(title), ln=True)
+
+    # ── 1. 시작하기 ──
+    pdf.add_page()
+    pdf.sec(1, "시작하기")
+    pdf.txt(
+        "Control Tower PM 대시보드는 FDA 510(k) 의료기기 개발을 위해 특별히 설계된 "
+        "종합 프로젝트 관리 플랫폼입니다. 규제, 기술 및 비즈니스 워크스트림에 대한 "
+        "실시간 가시성을 제공합니다."
+    )
+    pdf.sub("시스템 요구사항")
+    pdf.bul("최신 웹 브라우저 (Chrome, Firefox, Safari, Edge)")
+    pdf.bul("Supabase 동기화를 위한 인터넷 연결 (오프라인 모드 지원)")
+    pdf.bul("1280x720 이상의 화면 해상도 권장")
+
+    pdf.sub("첫 실행")
+    pdf.txt(
+        "대시보드를 처음 열면 설정 마법사가 프로젝트 구성을 안내합니다. "
+        "7개 기기 템플릿(호흡기, 심혈관, 정형외과, IVD, 영상, 재활, SaMD) 중 "
+        "선택하거나 처음부터 시작할 수 있습니다. 또는 '데모 데이터 로드'를 클릭하여 "
+        "샘플 데이터로 탐색할 수 있습니다."
+    )
+
+    pdf.sub("로그인 및 인증")
+    pdf.txt(
+        "대시보드는 역할 기반 로그인을 사용합니다. 프로젝트 관리자가 제공한 "
+        "비밀번호를 입력하세요. 인증 후 귀하의 역할과 구독 등급에 해당하는 "
+        "탭이 표시됩니다."
+    )
+
+    pdf.tip_box("빠른 접근을 위해 대시보드 URL을 북마크하세요. 프로젝트 데이터는 자동으로 저장됩니다.")
+
+    # ── 2. 대시보드 개요 ──
+    pdf.add_page()
+    pdf.sec(2, "대시보드 개요")
+    pdf.txt(
+        "대시보드는 상단 헤더 바(역할/등급 선택기), 17개 기능 패널을 포함하는 "
+        "5개 드롭다운 네비게이션 그룹, 그리고 메인 콘텐츠 영역으로 구성됩니다. "
+        "각 패널은 510(k) 프로젝트 수명 주기의 특정 측면에 초점을 맞춥니다."
+    )
+
+    pdf.sub("헤더 바")
+    pdf.bul("프로젝트 이름 및 부제목 (다국어 영어/중국어/한국어)")
+    pdf.bul("역할 선택기: PMP, 기술, 비즈니스, 회계 뷰 간 전환")
+    pdf.bul("등급 표시기: 현재 구독 등급 표시 (Starter/Growth/Scale)")
+    pdf.bul("언어 전환: 영어, 중국어, 한국어 인터페이스 간 전환")
+
+    pdf.sub("네비게이션 그룹")
+    pdf.txt(
+        "네비게이션 바는 17개 패널을 5개 드롭다운 그룹으로 구성합니다. "
+        "그룹 이름을 클릭하여 드롭다운 메뉴를 열고 패널을 선택하세요."
+    )
+
+    pdf.sub("프로그램 (Program)")
+    pdf.kv("듀얼 트랙", "기술 및 규제 마일스톤 추적")
+    pdf.kv("게이트 시스템", "단계별 게이트 검토 및 기준 체크리스트")
+    pdf.kv("타임라인", "월별 프로젝트 타임라인 보기")
+    pdf.kv("액션 항목", "작업 보드, DHF 문서 추적기, DMR 문서 추적기 및 CAPA 로그")
+
+    pdf.sub("규제 (Regulatory)")
+    pdf.kv("규제 추적기", "표준 준수 및 진행 상황 모니터링")
+    pdf.kv("리스크", "ISO 14971 리스크 매트릭스 (심각도/확률)")
+    pdf.kv("FDA 커뮤니케이션", "Q-Sub 생성기, RTA 체크리스트, 규제 타임라인 (PMP 전용)")
+    pdf.kv("Predicate Finder", "내장 510(k) 선행기기 검색, 체인 추적, SE 논증 도구")
+
+    pdf.sub("문서 (Documents)")
+    pdf.kv("문서 관리", "ISO 13485 기반 문서 수명 주기 관리")
+    pdf.kv("감사 추적", "모든 대시보드 변경사항의 타임스탬프 기록")
+    pdf.kv("메시지 보드", "스레드 토론, 의사결정 및 액션 추적")
+
+    pdf.sub("재무 (Finance)")
+    pdf.kv("예산", "예산 카테고리별 계획 대비 실제 추적")
+    pdf.kv("현금/런웨이", "현금 현황, 소진율 및 런웨이 예측")
+    pdf.kv("미국 투자", "투자자 파이프라인 및 IR 활동 추적")
+    pdf.kv("지분 구조표", "주주 명부, 지분 이벤트, 베스팅 일정")
+
+    pdf.sub("운영 (Operations)")
+    pdf.kv("리소스", "팀 배정 및 활용률 모니터링")
+    pdf.kv("공급업체", "공급업체 자격 및 리드타임 추적")
+
+    pdf.warn_box("일부 패널은 역할 또는 구독 등급에 따라 제한될 수 있습니다. 그룹 내 모든 패널이 제한되면 전체 그룹이 회색으로 표시됩니다.")
+
+    # ── 3. 역할 기반 접근 ──
+    pdf.add_page()
+    pdf.sec(3, "역할 기반 접근 및 구독 등급")
+
+    pdf.sub("사용자 역할")
+    pdf.txt("대시보드는 네 가지 주요 역할을 지원하며, 각각 다른 접근 수준을 가집니다:")
+    pdf.kv("PMP (프로젝트 매니저)", "모든 탭에 대한 전체 접근 권한. 마일스톤, 게이트, 리스크, 예산, 문서 및 팀 편집 가능. FDA 커뮤니케이션을 볼 수 있는 유일한 역할.")
+    pdf.kv("기술", "기술 마일스톤, 리스크 및 문서를 보고 업데이트 가능. 메시지 보드 참여 가능. 재무 탭 접근 불가.")
+    pdf.kv("비즈니스", "비즈니스 마일스톤, 예산, 투자 및 지분 구조표 접근 가능. 메시지 보드 참여 가능.")
+    pdf.kv("회계", "예산, 현금/런웨이, 지분 구조표에 대한 읽기 전용 접근. 제한된 편집 기능.")
+
+    pdf.sub("구독 등급")
+    pdf.txt("패널 접근은 Supabase RLS를 통해 서버 측에서 제어됩니다. 등급에 따라 사용 가능한 패널이 결정됩니다:")
+    pdf.kv("Starter ($500/월)", "2석, 4개 패널: 듀얼 트랙, 게이트, 타임라인, 예산 (프로그램 및 재무 그룹 부분 활성화)")
+    pdf.kv("Growth ($1,000/월)", "5석, 13개 패널: 지분 구조표, FDA 커뮤니케이션, 미국 투자를 제외한 전체")
+    pdf.kv("Scale ($2,000/월)", "10석, 전체 5개 그룹 17개 패널, FDA 커뮤니케이션, 지분 구조표 및 내장 Predicate Finder 포함")
+
+    pdf.tip_box("귀하의 등급은 서버 측에서 관리되며 대시보드 UI에서 변경할 수 없습니다.")
+
+    # ── 4. 듀얼 트랙 ──
+    pdf.add_page()
+    pdf.sec(4, "듀얼 트랙 마일스톤")
+    pdf.txt(
+        "듀얼 트랙 탭은 병렬 규제 및 기술 마일스톤 트랙을 표시합니다. "
+        "이는 엔지니어링 개발과 규제 준비가 동시에 진행되는 FDA 510(k) "
+        "프로세스의 실제 상황을 반영합니다."
+    )
+    pdf.sub("기술 마일스톤")
+    pdf.txt(
+        "기술 마일스톤은 엔지니어링 산출물을 추적합니다: 설계 동결, "
+        "프로토타입 테스트, 검증 및 유효성 확인 활동, 설계 이관. "
+        "각 마일스톤은 월, 상태, 담당자 및 카테고리를 표시합니다."
+    )
+    pdf.sub("규제 마일스톤")
+    pdf.txt(
+        "규제 마일스톤은 FDA 산출물을 추적합니다: Pre-Submission 미팅, "
+        "510(k) 준비 및 제출. 프로젝트 기간에 따라 자동 생성됩니다."
+    )
+    pdf.sub("마일스톤 편집")
+    pdf.txt(
+        "마일스톤 상태 배지를 클릭하여 상태를 전환합니다: 시작 전, 진행 중, "
+        "완료, 차단됨. PMP와 담당 역할만 상태를 변경할 수 있습니다. "
+        "모든 변경사항은 감사 추적에 기록됩니다."
+    )
+
+    # ── 5. 게이트 시스템 ──
+    pdf.add_page()
+    pdf.sec(5, "게이트 시스템")
+    pdf.txt(
+        "게이트 시스템은 단계별 게이트 검토 프로세스를 구현합니다. "
+        "게이트는 프로젝트 기간에 따라 자동 생성됩니다(2-6개 게이트). "
+        "각 게이트에는 프로젝트 진행 전에 충족해야 하는 기준이 있습니다."
+    )
+    pdf.sub("게이트 기준")
+    pdf.txt(
+        "각 게이트에는 기준 체크리스트가 있습니다('기술 산출물 완료', "
+        "'예산 정상', '리스크 완화 확인' 등). 기준을 개별적으로 클릭하여 "
+        "체크합니다. 기준 완료에 따라 게이트 상태가 업데이트됩니다."
+    )
+    pdf.sub("게이트 결정")
+    pdf.txt(
+        "PMP는 게이트 결정을 기록할 수 있습니다: 통과, 불통과, 조건부 통과. "
+        "결정에는 타임스탬프와 귀속이 표시됩니다. 게이트 메모는 토론 요점과 "
+        "조건부 승인 조건을 기록할 수 있습니다."
+    )
+
+    # ── 6. 규제 추적기 ──
+    pdf.add_page()
+    pdf.sec(6, "규제 추적기")
+    pdf.txt(
+        "규제 추적기는 적용 가능한 표준의 준수 상태를 모니터링합니다. "
+        "표준은 기기 템플릿에 따라 사전 입력되거나(예: 전기 기기용 IEC 60601-1, "
+        "생체적합성용 ISO 10993) 수동으로 입력합니다."
+    )
+    pdf.sub("표준 추적")
+    pdf.bul("상태: 시작 전, 진행 중, 완료")
+    pdf.bul("진행률 바: 0-100% 완료 비율")
+    pdf.bul("조항 수준 추적으로 상세 준수 관리")
+    pdf.txt(
+        "상태 배지를 클릭하여 상태를 전환합니다. 진행률 슬라이더를 업데이트하여 "
+        "실제 완료율을 반영합니다. FDA 커뮤니케이션 탭에서 이 값을 사용하여 "
+        "RTA 체크리스트를 자동 입력합니다."
+    )
+
+    # ── 7. 리스크 대시보드 ──
+    pdf.add_page()
+    pdf.sec(7, "리스크 대시보드")
+    pdf.txt(
+        "리스크 대시보드는 ISO 14971 리스크 관리를 구현합니다. "
+        "리스크는 심각도, 확률 및 리스크 수준을 보여주는 색상 코드 매트릭스로 "
+        "표시됩니다. 템플릿별 리스크는 기기 카테고리에서 자동 입력됩니다."
+    )
+    pdf.sub("리스크 필드")
+    pdf.kv("심각도", "위해의 심각성 (낮음/중간/높음)")
+    pdf.kv("확률", "위험 상황 발생 가능성 (낮음/중간/높음)")
+    pdf.kv("리스크 수준", "색상 코드: 녹색(수용 가능), 황색(ALARP), 적색(수용 불가)")
+    pdf.kv("제어 조치", "구현된 리스크 제어 조치")
+    pdf.kv("잔류 리스크", "제어 조치 후 남은 리스크")
+    pdf.kv("완화 상태", "시작 전, 진행 중, 완료")
+
+    pdf.tip_box("적색 리스크는 FDA 커뮤니케이션 패널에서 경고를 트리거하며, 510(k) 제출 전에 해결해야 합니다.")
+
+    # ── 8. 감사 추적 ──
+    pdf.add_page()
+    pdf.sec(8, "감사 추적")
+    pdf.txt(
+        "대시보드의 모든 변경사항은 감사 추적에 기록됩니다: 타임스탬프, "
+        "사용자 역할, 액션 유형, 변경된 필드, 이전 값, 새 값 및 상세 설명. "
+        "이는 21 CFR Part 11 추적성 요구사항을 지원합니다."
+    )
+    pdf.sub("Supabase 동기화")
+    pdf.txt(
+        "감사 항목은 자동으로 Supabase 백엔드에 동기화됩니다. "
+        "오프라인 상태에서는 항목이 로컬에 대기하고 연결이 복원되면 동기화됩니다."
+    )
+
+    # ── 9. 문서 관리 ──
+    pdf.add_page()
+    pdf.sec(9, "문서 관리")
+    pdf.txt(
+        "문서 관리는 ISO 13485 기반 문서 수명 주기 관리를 제공합니다. "
+        "문서는 지적 재산 보호를 위해 브라우저에서 로컬로 추적되며, "
+        "승인/발효된 문서는 서버 동기화가 가능합니다."
+    )
+    pdf.sub("문서 수명 주기")
+    pdf.bul("초안: 최초 문서 생성")
+    pdf.bul("검토 중: 이해관계자 검토 중")
+    pdf.bul("승인됨: 지정 권한에 의해 공식 승인")
+    pdf.bul("발효: 활성 및 구속력 있음 (발효일 자동 설정)")
+    pdf.bul("폐기: 대체되거나 철회됨")
+
+    pdf.sub("서버 동기화")
+    pdf.txt(
+        "문서가 '승인됨' 또는 '발효' 상태에 도달하면 '서버 동기화' 버튼을 "
+        "사용하여 Supabase dhf_documents 테이블에 업로드합니다. "
+        "이는 규제 준수를 위한 서버 측 기록을 생성합니다. "
+        "승인된 문서가 동기화되지 않으면 FDA 커뮤니케이션 탭에 경고가 표시됩니다."
+    )
+
+    pdf.warn_box("문서는 브라우저 localStorage에 저장됩니다. 브라우저 데이터 삭제 = 문서 손실. 중요 문서는 서버에 동기화하세요.")
+
+    # ── 10. 액션 항목 ──
+    pdf.add_page()
+    pdf.sec(10, "액션 항목")
+    pdf.txt(
+        "액션 항목 탭은 게이트 검토, 리스크 완화 및 일반 프로젝트 관리에서 "
+        "발생하는 액션 항목을 추적합니다. 각 항목에는 담당자, 우선순위, "
+        "마감일 및 연결된 게이트가 있습니다."
+    )
+    pdf.kv("담당자", "책임 팀원")
+    pdf.kv("우선순위", "높음, 중간, 낮음")
+    pdf.kv("상태", "할 일, 진행 중, 완료, 차단됨")
+    pdf.kv("마감일", "목표 완료일")
+
+    pdf.sub("DHF 문서 추적기")
+    pdf.txt(
+        "설계 이력 파일(DHF) 문서 추적기는 액션 항목 탭 내에 있습니다. "
+        "21 CFR 820.30에서 요구하는 모든 설계 단계 문서를 추적합니다. "
+        "문서 상태 배지를 클릭하여 전환: 시작 전 → 초안 → 검토 중 → 승인됨."
+    )
+
+    pdf.sub("DMR 문서 추적기")
+    pdf.txt(
+        "기기 마스터 레코드(DMR) 문서 추적기도 액션 항목 탭 내에 있으며, "
+        "DHF 추적기 아래에 위치합니다. 21 CFR 820.181에서 요구하는 12개 문서를 "
+        "추적합니다: 기기 사양, 생산 프로세스, 품질 절차, 포장/라벨링. "
+        "상태 전환은 DHF 추적기와 동일합니다."
+    )
+
+    pdf.sub("CAPA 로그")
+    pdf.txt(
+        "시정 및 예방 조치(CAPA) 로그도 액션 항목 탭 내에 있습니다. "
+        "유형(시정 또는 예방), 상태, 담당자 및 연결된 게이트로 "
+        "CAPA 항목을 추적합니다."
+    )
+
+    # ── 11. 타임라인 ──
+    pdf.sec(11, "타임라인")
+    pdf.txt(
+        "타임라인은 월별 프로젝트 이벤트를 표시합니다. 각 항목은 기술 및 "
+        "비즈니스 활동과 영향 지표(긍정/중립/부정)를 보여줍니다."
+    )
+
+    # ── 12. 예산 ──
+    pdf.add_page()
+    pdf.sec(12, "예산")
+    pdf.txt(
+        "예산 탭은 카테고리별로 계획 대비 실제 지출을 추적합니다. "
+        "카테고리는 마법사 설정 중에 정의되거나 템플릿 예산 항목에서 가져옵니다. "
+        "각 카테고리는 계획 금액, 실제 지출 및 차이를 표시합니다."
+    )
+    pdf.bul("예산 카테고리 추가, 편집 또는 삭제")
+    pdf.bul("차이 추적을 위한 실제 지출 값 업데이트")
+    pdf.bul("통화 표시는 USD와 CNY 간 전환")
+
+    # ── 13. 현금/런웨이 ──
+    pdf.sec(13, "현금/런웨이")
+    pdf.txt(
+        "현금/런웨이는 재무 건전성을 시각화합니다: 현재 현금 현황, "
+        "월간 소진율 및 예상 런웨이 개월 수. 펀딩 라운드 추적과 "
+        "소진 이력 차트를 포함합니다."
+    )
+    pdf.kv("현금 잔고", "현재 가용 현금")
+    pdf.kv("월간 소진율", "평균 월간 지출")
+    pdf.kv("런웨이", "현재 소진율로 운영 가능한 개월 수")
+
+    # ── 14. 미국 투자 ──
+    pdf.add_page()
+    pdf.sec(14, "미국 투자")
+    pdf.txt(
+        "미국 투자 탭은 미국 시장 진출을 추구하는 의료기기 벤처의 "
+        "투자자 관계를 관리합니다. 대상 투자자 추적과 IR 활동 기록을 포함합니다."
+    )
+    pdf.kv("투자자 유형", "VC, 엔젤 그룹, 전략적, PE, 정부")
+    pdf.kv("단계", "시드, 시리즈 A, 시리즈 B, 성장")
+    pdf.kv("연락 상태", "잠재 고객, 연락됨, 논의 중, 텀시트, 확약")
+
+    # ── 15. 지분 구조표 ──
+    pdf.add_page()
+    pdf.sec(15, "지분 구조표")
+    pdf.txt(
+        "지분 구조표는 지분 소유권, 지분 이벤트(펀딩 라운드, 전환, "
+        "옵션 부여) 및 베스팅 일정을 추적합니다. "
+        "법인의 전체 자본 구조 개요를 제공합니다."
+    )
+    pdf.sub("주주")
+    pdf.bul("이름, 주식 종류 (보통주, 우선주 A/B/C, 옵션, 워런트)")
+    pdf.bul("주식 수 및 소유 비율")
+    pdf.bul("이사회 석, 베스팅 상태, 메모")
+
+    pdf.sub("베스팅 일정")
+    pdf.bul("표준 4년 베스팅, 1년 클리프, 또는 맞춤 일정")
+    pdf.bul("클리프 날짜, 총 주식, 기 귀속 주식, 다음 귀속일 추적")
+
+    # ── 16. 리소스 ──
+    pdf.add_page()
+    pdf.sec(16, "리소스")
+    pdf.txt(
+        "리소스 탭은 팀원의 역할, 워크스트림별 배정 및 활용률을 표시합니다. "
+        "배정 바 차트는 각 팀원의 역량이 어떻게 분배되는지 보여줍니다."
+    )
+    pdf.sub("팀원 관리")
+    pdf.bul("팀원 추가 (이름, 역할, 이메일, 워크스트림 배정)")
+    pdf.bul("배정 비율을 클릭하여 인라인 편집 (PMP/기술/비즈니스 역할)")
+    pdf.bul("활용률 게이지: 녹색(<85%), 황색(85-100%), 적색(>100% 과배정)")
+    pdf.bul("각 카드의 X 버튼으로 팀원 삭제")
+
+    pdf.tip_box("총 배정을 100% 이하로 유지하여 과부하를 방지하세요. 대시보드는 과배정을 적색으로 표시합니다.")
+
+    # ── 17. 공급업체 ──
+    pdf.add_page()
+    pdf.sec(17, "공급업체")
+    pdf.txt(
+        "공급업체 탭은 공급업체 자격 상태, 리드타임, 구매 주문 상태 및 "
+        "위탁 제조 마일스톤을 추적합니다. 21 CFR 820 공급업체 통제를 지원합니다."
+    )
+    pdf.sub("공급업체 상태")
+    pdf.bul("검토 중: 초기 평가")
+    pdf.bul("자격 완료: 사용 승인")
+    pdf.bul("활성: 현재 공급 중")
+    pdf.bul("보류: 일시 중단")
+    pdf.bul("거부: 자격 미달")
+
+    # ── 18. 메시지 보드 ──
+    pdf.add_page()
+    pdf.sec(18, "메시지 보드")
+    pdf.txt(
+        "메시지 보드는 교차 기능 커뮤니케이션을 위한 목적 지향 메시징 "
+        "시스템입니다. 수명 주기 관리, 의사결정 추적 및 액션 항목 생성을 "
+        "지원하는 스레드 토론 기능을 제공합니다."
+    )
+    pdf.sub("스레드")
+    pdf.txt(
+        "제목, 워크스트림 배정, 우선순위 및 의도(토론, 결정, 알림, 에스컬레이션)로 "
+        "스레드를 생성합니다. 스레드는 열림 → 해결됨 수명 주기를 거칩니다."
+    )
+    pdf.sub("메시지 게시")
+    pdf.txt(
+        "역할 선택기 도구 모음에서 게시 역할(PMP, 기술, 비즈니스, 회계)을 "
+        "선택합니다. 메시지를 입력하고 전송을 누릅니다. [DECISION] 또는 "
+        "[ACTION] 접두사를 사용하여 특별한 의도를 가진 메시지를 태그합니다."
+    )
+    pdf.sub("설정")
+    pdf.txt(
+        "설정 기어 아이콘을 클릭하여 각 역할의 이메일 주소를 구성합니다. "
+        "개발용 테스트 모드를 전환합니다. 설정을 다시 클릭하여 패널을 닫습니다."
+    )
+    pdf.sub("뷰 및 필터")
+    pdf.bul("전체 스레드: 완전한 스레드 목록")
+    pdf.bul("내 항목: 소유자 또는 담당자인 스레드")
+    pdf.bul("의사결정: 활성 의사결정이 있는 스레드")
+    pdf.bul("임원: 높은 우선순위 및 의사결정 스레드")
+    pdf.bul("워크스트림 필터: 워크스트림 카테고리별 필터")
+    pdf.bul("수명 주기 필터: 열림, 해결됨, 전체")
+
+    # ── 19. FDA 커뮤니케이션 센터 ──
+    pdf.add_page()
+    pdf.sec(19, "FDA 커뮤니케이션 센터")
+    pdf.txt(
+        "FDA 커뮤니케이션 탭은 PMP 전용이며 FDA 규제 상호작용 도구를 "
+        "제공합니다. Q-Sub 커버 레터 생성기, RTA 체크리스트, "
+        "SE 결정 흐름 및 MDUFA 타임라인 추적을 포함합니다."
+    )
+
+    pdf.sub("Q-Sub 커버 레터 생성기")
+    pdf.txt(
+        "프로젝트 데이터(신청자 이름, 기기 설명, 제출 유형)를 사용하여 "
+        "Pre-Submission 미팅 요청서를 자동 생성합니다. "
+        "최종 서식을 위해 HTML로 내보냅니다."
+    )
+
+    pdf.sub("수리 거부(RTA) 체크리스트")
+    pdf.txt(
+        "FDA의 17개 항목 RTA 체크리스트에 대한 자체 점검. "
+        "DHF 문서 및 표준 준수 데이터에서 항목이 자동 입력됩니다. "
+        "진행률 바는 전체 준비 상태를 표시합니다."
+    )
+
+    pdf.sub("문서 동기화 경고")
+    pdf.txt(
+        "문서 관리에서 승인되거나 발효된 문서가 서버에 동기화되지 않으면 "
+        "FDA 커뮤니케이션 상단에 주황색 경고 배너가 나타납니다. "
+        "'문서 관리로 이동'을 클릭하여 직접 이동하고 동기화합니다."
+    )
+
+    pdf.sub("MDUFA 검토 타임라인")
+    pdf.txt(
+        "510(k) MDUFA 검토 마일스톤 추적: 제출 접수, K번호 할당(7일차), "
+        "RTA 심사(15일차), 실질 검토(60일차), MDUFA 결정 목표(90일차)."
+    )
+
+    # ── 20. 설정 마법사 ──
+    pdf.add_page()
+    pdf.sec(20, "설정 마법사 및 템플릿")
+    pdf.txt(
+        "설정 마법사는 첫 방문 시(또는 프로젝트 데이터가 없을 때) 시작됩니다. "
+        "3단계 설정 프로세스를 안내합니다."
+    )
+    pdf.sub("단계 1: 언어 선택")
+    pdf.txt("마법사 및 대시보드 인터페이스용 영어, 중국어 또는 한국어를 선택합니다.")
+
+    pdf.sub("단계 2: 기기 템플릿")
+    pdf.txt("7개 사전 구성된 기기 템플릿에서 선택하거나 처음부터 시작합니다:")
+    pdf.bul("호흡기 기기 (인공호흡기, CPAP, 네블라이저)")
+    pdf.bul("심혈관 (스텐트, 심박조율기, 모니터)")
+    pdf.bul("정형외과 (임플란트, 기구, 고정장치)")
+    pdf.bul("IVD (체외진단, 분석기)")
+    pdf.bul("영상 (X선, 초음파, MRI 부속품)")
+    pdf.bul("재활 (치료 기기, 이동 보조기구)")
+    pdf.bul("SaMD (의료기기 소프트웨어)")
+    pdf.txt(
+        "템플릿은 다음을 사전 입력합니다: 제출 유형, 기기 등급, 제품 코드, "
+        "규정 섹션, 선행기기 예시, 기술 분야, 예산 카테고리, 표준 및 "
+        "템플릿별 리스크."
+    )
+
+    pdf.sub("단계 3: 프로젝트 세부사항 (8단계)")
+    pdf.bul("1단계: 프로젝트 이름 및 부제목")
+    pdf.bul("2단계: 규제 세부사항 (제출 유형, 기기 등급, 선행기기)")
+    pdf.bul("3단계: 신청자 및 제조업체 정보")
+    pdf.bul("4단계: 팀원 및 역할, 워크스트림 배정")
+    pdf.bul("5단계: 예산 카테고리 및 금액")
+    pdf.bul("6단계: 현금 잔고 및 프로젝트 기간")
+    pdf.bul("7단계: 공급업체 및 구성품")
+    pdf.bul("8단계: DHF 문서 선택")
+
+    # ── 21. 단축키 및 팁 ──
+    pdf.add_page()
+    pdf.sec(21, "단축키 및 팁")
+    pdf.sub("일반 팁")
+    pdf.bul("모든 데이터는 브라우저 localStorage에 자동 저장 -- 전체 대시보드 상태 포함")
+    pdf.bul("온라인 시 Supabase 실시간 동기화")
+    pdf.bul("오프라인 변경사항은 대기 후 연결 복원 시 동기화")
+    pdf.bul("통화 표시는 언어 설정에 따라 USD와 CNY 간 전환")
+    pdf.bul("플로팅 액션 버튼(우하단)으로 빠른 작업 제공")
+
+    pdf.sub("URL 매개변수")
+    pdf.kv("?test=respiratory", "호흡기 템플릿 테스트 데이터 로드")
+    pdf.kv("?test=cardiovascular", "심혈관 템플릿 테스트 데이터 로드")
+    pdf.txt("?test=<templateId>를 사용하여 7개 템플릿의 사전 구성된 테스트 데이터를 로드합니다.")
+
+    pdf.sub("데이터 영속성")
+    pdf.bul("프로젝트 구성: ctower_project_data (localStorage)")
+    pdf.bul("실시간 대시보드 상태: ctower_live_state (localStorage) -- 마일스톤, 게이트, 리스크, 표준, 예산, 런웨이, 액션, DHF, CAPA, 팀, 공급업체, 투자자, 지분표, 감사 로그")
+    pdf.bul("메시지 보드 스레드: ctower_mb_threads (localStorage)")
+    pdf.bul("문서: ctower_doclib_docs (localStorage)")
+    pdf.bul("메시지: Supabase messages 테이블 (동기화)")
+    pdf.bul("감사 로그: Supabase audit_log 테이블 (동기화)")
+    pdf.tip_box("모든 대시보드 상태는 변경 후 자동으로 localStorage에 저장됩니다. 정전이나 브라우저 충돌 시에도 데이터가 보존되어 다음 방문 시 다시 로드됩니다.")
+
+    # ── 22. 문제 해결 ──
+    pdf.add_page()
+    pdf.sec(22, "문제 해결")
+
+    pdf.sub("대시보드가 로드되지 않음")
+    pdf.bul("초기 Supabase 인증을 위한 인터넷 연결 확인")
+    pdf.bul("브라우저 캐시 삭제 후 새로고침")
+    pdf.bul("배포 URL이 올바른지 확인")
+
+    pdf.sub("네비게이션 그룹 또는 패널이 회색으로 표시됨")
+    pdf.txt(
+        "패널 접근은 구독 등급에 의해 제어됩니다. 그룹 내 모든 패널이 제한되면 "
+        "전체 그룹 이름이 회색으로 표시됩니다. 드롭다운 메뉴 내 개별 패널도 "
+        "취소선 텍스트로 표시될 수 있습니다. 업그레이드를 위해 관리자에게 문의하세요."
+    )
+
+    pdf.sub("메시지 동기화 안 됨")
+    pdf.bul("인터넷 연결 확인 (녹색 표시기)")
+    pdf.bul("브라우저 콘솔에서 Supabase 오류 확인")
+    pdf.bul("연결 복원 시 메시지 자동 동기화")
+
+    pdf.sub("설정 패널이 보이지 않음")
+    pdf.txt(
+        "메시지 보드에서 설정 기어 아이콘을 클릭합니다. 패널이 스레드 목록 "
+        "위에 나타나 화면으로 스크롤됩니다. 설정을 다시 클릭하여 닫습니다."
+    )
+
+    pdf.sub("오래된 데모 데이터")
+    pdf.txt(
+        "이전 프로젝트 데이터가 보이면 마법사의 '데모 데이터 로드'가 "
+        "모든 기존 데이터를 삭제하고 호흡기 기기 템플릿에서 "
+        "새로운 샘플 데이터를 생성합니다."
+    )
+
+    pdf.sub("대시보드 초기화")
+    pdf.txt(
+        "완전히 초기화하려면 다음 localStorage 키를 삭제하세요: "
+        "ctower_project_data, ctower_live_state, ctower_mb_threads, ctower_mb_decisions, "
+        "ctower_doclib_docs, ctower_qa_messages, ctower_qa_settings, "
+        "ctower_qa_archive. 또는 브라우저 설정에서 모든 사이트 데이터를 삭제하세요."
+    )
+
+    # ── 23. 510(k) Predicate Finder ──
+    pdf.add_page()
+    pdf.sec(23, "510(k) Predicate Finder")
+    pdf.txt(
+        "510(k) Predicate Finder는 Control Tower에 직접 내장된 전용 탭입니다. "
+        "FDA openFDA 데이터베이스에 연결하여 PMP와 규제 팀이 선행기기를 식별하고, "
+        "선행기기 체인을 추적하며, 실질적 동등성(SE) 논증 초안을 작성할 수 "
+        "있도록 지원합니다. 이러한 작업은 510(k) 제출 계획에 필수적입니다.\n\n"
+        "Predicate Finder 탭은 동일 배포 오리진의 iframe을 로드하므로 "
+        "모든 데이터가 Control Tower 환경 내에 유지됩니다. "
+        "iframe은 지연 로딩되어 초기 대시보드 로드를 빠르게 유지합니다."
+    )
+
+    pdf.sub("무료 vs Pro")
+    pdf.txt(
+        "Predicate Finder는 일일 제한(5회 검색, 1회 체인 추적, 2기기 비교)으로 "
+        "무료 제공됩니다. Pro($99/월)는 무제한 검색, 무제한 체인 추적, "
+        "4기기 비교, SE 논증 생성 및 PDF 내보내기를 제공합니다."
+    )
+    pdf.tip_box(
+        "Predicate Finder는 510k Bridge의 주요 리드 생성 도구입니다. "
+        "무료 사용자는 이메일을 제공하여 도구를 잠금 해제하며, "
+        "자연스러운 업그레이드 퍼널을 만듭니다."
+    )
+
+    pdf.sub("Control Tower 통합")
+    pdf.txt(
+        "Predicate Finder는 Control Tower 대시보드의 전체 탭으로 내장되어 "
+        "모든 역할(PMP, 기술, 비즈니스, 회계)에서 사용 가능합니다. "
+        "선행기기 연구는 다음에 정보를 제공합니다:"
+    )
+    pdf.bul("규제 추적기 -- 선행기기 참조 및 SE 전략")
+    pdf.bul("리스크 대시보드 -- 선행기기 비교에서 식별된 리스크")
+    pdf.bul("FDA 커뮤니케이션 센터 -- 선행기기 분석 기반 Pre-Sub 토론 포인트")
+    pdf.bul("문서 관리 -- 선행기기 비교 보고서를 DHF 산출물로")
+
+    pdf.sub("PMP 워크플로우")
+    pdf.txt(
+        "1. Predicate Finder를 사용하여 제품 코드 또는 키워드로 후보 선행기기를 검색합니다.\n"
+        "2. 선행기기 체인을 추적하여 규제 계보를 파악합니다.\n"
+        "3. 최대 4개 기기를 나란히 비교(Pro)하여 가장 강력한 선행기기를 선택합니다.\n"
+        "4. SE 논증 초안(Pro)을 생성하여 규제 팀의 출발점으로 활용합니다.\n"
+        "5. 결과를 PDF로 내보내고 문서 관리의 510(k) 제출 패키지에 첨부합니다."
+    )
+
+    # ── 24. FDA 및 규제 용어집 ──
+    pdf.add_page()
+    pdf.sec(24, "FDA 및 규제 용어집")
+    pdf.ln(2)
+    fda_terms_ko = [
+        ("510(k)", "시판 전 통지. II등급 의료기기가 합법적으로 판매되는 선행기기와 실질적으로 동등함을 입증하기 위해 FDA에 제출하는 문서. 식품의약품화장품법 제510(k)조에서 명명."),
+        ("PMA (시판 전 승인)", "가장 엄격한 FDA 승인 경로. 실질적 동등성을 입증할 수 없는 III등급 기기에 필요. 임상 데이터 필요."),
+        ("De Novo (신규 분류)", "선행기기가 없는 새로운 저-중등도 위험 기기를 위한 FDA 분류 경로. 승인 시 새로운 규제 분류 생성."),
+        ("실질적 동등성 (SE)", "510(k) 허가의 법적 기준. 새 기기는 선행기기와 동일한 사용 목적 및 유사한 기술적 특성을 가져야 하며, 또는 다른 특성이 새로운 안전성/유효성 문제를 제기하지 않아야 함."),
+        ("선행기기 (Predicate)", "새로운 510(k) 제출의 비교 기준으로 사용되는 합법적으로 판매되는 기기(510(k) 허가 또는 수정 전 판매)."),
+        ("제품 코드 (Product Code)", "기기 유형에 대한 FDA의 영숫자 분류 코드(예: 호흡기 모니터용 IKN, 흉부 영상기용 DQS, 폐활량계용 BZG)."),
+        ("I등급 / II등급 / III등급", "FDA 위험 기반 기기 분류. I등급=최저 위험(일반 통제). II등급=중등 위험(특별 통제+510(k)). III등급=최고 위험(PMA 필요)."),
+        ("Pre-Sub (시판 전 미팅)", "510(k) 또는 PMA 제출 전 규제 전략, 테스트 계획 또는 임상 연구 설계를 논의하기 위한 공식 FDA 미팅 요청."),
+        ("RTA (수리 거부)", "510(k) 제출에 대한 FDA의 초기 행정 심사. 체크리스트 미통과 시 실질 검토 전 즉시 반려."),
+        ("21 CFR Part 820", "품질 시스템 규정(QSR). 의료기기에 대한 FDA의 현행 우수 제조 관행(cGMP) 요구사항."),
+        ("ISO 13485", "의료기기 품질 관리 시스템 국제 표준. 전 세계적으로 널리 인정되며 FDA QSR과 점차 조화됨."),
+        ("ISO 14971", "의료기기 리스크 관리 국제 표준. 위험 식별, 리스크 추정, 리스크 평가 및 리스크 제어 프로세스 정의."),
+        ("IEC 60601-1", "의용 전기 기기의 기본 안전 및 필수 성능 국제 표준. 대부분의 전원 공급 의료기기의 기초 표준."),
+        ("IEC 62304", "의료기기 소프트웨어 수명 주기 프로세스 국제 표준. 소프트웨어 안전 등급(A, B, C) 및 개발 요구사항 정의."),
+        ("DHF (설계 이력 파일)", "21 CFR 820.30에 따라 의료기기의 설계 및 개발을 문서화하는 완전한 기록 모음."),
+        ("DMR (기기 마스터 레코드)", "기기 사양, 생산 프로세스, 품질 보증 절차 및 포장/라벨링 사양을 포함하는 완성 기기를 명시하는 문서."),
+        ("CAPA (시정 및 예방 조치)", "21 CFR 820.90에 의해 요구되는 체계적 프로세스. 부적합 조사, 근본 원인 식별, 시정/예방 조치 실행."),
+        ("V&V (검증 및 유효성 확인)", "검증은 설계 출력이 설계 입력을 충족하는지 확인(올바르게 구축). 유효성 확인은 기기가 사용자 요구와 사용 목적을 충족하는지 확인(올바른 것을 구축)."),
+        ("UDI (고유 기기 식별)", "기기 라벨 및 포장에 고유 식별자를 표시하도록 FDA가 의무화한 시스템. 추적, 리콜 및 이상사례 보고용."),
+        ("eSTAR", "전자 제출 템플릿 및 리소스. 이전 종이/eCopy 프로세스를 대체하는 FDA의 표준화된 510(k) 전자 제출 형식."),
+        ("openFDA", "510(k) 허가 기록, 이상사례, 리콜 등 규제 데이터에 대한 검색 가능한 접근을 제공하는 FDA의 공개 API."),
+        ("Predicate Finder", "openFDA 데이터베이스를 사용하여 선행기기를 검색, 비교 및 추적하는 510k Bridge의 SaaS 도구. 무료 및 Pro 등급 제공."),
+        ("선행기기 체인", "허가된 기기를 이전 세대의 510(k) 허가를 통해 연결하는 선행기기 참조 계보."),
+    ]
+    for k, v in fda_terms_ko:
+        pdf.kv(k, v)
+        pdf.ln(1)
+
+    out = os.path.join(OUT_DIR, "PMP_Users_Guide_KO.pdf")
+    pdf.output(out)
+    return out
+
+
 if __name__ == "__main__":
     print("Generating PMP User's Guide (EN)...")
     en = build_english()
@@ -1642,4 +2418,7 @@ if __name__ == "__main__":
     print("Generating PMP User's Guide (CN)...")
     cn = build_chinese()
     print(f"  CN: {cn}")
+    print("Generating PMP User's Guide (KO)...")
+    ko = build_korean()
+    print(f"  KO: {ko}")
     print("Done.")

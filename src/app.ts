@@ -555,7 +555,7 @@ function initAfterLogin(): void {
   loadCRs();
   loadInputs();
   initTabs();
-  initLangToggle();
+  initLangButtons();
   initHelpToggle();
   initFab();
   initRoleSwitcher();
@@ -719,30 +719,25 @@ function initTabs(): void {
   document.addEventListener("click", () => closeAllDropdowns());
 }
 
-// ── LANGUAGE TOGGLE ───────────────────────────
-function initLangToggle(): void {
-  const btn = document.getElementById("langToggle")!;
-  const label = document.getElementById("langLabel")!;
-  const langCycle: Array<"en" | "cn" | "ko"> = ["en", "cn", "ko"];
-  const langLabels: Record<string, string> = { en: "EN", cn: "中", ko: "한" };
-  const langTitles: Record<string, string> = {
-    en: "Switch to Chinese / 切换中文",
-    cn: "Switch to Korean / 한국어로 전환",
-    ko: "Switch to English / 切换英文",
-  };
-  function updateLangBtn(lang: "en" | "cn" | "ko"): void {
-    label.textContent = langLabels[lang];
-    btn.title = langTitles[lang];
+// ── LANGUAGE BUTTONS ──────────────────────────
+function initLangButtons(): void {
+  const container = document.getElementById("langButtons")!;
+  const buttons = container.querySelectorAll<HTMLButtonElement>(".lang-btn");
+  function updateActive(lang: string): void {
+    buttons.forEach((b) =>
+      b.classList.toggle("active", b.dataset.lang === lang),
+    );
   }
-  updateLangBtn(getLang());
-  btn.addEventListener("click", () => {
-    const cur = getLang();
-    const idx = langCycle.indexOf(cur);
-    const newLang = langCycle[(idx + 1) % langCycle.length];
-    setLang(newLang);
-    updateLangBtn(newLang);
-    applyLanguage(newLang);
-    renderAll();
+  updateActive(getLang());
+  buttons.forEach((b) => {
+    b.addEventListener("click", () => {
+      const newLang = b.dataset.lang as "en" | "cn" | "ko";
+      if (newLang === getLang()) return;
+      setLang(newLang);
+      updateActive(newLang);
+      applyLanguage(newLang);
+      renderAll();
+    });
   });
 }
 

@@ -100,13 +100,11 @@
         >
           <span>❓</span>
         </button>
-        <button
-          class="lang-toggle"
-          id="langToggle"
-          title="切换中文 / Switch English"
-        >
-          <span id="langLabel">EN</span>
-        </button>
+        <div class="lang-buttons" id="langButtons">
+          <button class="lang-btn" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="cn">中文</button>
+          <button class="lang-btn" data-lang="ko">한국어</button>
+        </div>
         <div class="current-month-badge">
           <span data-i18n="currentMonth">Current</span>:
           <strong>M+<span id="currentMonthNum">0</span></strong>
