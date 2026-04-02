@@ -557,6 +557,7 @@ function initAfterLogin(): void {
   initTabs();
   initLangButtons();
   initHelpToggle();
+  initFeedback();
   initFab();
   initRoleSwitcher();
   applyLanguage(getLang());
@@ -737,6 +738,41 @@ function initLangButtons(): void {
       updateActive(newLang);
       applyLanguage(newLang);
       renderAll();
+    });
+  });
+}
+
+// ── FEEDBACK MODAL ────────────────────────────
+function initFeedback(): void {
+  const btn = document.getElementById("feedbackBtn")!;
+  const overlay = document.getElementById("feedbackOverlay")!;
+  const closeBtn = document.getElementById("feedbackClose")!;
+  const form = document.getElementById("feedbackForm") as HTMLFormElement;
+  const thanks = document.getElementById("feedbackThanks")!;
+
+  btn.addEventListener("click", () => {
+    overlay.classList.add("open");
+    form.style.display = "";
+    thanks.style.display = "none";
+  });
+  closeBtn.addEventListener("click", () => overlay.classList.remove("open"));
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) overlay.classList.remove("open");
+  });
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    fetch(form.action, {
+      method: "POST",
+      body: data,
+      headers: { Accept: "application/json" },
+    }).then((res) => {
+      if (res.ok) {
+        form.style.display = "none";
+        thanks.style.display = "";
+        form.reset();
+      }
     });
   });
 }

@@ -284,6 +284,20 @@ body {
   border-color: var(--accent);
   cursor: default;
 }
+.feedback-btn {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.15s;
+}
+.feedback-btn:hover {
+  background: var(--accent);
+  color: #fff;
+}
 
 .current-month-badge {
   font-size: 0.8rem;

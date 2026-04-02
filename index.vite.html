@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://fllqdhvvnqoayugohzld.supabase.co wss://fllqdhvvnqoayugohzld.supabase.co https://api.fda.gov; font-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self';"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://fllqdhvvnqoayugohzld.supabase.co wss://fllqdhvvnqoayugohzld.supabase.co https://api.fda.gov https://formspree.io; font-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://formspree.io;"
     />
     <title>Medical Device Development Control Tower | 医疗器械开发控制塔</title>
   </head>
@@ -105,12 +105,160 @@
           <button class="lang-btn" data-lang="cn">中文</button>
           <button class="lang-btn" data-lang="ko">한국어</button>
         </div>
+        <button
+          class="feedback-btn"
+          id="feedbackBtn"
+          title="Report Issue / Feedback"
+        >
+          <span>💬</span>
+        </button>
         <div class="current-month-badge">
           <span data-i18n="currentMonth">Current</span>:
           <strong>M+<span id="currentMonthNum">0</span></strong>
         </div>
       </div>
     </header>
+
+    <!-- ============================================ -->
+    <!-- FEEDBACK MODAL                               -->
+    <!-- ============================================ -->
+    <div class="gate-detail-overlay" id="feedbackOverlay">
+      <div class="gate-detail-modal" style="max-width: 500px">
+        <button class="modal-close" id="feedbackClose">&times;</button>
+        <h3
+          style="margin: 0 0 4px; color: var(--accent)"
+          data-i18n="feedbackTitle"
+        >
+          Report Issue / Feedback
+        </h3>
+        <p
+          style="
+            margin: 0 0 16px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+          "
+          data-i18n="feedbackSubtitle"
+        >
+          Help us improve Control Tower
+        </p>
+        <form
+          id="feedbackForm"
+          action="https://formspree.io/f/mbdpjapw"
+          method="POST"
+        >
+          <input type="hidden" name="_source" value="Control Tower Feedback" />
+          <label style="display: block; margin-bottom: 12px">
+            <span
+              style="font-size: 0.85rem; color: var(--text-secondary)"
+              data-i18n="feedbackCategory"
+              >Category</span
+            >
+            <select
+              name="category"
+              required
+              style="
+                display: block;
+                width: 100%;
+                margin-top: 4px;
+                padding: 8px;
+                border-radius: 6px;
+                border: 1px solid var(--border);
+                background: var(--bg-elevated);
+                color: var(--text-primary);
+                font-size: 0.9rem;
+              "
+            >
+              <option value="bug" data-i18n="feedbackBug">Bug Report</option>
+              <option value="feature" data-i18n="feedbackFeature">
+                Feature Request
+              </option>
+              <option value="question" data-i18n="feedbackQuestion">
+                Question
+              </option>
+              <option value="other" data-i18n="feedbackOther">Other</option>
+            </select>
+          </label>
+          <label style="display: block; margin-bottom: 12px">
+            <span
+              style="font-size: 0.85rem; color: var(--text-secondary)"
+              data-i18n="feedbackEmail"
+              >Email (optional)</span
+            >
+            <input
+              type="email"
+              name="email"
+              style="
+                display: block;
+                width: 100%;
+                margin-top: 4px;
+                padding: 8px;
+                border-radius: 6px;
+                border: 1px solid var(--border);
+                background: var(--bg-elevated);
+                color: var(--text-primary);
+                font-size: 0.9rem;
+                box-sizing: border-box;
+              "
+            />
+          </label>
+          <label style="display: block; margin-bottom: 16px">
+            <span
+              style="font-size: 0.85rem; color: var(--text-secondary)"
+              data-i18n="feedbackDesc"
+              >Description</span
+            >
+            <textarea
+              name="message"
+              required
+              rows="5"
+              style="
+                display: block;
+                width: 100%;
+                margin-top: 4px;
+                padding: 8px;
+                border-radius: 6px;
+                border: 1px solid var(--border);
+                background: var(--bg-elevated);
+                color: var(--text-primary);
+                font-size: 0.9rem;
+                resize: vertical;
+                box-sizing: border-box;
+              "
+            ></textarea>
+          </label>
+          <button
+            type="submit"
+            style="
+              width: 100%;
+              padding: 10px;
+              border: none;
+              border-radius: 6px;
+              background: var(--accent);
+              color: #fff;
+              font-size: 0.95rem;
+              font-weight: 600;
+              cursor: pointer;
+            "
+            data-i18n="feedbackSend"
+          >
+            Send Feedback
+          </button>
+        </form>
+        <p
+          id="feedbackThanks"
+          style="
+            display: none;
+            text-align: center;
+            color: var(--green);
+            font-weight: 600;
+            margin-top: 16px;
+          "
+          data-i18n="feedbackThanks"
+        >
+          Thank you! Your feedback has been submitted.
+        </p>
+      </div>
+    </div>
 
     <!-- ============================================ -->
     <!-- NAVIGATION TABS                              -->
