@@ -5665,122 +5665,14 @@ function renderPredicateFinder(): void {
 }
 
 function renderGuidanceDocs(): void {
-  const body = document.getElementById("gdBody");
-  if (!body) return;
-  if (body.children.length > 0) return; // already rendered
-  const lang = getLang();
-  const isCN = lang === "cn";
-  const isKO = lang === "ko";
-
-  const FDA_URL =
-    "https://www.fda.gov/regulatory-information/search-fda-guidance-documents";
-
-  const categories = isCN
-    ? [
-        { icon: "🏥", title: "医疗器械", desc: "510(k)、PMA、De Novo设备指南" },
-        {
-          icon: "💻",
-          title: "软件与网络安全",
-          desc: "SaMD、SiMD、FDA网络安全指南",
-        },
-        { icon: "🧬", title: "生物相容性", desc: "ISO 10993、材料表征" },
-        { icon: "🏷️", title: "标签", desc: "21 CFR 801、UDI要求" },
-        { icon: "📋", title: "质量体系", desc: "21 CFR 820、CGMP、ISO 13485" },
-        { icon: "🔬", title: "临床与性能", desc: "临床试验、性能测试指南" },
-      ]
-    : isKO
-      ? [
-          {
-            icon: "🏥",
-            title: "의료기기",
-            desc: "510(k), PMA, De Novo 기기 가이던스",
-          },
-          {
-            icon: "💻",
-            title: "소프트웨어 & 사이버보안",
-            desc: "SaMD, SiMD, FDA 사이버보안 가이던스",
-          },
-          { icon: "🧬", title: "생체적합성", desc: "ISO 10993, 재료 특성화" },
-          { icon: "🏷️", title: "라벨링", desc: "21 CFR 801, UDI 요구사항" },
-          {
-            icon: "📋",
-            title: "품질 시스템",
-            desc: "21 CFR 820, CGMP, ISO 13485",
-          },
-          {
-            icon: "🔬",
-            title: "임상 & 성능",
-            desc: "임상시험, 성능시험 가이던스",
-          },
-        ]
-      : [
-          {
-            icon: "🏥",
-            title: "Medical Devices",
-            desc: "510(k), PMA, De Novo device guidances",
-          },
-          {
-            icon: "💻",
-            title: "Software & Cybersecurity",
-            desc: "SaMD, SiMD, FDA cybersecurity guidance",
-          },
-          {
-            icon: "🧬",
-            title: "Biocompatibility",
-            desc: "ISO 10993, material characterization",
-          },
-          {
-            icon: "🏷️",
-            title: "Labeling",
-            desc: "21 CFR 801, UDI requirements",
-          },
-          {
-            icon: "📋",
-            title: "Quality Systems",
-            desc: "21 CFR 820, CGMP, ISO 13485",
-          },
-          {
-            icon: "🔬",
-            title: "Clinical & Performance",
-            desc: "Clinical trials, performance testing guidance",
-          },
-        ];
-
-  const btnLabel = isCN
-    ? "打开FDA指南文件搜索"
-    : isKO
-      ? "FDA 가이던스 문서 검색 열기"
-      : "Open FDA Guidance Document Search";
-  const noteLabel = isCN
-    ? "FDA指南文件库包含2,700+份文件，涵盖所有器械类别和法规主题。"
-    : isKO
-      ? "FDA 가이던스 문서 라이브러리에는 2,700개 이상의 문서가 포함되어 있습니다."
-      : "The FDA guidance library contains 2,700+ documents across all device categories and regulatory topics.";
-
-  const cardsHTML = categories
-    .map(
-      (c) => `
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px;display:flex;align-items:flex-start;gap:10px">
-      <span style="font-size:1.5rem">${c.icon}</span>
-      <div>
-        <strong style="color:var(--text)">${c.title}</strong>
-        <div style="font-size:0.85rem;color:var(--muted);margin-top:2px">${c.desc}</div>
-      </div>
-    </div>`,
-    )
-    .join("");
-
-  body.innerHTML = `
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-bottom:20px">
-      ${cardsHTML}
-    </div>
-    <div style="text-align:center;margin:24px 0">
-      <a href="${FDA_URL}" target="_blank" rel="noopener noreferrer"
-         style="display:inline-block;padding:14px 32px;background:var(--accent);color:#fff;text-decoration:none;border-radius:8px;font-size:1rem;font-weight:600">
-        📄 ${btnLabel}
-      </a>
-      <p style="margin-top:12px;color:var(--muted);font-size:0.85rem">${noteLabel}</p>
-    </div>`;
+  const iframe = document.getElementById(
+    "gdIframe",
+  ) as HTMLIFrameElement | null;
+  if (!iframe) return;
+  // Lazy-load: set src only on first render
+  if (!iframe.src || iframe.src === "about:blank") {
+    iframe.src = "/guidance-docs/";
+  }
 }
 
 // ══════════════════════════════════════════════════
