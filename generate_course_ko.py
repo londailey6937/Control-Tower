@@ -1185,11 +1185,22 @@ def build():
         pdf.set_text_color(*TEXT)
         pdf.cell(0, 5.5, _a(title), new_x="LMARGIN", new_y="NEXT")
 
-    # ---- Save ----
-    out_path = os.path.join(OUT_DIR, "PMP_Course_KO.pdf")
-    pdf.output(out_path)
-    print(f"Course PDF (KO): {out_path}")
-    print(f"Pages: {pdf.page_no()}")
+    # ---- Save course ----
+    course_path = os.path.join(OUT_DIR, "PMP_Course_KO.pdf")
+    pdf.output(course_path)
+    print(f"Course PDF (KO): {course_path}  ({pdf.page_no()} pages)")
+
+    # ---- Append answer sheet ----
+    from pypdf import PdfWriter
+    import generate_answers_ko
+    generate_answers_ko.build()
+    answer_path = os.path.join(OUT_DIR, "PMP_Course_Answer_Sheet_KO.pdf")
+    writer = PdfWriter()
+    writer.append(course_path)
+    writer.append(answer_path)
+    writer.write(course_path)
+    writer.close()
+    print(f"Combined PDF (course + answers): {course_path}")
 
 
 if __name__ == "__main__":

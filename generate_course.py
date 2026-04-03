@@ -8,6 +8,7 @@ Generates a comprehensive PDF suitable for a professional education program.
 
 import os
 from fpdf import FPDF
+from pypdf import PdfWriter
 
 OUT_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -1188,11 +1189,21 @@ def build():
         pdf.set_text_color(*TEXT)
         pdf.cell(0, 5.5, title, new_x="LMARGIN", new_y="NEXT")
 
-    # ---- Save ----
-    out_path = os.path.join(OUT_DIR, "PMP_Course.pdf")
-    pdf.output(out_path)
-    print(f"Course PDF: {out_path}")
-    print(f"Pages: {pdf.page_no()}")
+    # ---- Save course ----
+    course_path = os.path.join(OUT_DIR, "PMP_Course.pdf")
+    pdf.output(course_path)
+    print(f"Course PDF: {course_path}  ({pdf.page_no()} pages)")
+
+    # ---- Append answer sheet ----
+    import generate_answers
+    generate_answers.build()
+    answer_path = os.path.join(OUT_DIR, "PMP_Course_Answer_Sheet.pdf")
+    writer = PdfWriter()
+    writer.append(course_path)
+    writer.append(answer_path)
+    writer.write(course_path)
+    writer.close()
+    print(f"Combined PDF (course + answers): {course_path}")
 
 
 if __name__ == "__main__":
