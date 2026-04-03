@@ -267,6 +267,7 @@ def build_english():
     pdf.kv("Message Board", "Purpose-driven messaging with structured threads, decision logging, workstream filtering, and accountability")
     pdf.kv("FDA Comms", "FDA Communications Center -- Q-Sub tracking, DICE correspondence, RTA checklist, and Pre-Submission meeting management (PMP-only)")
     pdf.kv("Predicate Finder", "Embedded 510(k) predicate search, chain tracing, and SE argument tool")
+    pdf.kv("Guidance Docs", "FDA Guidance Document Search -- browse 2,700+ final and draft guidances by device category, software, biocompatibility, labeling, and quality systems")
 
     # 5. Dual-Track
     pdf.add_page()
@@ -1523,7 +1524,6 @@ def build_english():
     pdf.sub("34.1 Checklist Modules")
     pdf.bul("Delaware C-Corp Formation -- articles of incorporation, bylaws, EIN")
     pdf.bul("Oregon Registration -- foreign entity registration, business license")
-    pdf.bul("Washington Registration -- foreign entity registration, B&O tax setup")
     pdf.bul("Registered Agent -- appointment and annual renewal tracking")
     pdf.bul("US Bank Account -- application status, signatory requirements")
     pdf.bul("FDA Establishment Registration -- facility registration, device listing")
@@ -1863,6 +1863,7 @@ def build_chinese():
     pdf.kv("\u7559\u8a00\u677f", "\u76ee\u6807\u9a71\u52a8\u7684\u7ed3\u6784\u5316\u7ebf\u7a0b\u6d88\u606f\u3001\u51b3\u7b56\u8bb0\u5f55\u3001\u5de5\u4f5c\u6d41\u7b5b\u9009\u548c\u8d23\u4efb\u5236")
     pdf.kv("FDA\u901a\u4fe1", "FDA\u901a\u4fe1\u4e2d\u5fc3" + EM + EM + "Q-Sub\u8ffd\u8e2a\u3001DICE\u901a\u4fe1\u3001RTA\u68c0\u67e5\u8868\u548c\u9884\u63d0\u4ea4\u4f1a\u8bae\u7ba1\u7406\uff08\u4ec5PMP\uff09")
     pdf.kv("Predicate Finder", "\u5d4c\u5165\u5f0f510(k)\u5148\u5bfc\u641c\u7d22\u3001\u94fe\u8ffd\u6eaf\u548cSE\u8bba\u8bc1\u5de5\u5177")
+    pdf.kv("\u6307\u5357\u6587\u4ef6", "FDA\u6307\u5357\u6587\u4ef6\u641c\u7d22" + EM + EM + "\u6d4f\u89c82,700+\u4efd\u6700\u7ec8\u7248\u548c\u8349\u6848\u6307\u5357\uff0c\u8986\u76d6\u5668\u68b0\u7c7b\u522b\u3001\u8f6f\u4ef6\u3001\u751f\u7269\u76f8\u5bb9\u6027\u3001\u6807\u7b7e\u548c\u8d28\u91cf\u4f53\u7cfb")
 
     # 5
     pdf.add_page()

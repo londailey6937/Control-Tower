@@ -541,6 +541,10 @@ export const I18N: I18nMessages = {
     pfTitle: "510(k) Predicate Finder",
     pfDesc:
       "Search FDA's 510(k) database, trace predicate chains, compare devices, and generate SE arguments.",
+    tabGuidanceDocs: "Guidance Docs",
+    gdTitle: "FDA Guidance Document Search",
+    gdDesc:
+      "Search FDA's library of guidance documents — final and draft guidances for medical devices, software, biocompatibility, labeling, and more.",
     fdaTitle: "FDA Communications Center",
     fdaDesc:
       "Q-Sub package generation, RTA checklist, and FDA interaction timeline \u2014 PMP eyes only",
@@ -1190,6 +1194,10 @@ export const I18N: I18nMessages = {
     pfTitle: "510(k) 先导器械查找器",
     pfDesc:
       "搜索FDA 510(k)数据库，追踪先导器械链，比较设备，生成实质等同性论证。",
+    tabGuidanceDocs: "指南文件",
+    gdTitle: "FDA指南文件搜索",
+    gdDesc:
+      "搜索FDA指南文件库 — 医疗器械、软件、生物相容性、标签等领域的最终版和草案指南。",
     fdaTitle: "FDA通信中心",
     fdaDesc: "Q-Sub包生成、RTA清单和FDA交互时间线 — 仅PMP可见",
     qaTitle: "留言板",
@@ -1818,6 +1826,10 @@ export const I18N: I18nMessages = {
     pfTitle: "510(k) 선행기기 검색",
     pfDesc:
       "FDA 510(k) 데이터베이스 검색, 선행기기 체인 추적, 기기 비교, SE 논증 생성.",
+    tabGuidanceDocs: "가이던스 문서",
+    gdTitle: "FDA 가이던스 문서 검색",
+    gdDesc:
+      "FDA 가이던스 문서 라이브러리 검색 — 의료기기, 소프트웨어, 생체적합성, 라벨링 등의 최종 및 초안 가이던스.",
     fdaTitle: "FDA 커뮤니케이션 센터",
     fdaDesc:
       "Q-Sub 패키지 생성, RTA 체크리스트, FDA 상호작용 타임라인 — PMP 전용",

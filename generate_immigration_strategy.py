@@ -179,7 +179,7 @@ def build():
     pdf.sub("How It Works")
     pdf.txt(
         "Danielle files Form I-526E as the principal EB-5 investor. She invests "
-        "$800,000 into 510kBridge, which is registered in Camas, Washington -- a "
+        "$800,000 into 510kBridge, which is registered in Gresham, Oregon -- a "
         "designated Targeted Employment Area (TEA) qualifying for the reduced "
         "investment threshold. The company must create at least 10 full-time US "
         "jobs within two years."
@@ -386,17 +386,17 @@ def build():
         "the US and China operations."
     )
 
-    # ── WHY CAMAS ─────────────────────────────────
-    pdf.sec("Why Camas, Washington")
+    # ── WHY GRESHAM ─────────────────────────────────────
+    pdf.sec("Why Gresham, Oregon")
 
     pdf.txt(
-        "Camas is just across the river from Portland -- 20 minutes from the airport. "
+        "Gresham is just east of Portland -- 20 minutes from the airport. "
         "It qualifies as a Targeted Employment Area, which means the EB-5 investment "
         "threshold is $800,000 instead of $1,050,000."
     )
 
     pdf.txt(
-        "For the family: sell the current home at $800K or more and buy new in Camas. "
+        "For the family: sell the current home at $800K or more and buy new in Gresham. "
         "Beautiful homes are available -- some listed at $2M. The family would be close "
         "together, close to Portland International Airport, and in a great community "
         "with excellent schools for Claire."

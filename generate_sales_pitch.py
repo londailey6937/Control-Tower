@@ -201,7 +201,7 @@ def build_english():
     pdf.txt(
         "  $1K-5K one-time or $200/mo\n"
         "    Delaware C-Corp formation\n"
-        "    Oregon & Washington state registration\n"
+        "    Oregon state registration\n"
         "    Registered agent, EIN, US bank account coordination\n"
         "    FDA establishment registration, US Agent, labeling compliance\n"
         "    Best for: Chinese companies establishing US legal presence")

@@ -124,7 +124,6 @@
     <!-- ============================================ -->
     <div class="gate-detail-overlay" id="feedbackOverlay">
       <div class="gate-detail-modal" style="max-width: 500px">
-        <button class="modal-close" id="feedbackClose">&times;</button>
         <h3
           style="margin: 0 0 4px; color: var(--accent)"
           data-i18n="feedbackTitle"
@@ -313,6 +312,10 @@
           <button class="tab-btn" data-tab="predicate-finder">
             <span class="tab-icon">🔍</span>
             <span data-i18n="tabPredicateFinder">Predicate Finder</span>
+          </button>
+          <button class="tab-btn" data-tab="guidance-docs">
+            <span class="tab-icon">📄</span>
+            <span data-i18n="tabGuidanceDocs">Guidance Docs</span>
           </button>
         </div>
       </div>
@@ -1109,6 +1112,18 @@
           class="pf-iframe"
           title="510(k) Predicate Finder"
         ></iframe>
+      </section>
+      <!-- ── FDA GUIDANCE DOCUMENTS (Embedded) ────── -->
+      <section class="tab-panel" id="panel-guidance-docs">
+        <div class="panel-header">
+          <h2 data-i18n="gdTitle">FDA Guidance Document Search</h2>
+          <p class="panel-desc" data-i18n="gdDesc">
+            Search FDA's library of guidance documents — final and draft
+            guidances for medical devices, software, biocompatibility, labeling,
+            and more.
+          </p>
+        </div>
+        <div id="gdBody"></div>
       </section>
       <!-- ── PMP INPUT PANEL (slide-in) ─────────── -->
       <div class="input-panel-overlay" id="inputPanelOverlay">

@@ -97,7 +97,7 @@ def build_factsheet_en():
         "Chinese medical device companies seeking FDA 510(k) clearance to enter "
         "the US market. We specialize in Class II non-invasive devices: patient "
         "monitors, imaging systems, rehabilitation equipment, diagnostic tools, "
-        "and software-as-a-medical-device (SaMD). Offices in Camas, WA & Shanghai, China.")
+        "and software-as-a-medical-device (SaMD). Offices in Gresham, Oregon & Shanghai, China.")
 
     # ── The Problem ──
     pdf.section_bar("THE PROBLEM")
@@ -111,7 +111,7 @@ def build_factsheet_en():
     # ── Our Solution ──
     pdf.section_bar("OUR SOLUTION")
     pdf.txt(
-        "A bilingual (EN/CN) 510(k) project management platform paired with "
+        "A trilingual (EN/KO/CN) 510(k) project management platform paired with "
         "experienced regulatory professionals. From predicate device research through "
         "FDA clearance, we bridge the language, process, and compliance gap -- "
         "including QMS, entity formation, and investor relations.")
@@ -126,7 +126,7 @@ def build_factsheet_en():
     pdf.set_text_color(*FactEN.DARK)
     items_left = [
         "16-tab Control Tower dashboard",
-        "Bilingual 9-step setup wizard",
+        "Multilingual 9-step setup wizard",
         "AI-powered Predicate Finder",
         "FDA Communications Center",
         "Q-Sub generation & RTA self-check",
@@ -174,7 +174,7 @@ def build_factsheet_en():
     pdf.section_bar("SERVICE TIERS")
     tiers = [
         ("Control Tower", "From $500/mo",
-         ["16-tab PM dashboard", "Bilingual setup wizard", "Dual-track milestones",
+         ["16-tab PM dashboard", "Multilingual setup wizard", "Dual-track milestones",
           "Document control & messaging", "Risk & budget tracking", "Predicate Finder included"]),
         ("QMS-Lite", "$200-500/mo (included in Professional & Enterprise)",
          ["21 CFR 820 & ISO 13485 aligned", "Document control & CAPA",
@@ -217,7 +217,7 @@ def build_factsheet_en():
     pdf.section_bar("GET STARTED")
     pdf.set_font("Helvetica", "", 9)
     pdf.set_text_color(*FactEN.DARK)
-    pdf.cell(0, 5, _a("info@510kbridge.com  |  510kbridge.com  |  Camas, WA & Shanghai, China"), align="C")
+    pdf.cell(0, 5, _a("info@510kbridge.com  |  510kbridge.com  |  Gresham, Oregon & Shanghai, China"), align="C")
     pdf.ln(3)
     pdf.set_font("Helvetica", "", 8)
     pdf.set_text_color(*FactEN.GRAY)
@@ -323,7 +323,7 @@ def build_factsheet_cn():
     # ── Our Solution ──
     pdf.section_bar("我们的解决方案")
     pdf.txt(
-        "双语(中英文)510(k)项目管理平台，配合经验丰富的法规专业人员。"
+        "多语言(中英韩文)510(k)项目管理平台，配合经验丰富的法规专业人员。"
         "从策略制定到获批放行，我们弥合语言、流程和合规差距。")
 
     # ── Platform Highlights ──
@@ -334,7 +334,7 @@ def build_factsheet_cn():
     y0 = pdf.get_y()
     items_left = [
         "16选项卡控制塔仪表盘",
-        "双语9步设置向导",
+        "多语言9步设置向导",
         "7大设备类别模板",
         "双轨里程碑跟踪",
         "FDA通信中心",
@@ -381,7 +381,7 @@ def build_factsheet_cn():
     pdf.section_bar("服务层级")
     tiers = [
         ("Control Tower", "起步价$500/月",
-         ["16选项卡PM仪表板", "双语设置向导", "双轨里程碑",
+         ["16选项卡PM仪表板", "多语言设置向导", "双轨里程碑",
           "文档控制与消息", "风险与预算跟踪", "Predicate Finder包含"]),
         ("QMS-Lite", "$200-500/月 (专业版和企业版已包含)",
          ["21 CFR 820 & ISO 13485对齐", "文档控制与CAPA",
@@ -424,7 +424,7 @@ def build_factsheet_cn():
     pdf.section_bar("立即开始")
     pdf.set_font("ARUNI", "", 9)
     pdf.set_text_color(*FactCN.DARK)
-    pdf.cell(0, 5, "info@510kbridge.com  |  510kbridge.com  |  美国卡马斯 & 中国上海", align="C")
+    pdf.cell(0, 5, "info@510kbridge.com  |  510kbridge.com  |  美国格雷舍姆(俄勒冈州) & 中国上海", align="C")
     pdf.ln(3)
     pdf.set_font("ARUNI", "", 8)
     pdf.set_text_color(*FactCN.GRAY)
@@ -518,7 +518,7 @@ def build_factsheet_ko():
         "FDA 510(k) \uc778\ud5c8\uac00\ub97c \ud1b5\ud574 \ubbf8\uad6d \uc2dc\uc7a5\uc5d0 \uc9c4\ucd9c\ud558\ub824\ub294 \ud55c\uad6d \uc758\ub8cc\uae30\uae30 \uae30\uc5c5. "
         "Class II \ube44\uce68\uc2b5\uc801 \uae30\uae30 \uc804\ubb38: \ud658\uc790 \ubaa8\ub2c8\ud130, \uc601\uc0c1 \uc2dc\uc2a4\ud15c, "
         "\uc7ac\ud65c \uc7a5\ube44, \uc9c4\ub2e8 \ub3c4\uad6c \ubc0f SaMD(\uc758\ub8cc\uae30\uae30 \uc18c\ud504\ud2b8\uc6e8\uc5b4). "
-        "\ubbf8\uad6d \uce74\ub9c8\uc2a4(WA) \ubc0f \uc911\uad6d \uc0c1\ud558\uc774 \uc624\ud53c\uc2a4.")
+        "\ubbf8\uad6d \uadf8\ub808\uc14c(\uc624\ub808\uac74\uc8fc) \ubc0f \uc911\uad6d \uc0c1\ud558\uc774 \uc624\ud53c\uc2a4.")
 
     # ── The Problem ──
     pdf.section_bar("\uc5c5\uacc4 \ubb38\uc81c\uc810")
@@ -638,7 +638,7 @@ def build_factsheet_ko():
     pdf.section_bar("\uc2dc\uc791\ud558\uae30")
     pdf.set_font("ARUNI", "", 9)
     pdf.set_text_color(*FactKO.DARK)
-    pdf.cell(0, 5, "info@510kbridge.com  |  510kbridge.com  |  \ubbf8\uad6d \uce74\ub9c8\uc2a4(WA) & \uc911\uad6d \uc0c1\ud558\uc774", align="C")
+    pdf.cell(0, 5, "info@510kbridge.com  |  510kbridge.com  |  \ubbf8\uad6d \uadf8\ub808\uc14c(OR) & \uc911\uad6d \uc0c1\ud558\uc774", align="C")
     pdf.ln(3)
     pdf.set_font("ARUNI", "", 8)
     pdf.set_text_color(*FactKO.GRAY)

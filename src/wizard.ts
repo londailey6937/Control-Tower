@@ -250,9 +250,9 @@ const TXT = {
     ko: "신청자 주소",
   },
   applicantAddressPh: {
-    en: "e.g. 123 Main St, Suite 100, Camas, WA 98607",
-    cn: "例: 123 Main St, Suite 100, Camas, WA 98607",
-    ko: "예: 123 Main St, Suite 100, Camas, WA 98607",
+    en: "e.g. 123 Main St, Suite 100, Gresham, OR 97030",
+    cn: "例: 123 Main St, Suite 100, Gresham, OR 97030",
+    ko: "예: 123 Main St, Suite 100, Gresham, OR 97030",
   },
   applicantPhone: {
     en: "Applicant Phone",

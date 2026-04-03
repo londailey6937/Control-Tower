@@ -221,17 +221,17 @@ def build():
         "You would be investing in your family, not in someone else's company."
     )
 
-    # ── WHY CAMAS ─────────────────────────────────
-    pdf.sec("Why Camas, Washington")
+    # ── WHY GRESHAM ─────────────────────────────────────
+    pdf.sec("Why Gresham, Oregon")
 
     pdf.txt(
-        "Camas is just across the river from Portland -- 20 minutes from the airport. "
+        "Gresham is just east of Portland -- 20 minutes from the airport. "
         "It qualifies as a Targeted Employment Area, which means the EB-5 investment "
         "threshold is $800,000 instead of $1,050,000."
     )
 
     pdf.txt(
-        "I would suggest selling your house and buying new in Camas. There are beautiful "
+        "I would suggest selling your house and buying new in Gresham. There are beautiful "
         "homes available -- I found one listed at $2M right now. You could sell yours at "
         "$800K or more, and the difference puts you in a nicer home in a TEA-qualified "
         "area where the company is registered. The family would be close together, close "
@@ -332,9 +332,9 @@ def build():
     )
 
     pdf.bold_bullet("Investment: ", "$800,000 in a Targeted Employment Area (TEA) "
-                    "or $1,050,000 in a standard area. Camas, Washington qualifies "
-                    "as a TEA -- it is outside the Portland metro MSA boundary and "
-                    "meets the high-unemployment threshold at the census tract level.")
+                    "or $1,050,000 in a standard area. Gresham, Oregon qualifies "
+                    "as a TEA -- it meets the high-unemployment threshold at the "
+                    "census tract level.")
     pdf.bold_bullet("Job Creation: ", "The business must create at least 10 full-time "
                     "US jobs per investor")
     pdf.bold_bullet("Timeline: ", "Conditional green card (2 years), then file I-829 "
@@ -343,7 +343,7 @@ def build():
                     "(not a guaranteed return)")
 
     pdf.txt(
-        "510kBridge would be registered in Camas, Washington -- a designated "
+        "510kBridge would be registered in Gresham, Oregon -- a designated "
         "TEA that qualifies for the reduced $800,000 investment threshold. Our hiring "
         "plan calls for 13+ full-time positions in the first 2-3 years -- well above "
         "the 10-job threshold. And because the EB-5 investment goes directly into an "
@@ -381,7 +381,7 @@ def build():
         [
             ["Your role", "CEO", "Minority investor"],
             ["Family roles", "Danielle, Jessica, Malei", "None guaranteed"],
-            ["Capital required", "$800K (Camas TEA)", "$1M+ at set valuation"],
+            ["Capital required", "$800K (Gresham TEA)", "$1M+ at set valuation"],
             ["Valuation", "You build it from zero", "Pre-set by others"],
             ["Control", "Full -- you are CEO", "Limited, makes you uneasy"],
             ["Technology IP", "4-product suite (CT, PF, QMS, EST)", "None"],

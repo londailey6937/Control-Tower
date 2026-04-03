@@ -212,7 +212,6 @@ def build():
         "Checklist Modules:\n"
         "  Delaware C-Corp Formation -- Articles of incorporation, bylaws, EIN\n"
         "  Oregon Registration -- Foreign entity registration, business license\n"
-        "  Washington Registration -- Foreign entity registration, B&O tax setup\n"
         "  Registered Agent -- Appointment and annual renewal tracking\n"
         "  US Bank Account -- Application status, signatory requirements\n"
         "  FDA Establishment Registration -- Facility registration, device listing\n"
