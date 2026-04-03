@@ -267,7 +267,7 @@ def build_english():
     pdf.kv("Message Board", "Purpose-driven messaging with structured threads, decision logging, workstream filtering, and accountability")
     pdf.kv("FDA Comms", "FDA Communications Center -- Q-Sub tracking, DICE correspondence, RTA checklist, and Pre-Submission meeting management (PMP-only)")
     pdf.kv("Predicate Finder", "Embedded 510(k) predicate search, chain tracing, and SE argument tool")
-    pdf.kv("Guidance Docs", "FDA Guidance Document Search -- browse 2,700+ final and draft guidances by device category, software, biocompatibility, labeling, and quality systems")
+    pdf.kv("Guidance Docs", "FDA Guidance Document Search -- embedded searchable database of 600+ CDRH guidance documents with keyword search, topic filter, status filter (Final/Draft), year range, and direct PDF download links")
 
     # 5. Dual-Track
     pdf.add_page()
@@ -1546,9 +1546,41 @@ def build_english():
         "tabs, giving project managers visibility into corporate formation progress "
         "alongside regulatory milestones.")
 
-    # 35. Glossary
+    # 35. FDA Guidance Document Search
     pdf.add_page()
-    pdf.sec(35, "Glossary of Key Terms")
+    pdf.sec(35, "FDA Guidance Document Search")
+    pdf.txt(
+        "The Guidance Docs tab provides an embedded, searchable database of 600+ guidance "
+        "documents published by the FDA Center for Devices and Radiological Health (CDRH). "
+        "Unlike the Predicate Finder which queries the openFDA API in real time, the Guidance "
+        "Docs database is pre-loaded from a curated scrape of the official CDRH guidance page, "
+        "ensuring fast search and offline-ready performance.")
+
+    pdf.sub("35.1 Search and Filters")
+    pdf.bul("Keyword Search -- full-text search across document titles, matching as you type")
+    pdf.bul("Topic Filter -- 40+ categories including Biocompatibility, Software, IVD, "
+            "Labeling, Postmarket Surveillance, Quality System, Radiation, Sterility, and more")
+    pdf.bul("Status Filter -- filter by Final, Draft, or All to focus on current or upcoming guidance")
+    pdf.bul("Year Range -- adjustable From/To year range to narrow results by publication date")
+    pdf.bul("Sortable Columns -- click any column header (Title, Topic, Status, Date) to sort ascending or descending")
+
+    pdf.sub("35.2 Results and PDF Access")
+    pdf.txt(
+        "Search results display in a paginated table (20 per page) showing title, topic, status, "
+        "and date. Each row includes a direct PDF download link to the full guidance document on "
+        "FDA.gov. Results update instantly as filters change.")
+
+    pdf.sub("35.3 Integration with Control Tower")
+    pdf.txt(
+        "The Guidance Docs tab is available to all four roles (PMP, Technology, Business, "
+        "Accounting). It loads as an iframe from the same deployment origin, matching the "
+        "dark-theme design of the Control Tower. Teams can reference specific guidance documents "
+        "when building their regulatory strategy in the Regulatory Tracker tab or preparing "
+        "Pre-Submission packages in the FDA Communications Center.")
+
+    # 36. Glossary
+    pdf.add_page()
+    pdf.sec(36, "Glossary of Key Terms")
     pdf.ln(2)
     terms = [
         ("M+N", "Month notation. M+0 = project start (March 2026). M+6 = six months later (Sep 2026). Used throughout for all scheduling."),
@@ -1863,7 +1895,7 @@ def build_chinese():
     pdf.kv("\u7559\u8a00\u677f", "\u76ee\u6807\u9a71\u52a8\u7684\u7ed3\u6784\u5316\u7ebf\u7a0b\u6d88\u606f\u3001\u51b3\u7b56\u8bb0\u5f55\u3001\u5de5\u4f5c\u6d41\u7b5b\u9009\u548c\u8d23\u4efb\u5236")
     pdf.kv("FDA\u901a\u4fe1", "FDA\u901a\u4fe1\u4e2d\u5fc3" + EM + EM + "Q-Sub\u8ffd\u8e2a\u3001DICE\u901a\u4fe1\u3001RTA\u68c0\u67e5\u8868\u548c\u9884\u63d0\u4ea4\u4f1a\u8bae\u7ba1\u7406\uff08\u4ec5PMP\uff09")
     pdf.kv("Predicate Finder", "\u5d4c\u5165\u5f0f510(k)\u5148\u5bfc\u641c\u7d22\u3001\u94fe\u8ffd\u6eaf\u548cSE\u8bba\u8bc1\u5de5\u5177")
-    pdf.kv("\u6307\u5357\u6587\u4ef6", "FDA\u6307\u5357\u6587\u4ef6\u641c\u7d22" + EM + EM + "\u6d4f\u89c82,700+\u4efd\u6700\u7ec8\u7248\u548c\u8349\u6848\u6307\u5357\uff0c\u8986\u76d6\u5668\u68b0\u7c7b\u522b\u3001\u8f6f\u4ef6\u3001\u751f\u7269\u76f8\u5bb9\u6027\u3001\u6807\u7b7e\u548c\u8d28\u91cf\u4f53\u7cfb")
+    pdf.kv("\u6307\u5357\u6587\u4ef6", "FDA\u6307\u5357\u6587\u4ef6\u641c\u7d22" + EM + EM + "\u5d4c\u5165\u5f0f600+\u4efdCDRH\u6307\u5357\u6587\u4ef6\u53ef\u641c\u7d22\u6570\u636e\u5e93\uff0c\u652f\u6301\u5173\u952e\u8bcd\u641c\u7d22\u3001\u4e3b\u9898\u7b5b\u9009\u3001\u72b6\u6001\u7b5b\u9009\uff08\u6700\u7ec8\u7248/\u8349\u6848\uff09\u3001\u5e74\u4efd\u8303\u56f4\u548cPDF\u76f4\u63a5\u4e0b\u8f7d")
 
     # 5
     pdf.add_page()
@@ -3064,9 +3096,41 @@ def build_chinese():
         "\u5b9e\u4f53\u8bbe\u7acb\u72b6\u6001\u63a5\u5165Control Tower\u7684\u7f8e\u56fd\u6295\u8d44\u548c\u8d44\u6e90\u9009\u9879\u5361\uff0c"
         "\u8ba9\u9879\u76ee\u7ecf\u7406\u5728\u6cd5\u89c4\u91cc\u7a0b\u7891\u65c1\u8fb9\u4e86\u89e3\u516c\u53f8\u7ec4\u5efa\u8fdb\u5ea6\u3002")
 
-    # 35 关键术语表
+    # 35 FDA指南文件搜索
     pdf.add_page()
-    pdf.sec(35, "\u5173\u952e\u672f\u8bed\u8868")
+    pdf.sec(35, "FDA\u6307\u5357\u6587\u4ef6\u641c\u7d22")
+    pdf.txt(
+        "\u6307\u5357\u6587\u4ef6\u9009\u9879\u5361\u63d0\u4f9b\u4e86\u4e00\u4e2a\u5d4c\u5165\u5f0f\u53ef\u641c\u7d22\u6570\u636e\u5e93\uff0c"
+        "\u5305\u542b600+\u4efdFDA\u5668\u68b0\u548c\u653e\u5c04\u5065\u5eb7\u4e2d\u5fc3\uff08CDRH\uff09\u53d1\u5e03\u7684\u6307\u5357\u6587\u4ef6\u3002"
+        "\u4e0ePredicate Finder\u5b9e\u65f6\u67e5\u8be2openFDA API\u4e0d\u540c\uff0c"
+        "\u6307\u5357\u6587\u4ef6\u6570\u636e\u5e93\u4ece\u5b98\u65b9CDRH\u6307\u5357\u9875\u9762\u9884\u52a0\u8f7d\uff0c"
+        "\u786e\u4fdd\u5feb\u901f\u641c\u7d22\u548c\u79bb\u7ebf\u5c31\u7eea\u6027\u80fd\u3002")
+
+    pdf.sub("35.1 \u641c\u7d22\u548c\u7b5b\u9009")
+    pdf.bul("\u5173\u952e\u8bcd\u641c\u7d22 -- \u5728\u6587\u6863\u6807\u9898\u4e2d\u8fdb\u884c\u5168\u6587\u641c\u7d22\uff0c\u8f93\u5165\u5373\u641c")
+    pdf.bul("\u4e3b\u9898\u7b5b\u9009 -- 40+\u4e2a\u7c7b\u522b\uff0c\u5305\u62ec\u751f\u7269\u76f8\u5bb9\u6027\u3001\u8f6f\u4ef6\u3001IVD\u3001"
+            "\u6807\u7b7e\u3001\u4e0a\u5e02\u540e\u76d1\u7763\u3001\u8d28\u91cf\u4f53\u7cfb\u3001\u653e\u5c04\u3001\u65e0\u83cc\u7b49")
+    pdf.bul("\u72b6\u6001\u7b5b\u9009 -- \u6309\u6700\u7ec8\u7248\u3001\u8349\u6848\u6216\u5168\u90e8\u7b5b\u9009\uff0c\u805a\u7126\u5f53\u524d\u6216\u5373\u5c06\u53d1\u5e03\u7684\u6307\u5357")
+    pdf.bul("\u5e74\u4efd\u8303\u56f4 -- \u53ef\u8c03\u8282\u7684\u8d77\u59cb/\u7ed3\u675f\u5e74\u4efd\uff0c\u6309\u53d1\u5e03\u65e5\u671f\u7f29\u5c0f\u7ed3\u679c\u8303\u56f4")
+    pdf.bul("\u53ef\u6392\u5e8f\u5217 -- \u70b9\u51fb\u4efb\u610f\u5217\u6807\u9898\uff08\u6807\u9898\u3001\u4e3b\u9898\u3001\u72b6\u6001\u3001\u65e5\u671f\uff09\u8fdb\u884c\u5347\u5e8f\u6216\u964d\u5e8f\u6392\u5217")
+
+    pdf.sub("35.2 \u7ed3\u679c\u548cPDF\u8bbf\u95ee")
+    pdf.txt(
+        "\u641c\u7d22\u7ed3\u679c\u4ee5\u5206\u9875\u8868\u683c\u663e\u793a\uff08\u6bcf\u987520\u6761\uff09\uff0c"
+        "\u5305\u542b\u6807\u9898\u3001\u4e3b\u9898\u3001\u72b6\u6001\u548c\u65e5\u671f\u3002"
+        "\u6bcf\u884c\u5305\u542b\u6307\u5411FDA.gov\u4e0a\u5b8c\u6574\u6307\u5357\u6587\u4ef6\u7684\u76f4\u63a5PDF\u4e0b\u8f7d\u94fe\u63a5\u3002"
+        "\u7ed3\u679c\u968f\u7b5b\u9009\u6761\u4ef6\u53d8\u5316\u5373\u65f6\u66f4\u65b0\u3002")
+
+    pdf.sub("35.3 \u4e0eControl Tower\u7684\u96c6\u6210")
+    pdf.txt(
+        "\u6307\u5357\u6587\u4ef6\u9009\u9879\u5361\u5bf9\u6240\u6709\u56db\u4e2a\u89d2\u8272\uff08PMP\u3001\u6280\u672f\u3001\u4e1a\u52a1\u3001\u8d22\u52a1\uff09\u5747\u53ef\u7528\u3002"
+        "\u4ee5iframe\u5f62\u5f0f\u4ece\u540c\u4e00\u90e8\u7f72\u6e90\u52a0\u8f7d\uff0c\u4e0eControl Tower\u6697\u8272\u4e3b\u9898\u8bbe\u8ba1\u5339\u914d\u3002"
+        "\u56e2\u961f\u53ef\u4ee5\u5728\u6784\u5efa\u6cd5\u89c4\u7b56\u7565\uff08\u6cd5\u89c4\u8ffd\u8e2a\u5668\u9009\u9879\u5361\uff09\u6216"
+        "\u51c6\u5907Pre-Submission\u5305\uff08FDA\u901a\u4fe1\u4e2d\u5fc3\uff09\u65f6\u5f15\u7528\u7279\u5b9a\u6307\u5357\u6587\u4ef6\u3002")
+
+    # 36 \u5173\u952e\u672f\u8bed\u8868
+    pdf.add_page()
+    pdf.sec(36, "\u5173\u952e\u672f\u8bed\u8868")
     pdf.ln(2)
     terms = [
         ("M+N", "\u6708\u4efd\u6807\u8bb0\u3002M+0 = \u9879\u76ee\u542f\u52a8\uff082026\u5e743\u6708\uff09\u3002M+6 = \u542f\u52a8\u540e6\u4e2a\u6708\u3002\u8d2f\u7a7f\u6240\u6709\u8ba1\u5212\u4f7f\u7528\u3002"),
