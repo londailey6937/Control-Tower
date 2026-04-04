@@ -223,21 +223,48 @@ const GUIDE: HelpSection[] = [
 <h4>Gate Decisions</h4>
 <p>PMP can record gate decisions: Go, No-Go, or Conditional Go. Decisions are timestamped and attributed. Gate notes can capture discussion points and conditions for conditional approvals.</p>
 <h4>Stakeholder Inputs</h4>
-<p>Technical and Business stakeholders can submit gate inputs. These appear in the gate review panel, providing a complete picture for the gate decision.</p>`,
+<p>The Stakeholder Inputs feature allows Technical and Business team members to formally submit inputs to a specific gate review. Inputs are logged via a floating action button (📥) that slides open a side panel. Each input includes:</p>
+<ul>
+<li><strong>Source:</strong> Technical or Business — identifies which team submitted the input</li>
+<li><strong>Linked Gate:</strong> The specific gate (G1, G2, etc.) this input pertains to</li>
+<li><strong>Content:</strong> The stakeholder's observation, recommendation, or concern</li>
+<li><strong>Status:</strong> Pending Review → Accepted or Noted — PMP reviews and dispositions each input</li>
+<li><strong>PMP Response:</strong> Written response from PMP acknowledging or addressing the input</li>
+</ul>
+<p>A badge on the floating button shows the count of pending-review inputs. Inputs appear directly in the gate review panel, giving PMP a complete picture before making a gate decision. All stakeholder inputs are audit-logged.</p>
+<div class="help-tip">💡 Stakeholder Inputs ensure cross-functional voices are formally captured in gate reviews — a best practice for FDA design review requirements under 21 CFR 820.30(e).</div>`,
       cn: `<p>门控系统实施阶段门控评审流程。门控基于项目持续时间自动生成（2-6个门控）。每个门控都有在项目继续之前必须满足的标准。</p>
 <h4>门控标准</h4>
 <p>每个门控都有标准清单（例如"技术交付成果完成"、"预算正常"、"风险缓解已确认"）。通过点击逐项检查标准。门控状态根据标准完成情况更新。</p>
 <h4>门控决定</h4>
 <p>PMP可以记录门控决定：通过、不通过或有条件通过。决定带有时间戳和归属。门控备注可以记录讨论要点和有条件批准的条件。</p>
 <h4>利益相关方输入</h4>
-<p>技术和商务利益相关方可以提交门控输入。这些出现在门控评审面板中，为门控决定提供完整的信息。</p>`,
+<p>利益相关方输入功能允许技术和商务团队成员正式向特定门控评审提交输入。输入通过浮动操作按钮(📥)记录，会滑出侧面板。每个输入包括：</p>
+<ul>
+<li><strong>来源：</strong>技术或商务——标识哪个团队提交了输入</li>
+<li><strong>关联门控：</strong>此输入相关的特定门控(G1、G2等)</li>
+<li><strong>内容：</strong>利益相关方的观察、建议或关注点</li>
+<li><strong>状态：</strong>待审查→已接受或已记录——PMP审查并处置每个输入</li>
+<li><strong>PMP回复：</strong>PMP确认或回应输入的书面回复</li>
+</ul>
+<p>浮动按钮上的徽章显示待审查输入的数量。输入直接出现在门控评审面板中，在做出门控决定前为PMP提供完整的信息。所有利益相关方输入均记录到审计追踪。</p>
+<div class="help-tip">💡 利益相关方输入确保跨职能的声音在门控评审中被正式记录——这是FDA根据21 CFR 820.30(e)设计评审要求的最佳实践。</div>`,
       ko: `<p>게이트 시스템은 단계별 게이트 심사 프로세스를 구현합니다. 게이트는 프로젝트 기간에 따라 자동으로 생성됩니다(2~6개 게이트). 각 게이트에는 프로젝트가 진행되기 전에 충족해야 하는 기준이 있습니다.</p>
 <h4>게이트 기준</h4>
 <p>각 게이트에는 기준 체크리스트가 있습니다(예: '기술 산출물 완료', '예산 정상', '위험 완화 확인'). 기준을 클릭하여 개별적으로 확인합니다. 게이트 상태는 기준 완료에 따라 업데이트됩니다.</p>
 <h4>게이트 결정</h4>
 <p>PMP는 게이트 결정을 기록할 수 있습니다: 진행(Go), 중단(No-Go), 또는 조건부 진행(Conditional Go). 결정에는 타임스탬프와 귀속 정보가 포함됩니다. 게이트 노트에 논의 사항과 조건부 승인 조건을 기록할 수 있습니다.</p>
 <h4>이해관계자 입력</h4>
-<p>기술 및 비즈니스 이해관계자가 게이트 입력을 제출할 수 있습니다. 이는 게이트 심사 패널에 표시되어 게이트 결정을 위한 완전한 정보를 제공합니다.</p>`,
+<p>이해관계자 입력 기능을 통해 기술 및 비즈니스 팀원이 특정 게이트 심사에 공식적으로 입력을 제출할 수 있습니다. 입력은 플로팅 액션 버튼(📥)을 통해 기록되며 사이드 패널이 슬라이드됩니다. 각 입력에는 다음이 포함됩니다:</p>
+<ul>
+<li><strong>출처:</strong> 기술 또는 비즈니스 — 어느 팀이 입력을 제출했는지 식별</li>
+<li><strong>연결된 게이트:</strong> 이 입력이 관련된 특정 게이트(G1, G2 등)</li>
+<li><strong>내용:</strong> 이해관계자의 관찰, 권장 사항 또는 우려 사항</li>
+<li><strong>상태:</strong> 검토 대기 → 수락됨 또는 기록됨 — PMP가 각 입력을 검토하고 처리</li>
+<li><strong>PMP 응답:</strong> 입력을 확인하거나 대응하는 PMP의 서면 응답</li>
+</ul>
+<p>플로팅 버튼의 배지는 검토 대기 중인 입력의 수를 표시합니다. 입력은 게이트 심사 패널에 직접 표시되어 게이트 결정을 내리기 전에 PMP에게 완전한 정보를 제공합니다. 모든 이해관계자 입력은 감사 추적에 기록됩니다.</p>
+<div class="help-tip">💡 이해관계자 입력은 게이트 심사에서 교차 기능적 의견이 공식적으로 기록되도록 보장합니다 — 이는 21 CFR 820.30(e)에 따른 FDA 설계 심사 요구사항의 모범 사례입니다.</div>`,
     },
   },
   {
@@ -1097,6 +1124,264 @@ const GUIDE: HelpSection[] = [
 <li>FDA와의 모든 상호작용 전에 <strong>감사 추적</strong> 검토 — 이것이 준수 증거입니다</li>
 </ol>
 <div class="help-tip">💡 QMS-Lite는 첫 510(k) 제출에 필요한 필수 요소를 포함합니다. 회사가 성장하면 프로젝트 관리를 위해 Control Tower를 유지하면서 전체 QMS 플랫폼으로 전환할 수 있습니다.</div>`,
+    },
+  },
+  {
+    num: 27,
+    title: {
+      en: "Stakeholder Inputs",
+      cn: "利益相关方输入",
+      ko: "이해관계자 입력",
+    },
+    content: {
+      en: `<p><strong>Stakeholder Inputs</strong> is a cross-cutting feature accessed via a floating action button (📥) visible on all tabs. It provides a formal mechanism for Technical and Business team members to submit observations, recommendations, and concerns that feed directly into gate review decisions.</p>
+<h4>How It Works</h4>
+<ol>
+<li>Click the floating <strong>📥</strong> button (bottom-right corner) to open the Stakeholder Inputs side panel</li>
+<li>Select the <strong>source role</strong> (Technical or Business)</li>
+<li>Choose the <strong>linked gate</strong> (G1, G2, etc.) the input relates to</li>
+<li>Enter your <strong>input content</strong> — your observation, concern, or recommendation</li>
+<li>Submit — the input is logged with a timestamp and your role attribution</li>
+</ol>
+<h4>PMP Review Process</h4>
+<p>The PMP reviews all stakeholder inputs before a gate decision. For each input, the PMP can:</p>
+<ul>
+<li>Set status to <strong>Accepted</strong> (input will be acted upon) or <strong>Noted</strong> (acknowledged but no action required)</li>
+<li>Write a <strong>PMP Response</strong> explaining the disposition</li>
+</ul>
+<p>A <strong>badge counter</strong> on the floating button shows the number of inputs still in "Pending Review" status, alerting the PMP that inputs await disposition.</p>
+<h4>Integration with Gate System</h4>
+<p>Stakeholder inputs linked to a specific gate appear directly in that gate's review panel. This ensures the PMP has all cross-functional feedback visible when recording a Go/No-Go/Conditional decision.</p>
+<h4>Why This Matters</h4>
+<p>FDA's 21 CFR 820.30(e) requires that design reviews include "representatives of all functions concerned with the design stage being reviewed." Stakeholder Inputs provide formal evidence that cross-functional perspectives were solicited and considered — critical documentation for FDA audits.</p>
+<div class="help-warn">⚠️ Only PMP can change the status of stakeholder inputs. Technical and Business roles can submit inputs but cannot review or disposition them.</div>`,
+      cn: `<p><strong>利益相关方输入</strong>是通过浮动操作按钮(📥)访问的跨功能特性，在所有标签页上可见。它为技术和商务团队成员提供正式机制，提交直接纳入门控评审决策的观察、建议和关注点。</p>
+<h4>工作原理</h4>
+<ol>
+<li>点击浮动的<strong>📥</strong>按钮（右下角）打开利益相关方输入侧面板</li>
+<li>选择<strong>来源角色</strong>（技术或商务）</li>
+<li>选择输入相关的<strong>关联门控</strong>（G1、G2等）</li>
+<li>输入您的<strong>输入内容</strong>——您的观察、关注点或建议</li>
+<li>提交——输入会记录时间戳和您的角色归属</li>
+</ol>
+<h4>PMP审查流程</h4>
+<p>PMP在做出门控决策前审查所有利益相关方输入。对于每个输入，PMP可以：</p>
+<ul>
+<li>将状态设为<strong>已接受</strong>（输入将被采纳）或<strong>已记录</strong>（已确认但不需要行动）</li>
+<li>撰写<strong>PMP回复</strong>解释处置结果</li>
+</ul>
+<p>浮动按钮上的<strong>徽章计数</strong>显示仍处于"待审查"状态的输入数量，提醒PMP有输入等待处置。</p>
+<h4>与门控系统的集成</h4>
+<p>与特定门控关联的利益相关方输入直接出现在该门控的评审面板中。这确保PMP在记录通过/不通过/有条件决策时可以看到所有跨职能反馈。</p>
+<h4>为什么重要</h4>
+<p>FDA的21 CFR 820.30(e)要求设计评审"包括与被评审设计阶段相关的所有职能代表"。利益相关方输入提供正式证据，证明跨职能观点已被征求和考虑——这是FDA审计的关键文档。</p>
+<div class="help-warn">⚠️ 只有PMP可以更改利益相关方输入的状态。技术和商务角色可以提交输入但不能审查或处置。</div>`,
+      ko: `<p><strong>이해관계자 입력</strong>은 모든 탭에서 보이는 플로팅 액션 버튼(📥)을 통해 접근하는 교차 기능 특성입니다. 기술 및 비즈니스 팀원이 게이트 심사 결정에 직접 반영되는 관찰, 권장 사항 및 우려 사항을 공식적으로 제출할 수 있는 메커니즘을 제공합니다.</p>
+<h4>작동 방식</h4>
+<ol>
+<li>플로팅 <strong>📥</strong> 버튼(오른쪽 하단)을 클릭하여 이해관계자 입력 사이드 패널 열기</li>
+<li><strong>출처 역할</strong> 선택 (기술 또는 비즈니스)</li>
+<li>입력과 관련된 <strong>연결된 게이트</strong> 선택 (G1, G2 등)</li>
+<li><strong>입력 내용</strong> 입력 — 관찰, 우려 사항 또는 권장 사항</li>
+<li>제출 — 타임스탬프와 역할 귀속 정보와 함께 입력이 기록됨</li>
+</ol>
+<h4>PMP 검토 프로세스</h4>
+<p>PMP는 게이트 결정 전에 모든 이해관계자 입력을 검토합니다. 각 입력에 대해 PMP는:</p>
+<ul>
+<li>상태를 <strong>수락됨</strong>(입력이 반영됨) 또는 <strong>기록됨</strong>(확인되었으나 조치 불필요)으로 설정</li>
+<li>처리 결과를 설명하는 <strong>PMP 응답</strong> 작성</li>
+</ul>
+<p>플로팅 버튼의 <strong>배지 카운터</strong>는 아직 "검토 대기" 상태인 입력 수를 표시하여 PMP에게 처리 대기 중인 입력이 있음을 알립니다.</p>
+<h4>게이트 시스템과의 통합</h4>
+<p>특정 게이트에 연결된 이해관계자 입력은 해당 게이트의 심사 패널에 직접 표시됩니다. 이를 통해 PMP가 진행/중단/조건부 결정을 기록할 때 모든 교차 기능 피드백을 볼 수 있습니다.</p>
+<h4>중요한 이유</h4>
+<p>FDA의 21 CFR 820.30(e)는 설계 심사에 "검토 중인 설계 단계와 관련된 모든 기능의 대표자"가 포함되어야 한다고 요구합니다. 이해관계자 입력은 교차 기능적 관점이 요청되고 고려되었다는 공식 증거를 제공합니다 — FDA 감사에 중요한 문서입니다.</p>
+<div class="help-warn">⚠️ PMP만 이해관계자 입력의 상태를 변경할 수 있습니다. 기술 및 비즈니스 역할은 입력을 제출할 수 있지만 검토하거나 처리할 수 없습니다.</div>`,
+    },
+  },
+  {
+    num: 28,
+    title: {
+      en: "Change Request Workflow",
+      cn: "变更请求工作流",
+      ko: "변경 요청 워크플로",
+    },
+    content: {
+      en: `<p>The <strong>Change Request (CR) Workflow</strong> enforces controlled modification of project data. When a non-PMP role (Technology, Business, Accounting) attempts to edit milestones, risks, or other governed fields, a Change Request form opens instead of allowing direct editing.</p>
+<h4>Submitting a Change Request</h4>
+<p>The CR form captures:</p>
+<ul>
+<li><strong>Requester Role:</strong> Automatically set to the current user's role</li>
+<li><strong>Target Item:</strong> The specific milestone, risk, or field being changed</li>
+<li><strong>Current Value:</strong> Auto-populated with the existing value</li>
+<li><strong>Proposed New Value:</strong> The change being requested</li>
+<li><strong>Justification:</strong> Why the change is needed</li>
+<li><strong>Impact Assessment:</strong> Potential impact on schedule, budget, or risk</li>
+<li><strong>File Attachments:</strong> Supporting documents (stored locally via IndexedDB)</li>
+</ul>
+<h4>CR Lifecycle</h4>
+<p>Each CR receives a sequential ID (CR-001, CR-002, etc.) and follows this lifecycle:</p>
+<ol>
+<li><strong>Submitted:</strong> CR is created and PMP is notified via the Notifications bar</li>
+<li><strong>Under Review:</strong> PMP examines the request, justification, and impact</li>
+<li><strong>Approved or Rejected:</strong> PMP records the decision with a timestamp and rationale</li>
+</ol>
+<p>Approved CRs automatically apply the proposed change. Rejected CRs are logged with the PMP's rejection reason. All CR activity is recorded in the Audit Trail.</p>
+<h4>Why This Matters</h4>
+<p>Change control is a core requirement of ISO 13485 and 21 CFR 820. The CR workflow ensures that no unauthorized changes are made to controlled project data, maintaining the integrity of your Design History File and audit evidence.</p>
+<div class="help-tip">💡 PMP users always edit directly — the CR workflow only applies to Technology, Business, and Accounting roles.</div>`,
+      cn: `<p><strong>变更请求(CR)工作流</strong>对项目数据的修改实施受控管理。当非PMP角色（技术、商务、财务）尝试编辑里程碑、风险或其他受治理字段时，会打开变更请求表单，而非允许直接编辑。</p>
+<h4>提交变更请求</h4>
+<p>CR表单捕获：</p>
+<ul>
+<li><strong>请求者角色：</strong>自动设置为当前用户的角色</li>
+<li><strong>目标项：</strong>正在更改的特定里程碑、风险或字段</li>
+<li><strong>当前值：</strong>自动填充现有值</li>
+<li><strong>建议新值：</strong>请求的更改</li>
+<li><strong>理由：</strong>为什么需要此更改</li>
+<li><strong>影响评估：</strong>对进度、预算或风险的潜在影响</li>
+<li><strong>文件附件：</strong>支持文件(通过IndexedDB本地存储)</li>
+</ul>
+<h4>CR生命周期</h4>
+<p>每个CR接收一个顺序ID(CR-001、CR-002等)，并遵循此生命周期：</p>
+<ol>
+<li><strong>已提交：</strong>CR已创建，PMP通过通知栏收到通知</li>
+<li><strong>审查中：</strong>PMP检查请求、理由和影响</li>
+<li><strong>已批准或已拒绝：</strong>PMP记录决定并附时间戳和理由</li>
+</ol>
+<p>已批准的CR自动应用建议的更改。已拒绝的CR记录PMP的拒绝原因。所有CR活动均记录在审计追踪中。</p>
+<h4>为什么重要</h4>
+<p>变更控制是ISO 13485和21 CFR 820的核心要求。CR工作流确保不会对受控项目数据进行未经授权的更改，维护设计历史文件和审计证据的完整性。</p>
+<div class="help-tip">💡 PMP用户始终直接编辑——CR工作流仅适用于技术、商务和财务角色。</div>`,
+      ko: `<p><strong>변경 요청(CR) 워크플로</strong>는 프로젝트 데이터의 수정을 통제합니다. 비-PMP 역할(기술, 비즈니스, 회계)이 마일스톤, 위험 또는 기타 관리 필드를 편집하려고 하면 직접 편집 대신 변경 요청 양식이 열립니다.</p>
+<h4>변경 요청 제출</h4>
+<p>CR 양식 캡처 내용:</p>
+<ul>
+<li><strong>요청자 역할:</strong> 현재 사용자의 역할로 자동 설정</li>
+<li><strong>대상 항목:</strong> 변경 중인 특정 마일스톤, 위험 또는 필드</li>
+<li><strong>현재 값:</strong> 기존 값으로 자동 입력</li>
+<li><strong>제안된 새 값:</strong> 요청되는 변경 사항</li>
+<li><strong>정당화:</strong> 변경이 필요한 이유</li>
+<li><strong>영향 평가:</strong> 일정, 예산 또는 위험에 대한 잠재적 영향</li>
+<li><strong>파일 첨부:</strong> 지원 문서(IndexedDB를 통해 로컬 저장)</li>
+</ul>
+<h4>CR 수명주기</h4>
+<p>각 CR은 순차적 ID(CR-001, CR-002 등)를 받으며 다음 수명주기를 따릅니다:</p>
+<ol>
+<li><strong>제출됨:</strong> CR이 생성되고 PMP가 알림 바를 통해 통보받음</li>
+<li><strong>검토 중:</strong> PMP가 요청, 정당화 및 영향을 검토</li>
+<li><strong>승인 또는 거부:</strong> PMP가 타임스탬프와 근거와 함께 결정을 기록</li>
+</ol>
+<p>승인된 CR은 제안된 변경을 자동으로 적용합니다. 거부된 CR은 PMP의 거부 사유와 함께 기록됩니다. 모든 CR 활동은 감사 추적에 기록됩니다.</p>
+<h4>중요한 이유</h4>
+<p>변경 관리는 ISO 13485 및 21 CFR 820의 핵심 요구사항입니다. CR 워크플로는 통제된 프로젝트 데이터에 무단 변경이 이루어지지 않도록 보장하여 설계 이력 파일과 감사 증거의 무결성을 유지합니다.</p>
+<div class="help-tip">💡 PMP 사용자는 항상 직접 편집합니다 — CR 워크플로는 기술, 비즈니스, 회계 역할에만 적용됩니다.</div>`,
+    },
+  },
+  {
+    num: 29,
+    title: {
+      en: "Notifications, Alerts & Export Report",
+      cn: "通知、警报与导出报告",
+      ko: "알림, 경고 및 보고서 내보내기",
+    },
+    content: {
+      en: `<p>Control Tower provides automated notifications, contextual alerts, and an executive export report to keep the team informed and leadership updated.</p>
+<h4>Notifications Bar</h4>
+<p>The notifications bar appears at the top of the dashboard and auto-generates alerts for:</p>
+<ul>
+<li><strong>Pending Change Requests:</strong> CRs awaiting PMP review</li>
+<li><strong>Overdue Action Items:</strong> Tasks past their due date</li>
+<li><strong>Overdue CAPAs:</strong> Corrective/Preventive Actions past deadline</li>
+<li><strong>Budget Overruns:</strong> Categories where actual exceeds planned</li>
+<li><strong>Runway Warning:</strong> Cash runway ≤6 months — critical financial alert</li>
+</ul>
+<p>Each alert is dismissable. Alerts re-appear if the underlying condition persists.</p>
+<h4>Regulatory Readiness Guardrails</h4>
+<p>The Regulatory Tracker tab includes three guardrail panels that provide pass/warn/fail indicators:</p>
+<ul>
+<li><strong>Predicate Selection Guardrails:</strong> 3 checks — predicate identified, Device Description approved, Pre-Sub filed</li>
+<li><strong>Testing Gap Analysis Guardrails:</strong> 5 checks — IEC 60601-1, EMC, IEC 62304, Design Verification, ISO 14971</li>
+<li><strong>Translation Readiness Guardrails:</strong> 3 checks — English DHF docs, Labeling in English, bilingual glossary</li>
+</ul>
+<h4>Export Report</h4>
+<p>The <strong>Export Report</strong> button generates a comprehensive HTML executive report that includes:</p>
+<ul>
+<li>Overall project status badge (On Track / At Risk / Delayed)</li>
+<li>Milestone progress summary (Technical and Regulatory tracks)</li>
+<li>Risk summary table with color-coded risk levels</li>
+<li>Budget table with variance analysis</li>
+<li>CAPA status overview</li>
+<li>Action Items status</li>
+<li>DHF/DMR completion percentages</li>
+<li>Cash runway forecast</li>
+</ul>
+<p>The report opens in a new browser window for easy printing or PDF save.</p>
+<div class="help-tip">💡 Export the report before board meetings or investor updates — it provides a single-page executive summary of your entire 510(k) program.</div>`,
+      cn: `<p>Control Tower提供自动化通知、上下文警报和管理层导出报告，使团队保持信息同步，领导层及时了解最新情况。</p>
+<h4>通知栏</h4>
+<p>通知栏出现在仪表板顶部，自动生成以下警报：</p>
+<ul>
+<li><strong>待处理的变更请求：</strong>等待PMP审查的CR</li>
+<li><strong>逾期行动项：</strong>超过截止日期的任务</li>
+<li><strong>逾期CAPA：</strong>超过截止日期的纠正/预防措施</li>
+<li><strong>预算超支：</strong>实际超过计划的类别</li>
+<li><strong>跑道警告：</strong>现金跑道≤6个月——关键财务警报</li>
+</ul>
+<p>每个警报可以关闭。如果基础条件持续存在，警报会重新出现。</p>
+<h4>法规就绪保障</h4>
+<p>法规跟踪标签页包含三个保障面板，提供通过/警告/失败指标：</p>
+<ul>
+<li><strong>前置器械选择保障：</strong>3项检查——前置器械已识别、器械描述已批准、Pre-Sub已提交</li>
+<li><strong>测试差距分析保障：</strong>5项检查——IEC 60601-1、EMC、IEC 62304、设计验证、ISO 14971</li>
+<li><strong>翻译就绪保障：</strong>3项检查——英文DHF文档、英文标签、双语术语表</li>
+</ul>
+<h4>导出报告</h4>
+<p><strong>导出报告</strong>按钮生成全面的HTML管理层报告，包括：</p>
+<ul>
+<li>总体项目状态徽章（正常/有风险/延迟）</li>
+<li>里程碑进度摘要（技术和法规轨道）</li>
+<li>颜色编码的风险摘要表</li>
+<li>含差异分析的预算表</li>
+<li>CAPA状态概览</li>
+<li>行动项状态</li>
+<li>DHF/DMR完成百分比</li>
+<li>现金跑道预测</li>
+</ul>
+<p>报告在新浏览器窗口中打开，便于打印或保存为PDF。</p>
+<div class="help-tip">💡 在董事会或投资者更新会前导出报告——它提供整个510(k)项目的单页管理层摘要。</div>`,
+      ko: `<p>Control Tower는 자동화된 알림, 상황별 경고 및 경영진 보고서 내보내기를 제공하여 팀이 정보를 공유하고 리더십이 최신 상황을 파악할 수 있도록 합니다.</p>
+<h4>알림 바</h4>
+<p>알림 바는 대시보드 상단에 표시되며 다음에 대한 경고를 자동 생성합니다:</p>
+<ul>
+<li><strong>대기 중인 변경 요청:</strong> PMP 검토를 기다리는 CR</li>
+<li><strong>기한 초과 조치 항목:</strong> 마감일이 지난 작업</li>
+<li><strong>기한 초과 CAPA:</strong> 마감일이 지난 시정/예방 조치</li>
+<li><strong>예산 초과:</strong> 실제가 계획을 초과한 범주</li>
+<li><strong>런웨이 경고:</strong> 현금 런웨이 6개월 이하 — 중요 재무 경고</li>
+</ul>
+<p>각 경고는 해제 가능합니다. 기본 조건이 지속되면 경고가 다시 나타납니다.</p>
+<h4>규제 준비 가드레일</h4>
+<p>규제 추적기 탭에는 통과/경고/실패 지표를 제공하는 세 가지 가드레일 패널이 포함됩니다:</p>
+<ul>
+<li><strong>선행기기 선택 가드레일:</strong> 3가지 확인 — 선행기기 식별, 기기 설명 승인, Pre-Sub 제출</li>
+<li><strong>테스트 갭 분석 가드레일:</strong> 5가지 확인 — IEC 60601-1, EMC, IEC 62304, 설계 검증, ISO 14971</li>
+<li><strong>번역 준비 가드레일:</strong> 3가지 확인 — 영문 DHF 문서, 영문 라벨링, 이중 언어 용어집</li>
+</ul>
+<h4>보고서 내보내기</h4>
+<p><strong>보고서 내보내기</strong> 버튼은 다음을 포함하는 포괄적인 HTML 경영진 보고서를 생성합니다:</p>
+<ul>
+<li>전체 프로젝트 상태 배지 (정상 진행 / 위험 / 지연)</li>
+<li>마일스톤 진행 요약 (기술 및 규제 트랙)</li>
+<li>색상 코딩된 위험 요약 표</li>
+<li>분산 분석이 포함된 예산 표</li>
+<li>CAPA 상태 개요</li>
+<li>조치 항목 상태</li>
+<li>DHF/DMR 완료 백분율</li>
+<li>현금 런웨이 예측</li>
+</ul>
+<p>보고서는 인쇄 또는 PDF 저장을 위해 새 브라우저 창에서 열립니다.</p>
+<div class="help-tip">💡 이사회 또는 투자자 업데이트 전에 보고서를 내보내세요 — 전체 510(k) 프로그램의 한 페이지 경영진 요약을 제공합니다.</div>`,
     },
   },
 ];
