@@ -4,7 +4,26 @@ dist/
 *.pyc
 __pycache__/
 .DS_Store
+*.pdf
+*.pptx
+*.docx
+*.png
 _fix_*.py
 _test_*.mjs
 _probe_*.mjs
+_fetch_*.py
+scrape_*.mjs
+supabase/.temp/
 PM-Dashboard.html
+Control_Tower.html
+FDA_Pre-Submission_Guidelines.md
+
+# Legacy pre-Vite monolithic files (kept locally for reference)
+app.js
+data.js
+i18n.js
+index.html
+styles.css
+test-data.json
+supabase-schema.sql
+Network_Diagram.png
