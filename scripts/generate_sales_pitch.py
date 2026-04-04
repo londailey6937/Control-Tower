@@ -184,7 +184,7 @@ def build_english():
         "    2 projects, full dashboard, message board, document control\n"
         "    Best for: Active 510(k) submissions\n\n"
         "  SCALE ($2,000/mo)\n"
-        "    Unlimited projects, full FDA comms center, cap table,\n"
+        "    Unlimited projects, full FDA comms center,\n"
         "    advanced analytics\n"
         "    Best for: Companies managing multiple submissions or devices")
 

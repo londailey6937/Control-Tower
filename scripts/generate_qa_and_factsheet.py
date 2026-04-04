@@ -783,7 +783,6 @@ def build_qa():
         why="Equity structure is the #1 question investors ask. This must be "
             "resolved before any fundraising conversations.",
         follow_ups=[
-            "What is the current cap table for Company B USA?",
             "Are there any outstanding convertible notes or SAFEs?",
             "Is there an option pool reserved for employees/advisors?",
             "Has the company been formally valued (409A or equivalent)?",

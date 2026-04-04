@@ -23,9 +23,6 @@ import {
   TARGET_INVESTORS,
   IR_ACTIVITIES,
   INVESTOR_BRIDGE,
-  SHAREHOLDERS,
-  EQUITY_EVENTS,
-  VESTING_SCHEDULES,
 } from "./data.ts";
 
 import { DEFAULT_DHF_DOCS } from "./wizard.ts";
@@ -673,54 +670,4 @@ export function seed(a: WizardAnswers): void {
       signal: "close",
     },
   );
-
-  // ── SHAREHOLDERS (Cap Table) ─────────────────
-  const founderName = a.applicantName || (isCn ? "创始人" : "Founder");
-  SHAREHOLDERS.length = 0;
-  SHAREHOLDERS.push(
-    {
-      id: "SH-001",
-      name: founderName,
-      role: isCn ? "创始人" : "Founder",
-      shareClass: "common",
-      shares: 0,
-      notes: isCn ? "创始人普通股" : "Founder common shares",
-    },
-    {
-      id: "SH-002",
-      name: isCn ? "期权池" : "Option Pool",
-      role: isCn ? "预留" : "Reserved",
-      shareClass: "options",
-      shares: 0,
-      notes: isCn ? "员工期权预留 (ESOP)" : "Employee stock option pool (ESOP)",
-    },
-  );
-
-  // ── EQUITY_EVENTS ────────────────────────────
-  EQUITY_EVENTS.length = 0;
-  EQUITY_EVENTS.push({
-    id: "EQ-001",
-    date: offsetDate(0),
-    event: isCn ? "公司成立" : "Company Formation",
-    shareClass: "common",
-    shares: 0,
-    pricePerShare: 0,
-    totalValue: 0,
-    status: "pending",
-    notes: isCn ? "待分配股份" : "Shares pending allocation",
-  });
-
-  // ── VESTING_SCHEDULES ────────────────────────
-  VESTING_SCHEDULES.length = 0;
-  VESTING_SCHEDULES.push({
-    id: "VS-001",
-    holder: founderName,
-    shares: 0,
-    startDate: offsetDate(0),
-    cliffMonths: 12,
-    totalMonths: 48,
-    vestedShares: 0,
-    status: "vesting",
-    notes: isCn ? "4年归属, 1年悬崖期" : "4-year vest, 1-year cliff",
-  });
 }

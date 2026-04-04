@@ -3010,55 +3010,6 @@ body {
 }
 
 /* ══════════════════════════════════════════════════
-   CAP TABLE MANAGEMENT
-   ══════════════════════════════════════════════════ */
-.dilution-bar {
-  display: flex;
-  height: 36px;
-  border-radius: 8px;
-  overflow: hidden;
-  margin-bottom: var(--sp-sm);
-  border: 1px solid var(--border);
-}
-.dilution-segment {
-  min-width: 2px;
-  transition: width 0.3s ease;
-}
-.dil-common {
-  background: var(--accent);
-}
-.dil-preferred-seed {
-  background: var(--success);
-}
-.dil-preferred-a {
-  background: var(--warning);
-}
-.dil-safe {
-  background: #f97316;
-}
-.dil-options {
-  background: var(--text-muted);
-}
-.dilution-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sp-sm);
-  font-size: 0.82rem;
-  color: var(--text-muted);
-}
-.dilution-legend-item {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.dilution-swatch {
-  width: 12px;
-  height: 12px;
-  border-radius: 3px;
-  display: inline-block;
-}
-
-/* ══════════════════════════════════════════════════
    DOCUMENT CONTROL
    ══════════════════════════════════════════════════ */
 .doc-lib-filters {

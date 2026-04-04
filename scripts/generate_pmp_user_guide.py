@@ -373,16 +373,15 @@ def build_english():
         ("12", "Budget"),
         ("13", "Cash / Runway"),
         ("14", "US Investment"),
-        ("15", "Cap Table"),
-        ("16", "Resources"),
-        ("17", "Suppliers"),
-        ("18", "Message Board"),
-        ("19", "FDA Communications Center"),
-        ("20", "Setup Wizard & Templates"),
-        ("21", "Keyboard Shortcuts & Tips"),
-        ("22", "Troubleshooting"),
-        ("23", "510(k) Predicate Finder"),
-        ("24", "Glossary of FDA & Regulatory Terms"),
+        ("15", "Resources"),
+        ("16", "Suppliers"),
+        ("17", "Message Board"),
+        ("18", "FDA Communications Center"),
+        ("19", "Setup Wizard & Templates"),
+        ("20", "Keyboard Shortcuts & Tips"),
+        ("21", "Troubleshooting"),
+        ("22", "510(k) Predicate Finder"),
+        ("23", "Glossary of FDA & Regulatory Terms"),
     ]
     pdf.set_font("Helvetica", "", 11)
     for num, title in toc:
@@ -464,7 +463,6 @@ def build_english():
     pdf.kv("Budget", "Budget categories with planned vs. actual tracking")
     pdf.kv("Cash/Runway", "Cash position, burn rate, and runway forecast")
     pdf.kv("US Investment", "Investor pipeline and IR activity tracking")
-    pdf.kv("Cap Table", "Shareholder registry, equity events, vesting schedules")
 
     pdf.sub("Operations")
     pdf.kv("Resources", "Team allocation and utilization monitoring")
@@ -480,14 +478,14 @@ def build_english():
     pdf.txt("The dashboard supports four primary roles, each with different access levels:")
     pdf.kv("PMP (Project Manager)", "Full access to all tabs. Can edit milestones, gates, risks, budgets, documents, and team. Only role that can see FDA Communications.")
     pdf.kv("Technology", "Can view and update technical milestones, risks, and documents. Can participate in Message Board. Cannot access financial tabs.")
-    pdf.kv("Business", "Access to business milestones, budget, investment, and cap table. Can participate in Message Board.")
-    pdf.kv("Accounting", "Read-only access to Budget, Cash/Runway, and Cap Table. Limited editing capabilities.")
+    pdf.kv("Business", "Access to business milestones, budget, and investment. Can participate in Message Board.")
+    pdf.kv("Accounting", "Read-only access to Budget, Cash/Runway, and US Investment. Limited editing capabilities.")
 
     pdf.sub("Subscription Tiers")
     pdf.txt("Tab access is server-controlled via Supabase RLS. The tier determines which tabs are available:")
     pdf.kv("Starter ($500/mo)", "2 seats, 4 panels: Dual-Track, Gates, Timeline, Budget (Program and Finance groups partially enabled)")
-    pdf.kv("Growth ($1,000/mo)", "5 seats, 13 panels: All except Cap Table, FDA Comms, and US Investment")
-    pdf.kv("Scale ($2,000/mo)", "10 seats, all 17 panels across all 5 groups, including FDA Comms, Cap Table, and embedded Predicate Finder")
+    pdf.kv("Growth ($1,000/mo)", "5 seats, 13 panels: All except FDA Comms and US Investment")
+    pdf.kv("Scale ($2,000/mo)", "10 seats, all 15 panels across all 5 groups, including FDA Comms and embedded Predicate Finder")
 
     pdf.tip_box("Your tier is managed server-side and cannot be changed from the dashboard UI.")
 
@@ -736,30 +734,9 @@ def build_english():
         "sessions, term sheet negotiations. Each activity has a date, type, and status."
     )
 
-    # ── 15. Cap Table ──
+    # ── 15. Resources ──
     pdf.add_page()
-    pdf.sec(15, "Cap Table")
-    pdf.txt(
-        "The Cap Table tracks equity ownership, equity events (rounds, conversions, "
-        "option grants), and vesting schedules. It provides a complete capitalization "
-        "overview for the entity."
-    )
-    pdf.sub("Shareholders")
-    pdf.bul("Name, share class (Common, Preferred A/B/C, Options, Warrants)")
-    pdf.bul("Share count and ownership percentage")
-    pdf.bul("Board seat, vesting status, and notes")
-
-    pdf.sub("Equity Events")
-    pdf.bul("Track funding rounds, stock splits, option grants, conversions")
-    pdf.bul("Each event records shares issued, price per share, and total raised")
-
-    pdf.sub("Vesting Schedules")
-    pdf.bul("Standard 4-year vest with 1-year cliff, or custom schedules")
-    pdf.bul("Track cliff date, total shares, vested shares, and next vest date")
-
-    # ── 16. Resources ──
-    pdf.add_page()
-    pdf.sec(16, "Resources")
+    pdf.sec(15, "Resources")
     pdf.txt(
         "The Resources tab displays team members with their role, allocation across "
         "workstreams, and utilization percentage. Allocation bars show how each team "
@@ -780,9 +757,9 @@ def build_english():
 
     pdf.tip_box("Keep total allocation at or below 100% to avoid burnout. The dashboard flags over-allocation in red.")
 
-    # ── 17. Suppliers ──
+    # ── 16. Suppliers ──
     pdf.add_page()
-    pdf.sec(17, "Suppliers")
+    pdf.sec(16, "Suppliers")
     pdf.txt(
         "The Suppliers tab tracks supplier qualification status, lead times, "
         "purchase order status, and contract manufacturing milestones. This supports "
@@ -795,9 +772,9 @@ def build_english():
     pdf.bul("On Hold: Temporarily suspended")
     pdf.bul("Rejected: Failed qualification")
 
-    # ── 18. Message Board ──
+    # ── 17. Message Board ──
     pdf.add_page()
-    pdf.sec(18, "Message Board")
+    pdf.sec(17, "Message Board")
     pdf.txt(
         "The Message Board is a purpose-driven messaging system for cross-functional "
         "communication. It supports threaded discussions with lifecycle management, "
@@ -829,9 +806,9 @@ def build_english():
     pdf.bul("Workstream filter: Filter by workstream category")
     pdf.bul("Lifecycle filter: Open, Resolved, or All")
 
-    # ── 19. FDA Communications ──
+    # ── 18. FDA Communications ──
     pdf.add_page()
-    pdf.sec(19, "FDA Communications Center")
+    pdf.sec(18, "FDA Communications Center")
     pdf.txt(
         "The FDA Comms tab is PMP-only and provides tools for FDA regulatory "
         "interactions. It includes a Q-Sub cover letter generator, RTA checklist, "
@@ -873,9 +850,9 @@ def build_english():
         "characteristics analysis, and safety/effectiveness evaluation."
     )
 
-    # ── 20. Setup Wizard ──
+    # ── 19. Setup Wizard ──
     pdf.add_page()
-    pdf.sec(20, "Setup Wizard & Templates")
+    pdf.sec(19, "Setup Wizard & Templates")
     pdf.txt(
         "The Setup Wizard launches on first visit (or when no project data exists). "
         "It guides you through a 3-phase setup process."
@@ -908,9 +885,9 @@ def build_english():
     pdf.bul("Step 7: Suppliers and components")
     pdf.bul("Step 8: DHF document selection")
 
-    # ── 21. Shortcuts & Tips ──
+    # ── 20. Shortcuts & Tips ──
     pdf.add_page()
-    pdf.sec(21, "Keyboard Shortcuts & Tips")
+    pdf.sec(20, "Keyboard Shortcuts & Tips")
     pdf.sub("General Tips")
     pdf.bul("All data saves automatically to browser localStorage -- including full dashboard state (milestones, gates, risks, budget, investors, etc.)")
     pdf.bul("Dashboard state survives browser crashes and power outages -- data reloads automatically on next visit")
@@ -929,16 +906,16 @@ def build_english():
 
     pdf.sub("Data Persistence")
     pdf.bul("Project configuration: ctower_project_data (localStorage)")
-    pdf.bul("Live dashboard state: ctower_live_state (localStorage) -- milestones, gates, risks, standards, budget, cash/runway, action items, DHF, DMR, CAPA, team, suppliers, investors, cap table, audit log")
+    pdf.bul("Live dashboard state: ctower_live_state (localStorage) -- milestones, gates, risks, standards, budget, cash/runway, action items, DHF, DMR, CAPA, team, suppliers, investors, audit log")
     pdf.bul("Message Board threads: ctower_mb_threads (localStorage)")
     pdf.bul("Documents: ctower_doclib_docs (localStorage)")
     pdf.bul("Messages: Supabase messages table (synced)")
     pdf.bul("Audit log: Supabase audit_log table (synced)")
     pdf.tip_box("All dashboard state is automatically saved to localStorage after every change. If power is lost or the browser crashes, your data is preserved and will reload on next visit.")
 
-    # ── 22. Troubleshooting ──
+    # ── 21. Troubleshooting ──
     pdf.add_page()
-    pdf.sec(22, "Troubleshooting")
+    pdf.sec(21, "Troubleshooting")
 
     pdf.sub("Dashboard won't load")
     pdf.bul("Check internet connection for initial Supabase authentication")
@@ -979,9 +956,9 @@ def build_english():
         "ctower_qa_archive. Or clear all site data in browser settings."
     )
 
-    # ── 23. 510(k) Predicate Finder ──
+    # ── 22. 510(k) Predicate Finder ──
     pdf.add_page()
-    pdf.sec(23, "510(k) Predicate Finder")
+    pdf.sec(22, "510(k) Predicate Finder")
     pdf.txt(
         "The 510(k) Predicate Finder is now embedded directly in the Control Tower "
         "as a dedicated tab. It connects to the FDA openFDA database and helps PMPs "
@@ -1025,7 +1002,7 @@ def build_english():
 
     # ── 24. Glossary of FDA & Regulatory Terms ──
     pdf.add_page()
-    pdf.sec(24, "Glossary of FDA & Regulatory Terms")
+    pdf.sec(23, "Glossary of FDA & Regulatory Terms")
     pdf.ln(2)
     fda_terms = [
         ("510(k)", "Premarket Notification submitted to FDA to demonstrate a Class II device is substantially equivalent to a legally marketed predicate device. Named after Section 510(k) of the Food, Drug, and Cosmetic Act."),
@@ -1139,16 +1116,15 @@ def build_chinese():
         ("12", "预算"),
         ("13", "现金/续航"),
         ("14", "美国投资"),
-        ("15", "股权结构表"),
-        ("16", "资源"),
-        ("17", "供应商"),
-        ("18", "消息板"),
-        ("19", "FDA通信中心"),
-        ("20", "设置向导与模板"),
-        ("21", "快捷操作与技巧"),
-        ("22", "故障排除"),
-        ("23", "510(k) Predicate Finder"),
-        ("24", "FDA与法规术语表"),
+        ("15", "资源"),
+        ("16", "供应商"),
+        ("17", "消息板"),
+        ("18", "FDA通信中心"),
+        ("19", "设置向导与模板"),
+        ("20", "快捷操作与技巧"),
+        ("21", "故障排除"),
+        ("22", "510(k) Predicate Finder"),
+        ("23", "FDA与法规术语表"),
     ]
     pdf.set_font("CJK", "", 11)
     for num, title in toc:
@@ -1224,7 +1200,6 @@ def build_chinese():
     pdf.kv("预算", "预算类别的计划与实际对比")
     pdf.kv("现金/续航", "现金状况、消耗率和续航预测")
     pdf.kv("美国投资", "投资者管道和IR活动跟踪")
-    pdf.kv("股权结构表", "股东名册、股权事件、归属计划")
 
     pdf.sub("运营 (Operations)")
     pdf.kv("资源", "团队分配和利用率监控")
@@ -1240,14 +1215,14 @@ def build_chinese():
     pdf.txt("仪表板支持四种主要角色，每种角色具有不同的访问级别:")
     pdf.kv("PMP（项目经理）", "完全访问所有标签页。可编辑里程碑、门控、风险、预算、文档和团队。唯一可查看FDA通信的角色。")
     pdf.kv("技术", "可查看和更新技术里程碑、风险和文档。可参与消息板。无法访问财务标签页。")
-    pdf.kv("商务", "可访问商务里程碑、预算、投资和股权结构表。可参与消息板。")
-    pdf.kv("会计", "预算、现金/续航和股权结构表的只读访问。编辑能力有限。")
+    pdf.kv("商务", "可访问商务里程碑、预算和投资。可参与消息板。")
+    pdf.kv("会计", "预算、现金/续航和美国投资的只读访问。编辑能力有限。")
 
     pdf.sub("订阅层级")
     pdf.txt("标签页访问由 Supabase RLS 在服务器端控制。层级决定可用的标签页:")
     pdf.kv("Starter ($500/月)", "2个席位，4个面板: 双轨、门控、时间线、预算（项目组和财务组部分启用）")
-    pdf.kv("Growth ($1,000/月)", "5个席位，13个面板: 除股权表、FDA通信和美国投资外全部")
-    pdf.kv("Scale ($2,000/月)", "10个席位，全部5组17个面板，包括FDA通信、股权表和嵌入式Predicate Finder")
+    pdf.kv("Growth ($1,000/月)", "5个席位，13个面板: 除FDA通信和美国投资外全部")
+    pdf.kv("Scale ($2,000/月)", "10个席位，全部5组15个面板，包括FDA通信和嵌入式Predicate Finder")
 
     pdf.tip_box("您的层级由服务器端管理，无法从仪表板UI更改。")
 
@@ -1436,25 +1411,9 @@ def build_chinese():
     pdf.kv("阶段", "种子轮、A轮、B轮、成长轮")
     pdf.kv("联系状态", "潜在客户、已联系、洽谈中、条款书、已承诺")
 
-    # ── 15. 股权结构表 ──
+    # ── 15. 资源 ──
     pdf.add_page()
-    pdf.sec(15, "股权结构表")
-    pdf.txt(
-        "股权结构表跟踪股权所有权、股权事件（融资轮次、转换、期权授予）"
-        "和归属计划。它提供实体的完整资本化概览。"
-    )
-    pdf.sub("股东")
-    pdf.bul("姓名、股份类别（普通股、优先股A/B/C、期权、认股权证）")
-    pdf.bul("股份数量和所有权百分比")
-    pdf.bul("董事会席位、归属状态和备注")
-
-    pdf.sub("归属计划")
-    pdf.bul("标准4年归属，1年悬崖期，或自定义计划")
-    pdf.bul("跟踪悬崖日期、总股份、已归属股份和下次归属日期")
-
-    # ── 16. 资源 ──
-    pdf.add_page()
-    pdf.sec(16, "资源")
+    pdf.sec(15, "资源")
     pdf.txt(
         "资源标签页显示团队成员及其角色、跨工作流的分配和利用率百分比。"
         "分配条形图显示每个团队成员的能力如何分配。"
@@ -1473,9 +1432,9 @@ def build_chinese():
 
     pdf.tip_box("保持总分配在100%或以下以避免过度负荷。仪表板以红色标记超额分配。")
 
-    # ── 17. 供应商 ──
+    # ── 16. 供应商 ──
     pdf.add_page()
-    pdf.sec(17, "供应商")
+    pdf.sec(16, "供应商")
     pdf.txt(
         "供应商标签页跟踪供应商资质状态、交期、采购订单状态和合同制造里程碑。"
         "这支持21 CFR 820供应商控制。"
@@ -1487,9 +1446,9 @@ def build_chinese():
     pdf.bul("暂停: 临时中止")
     pdf.bul("拒绝: 资质未通过")
 
-    # ── 18. 消息板 ──
+    # ── 17. 消息板 ──
     pdf.add_page()
-    pdf.sec(18, "消息板")
+    pdf.sec(17, "消息板")
     pdf.txt(
         "消息板是一个目的导向的消息系统，用于跨职能沟通。"
         "它支持带有生命周期管理、决策跟踪和行动项创建的线程讨论。"
@@ -1517,9 +1476,9 @@ def build_chinese():
     pdf.bul("工作流过滤器: 按工作流类别过滤")
     pdf.bul("生命周期过滤器: 打开、已解决或全部")
 
-    # ── 19. FDA通信中心 ──
+    # ── 18. FDA通信中心 ──
     pdf.add_page()
-    pdf.sec(19, "FDA通信中心")
+    pdf.sec(18, "FDA通信中心")
     pdf.txt(
         "FDA通信标签页仅限PMP访问，提供FDA监管互动工具。"
         "包括Q-Sub附信生成器、RTA清单、SE决策流程和MDUFA时间线跟踪。"
@@ -1549,9 +1508,9 @@ def build_chinese():
         "RTA筛查（第15天）、实质性审查（第60天）和MDUFA决定目标（第90天）。"
     )
 
-    # ── 20. 设置向导 ──
+    # ── 19. 设置向导 ──
     pdf.add_page()
-    pdf.sec(20, "设置向导与模板")
+    pdf.sec(19, "设置向导与模板")
     pdf.txt(
         "设置向导在首次访问时启动（或当不存在项目数据时）。"
         "它引导您完成3阶段设置过程。"
@@ -1583,9 +1542,9 @@ def build_chinese():
     pdf.bul("步骤7: 供应商和组件")
     pdf.bul("步骤8: DHF文档选择")
 
-    # ── 21. 快捷操作 ──
+    # ── 20. 快捷操作 ──
     pdf.add_page()
-    pdf.sec(21, "快捷操作与技巧")
+    pdf.sec(20, "快捷操作与技巧")
     pdf.sub("常用技巧")
     pdf.bul("所有数据自动保存到浏览器localStorage，包括全部仪表板状态")
     pdf.bul("在线时Supabase实时同步")
@@ -1600,16 +1559,16 @@ def build_chinese():
 
     pdf.sub("数据持久化")
     pdf.bul("项目配置: ctower_project_data (localStorage)")
-    pdf.bul("实时仪表板状态: ctower_live_state (localStorage) -- 里程碑、门控、风险、标准、预算、资金/跑道、行动项、DHF、CAPA、团队、供应商、投资者、股权表、审计日志")
+    pdf.bul("实时仪表板状态: ctower_live_state (localStorage) -- 里程碑、门控、风险、标准、预算、资金/跑道、行动项、DHF、CAPA、团队、供应商、投资者、审计日志")
     pdf.bul("消息板线程: ctower_mb_threads (localStorage)")
     pdf.bul("文档: ctower_doclib_docs (localStorage)")
     pdf.bul("消息: Supabase messages 表（已同步）")
     pdf.bul("审计日志: Supabase audit_log 表（已同步）")
     pdf.tip_box("所有仪表板状态在每次更改后自动保存到localStorage。如果断电或浏览器崩溃，您的数据将保留并在下次访问时重新加载。")
 
-    # ── 22. 故障排除 ──
+    # ── 21. 故障排除 ──
     pdf.add_page()
-    pdf.sec(22, "故障排除")
+    pdf.sec(21, "故障排除")
 
     pdf.sub("仪表板无法加载")
     pdf.bul("检查互联网连接以进行初始Supabase认证")
@@ -1685,7 +1644,7 @@ def build_chinese():
 
     # ── 24. FDA与法规术语表 ──
     pdf.add_page()
-    pdf.sec(24, "FDA与法规术语表")
+    pdf.sec(23, "FDA与法规术语表")
     pdf.ln(2)
     fda_terms_cn = [
         ("510(k)", "上市前通知。向FDA提交的文件，证明II类器械与已合法上市的对照器械实质等同。以《食品、药品和化妆品法》第510(k)条命名。"),
@@ -1798,16 +1757,15 @@ def build_korean():
         ("12", "예산"),
         ("13", "현금/런웨이"),
         ("14", "미국 투자"),
-        ("15", "지분 구조표"),
-        ("16", "리소스"),
-        ("17", "공급업체"),
-        ("18", "메시지 보드"),
-        ("19", "FDA 커뮤니케이션 센터"),
-        ("20", "설정 마법사 및 템플릿"),
-        ("21", "단축키 및 팁"),
-        ("22", "문제 해결"),
-        ("23", "510(k) Predicate Finder"),
-        ("24", "FDA 및 규제 용어집"),
+        ("15", "리소스"),
+        ("16", "공급업체"),
+        ("17", "메시지 보드"),
+        ("18", "FDA 커뮤니케이션 센터"),
+        ("19", "설정 마법사 및 템플릿"),
+        ("20", "단축키 및 팁"),
+        ("21", "문제 해결"),
+        ("22", "510(k) Predicate Finder"),
+        ("23", "FDA 및 규제 용어집"),
     ]
     pdf.set_font("CJK", "", 11)
     for num, title in toc:
@@ -1888,7 +1846,6 @@ def build_korean():
     pdf.kv("예산", "예산 카테고리별 계획 대비 실제 추적")
     pdf.kv("현금/런웨이", "현금 현황, 소진율 및 런웨이 예측")
     pdf.kv("미국 투자", "투자자 파이프라인 및 IR 활동 추적")
-    pdf.kv("지분 구조표", "주주 명부, 지분 이벤트, 베스팅 일정")
 
     pdf.sub("운영 (Operations)")
     pdf.kv("리소스", "팀 배정 및 활용률 모니터링")
@@ -1904,14 +1861,14 @@ def build_korean():
     pdf.txt("대시보드는 네 가지 주요 역할을 지원하며, 각각 다른 접근 수준을 가집니다:")
     pdf.kv("PMP (프로젝트 매니저)", "모든 탭에 대한 전체 접근 권한. 마일스톤, 게이트, 리스크, 예산, 문서 및 팀 편집 가능. FDA 커뮤니케이션을 볼 수 있는 유일한 역할.")
     pdf.kv("기술", "기술 마일스톤, 리스크 및 문서를 보고 업데이트 가능. 메시지 보드 참여 가능. 재무 탭 접근 불가.")
-    pdf.kv("비즈니스", "비즈니스 마일스톤, 예산, 투자 및 지분 구조표 접근 가능. 메시지 보드 참여 가능.")
-    pdf.kv("회계", "예산, 현금/런웨이, 지분 구조표에 대한 읽기 전용 접근. 제한된 편집 기능.")
+    pdf.kv("비즈니스", "비즈니스 마일스톤, 예산 및 투자 접근 가능. 메시지 보드 참여 가능.")
+    pdf.kv("회계", "예산, 현금/런웨이, 미국 투자에 대한 읽기 전용 접근. 제한된 편집 기능.")
 
     pdf.sub("구독 등급")
     pdf.txt("패널 접근은 Supabase RLS를 통해 서버 측에서 제어됩니다. 등급에 따라 사용 가능한 패널이 결정됩니다:")
     pdf.kv("Starter ($500/월)", "2석, 4개 패널: 듀얼 트랙, 게이트, 타임라인, 예산 (프로그램 및 재무 그룹 부분 활성화)")
-    pdf.kv("Growth ($1,000/월)", "5석, 13개 패널: 지분 구조표, FDA 커뮤니케이션, 미국 투자를 제외한 전체")
-    pdf.kv("Scale ($2,000/월)", "10석, 전체 5개 그룹 17개 패널, FDA 커뮤니케이션, 지분 구조표 및 내장 Predicate Finder 포함")
+    pdf.kv("Growth ($1,000/월)", "5석, 13개 패널: FDA 커뮤니케이션 및 미국 투자를 제외한 전체")
+    pdf.kv("Scale ($2,000/월)", "10석, 전체 5개 그룹 15개 패널, FDA 커뮤니케이션 및 내장 Predicate Finder 포함")
 
     pdf.tip_box("귀하의 등급은 서버 측에서 관리되며 대시보드 UI에서 변경할 수 없습니다.")
 
@@ -2113,26 +2070,9 @@ def build_korean():
     pdf.kv("단계", "시드, 시리즈 A, 시리즈 B, 성장")
     pdf.kv("연락 상태", "잠재 고객, 연락됨, 논의 중, 텀시트, 확약")
 
-    # ── 15. 지분 구조표 ──
+    # ── 15. 리소스 ──
     pdf.add_page()
-    pdf.sec(15, "지분 구조표")
-    pdf.txt(
-        "지분 구조표는 지분 소유권, 지분 이벤트(펀딩 라운드, 전환, "
-        "옵션 부여) 및 베스팅 일정을 추적합니다. "
-        "법인의 전체 자본 구조 개요를 제공합니다."
-    )
-    pdf.sub("주주")
-    pdf.bul("이름, 주식 종류 (보통주, 우선주 A/B/C, 옵션, 워런트)")
-    pdf.bul("주식 수 및 소유 비율")
-    pdf.bul("이사회 석, 베스팅 상태, 메모")
-
-    pdf.sub("베스팅 일정")
-    pdf.bul("표준 4년 베스팅, 1년 클리프, 또는 맞춤 일정")
-    pdf.bul("클리프 날짜, 총 주식, 기 귀속 주식, 다음 귀속일 추적")
-
-    # ── 16. 리소스 ──
-    pdf.add_page()
-    pdf.sec(16, "리소스")
+    pdf.sec(15, "리소스")
     pdf.txt(
         "리소스 탭은 팀원의 역할, 워크스트림별 배정 및 활용률을 표시합니다. "
         "배정 바 차트는 각 팀원의 역량이 어떻게 분배되는지 보여줍니다."
@@ -2145,9 +2085,9 @@ def build_korean():
 
     pdf.tip_box("총 배정을 100% 이하로 유지하여 과부하를 방지하세요. 대시보드는 과배정을 적색으로 표시합니다.")
 
-    # ── 17. 공급업체 ──
+    # ── 16. 공급업체 ──
     pdf.add_page()
-    pdf.sec(17, "공급업체")
+    pdf.sec(16, "공급업체")
     pdf.txt(
         "공급업체 탭은 공급업체 자격 상태, 리드타임, 구매 주문 상태 및 "
         "위탁 제조 마일스톤을 추적합니다. 21 CFR 820 공급업체 통제를 지원합니다."
@@ -2159,9 +2099,9 @@ def build_korean():
     pdf.bul("보류: 일시 중단")
     pdf.bul("거부: 자격 미달")
 
-    # ── 18. 메시지 보드 ──
+    # ── 17. 메시지 보드 ──
     pdf.add_page()
-    pdf.sec(18, "메시지 보드")
+    pdf.sec(17, "메시지 보드")
     pdf.txt(
         "메시지 보드는 교차 기능 커뮤니케이션을 위한 목적 지향 메시징 "
         "시스템입니다. 수명 주기 관리, 의사결정 추적 및 액션 항목 생성을 "
@@ -2191,9 +2131,9 @@ def build_korean():
     pdf.bul("워크스트림 필터: 워크스트림 카테고리별 필터")
     pdf.bul("수명 주기 필터: 열림, 해결됨, 전체")
 
-    # ── 19. FDA 커뮤니케이션 센터 ──
+    # ── 18. FDA 커뮤니케이션 센터 ──
     pdf.add_page()
-    pdf.sec(19, "FDA 커뮤니케이션 센터")
+    pdf.sec(18, "FDA 커뮤니케이션 센터")
     pdf.txt(
         "FDA 커뮤니케이션 탭은 PMP 전용이며 FDA 규제 상호작용 도구를 "
         "제공합니다. Q-Sub 커버 레터 생성기, RTA 체크리스트, "
@@ -2227,9 +2167,9 @@ def build_korean():
         "RTA 심사(15일차), 실질 검토(60일차), MDUFA 결정 목표(90일차)."
     )
 
-    # ── 20. 설정 마법사 ──
+    # ── 19. 설정 마법사 ──
     pdf.add_page()
-    pdf.sec(20, "설정 마법사 및 템플릿")
+    pdf.sec(19, "설정 마법사 및 템플릿")
     pdf.txt(
         "설정 마법사는 첫 방문 시(또는 프로젝트 데이터가 없을 때) 시작됩니다. "
         "3단계 설정 프로세스를 안내합니다."
@@ -2262,9 +2202,9 @@ def build_korean():
     pdf.bul("7단계: 공급업체 및 구성품")
     pdf.bul("8단계: DHF 문서 선택")
 
-    # ── 21. 단축키 및 팁 ──
+    # ── 20. 단축키 및 팁 ──
     pdf.add_page()
-    pdf.sec(21, "단축키 및 팁")
+    pdf.sec(20, "단축키 및 팁")
     pdf.sub("일반 팁")
     pdf.bul("모든 데이터는 브라우저 localStorage에 자동 저장 -- 전체 대시보드 상태 포함")
     pdf.bul("온라인 시 Supabase 실시간 동기화")
@@ -2279,16 +2219,16 @@ def build_korean():
 
     pdf.sub("데이터 영속성")
     pdf.bul("프로젝트 구성: ctower_project_data (localStorage)")
-    pdf.bul("실시간 대시보드 상태: ctower_live_state (localStorage) -- 마일스톤, 게이트, 리스크, 표준, 예산, 런웨이, 액션, DHF, CAPA, 팀, 공급업체, 투자자, 지분표, 감사 로그")
+    pdf.bul("실시간 대시보드 상태: ctower_live_state (localStorage) -- 마일스톤, 게이트, 리스크, 표준, 예산, 런웨이, 액션, DHF, CAPA, 팀, 공급업체, 투자자, 감사 로그")
     pdf.bul("메시지 보드 스레드: ctower_mb_threads (localStorage)")
     pdf.bul("문서: ctower_doclib_docs (localStorage)")
     pdf.bul("메시지: Supabase messages 테이블 (동기화)")
     pdf.bul("감사 로그: Supabase audit_log 테이블 (동기화)")
     pdf.tip_box("모든 대시보드 상태는 변경 후 자동으로 localStorage에 저장됩니다. 정전이나 브라우저 충돌 시에도 데이터가 보존되어 다음 방문 시 다시 로드됩니다.")
 
-    # ── 22. 문제 해결 ──
+    # ── 21. 문제 해결 ──
     pdf.add_page()
-    pdf.sec(22, "문제 해결")
+    pdf.sec(21, "문제 해결")
 
     pdf.sub("대시보드가 로드되지 않음")
     pdf.bul("초기 Supabase 인증을 위한 인터넷 연결 확인")
@@ -2328,9 +2268,9 @@ def build_korean():
         "ctower_qa_archive. 또는 브라우저 설정에서 모든 사이트 데이터를 삭제하세요."
     )
 
-    # ── 23. 510(k) Predicate Finder ──
+    # ── 22. 510(k) Predicate Finder ──
     pdf.add_page()
-    pdf.sec(23, "510(k) Predicate Finder")
+    pdf.sec(22, "510(k) Predicate Finder")
     pdf.txt(
         "510(k) Predicate Finder는 Control Tower에 직접 내장된 전용 탭입니다. "
         "FDA openFDA 데이터베이스에 연결하여 PMP와 규제 팀이 선행기기를 식별하고, "
@@ -2373,9 +2313,9 @@ def build_korean():
         "5. 결과를 PDF로 내보내고 문서 관리의 510(k) 제출 패키지에 첨부합니다."
     )
 
-    # ── 24. FDA 및 규제 용어집 ──
+    # ── 23. FDA 및 규제 용어집 ──
     pdf.add_page()
-    pdf.sec(24, "FDA 및 규제 용어집")
+    pdf.sec(23, "FDA 및 규제 용어집")
     pdf.ln(2)
     fda_terms_ko = [
         ("510(k)", "시판 전 통지. II등급 의료기기가 합법적으로 판매되는 선행기기와 실질적으로 동등함을 입증하기 위해 FDA에 제출하는 문서. 식품의약품화장품법 제510(k)조에서 명명."),

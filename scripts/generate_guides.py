@@ -261,7 +261,6 @@ def build_english():
     pdf.kv("Budget", "Budget vs. Actual spending per category")
     pdf.kv("Cash / Runway", "Financial position, burn rate, funding milestones, and API integrations")
     pdf.kv("US Investment", "North America fundraising pipeline, investor tracking, and IR activities")
-    pdf.kv("Cap Table", "Equity ownership, share classes, dilution modeling, and investor cap management")
     pdf.kv("Resources", "Team allocation and capacity utilization")
     pdf.kv("Suppliers", "Hardware component vendor tracking")
     pdf.kv("Message Board", "Purpose-driven messaging with structured threads, decision logging, workstream filtering, and accountability")
@@ -542,9 +541,9 @@ def build_english():
     pdf.txt(
         "A dropdown menu in the top bar lets you switch between roles:\n\n"
         "  PMP (Full Authority) -- Can directly change any status, approve/reject change requests, "
-        "make gate decisions, and access all 17 tabs.\n"
+        "make gate decisions, and access all 15 tabs.\n"
         "  Technology Team -- Isolated to technical & regulatory tabs only. Financial data "
-        "(budget, cash/runway, investment, cap table) is restricted. Must submit a "
+        "(budget, cash/runway, investment) is restricted. Must submit a "
         "Change Request for status modifications.\n"
         "  Business / Investors -- Isolated to financial & planning tabs only. Technical IP "
         "(regulatory tracker, risks, doc library, resources, suppliers) is restricted. "
@@ -570,7 +569,7 @@ def build_english():
         "Document Control, Actions, Resources, Suppliers, Message Board\n\n"
         "BUSINESS / INVESTORS tabs (9):\n"
         "  Dual-Track, Gates, Timeline, Budget, Cash/Runway, US Investment, "
-        "Cap Table, Actions, Message Board\n\n"
+        "Actions, Message Board\n\n"
         "When a Tech or Business team member clicks a status to change it, instead of "
         "directly modifying the data, a Change Request form opens.\n\n"
         "They must provide:\n"
@@ -595,7 +594,6 @@ def build_english():
         "    - Timeline -- View milestone events in business language\n"
         "    - Gate System -- View gate statuses and criteria\n"
         "    - US Investment -- View investor pipeline (read-only)\n"
-        "    - Cap Table -- View ownership table (read-only)\n"
         "    - Message Board -- Participate in threads\n\n"
         "  RESTRICTED (tabs disabled):\n"
         "    - Dual-Track, Regulatory Tracker, Risk Dashboard, Audit Trail, "
@@ -1050,8 +1048,8 @@ def build_english():
     pdf.kv("Mercury Banking", "Startup banking API -- real-time balance, wire transfers, treasury management")
     pdf.kv("Stripe", "US payment processing, investor subscription billing, automated invoicing")
     pdf.kv("Silicon Valley Bank (SVB)", "Venture banking, capital call processing, fund administration API")
-    pdf.kv("AngelList", "Fundraising platform integration, SPV management, cap table sync")
-    pdf.kv("Carta", "Cap table management, 409A valuations, equity plan administration")
+    pdf.kv("AngelList", "Fundraising platform integration, SPV management")
+    pdf.kv("Carta", "Equity management, 409A valuations, equity plan administration")
     pdf.kv("SEC EDGAR", "Regulatory filing monitoring, Form D tracking, investor accreditation verification")
 
     pdf.ln(2)
@@ -1113,82 +1111,15 @@ def build_english():
         "and fundraising presentation preparation. This log provides an auditable "
         "record of all investor engagement for both internal review and board reporting.")
 
-    # 27. Cap Table Management
-    pdf.add_page()
-    pdf.sec(28, "Tab 13: Cap Table Management")
-    pdf.txt(
-        "The Cap Table Management tab provides a comprehensive view of the company's equity "
-        "structure, shareholder registry, vesting schedules, and dilution tracking. It is "
-        "essential for maintaining an accurate picture of ownership as the company raises "
-        "funding through the 510(k) Bridge strategy.\n\n"
-        "This tab consolidates information from the Investment & Fundraising Guide, including "
-        "pre-money/post-money valuation mechanics, SAFE conversion, option pool sizing, and "
-        "founder vesting schedules -- all in one auditable dashboard view.")
-
-    pdf.sub("28.1 Cap Table Metrics")
-    pdf.txt(
-        "Four summary cards at the top:\n\n"
-        "  Shareholders        -- Total number of equity holders\n"
-        "  Total Shares        -- Total shares outstanding (all classes)\n"
-        "  Founder Ownership   -- Combined founder ownership percentage\n"
-        "  Latest Valuation    -- Implied valuation based on most recent priced round")
-
-    pdf.sub("28.2 Dilution Waterfall")
-    pdf.txt(
-        "A visual bar chart showing ownership breakdown by share class:\n\n"
-        "  Common           -- Founder shares (blue)\n"
-        "  Preferred Seed   -- Seed round preferred shares (green)\n"
-        "  Preferred A      -- Series A preferred shares (yellow)\n"
-        "  SAFE             -- SAFE note allocations pre-conversion (orange)\n"
-        "  Options          -- Employee/advisor option pool (gray)\n\n"
-        "The waterfall updates automatically as shareholders are added or removed.")
-
-    pdf.sub("28.3 Shareholder Holdings")
-    pdf.txt(
-        "A table listing every equity holder with full CRUD (add/delete):\n\n"
-        "  Shareholder  -- Name of the person, entity, or pool\n"
-        "  Role         -- Founder, Investor, Reserved, Employee, Advisor\n"
-        "  Share Class  -- Common, Preferred Seed, Preferred A, SAFE, Options\n"
-        "  Shares       -- Number of shares held\n"
-        "  Ownership %  -- Percentage of total shares outstanding\n"
-        "  Notes        -- Additional context (e.g., vesting terms, SAFE cap)\n\n"
-        "Ownership percentages recalculate dynamically when shareholders are added or removed.")
-
-    pdf.sub("28.4 Equity Events & Funding Rounds")
-    pdf.txt(
-        "A chronological log of every equity-related event:\n\n"
-        "  Date         -- When the event occurred or is projected\n"
-        "  Event        -- Description (e.g., 'Phase 1 Seed Round', 'SAFE Note')\n"
-        "  Share Class  -- Type of equity issued\n"
-        "  Shares       -- Number of shares created or converted\n"
-        "  Price/Share  -- Price per share for priced rounds\n"
-        "  Total Value  -- Total capital raised in this event\n"
-        "  Status       -- Issued (completed), Pending (projected), Converted (SAFE->equity)\n"
-        "  Notes        -- Deal terms, valuation, timing rationale\n\n"
-        "Status badges are clickable to cycle through states (Pending -> Issued -> Converted).")
-
-    pdf.sub("28.5 Vesting Schedules")
-    pdf.txt(
-        "Tracks founder and employee vesting with full details:\n\n"
-        "  Holder       -- Person name\n"
-        "  Total Shares -- Total shares subject to vesting\n"
-        "  Start Date   -- Vesting start date\n"
-        "  Cliff        -- Months before any shares vest (typically 12)\n"
-        "  Term         -- Total vesting period in months (typically 48)\n"
-        "  Vested       -- Number of shares vested to date\n"
-        "  Status       -- Vesting (in progress), Fully Vested, or Cancelled\n\n"
-        "Standard terms: 4-year vesting with 1-year cliff. Founders may receive credit "
-        "for pre-formation work (e.g., 6 months credited for IP development or sourcing).")
-
     # 28. Document Control (Tab 14)
     pdf.add_page()
-    pdf.sec(29, "Tab 14: Document Control")
+    pdf.sec(28, "Tab 14: Document Control")
     pdf.txt(
         "Document Control provides ISO 13485-aligned document lifecycle management. "
         "Every document carries a Document Control Number (DCN), a 5-stage status "
         "workflow, full revision history, and automated review scheduling.")
 
-    pdf.sub("29.1 Summary Bar")
+    pdf.sub("28.1 Summary Bar")
     pdf.txt(
         "At the top of the panel, counter-cards provide an at-a-glance summary:\n\n"
         "  Total      -- Total number of controlled documents\n"
@@ -1197,7 +1128,7 @@ def build_english():
         "  Draft       -- New or in-progress documents\n"
         "  Overdue     -- Documents past their scheduled review date (red badge)")
 
-    pdf.sub("29.2 Category Filters")
+    pdf.sub("28.2 Category Filters")
     pdf.txt(
         "Filter buttons allow viewing documents by category:\n\n"
         "  All Categories  -- Show everything (default)\n"
@@ -1208,7 +1139,7 @@ def build_english():
         "  Finance          -- Budget reports, burn reports, financial statements\n"
         "  Templates        -- Reusable templates for recurring documents")
 
-    pdf.sub("29.3 Document Table")
+    pdf.sub("28.3 Document Table")
     pdf.txt(
         "Each row shows:\n\n"
         "  Category         -- Color-coded badge (Regulatory=blue, Technical=green, etc.)\n"
@@ -1224,20 +1155,20 @@ def build_english():
         "  Draft -> In Review -> Approved -> Effective -> Obsolete\n\n"
         "Status changes are logged to the Audit Trail for DHF traceability.")
 
-    pdf.sub("29.4 Revision History")
+    pdf.sub("28.4 Revision History")
     pdf.txt(
         "Click any document name to open a modal panel showing:\n\n"
         "  Document metadata  -- Owner, version, effective date, next review, linked milestone, data source ref\n"
         "  Revision table     -- Every revision with rev number, date, author, and change description\n\n"
         "This provides full traceability for design control documentation.")
 
-    pdf.sub("29.5 Review Scheduling")
+    pdf.sub("28.5 Review Scheduling")
     pdf.txt(
         "Each document has a Next Review date. Documents past their review date are highlighted "
         "with a warning badge and a tinted row background. The summary bar shows the count of "
         "overdue reviews.")
 
-    pdf.sub("29.6 Team Members & Dashboard Roles")
+    pdf.sub("28.6 Team Members & Dashboard Roles")
     pdf.txt(
         "The dashboard supports four role-based access levels, configured during the "
         "Project Setup Wizard:\n\n"
@@ -1263,7 +1194,7 @@ def build_english():
 
     # 29. Message Board (Tab 15)
     pdf.add_page()
-    pdf.sec(30, "Tab 15: Message Board")
+    pdf.sec(29, "Tab 15: Message Board")
     pdf.txt(
         "The Message Board is the dashboard's purpose-driven internal messaging "
         "layer. Every thread maps to one of three intents -- inform, decide, or act "
@@ -1271,7 +1202,7 @@ def build_english():
         "priority. Messages are synced in real-time via the server database (Supabase) "
         "with localStorage as a fallback.")
 
-    pdf.sub("30.1 Structured Threads")
+    pdf.sub("29.1 Structured Threads")
     pdf.txt(
         "Each thread has:\n\n"
         "  Title       -- Descriptive name for the conversation\n"
@@ -1286,7 +1217,7 @@ def build_english():
         "load. Existing messages are preserved via Supabase. New threads can be created "
         "at any time using the 'New Thread' button.")
 
-    pdf.sub("30.2 Decision Visibility")
+    pdf.sub("29.2 Decision Visibility")
     pdf.txt(
         "Decisions are first-class objects, not buried in chat:\n\n"
         "  [DECISION] prefix -- Prefix any message with [DECISION] to auto-log it\n"
@@ -1295,7 +1226,7 @@ def build_english():
         "  Decision cards    -- Each decision shows text, rationale, who made it, and date\n"
         "  Audit trail       -- All decisions are recorded in the audit log")
 
-    pdf.sub("30.3 Four Views")
+    pdf.sub("29.3 Four Views")
     pdf.txt(
         "The view switcher provides four perspectives:\n\n"
         "  All Threads  -- Every thread matching current filters\n"
@@ -1303,7 +1234,7 @@ def build_english():
         "  Decisions    -- Threads that have active logged decisions\n"
         "  Executive    -- High-signal view: urgent, escalated, decisions, and resolved threads")
 
-    pdf.sub("30.4 Filters & Summary Dashboard")
+    pdf.sub("29.4 Filters & Summary Dashboard")
     pdf.txt(
         "  Workstream Filter  -- Dropdown to show only one workstream or all\n"
         "  Lifecycle Filter   -- Show open, resolved, or all threads\n"
@@ -1315,28 +1246,28 @@ def build_english():
         "  My Items           -- Threads owned or assigned to current role\n"
         "  Unread Messages    -- Messages not yet read by current role")
 
-    pdf.sub("30.5 Accountability & Actions")
+    pdf.sub("29.5 Accountability & Actions")
     pdf.txt(
         "  Create Action   -- Assigns a thread to a specific role with a due date\n"
         "  Assignee badge  -- Shows who is responsible on the thread card\n"
         "  Due date        -- Displayed alongside the assignee\n"
         "  Intent tagging  -- Prefix [ACTION] on a message for visual highlighting")
 
-    pdf.sub("30.6 Linked Artifacts")
+    pdf.sub("29.6 Linked Artifacts")
     pdf.txt(
         "Threads can be connected to other dashboard items:\n\n"
         "  Link types: milestone, risk, gate, document, standard, task\n"
         "  Each linked artifact appears as a badge on the thread card\n"
         "  Links are stored as part of the thread metadata")
 
-    pdf.sub("30.7 Lifecycle Management")
+    pdf.sub("29.7 Lifecycle Management")
     pdf.txt(
         "  Resolve       -- Mark a thread as resolved with a summary\n"
         "  Reopen        -- Reopen a previously resolved thread\n"
         "  Resolution    -- Displayed on resolved thread cards\n"
         "  Audit trail   -- All lifecycle changes are logged")
 
-    pdf.sub("30.8 Read Receipts & Notifications")
+    pdf.sub("29.8 Read Receipts & Notifications")
     pdf.txt(
         "  Sent messages   -- Show single check (Unread) or double check (Read)\n"
         "  Received        -- Highlighted with a blue left border when unread\n"
@@ -1345,13 +1276,13 @@ def build_english():
         "  Toast           -- New messages from other parties trigger a slide-up toast\n"
         "  Cross-Tab Sync  -- Messages sync across browser tabs via StorageEvent")
 
-    pdf.sub("30.9 Export & Archive")
+    pdf.sub("29.9 Export & Archive")
     pdf.txt(
         "  Export  -- Downloads all threads and decisions as a .txt file\n"
         "  Archive -- Saves a thread's messages to archive storage and clears them\n"
         "  View Archive / Delete Archive -- Browse or remove archived entries")
 
-    pdf.sub("30.10 Data Storage")
+    pdf.sub("29.10 Data Storage")
     pdf.txt(
         "Messages sync in real-time to the server database (Supabase). Thread metadata "
         "(title, workstream, intent, owner, lifecycle, linked items, source ref) is stored locally "
@@ -1361,19 +1292,19 @@ def build_english():
 
     # 30. FDA Comms (Tab 16)
     pdf.add_page()
-    pdf.sec(31, "Tab 16: FDA Communications Center (PMP-Only)")
+    pdf.sec(30, "Tab 16: FDA Communications Center (PMP-Only)")
     pdf.txt(
         "The FDA Communications Center is a PMP-exclusive tab providing automated tools "
         "to prepare, track, and manage all FDA interactions. It is invisible to Tech, "
         "Business, and Accounting roles -- the tab itself is hidden from the navigation bar.")
 
-    pdf.sub("31.1 Access Control")
+    pdf.sub("30.1 Access Control")
     pdf.txt(
         "The tab is gated by role -- only users with PMP authority (admin URL parameter) "
         "can see it. A purple 'PMP Eyes Only' badge is displayed at the top of the tab. "
         "When switching to any non-PMP role, the tab disappears from the nav bar entirely.")
 
-    pdf.sub("31.2 Summary Metrics")
+    pdf.sub("30.2 Summary Metrics")
     pdf.txt(
         "Seven metric cards provide an at-a-glance readiness assessment:\n\n"
         "  RTA Ready %       -- Percentage of Refuse-to-Accept checklist items passed\n"
@@ -1384,7 +1315,7 @@ def build_english():
         "  Red Risks         -- Count of red-level risks (blocks submission)\n"
         "  Yellow Risks      -- Count of yellow-level risks (requires mitigation plan)")
 
-    pdf.sub("31.3 Q-Sub Cover Letter Generator")
+    pdf.sub("30.3 Q-Sub Cover Letter Generator")
     pdf.txt(
         "Generates a Pre-Submission meeting request cover letter following FDA Q-Sub guidance. "
         "The letter auto-populates from project data:\n\n"
@@ -1397,13 +1328,13 @@ def build_english():
         "The letter is rendered in a print-style preview and can be exported as a "
         "standalone HTML file via the 'Export Cover Letter (HTML)' button.")
 
-    pdf.sub("31.4 Question Package Export")
+    pdf.sub("30.4 Question Package Export")
     pdf.txt(
         "Pulls all questions from the Message Board's Q&A sections and formats them "
         "per FDA Pre-Sub structure: numbered questions with section headings and context. "
         "Export generates a clean HTML document suitable for inclusion in the Q-Sub package.")
 
-    pdf.sub("31.5 Refuse-to-Accept (RTA) Checklist")
+    pdf.sub("30.5 Refuse-to-Accept (RTA) Checklist")
     pdf.txt(
         "A 14-item self-check based on FDA's published RTA checklist for 510(k) submissions. "
         "Items automatically cross-reference the DHF Document Tracker and Standards Tracker "
@@ -1415,7 +1346,7 @@ def build_english():
         "predicate comparison, standards data, labeling, biocompatibility, software docs, "
         "EMC/electrical safety, sterilization, risk analysis, and performance testing.")
 
-    pdf.sub("31.6 FDA Interaction Timeline")
+    pdf.sub("30.6 FDA Interaction Timeline")
     pdf.txt(
         "A visual timeline showing key FDA milestones mapped to project months:\n\n"
         "  M+1  Pre-Sub Meeting Request\n"
@@ -1428,7 +1359,7 @@ def build_english():
         "Milestones are color-coded: green (done), blue (current), gray (future). "
         "The 75-day FDA feedback window is highlighted as a key planning constraint.")
 
-    pdf.sub("31.7 DHF Readiness Snapshot")
+    pdf.sub("30.7 DHF Readiness Snapshot")
     pdf.txt(
         "A stacked bar chart showing Design History File document status distribution:\n\n"
         "  Green  -- Approved\n"
@@ -1439,7 +1370,7 @@ def build_english():
 
     # 32. Predicate Finder Integration
     pdf.add_page()
-    pdf.sec(32, "510(k) Predicate Finder Integration")
+    pdf.sec(31, "510(k) Predicate Finder Integration")
     pdf.txt(
         "The 510(k) Predicate Finder is now embedded directly in the Control Tower "
         "as a dedicated tab. It connects to the FDA openFDA database to help teams "
@@ -1449,7 +1380,7 @@ def build_english():
         "keeping all data within the Control Tower environment. The iframe loads "
         "lazily on first tab visit to keep initial dashboard load fast.")
 
-    pdf.sub("32.1 Free Tier")
+    pdf.sub("31.1 Free Tier")
     pdf.txt(
         "Anyone can use the Predicate Finder at no cost with the following limits:\n\n"
         "  5 searches per day\n"
@@ -1458,13 +1389,13 @@ def build_english():
         "An email address is required to unlock the tool. This serves as the primary "
         "lead-generation funnel for 510k Bridge.")
 
-    pdf.sub("32.2 Pro Tier ($99/month)")
+    pdf.sub("31.2 Pro Tier ($99/month)")
     pdf.txt(
         "Pro unlocks unlimited searches, unlimited chain tracing, 4-device comparison, "
         "SE argument generation, and PDF export. Users who need the full Control Tower "
         "can upgrade to any dashboard tier directly from the Predicate Finder.")
 
-    pdf.sub("32.3 Key Features")
+    pdf.sub("31.3 Key Features")
     pdf.bul("Keyword & Product Code Search -- query the openFDA 510(k) database by applicant, "
             "product code, device name, or decision date range")
     pdf.bul("Predicate Chain Tracing -- starting from any cleared device, automatically trace "
@@ -1475,7 +1406,7 @@ def build_english():
             "narrative comparing the subject device to the selected predicate")
     pdf.bul("Bilingual (EN/CN) -- full Chinese language support matching Control Tower")
 
-    pdf.sub("32.4 Integration with Control Tower")
+    pdf.sub("31.4 Integration with Control Tower")
     pdf.txt(
         "The Predicate Finder is embedded as a full tab in the Control Tower, available "
         "to all four roles (PMP, Technology, Business, Accounting). Predicate research "
@@ -1484,21 +1415,21 @@ def build_english():
 
     # 33. QMS-Lite for Startups
     pdf.add_page()
-    pdf.sec(33, "QMS-Lite for Startups")
+    pdf.sec(32, "QMS-Lite for Startups")
     pdf.txt(
         "QMS-Lite is a lightweight quality management system designed specifically for "
         "510(k)-stage startups. It provides the minimum viable QMS needed to pass an "
         "FDA audit without the $30K-$100K/year cost of full platforms like Greenlight "
         "Guru or MasterControl.")
 
-    pdf.sub("33.1 Modules (aligned to 21 CFR 820 / ISO 13485)")
+    pdf.sub("32.1 Modules (aligned to 21 CFR 820 / ISO 13485)")
     pdf.bul("Document Control -- version-controlled SOPs, work instructions, forms")
     pdf.bul("CAPA -- corrective and preventive action tracking with root cause analysis")
     pdf.bul("Training Records -- employee training matrix, sign-off tracking, competency logs")
     pdf.bul("Supplier Qualification -- approved supplier list, audit schedules, scorecards")
     pdf.bul("Complaint Handling -- customer complaint intake, investigation, trend analysis")
 
-    pdf.sub("33.2 Pricing")
+    pdf.sub("32.2 Pricing")
     pdf.txt(
         "  QMS-Lite Starter -- $200/month (Document Control, CAPA, Training Records)\n"
         "  QMS-Lite Pro -- $500/month (full suite including Supplier Qualification, "
@@ -1506,7 +1437,7 @@ def build_english():
         "Compared to Greenlight Guru ($2.5K-$8K/month) and MasterControl ($8K+/month), "
         "QMS-Lite targets startups that need just enough QMS to satisfy FDA auditors.")
 
-    pdf.sub("33.3 Integration with Control Tower")
+    pdf.sub("32.3 Integration with Control Tower")
     pdf.txt(
         "QMS-Lite reuses existing Control Tower modules -- Document Control, Actions "
         "(CAPA), and Suppliers tabs -- extended with QMS-specific templates to meet "
@@ -1515,13 +1446,13 @@ def build_english():
 
     # 34. Cross-Border Entity Setup Tracker
     pdf.add_page()
-    pdf.sec(34, "Cross-Border Entity Setup Tracker")
+    pdf.sec(33, "Cross-Border Entity Setup Tracker")
     pdf.txt(
         "The Entity Setup Tracker provides a structured dashboard for Chinese companies "
         "entering the US market. Currently these workflows are handled entirely through "
         "email chains with attorneys -- there is no dedicated tool.")
 
-    pdf.sub("34.1 Checklist Modules")
+    pdf.sub("33.1 Checklist Modules")
     pdf.bul("Delaware C-Corp Formation -- articles of incorporation, bylaws, EIN")
     pdf.bul("Oregon Registration -- foreign entity registration, business license")
     pdf.bul("Registered Agent -- appointment and annual renewal tracking")
@@ -1532,7 +1463,7 @@ def build_english():
     pdf.bul("State Business Licenses -- state-specific permits and renewals")
     pdf.bul("Insurance -- product liability, general liability, D&O coverage")
 
-    pdf.sub("34.2 Pricing")
+    pdf.sub("33.2 Pricing")
     pdf.txt(
         "  One-time setup -- $1K-$5K (guided entity formation with checklist tracking)\n"
         "  SaaS -- $200/month (ongoing dashboard with renewal reminders, compliance "
@@ -1540,7 +1471,7 @@ def build_english():
         "Revenue add-on: referral partnerships with immigration attorneys, corporate "
         "service providers, and registered agent companies.")
 
-    pdf.sub("34.3 Integration with Control Tower")
+    pdf.sub("33.3 Integration with Control Tower")
     pdf.txt(
         "Entity Setup status feeds into the Control Tower's US Investment and Resources "
         "tabs, giving project managers visibility into corporate formation progress "
@@ -1548,7 +1479,7 @@ def build_english():
 
     # 35. FDA Guidance Document Search
     pdf.add_page()
-    pdf.sec(35, "FDA Guidance Document Search")
+    pdf.sec(34, "FDA Guidance Document Search")
     pdf.txt(
         "The Guidance Docs tab provides an embedded, searchable database of 600+ guidance "
         "documents published by the FDA Center for Devices and Radiological Health (CDRH). "
@@ -1556,7 +1487,7 @@ def build_english():
         "Docs database is pre-loaded from a curated scrape of the official CDRH guidance page, "
         "ensuring fast search and offline-ready performance.")
 
-    pdf.sub("35.1 Search and Filters")
+    pdf.sub("34.1 Search and Filters")
     pdf.bul("Keyword Search -- full-text search across document titles, matching as you type")
     pdf.bul("Topic Filter -- 40+ categories including Biocompatibility, Software, IVD, "
             "Labeling, Postmarket Surveillance, Quality System, Radiation, Sterility, and more")
@@ -1564,13 +1495,13 @@ def build_english():
     pdf.bul("Year Range -- adjustable From/To year range to narrow results by publication date")
     pdf.bul("Sortable Columns -- click any column header (Title, Topic, Status, Date) to sort ascending or descending")
 
-    pdf.sub("35.2 Results and PDF Access")
+    pdf.sub("34.2 Results and PDF Access")
     pdf.txt(
         "Search results display in a paginated table (20 per page) showing title, topic, status, "
         "and date. Each row includes a direct PDF download link to the full guidance document on "
         "FDA.gov. Results update instantly as filters change.")
 
-    pdf.sub("35.3 Integration with Control Tower")
+    pdf.sub("34.3 Integration with Control Tower")
     pdf.txt(
         "The Guidance Docs tab is available to all four roles (PMP, Technology, Business, "
         "Accounting). It loads as an iframe from the same deployment origin, matching the "
@@ -1580,7 +1511,7 @@ def build_english():
 
     # 36. Glossary
     pdf.add_page()
-    pdf.sec(36, "Glossary of Key Terms")
+    pdf.sec(35, "Glossary of Key Terms")
     pdf.ln(2)
     terms = [
         ("M+N", "Month notation. M+0 = project start (March 2026). M+6 = six months later (Sep 2026). Used throughout for all scheduling."),
@@ -1604,7 +1535,7 @@ def build_english():
         ("Kanban", "Visual task management board with columns representing work stages."),
         ("FAB", "Floating Action Button -- the circular button for quick access to stakeholder inputs."),
         ("IndexedDB", "Browser-based local storage used as a fallback for document persistence."),
-        ("ctower_live_state", "localStorage key that persists all mutable dashboard state (milestones, gates, risks, standards, budget, cash/runway, action items, DHF, DMR, CAPA, team, suppliers, investors, cap table, audit log). Saved after every change for crash-proof resilience."),
+        ("ctower_live_state", "localStorage key that persists all mutable dashboard state (milestones, gates, risks, standards, budget, cash/runway, action items, DHF, DMR, CAPA, team, suppliers, investors, audit log). Saved after every change for crash-proof resilience."),
         ("Runway", "Number of months the project can continue operating at current burn rate before funds run out."),
         ("NRE", "Non-Recurring Engineering -- one-time engineering costs for manufacturing setup."),
         ("RTA", "Refuse to Accept -- FDA's initial screening checklist before substantive review of a 510(k). Failure triggers an immediate rejection."),
@@ -2697,80 +2628,14 @@ def build_chinese():
         "\u878d\u8d44\u6f14\u793a\u51c6\u5907\u3002\u6b64\u65e5\u5fd7\u4e3a\u5185\u90e8\u5ba1\u67e5\u548c\u8463\u4e8b\u4f1a\u62a5\u544a"
         "\u63d0\u4f9b\u6240\u6709\u6295\u8d44\u8005\u4e92\u52a8\u7684\u53ef\u5ba1\u8ba1\u8bb0\u5f55\u3002")
 
-
-    # 27. 股权表管理 (Tab 13)
-    pdf.add_page()
-    pdf.sec(28, "选项匁13：股权表管理")
-    pdf.txt(
-        "股权表管理选项卡提供公司股权结构、股东登记、"
-        "归属计划和稀释跟踪的全面视图。在公司通过510(k) Bridge"
-        "策略进行融资时，它对于维护准确的所有权记录至关重要。\n\n"
-        "此选项卡整合了投资与融资指南中的信息，包括投前/投后估值机制、"
-        "SAFE转换、期权池规模和创始人归属计划——全部在一个可审计的仪表盘视图中。")
-
-    pdf.sub("28.1 股权表指标")
-    pdf.txt(
-        "顶部四个摘要卡片：\n\n"
-        "  股东数量        -- 股权持有者总数\n"
-        "  总股份          -- 已发行股份总数（所有类别）\n"
-        "  创始人持股比例  -- 创始人合计持股百分比\n"
-        "  最新估值        -- 基于最近定价轮的隐含估值")
-
-    pdf.sub("28.2 稀释瀑布图")
-    pdf.txt(
-        "按股份类别显示所有权分布的可视化条形图：\n\n"
-        "  普通股           -- 创始人股份（蓝色）\n"
-        "  种子轮优先股     -- 种子轮优先股（绿色）\n"
-        "  A轮优先股        -- A轮优先股（黄色）\n"
-        "  SAFE             -- 转换前的SAFE笔据分配（橙色）\n"
-        "  期权             -- 员工/顾问期权池（灰色）\n\n"
-        "瀑布图在添加或删除股东时自动更新。")
-
-    pdf.sub("28.3 股东持股")
-    pdf.txt(
-        "列出每个股权持有者的表格，支持完整CRUD（添加/删除）：\n\n"
-        "  股东       -- 个人、实体或池的名称\n"
-        "  角色       -- 创始人、投资者、预留、员工、顾问\n"
-        "  股份类别   -- 普通股、种子优先、A轮优先、SAFE、期权\n"
-        "  股份数     -- 持有股份数量\n"
-        "  持股比例 % -- 占已发行股份总数的百分比\n"
-        "  备注       -- 附加信息（如归属条款、SAFE估值上限）\n\n"
-        "添加或删除股东时，持股比例自动重新计算。")
-
-    pdf.sub("28.4 股权事件与融资轮次")
-    pdf.txt(
-        "每个股权相关事件的时间顺序记录：\n\n"
-        "  日期         -- 事件发生或预计日期\n"
-        "  事件         -- 描述（如“种子轮”、“SAFE笔据”）\n"
-        "  股份类别   -- 发行的股权类型\n"
-        "  股份数     -- 创建或转换的股份数\n"
-        "  每股价格   -- 定价轮的每股价格\n"
-        "  总价值     -- 此事件募集的总资本\n"
-        "  状态       -- 已发行、待定、已转换\n"
-        "  备注       -- 交易条款、估值、时间理由\n\n"
-        "状态标签可点击循环切换（待定 → 已发行 → 已转换）。")
-
-    pdf.sub("28.5 归属计划")
-    pdf.txt(
-        "跟踪创始人和员工的归属详情：\n\n"
-        "  持有人       -- 人员名称\n"
-        "  总股份       -- 受归属约束的总股份\n"
-        "  开始日期     -- 归属起始日\n"
-        "  崖期         -- 任何股份归属前的月数（通常12个月）\n"
-        "  期限         -- 总归属期间月数（通常48个月）\n"
-        "  已归属       -- 已归属股份数\n"
-        "  状态         -- 归属中、已完全归属、已取消\n\n"
-        "标准条款：4年归属，1年崖期。创始人可获得"
-        "成立前工作的时间抵扣（如IP开发抵扖6个月）。")
-
     # 28. 文档控制 (Tab 14)
     pdf.add_page()
-    pdf.sec(29, "\u9009\u9879\u530114\uff1a\u6587\u6863\u63a7\u5236")
+    pdf.sec(28, "\u9009\u9879\u530114\uff1a\u6587\u6863\u63a7\u5236")
     pdf.txt(
         "\u6587\u6863\u63a7\u5236\u63d0\u4f9bISO 13485\u5408\u89c4\u7684\u6587\u6863\u751f\u547d\u5468\u671f\u7ba1\u7406\u3002\u6bcf\u4e2a\u6587\u6863\u90fd\u5e26\u6709"
         "\u6587\u63a7\u7f16\u53f7(DCN)\u3001\u4e94\u9636\u6bb5\u72b6\u6001\u5de5\u4f5c\u6d41\u3001\u5b8c\u6574\u7684\u4fee\u8ba2\u5386\u53f2\u548c\u81ea\u52a8\u5ba1\u6838\u6392\u7a0b\u3002")
 
-    pdf.sub("29.1 \u6458\u8981\u680f")
+    pdf.sub("28.1 \u6458\u8981\u680f")
     pdf.txt(
         "\u9762\u677f\u9876\u90e8\u7684\u8ba1\u6570\u5361\u7247\u63d0\u4f9b\u5feb\u901f\u6982\u89c8\uff1a\n\n"
         "  \u603b\u8ba1      -- \u53d7\u63a7\u6587\u6863\u603b\u6570\n"
@@ -2779,7 +2644,7 @@ def build_chinese():
         "  \u8349\u7a3f      -- \u65b0\u5efa\u6216\u7f16\u5199\u4e2d\u7684\u6587\u6863\n"
         "  \u903e\u671f      -- \u8d85\u8fc7\u8ba1\u5212\u5ba1\u6838\u65e5\u671f\u7684\u6587\u6863\uff08\u7ea2\u8272\u6807\u8bb0\uff09")
 
-    pdf.sub("29.2 \u7c7b\u522b\u7b5b\u9009")
+    pdf.sub("28.2 \u7c7b\u522b\u7b5b\u9009")
     pdf.txt(
         "\u7b5b\u9009\u6309\u94ae\u5141\u8bb8\u6309\u7c7b\u522b\u67e5\u770b\u6587\u6863\uff1a\n\n"
         "  \u6240\u6709\u7c7b\u522b  -- \u663e\u793a\u6240\u6709\u5185\u5bb9\uff08\u9ed8\u8ba4\uff09\n"
@@ -2790,7 +2655,7 @@ def build_chinese():
         "  \u8d22\u52a1      -- \u9884\u7b97\u62a5\u544a\u3001\u71c3\u70e7\u62a5\u544a\u3001\u8d22\u52a1\u62a5\u8868\n"
         "  \u6a21\u677f      -- \u53ef\u91cd\u590d\u4f7f\u7528\u7684\u5e38\u89c4\u6587\u6863\u6a21\u677f")
 
-    pdf.sub("29.3 \u6587\u6863\u8868\u683c")
+    pdf.sub("28.3 \u6587\u6863\u8868\u683c")
     pdf.txt(
         "\u6bcf\u884c\u663e\u793a\uff1a\n\n"
         "  \u7c7b\u522b         -- \u989c\u8272\u7f16\u7801\u6807\u7b7e\n"
@@ -2806,19 +2671,19 @@ def build_chinese():
         "  \u8349\u7a3f -> \u5ba1\u6838\u4e2d -> \u5df2\u6279\u51c6 -> \u5df2\u751f\u6548 -> \u5df2\u5e9f\u6b62\n\n"
         "\u72b6\u6001\u53d8\u66f4\u8bb0\u5f55\u5230\u5ba1\u8ba1\u8ffd\u8e2a\u4ee5\u5b9e\u73b0DHF\u53ef\u8ffd\u6eaf\u6027\u3002")
 
-    pdf.sub("29.4 \u4fee\u8ba2\u5386\u53f2")
+    pdf.sub("28.4 \u4fee\u8ba2\u5386\u53f2")
     pdf.txt(
         "\u70b9\u51fb\u4efb\u4f55\u6587\u6863\u540d\u79f0\u53ef\u6253\u5f00\u6a21\u6001\u9762\u677f\uff0c\u663e\u793a\uff1a\n\n"
         "  \u6587\u6863\u5143\u6570\u636e  -- \u8d1f\u8d23\u4eba\u3001\u7248\u672c\u3001\u751f\u6548\u65e5\u671f\u3001\u4e0b\u6b21\u5ba1\u6838\u3001\u5173\u8054\u91cc\u7a0b\u7891\u3001\u6570\u636e\u6e90\u5f15\u7528\n"
         "  \u4fee\u8ba2\u8868     -- \u6bcf\u6b21\u4fee\u8ba2\u7684\u7248\u6b21\u3001\u65e5\u671f\u3001\u4f5c\u8005\u548c\u53d8\u66f4\u8bf4\u660e\n\n"
         "\u8fd9\u4e3a\u8bbe\u8ba1\u63a7\u5236\u6587\u6863\u63d0\u4f9b\u5b8c\u6574\u7684\u53ef\u8ffd\u6eaf\u6027\u3002")
 
-    pdf.sub("29.5 \u5ba1\u6838\u6392\u7a0b")
+    pdf.sub("28.5 \u5ba1\u6838\u6392\u7a0b")
     pdf.txt(
         "\u6bcf\u4e2a\u6587\u6863\u90fd\u6709\u4e0b\u6b21\u5ba1\u6838\u65e5\u671f\u3002\u8d85\u8fc7\u5ba1\u6838\u65e5\u671f\u7684\u6587\u6863\u4f1a\u4ee5"
         "\u8b66\u544a\u6807\u7b7e\u548c\u7740\u8272\u884c\u80cc\u666f\u9ad8\u4eae\u663e\u793a\u3002\u6458\u8981\u680f\u663e\u793a\u903e\u671f\u5ba1\u6838\u7684\u6570\u91cf\u3002")
 
-    pdf.sub("29.6 \u56e2\u961f\u6210\u5458\u4e0e\u4eea\u8868\u76d8\u89d2\u8272")
+    pdf.sub("28.6 \u56e2\u961f\u6210\u5458\u4e0e\u4eea\u8868\u76d8\u89d2\u8272")
     pdf.txt(
         "\u4eea\u8868\u76d8\u56e2\u961f\u5728\u9879\u76ee\u8bbe\u7f6e\u5411\u5bfc\u4e2d\u914d\u7f6e\u3002\u9ed8\u8ba4\u89d2\u8272\uff1a\n\n"
         "  \u9879\u76ee\u8d1f\u8d23\u4eba -- \u6cd5\u89c4\u53ca\u9879\u76ee\u7ba1\u7406\n"
@@ -2832,7 +2697,7 @@ def build_chinese():
 
     # 30. 留言板 (Tab 15)
     pdf.add_page()
-    pdf.sec(30, "\u9009\u9879\u530115\uff1a\u7559\u8a00\u677f")
+    pdf.sec(29, "\u9009\u9879\u530115\uff1a\u7559\u8a00\u677f")
     pdf.txt(
         "\u7559\u8a00\u677f\u662f\u4eea\u8868\u76d8\u7684\u76ee\u7684\u9a71\u52a8\u5185\u90e8\u6d88\u606f\u5c42\u3002"
         "\u6bcf\u4e2a\u4e3b\u9898\u5bf9\u5e94\u4e09\u79cd\u610f\u56fe\u4e4b\u4e00\u2014\u2014\u544a\u77e5\u3001\u51b3\u7b56\u6216\u884c\u52a8\u2014\u2014"
@@ -2840,7 +2705,7 @@ def build_chinese():
         "\u6d88\u606f\u901a\u8fc7\u670d\u52a1\u5668\u6570\u636e\u5e93\uff08Supabase\uff09\u5b9e\u65f6\u540c\u6b65\uff0c"
         "localStorage\u4f5c\u4e3a\u5907\u4efd\u3002")
 
-    pdf.sub("30.1 \u7ed3\u6784\u5316\u4e3b\u9898")
+    pdf.sub("29.1 \u7ed3\u6784\u5316\u4e3b\u9898")
     pdf.txt(
         "\u6bcf\u4e2a\u4e3b\u9898\u5305\u542b\uff1a\n\n"
         "  \u6807\u9898       -- \u5bf9\u8bdd\u7684\u63cf\u8ff0\u6027\u540d\u79f0\n"
@@ -2855,7 +2720,7 @@ def build_chinese():
         "\u73b0\u6709\u6d88\u606f\u901a\u8fc7Supabase\u4fdd\u7559\u3002"
         "\u53ef\u968f\u65f6\u4f7f\u7528\u201c\u65b0\u4e3b\u9898\u201d\u6309\u94ae\u521b\u5efa\u65b0\u4e3b\u9898\u3002")
 
-    pdf.sub("30.2 \u51b3\u7b56\u53ef\u89c1\u6027")
+    pdf.sub("29.2 \u51b3\u7b56\u53ef\u89c1\u6027")
     pdf.txt(
         "\u51b3\u7b56\u662f\u4e00\u7b49\u5bf9\u8c61\uff0c\u4e0d\u4f1a\u57cb\u6ca1\u5728\u804a\u5929\u4e2d\uff1a\n\n"
         "  [DECISION]\u524d\u7f00 -- \u5728\u6d88\u606f\u524d\u52a0[DECISION]\u81ea\u52a8\u8bb0\u5f55\n"
@@ -2864,7 +2729,7 @@ def build_chinese():
         "  \u51b3\u7b56\u5361\u7247     -- \u663e\u793a\u6587\u672c\u3001\u7406\u7531\u3001\u51b3\u7b56\u8005\u548c\u65e5\u671f\n"
         "  \u5ba1\u8ba1\u8ddf\u8e2a     -- \u6240\u6709\u51b3\u7b56\u8bb0\u5f55\u5728\u5ba1\u8ba1\u65e5\u5fd7\u4e2d")
 
-    pdf.sub("30.3 \u56db\u4e2a\u89c6\u56fe")
+    pdf.sub("29.3 \u56db\u4e2a\u89c6\u56fe")
     pdf.txt(
         "\u89c6\u56fe\u5207\u6362\u5668\u63d0\u4f9b\u56db\u4e2a\u89c6\u89d2\uff1a\n\n"
         "  \u6240\u6709\u4e3b\u9898   -- \u5339\u914d\u5f53\u524d\u8fc7\u6ee4\u6761\u4ef6\u7684\u6240\u6709\u4e3b\u9898\n"
@@ -2872,7 +2737,7 @@ def build_chinese():
         "  \u51b3\u7b56\u8bb0\u5f55   -- \u6709\u6d3b\u52a8\u51b3\u7b56\u7684\u4e3b\u9898\n"
         "  \u7ba1\u7406\u89c6\u56fe   -- \u9ad8\u4fe1\u53f7\u89c6\u56fe\uff1a\u7d27\u6025\u3001\u5347\u7ea7\u3001\u51b3\u7b56\u548c\u5df2\u89e3\u51b3\u7684\u4e3b\u9898")
 
-    pdf.sub("30.4 \u8fc7\u6ee4\u5668\u4e0e\u6458\u8981\u4eea\u8868\u76d8")
+    pdf.sub("29.4 \u8fc7\u6ee4\u5668\u4e0e\u6458\u8981\u4eea\u8868\u76d8")
     pdf.txt(
         "  \u5de5\u4f5c\u6d41\u8fc7\u6ee4   -- \u4e0b\u62c9\u83dc\u5355\u663e\u793a\u5355\u4e2a\u5de5\u4f5c\u6d41\u6216\u5168\u90e8\n"
         "  \u751f\u547d\u5468\u671f\u8fc7\u6ee4 -- \u663e\u793a\u8fdb\u884c\u4e2d\u3001\u5df2\u89e3\u51b3\u6216\u5168\u90e8\u4e3b\u9898\n"
@@ -2884,28 +2749,28 @@ def build_chinese():
         "  \u6211\u7684\u4e8b\u9879       -- \u5f53\u524d\u89d2\u8272\u62e5\u6709\u6216\u88ab\u5206\u914d\u7684\u4e3b\u9898\n"
         "  \u672a\u8bfb\u6d88\u606f       -- \u5f53\u524d\u89d2\u8272\u5c1a\u672a\u8bfb\u53d6\u7684\u6d88\u606f")
 
-    pdf.sub("30.5 \u8d23\u4efb\u4e0e\u884c\u52a8")
+    pdf.sub("29.5 \u8d23\u4efb\u4e0e\u884c\u52a8")
     pdf.txt(
         "  \u521b\u5efa\u884c\u52a8   -- \u5c06\u4e3b\u9898\u5206\u914d\u7ed9\u7279\u5b9a\u89d2\u8272\u5e76\u8bbe\u5b9a\u622a\u6b62\u65e5\u671f\n"
         "  \u8d1f\u8d23\u4eba\u5fbd\u7ae0 -- \u5728\u4e3b\u9898\u5361\u7247\u4e0a\u663e\u793a\u8d1f\u8d23\u4eba\n"
         "  \u622a\u6b62\u65e5\u671f   -- \u4e0e\u8d1f\u8d23\u4eba\u4e00\u8d77\u663e\u793a\n"
         "  \u610f\u56fe\u6807\u8bb0   -- \u6d88\u606f\u524d\u7f00[ACTION]\u8fdb\u884c\u89c6\u89c9\u9ad8\u4eae")
 
-    pdf.sub("30.6 \u5173\u8054\u5de5\u4ef6")
+    pdf.sub("29.6 \u5173\u8054\u5de5\u4ef6")
     pdf.txt(
         "\u4e3b\u9898\u53ef\u4ee5\u8fde\u63a5\u5230\u5176\u4ed6\u4eea\u8868\u76d8\u9879\u76ee\uff1a\n\n"
         "  \u5173\u8054\u7c7b\u578b\uff1a\u91cc\u7a0b\u7891\u3001\u98ce\u9669\u3001\u95e8\u63a7\u3001\u6587\u6863\u3001\u6807\u51c6\u3001\u4efb\u52a1\n"
         "  \u6bcf\u4e2a\u5173\u8054\u5de5\u4ef6\u5728\u4e3b\u9898\u5361\u7247\u4e0a\u663e\u793a\u4e3a\u5fbd\u7ae0\n"
         "  \u5173\u8054\u5b58\u50a8\u4e3a\u4e3b\u9898\u5143\u6570\u636e\u7684\u4e00\u90e8\u5206")
 
-    pdf.sub("30.7 \u751f\u547d\u5468\u671f\u7ba1\u7406")
+    pdf.sub("29.7 \u751f\u547d\u5468\u671f\u7ba1\u7406")
     pdf.txt(
         "  \u89e3\u51b3       -- \u5c06\u4e3b\u9898\u6807\u8bb0\u4e3a\u5df2\u89e3\u51b3\u5e76\u9644\u6458\u8981\n"
         "  \u91cd\u65b0\u6253\u5f00   -- \u91cd\u65b0\u6253\u5f00\u5df2\u89e3\u51b3\u7684\u4e3b\u9898\n"
         "  \u89e3\u51b3\u65b9\u6848   -- \u5728\u5df2\u89e3\u51b3\u7684\u4e3b\u9898\u5361\u7247\u4e0a\u663e\u793a\n"
         "  \u5ba1\u8ba1\u8ddf\u8e2a   -- \u6240\u6709\u751f\u547d\u5468\u671f\u53d8\u66f4\u5747\u88ab\u8bb0\u5f55")
 
-    pdf.sub("30.8 \u5df2\u8bfb\u56de\u6267\u4e0e\u901a\u77e5")
+    pdf.sub("29.8 \u5df2\u8bfb\u56de\u6267\u4e0e\u901a\u77e5")
     pdf.txt(
         "  \u5df2\u53d1\u6d88\u606f   -- \u663e\u793a\u5355\u52fe\uff08\u672a\u8bfb\uff09\u6216\u53cc\u52fe\uff08\u5df2\u8bfb\uff09\n"
         "  \u6536\u5230\u7684\u6d88\u606f -- \u672a\u8bfb\u65f6\u5de6\u4fa7\u84dd\u8272\u8fb9\u6846\u9ad8\u4eae\n"
@@ -2914,13 +2779,13 @@ def build_chinese():
         "  \u5f39\u51fa\u901a\u77e5   -- \u5176\u4ed6\u89d2\u8272\u7684\u65b0\u6d88\u606f\u89e6\u53d1\u5f39\u51fa\u63d0\u793a\n"
         "  \u8de8\u6807\u7b7e\u540c\u6b65 -- \u6d88\u606f\u901a\u8fc7StorageEvent\u5728\u6d4f\u89c8\u5668\u6807\u7b7e\u95f4\u540c\u6b65")
 
-    pdf.sub("30.9 \u5bfc\u51fa\u4e0e\u5f52\u6863")
+    pdf.sub("29.9 \u5bfc\u51fa\u4e0e\u5f52\u6863")
     pdf.txt(
         "  \u5bfc\u51fa  -- \u5c06\u6240\u6709\u4e3b\u9898\u548c\u51b3\u7b56\u4e0b\u8f7d\u4e3a.txt\u6587\u4ef6\n"
         "  \u5f52\u6863  -- \u5c06\u4e3b\u9898\u6d88\u606f\u4fdd\u5b58\u5230\u5f52\u6863\u5b58\u50a8\u5e76\u6e05\u9664\n"
         "  \u67e5\u770b\u5f52\u6863 / \u5220\u9664\u5f52\u6863 -- \u6d4f\u89c8\u6216\u5220\u9664\u5f52\u6863\u6761\u76ee")
 
-    pdf.sub("30.10 \u6570\u636e\u5b58\u50a8")
+    pdf.sub("29.10 \u6570\u636e\u5b58\u50a8")
     pdf.txt(
         "\u6d88\u606f\u5b9e\u65f6\u540c\u6b65\u5230\u670d\u52a1\u5668\u6570\u636e\u5e93\uff08Supabase\uff09\u3002"
         "\u4e3b\u9898\u5143\u6570\u636e\uff08\u6807\u9898\u3001\u5de5\u4f5c\u6d41\u3001\u610f\u56fe\u3001\u62e5\u6709\u8005\u3001\u751f\u547d\u5468\u671f\u3001\u5173\u8054\u5de5\u4ef6\u3001\u6570\u636e\u6e90\u5f15\u7528\uff09"
@@ -2931,19 +2796,19 @@ def build_chinese():
 
     # 31 FDA通信中心
     pdf.add_page()
-    pdf.sec(31, "选项卡16：FDA通信中心（仅PMP）")
+    pdf.sec(30, "选项卡16：FDA通信中心（仅PMP）")
     pdf.txt(
         "FDA通信中心是PMP专属选项卡，提供自动化工具来准备、"
         "跟踪和管理所有FDA交互。对技术、商务和会计角色不可见——"
         "选项卡本身从导航栏中隐藏。")
 
-    pdf.sub("31.1 访问控制")
+    pdf.sub("30.1 访问控制")
     pdf.txt(
         "该选项卡按角色限制——只有拥有PMP权限（管理员URL参数）的用户才能看到。"
         "选项卡顶部显示紫色'PMP专属'徽章。"
         "切换到任何非PMP角色时，该选项卡从导航栏中完全消失。")
 
-    pdf.sub("31.2 摘要指标")
+    pdf.sub("30.2 摘要指标")
     pdf.txt(
         "七个指标卡提供快速就绪评估：\n\n"
         "  RTA就绪%       -- RTA清单通过项的百分比\n"
@@ -2954,7 +2819,7 @@ def build_chinese():
         "  红色风险       -- 红色级别风险数量\n"
         "  黄色风险       -- 黄色级别风险数量")
 
-    pdf.sub("31.3 Q-Sub附信生成器")
+    pdf.sub("30.3 Q-Sub附信生成器")
     pdf.txt(
         "按照FDA Q-Sub指南自动生成Pre-Sub会议请求附信。"
         "附信从项目数据自动填充：\n\n"
@@ -2966,13 +2831,13 @@ def build_chinese():
         "  会议形式        -- 默认电话会议\n\n"
         "附信以打印样式预览，可通过'导出附信(HTML)'按钮导出为独立HTML文件。")
 
-    pdf.sub("31.4 问题包导出")
+    pdf.sub("30.4 问题包导出")
     pdf.txt(
         "从留言板的问答部分提取所有问题并按FDA Pre-Sub格式整理："
         "编号问题、章节标题和上下文。"
         "导出生成适合纳入Q-Sub包的清洁HTML文档。")
 
-    pdf.sub("31.5 RTA自检清单")
+    pdf.sub("30.5 RTA自检清单")
     pdf.txt(
         "基于FDA发布的510(k) RTA清单的14项自检。"
         "项目自动交叉引用DHF文档跟踪器和标准跟踪器来检测就绪状态：\n\n"
@@ -2980,13 +2845,13 @@ def build_chinese():
         "  空框      -- 尚未就绪（文档未开始或标准不完整）\n\n"
         "进度条显示整体RTA就绪百分比。")
 
-    pdf.sub("31.6 FDA交互时间线")
+    pdf.sub("30.6 FDA交互时间线")
     pdf.txt(
         "显示关键FDA里程碑映射到项目月份的可视化时间线。"
         "里程碑颜色编码：绿色（已完成）、蓝色（当前）、灰色（未来）。"
         "75天FDA反馈窗口作为关键规划约束突出显示。")
 
-    pdf.sub("31.7 DHF就绪快照")
+    pdf.sub("30.7 DHF就绪快照")
     pdf.txt(
         "堆叠条形图显示设计历史文件文档状态分布：\n\n"
         "  绿色 -- 已批准\n"
@@ -2996,7 +2861,7 @@ def build_chinese():
 
     # 32 510(k) Predicate Finder
     pdf.add_page()
-    pdf.sec(32, "510(k) Predicate Finder \u96c6\u6210")
+    pdf.sec(31, "510(k) Predicate Finder \u96c6\u6210")
     pdf.txt(
         "510(k) Predicate Finder现已作为专用选项卡直接嵌入Control Tower。"
         "它连接FDA openFDA数据库，"
@@ -3006,7 +2871,7 @@ def build_chinese():
         "所有数据保留在Control Tower环境中。"
         "iframe在首次访问选项卡时延迟加载，以保持初始仪表板加载快速。")
 
-    pdf.sub("32.1 \u514d\u8d39\u7248")
+    pdf.sub("31.1 \u514d\u8d39\u7248")
     pdf.txt(
         "\u4efb\u4f55\u4eba\u90fd\u53ef\u4ee5\u514d\u8d39\u4f7f\u7528Predicate Finder\uff0c\u9650\u5236\u5982\u4e0b\uff1a\n\n"
         "  \u6bcf\u65e55\u6b21\u641c\u7d22\n"
@@ -3015,21 +2880,21 @@ def build_chinese():
         "\u9700\u8981\u63d0\u4f9b\u90ae\u7bb1\u5730\u5740\u6765\u89e3\u9501\u5de5\u5177\u3002"
         "\u8fd9\u662f510k Bridge\u7684\u4e3b\u8981\u6f5c\u5728\u5ba2\u6237\u83b7\u53d6\u6e20\u9053\u3002")
 
-    pdf.sub("32.2 Pro\u7248 ($99/\u6708)")
+    pdf.sub("31.2 Pro\u7248 ($99/\u6708)")
     pdf.txt(
         "Pro\u89e3\u9501\u65e0\u9650\u641c\u7d22\u3001\u65e0\u9650\u94fe\u8ffd\u6eaf\u3001"
         "4\u5668\u68b0\u5bf9\u6bd4\u3001SE\u8bba\u8bc1\u751f\u6210\u548cPDF\u5bfc\u51fa\u3002"
         "\u9700\u8981\u5b8c\u6574Control Tower\u7684\u7528\u6237\u53ef\u4ee5\u4ece"
         "Predicate Finder\u76f4\u63a5\u5347\u7ea7\u5230\u4efb\u4f55\u4eea\u8868\u677f\u5c42\u7ea7\u3002")
 
-    pdf.sub("32.3 \u4e3b\u8981\u529f\u80fd")
+    pdf.sub("31.3 \u4e3b\u8981\u529f\u80fd")
     pdf.bul("\u5173\u952e\u8bcd\u548c\u4ea7\u54c1\u4ee3\u7801\u641c\u7d22 -- \u901a\u8fc7\u7533\u8bf7\u4eba\u3001\u4ea7\u54c1\u4ee3\u7801\u3001\u5668\u68b0\u540d\u79f0\u6216\u51b3\u5b9a\u65e5\u671f\u8303\u56f4\u67e5\u8be2openFDA 510(k)\u6570\u636e\u5e93")
     pdf.bul("\u5148\u5bfc\u94fe\u8ffd\u6eaf -- \u4ece\u4efb\u4f55\u5df2\u6279\u51c6\u5668\u68b0\u5f00\u59cb\uff0c\u81ea\u52a8\u8ffd\u6eaf\u591a\u4ee3\u5148\u5bfc\u5f15\u7528\u94fe")
     pdf.bul("\u5e76\u6392\u5bf9\u6bd4 -- \u9009\u62e9\u6700\u591a4\u4e2a\u5668\u68b0\uff08Pro\uff09\uff0c\u67e5\u770b\u6cd5\u89c4\u7c7b\u522b\u3001\u4ea7\u54c1\u4ee3\u7801\u3001\u7533\u8bf7\u4eba\u548c\u51b3\u5b9a\u6570\u636e\u7684\u7ed3\u6784\u5316\u5bf9\u6bd4")
     pdf.bul("SE\u8bba\u8bc1\u8349\u7a3f\uff08Pro\uff09 -- \u81ea\u52a8\u751f\u6210\u521d\u6b65\u7684\u5b9e\u8d28\u7b49\u6548\u6027\u53d9\u8ff0\uff0c\u5c06\u4e3b\u9898\u5668\u68b0\u4e0e\u6240\u9009\u5148\u5bfc\u5668\u68b0\u8fdb\u884c\u6bd4\u8f83")
     pdf.bul("\u53cc\u8bed\uff08EN/CN\uff09 -- \u5b8c\u6574\u7684\u4e2d\u6587\u8bed\u8a00\u652f\u6301\uff0c\u4e0eControl Tower\u4e00\u81f4")
 
-    pdf.sub("32.4 \u4e0eControl Tower\u7684\u96c6\u6210")
+    pdf.sub("31.4 \u4e0eControl Tower\u7684\u96c6\u6210")
     pdf.txt(
         "Predicate Finder作为完整选项卡嵌入Control Tower，"
         "所有四个角色（PMP、技术、业务、财务）均可使用。"
@@ -3039,27 +2904,27 @@ def build_chinese():
 
     # 33 QMS-Lite 创业版
     pdf.add_page()
-    pdf.sec(33, "QMS-Lite \u8d28\u91cf\u7ba1\u7406\u8f7b\u91cf\u7248")
+    pdf.sec(32, "QMS-Lite \u8d28\u91cf\u7ba1\u7406\u8f7b\u91cf\u7248")
     pdf.txt(
         "QMS-Lite\u662f\u4e13\u4e3a510(k)\u9636\u6bb5\u521b\u4e1a\u4f01\u4e1a\u8bbe\u8ba1\u7684\u8f7b\u91cf\u7ea7\u8d28\u91cf\u7ba1\u7406\u7cfb\u7edf\u3002"
         "\u63d0\u4f9b\u901a\u8fc7FDA\u5ba1\u8ba1\u6240\u9700\u7684\u6700\u4f4e\u53ef\u884cQMS\uff0c"
         "\u65e0\u9700\u50cfGreenlight Guru\u6216MasterControl\u90a3\u6837\u6bcf\u5e74$30K-$100K\u7684\u6210\u672c\u3002")
 
-    pdf.sub("33.1 \u6a21\u5757\uff08\u7b26\u540821 CFR 820 / ISO 13485\uff09")
+    pdf.sub("32.1 \u6a21\u5757\uff08\u7b26\u540821 CFR 820 / ISO 13485\uff09")
     pdf.bul("\u6587\u6863\u63a7\u5236 -- \u7248\u672c\u63a7\u5236\u7684SOP\u3001\u4f5c\u4e1a\u6307\u5bfc\u4e66\u3001\u8868\u5355")
     pdf.bul("CAPA -- \u7ea0\u6b63\u548c\u9884\u9632\u63aa\u65bd\u8ffd\u8e2a\uff0c\u6839\u672c\u539f\u56e0\u5206\u6790")
     pdf.bul("\u57f9\u8bad\u8bb0\u5f55 -- \u5458\u5de5\u57f9\u8bad\u77e9\u9635\u3001\u7b7e\u5b57\u8ffd\u8e2a\u3001\u80fd\u529b\u65e5\u5fd7")
     pdf.bul("\u4f9b\u5e94\u5546\u8d44\u8d28 -- \u5408\u683c\u4f9b\u5e94\u5546\u540d\u5f55\u3001\u5ba1\u8ba1\u8ba1\u5212\u3001\u8bc4\u5206\u5361")
     pdf.bul("\u6295\u8bc9\u5904\u7406 -- \u5ba2\u6237\u6295\u8bc9\u53d7\u7406\u3001\u8c03\u67e5\u3001\u8d8b\u52bf\u5206\u6790")
 
-    pdf.sub("33.2 \u5b9a\u4ef7")
+    pdf.sub("32.2 \u5b9a\u4ef7")
     pdf.txt(
         "  QMS-Lite \u57fa\u7840\u7248 -- $200/\u6708\uff08\u6587\u6863\u63a7\u5236\u3001CAPA\u3001\u57f9\u8bad\u8bb0\u5f55\uff09\n"
         "  QMS-Lite Pro -- $500/\u6708\uff08\u5168\u5957\u542b\u4f9b\u5e94\u5546\u8d44\u8d28\u3001\u6295\u8bc9\u5904\u7406\uff09\n\n"
         "\u76f8\u6bd4Greenlight Guru ($2.5K-$8K/\u6708) \u548c MasterControl ($8K+/\u6708)\uff0c"
         "QMS-Lite\u9488\u5bf9\u53ea\u9700\u8981\u8db3\u591f\u6ee1\u8db3FDA\u5ba1\u8ba1\u5458\u7684\u521b\u4e1a\u4f01\u4e1a\u3002")
 
-    pdf.sub("33.3 \u4e0eControl Tower\u7684\u96c6\u6210")
+    pdf.sub("32.3 \u4e0eControl Tower\u7684\u96c6\u6210")
     pdf.txt(
         "QMS-Lite\u590d\u7528Control Tower\u73b0\u6709\u6a21\u5757 -- \u6587\u6863\u63a7\u5236\u3001\u884c\u52a8\u9879"
         "\uff08CAPA\uff09\u548c\u4f9b\u5e94\u5546\u9009\u9879\u5361 -- \u6269\u5c55\u4e86QMS\u7279\u5b9a\u6a21\u677f\u4ee5\u6ee1\u8db3"
@@ -3068,12 +2933,12 @@ def build_chinese():
 
     # 34 跨境实体设立追踪器
     pdf.add_page()
-    pdf.sec(34, "\u8de8\u5883\u5b9e\u4f53\u8bbe\u7acb\u8ffd\u8e2a\u5668")
+    pdf.sec(33, "\u8de8\u5883\u5b9e\u4f53\u8bbe\u7acb\u8ffd\u8e2a\u5668")
     pdf.txt(
         "\u5b9e\u4f53\u8bbe\u7acb\u8ffd\u8e2a\u5668\u4e3a\u8fdb\u5165\u7f8e\u56fd\u5e02\u573a\u7684\u4e2d\u56fd\u4f01\u4e1a\u63d0\u4f9b\u7ed3\u6784\u5316\u4eea\u8868\u677f\u3002"
         "\u76ee\u524d\u8fd9\u4e9b\u5de5\u4f5c\u6d41\u5b8c\u5168\u901a\u8fc7\u4e0e\u5f8b\u5e08\u7684\u90ae\u4ef6\u94fe\u5904\u7406 -- \u6ca1\u6709\u4e13\u7528\u5de5\u5177\u3002")
 
-    pdf.sub("34.1 \u6e05\u5355\u6a21\u5757")
+    pdf.sub("33.1 \u6e05\u5355\u6a21\u5757")
     pdf.bul("\u7279\u62c9\u534eC-Corp\u7ec4\u5efa -- \u516c\u53f8\u7ae0\u7a0b\u3001\u7ae0\u5219\u3001EIN")
     pdf.bul("\u4fc4\u52d2\u5188\u5dde\u6ce8\u518c -- \u5916\u5dde\u5b9e\u4f53\u6ce8\u518c\u3001\u8425\u4e1a\u6267\u7167")
     pdf.bul("\u534e\u76db\u987f\u5dde\u6ce8\u518c -- \u5916\u5dde\u5b9e\u4f53\u6ce8\u518c\u3001B&O\u7a0e\u52a1\u8bbe\u7f6e")
@@ -3085,20 +2950,20 @@ def build_chinese():
     pdf.bul("\u5dde\u8425\u4e1a\u6267\u7167 -- \u5404\u5dde\u7279\u5b9a\u8bb8\u53ef\u548c\u7eed\u671f")
     pdf.bul("\u4fdd\u9669 -- \u4ea7\u54c1\u8d23\u4efb\u3001\u4e00\u822c\u8d23\u4efb\u3001\u8463\u4e8b\u53ca\u9ad8\u7ba1\u8d23\u4efb")
 
-    pdf.sub("34.2 \u5b9a\u4ef7")
+    pdf.sub("33.2 \u5b9a\u4ef7")
     pdf.txt(
         "  \u4e00\u6b21\u6027\u8bbe\u7acb -- $1K-$5K\uff08\u5f15\u5bfc\u5f0f\u5b9e\u4f53\u8bbe\u7acb\uff0c\u542b\u6e05\u5355\u8ffd\u8e2a\uff09\n"
         "  SaaS -- $200/\u6708\uff08\u6301\u7eed\u4eea\u8868\u677f\uff0c\u542b\u7eed\u671f\u63d0\u9192\u3001\u5408\u89c4\u72b6\u6001\uff09\n\n"
         "\u6536\u5165\u52a0\u6210: \u4e0e\u79fb\u6c11\u5f8b\u5e08\u3001\u516c\u53f8\u670d\u52a1\u63d0\u4f9b\u5546\u548c\u6ce8\u518c\u4ee3\u7406\u516c\u53f8\u7684\u8f6c\u4ecb\u5408\u4f5c\u3002")
 
-    pdf.sub("34.3 \u4e0eControl Tower\u7684\u96c6\u6210")
+    pdf.sub("33.3 \u4e0eControl Tower\u7684\u96c6\u6210")
     pdf.txt(
         "\u5b9e\u4f53\u8bbe\u7acb\u72b6\u6001\u63a5\u5165Control Tower\u7684\u7f8e\u56fd\u6295\u8d44\u548c\u8d44\u6e90\u9009\u9879\u5361\uff0c"
         "\u8ba9\u9879\u76ee\u7ecf\u7406\u5728\u6cd5\u89c4\u91cc\u7a0b\u7891\u65c1\u8fb9\u4e86\u89e3\u516c\u53f8\u7ec4\u5efa\u8fdb\u5ea6\u3002")
 
     # 35 FDA指南文件搜索
     pdf.add_page()
-    pdf.sec(35, "FDA\u6307\u5357\u6587\u4ef6\u641c\u7d22")
+    pdf.sec(34, "FDA\u6307\u5357\u6587\u4ef6\u641c\u7d22")
     pdf.txt(
         "\u6307\u5357\u6587\u4ef6\u9009\u9879\u5361\u63d0\u4f9b\u4e86\u4e00\u4e2a\u5d4c\u5165\u5f0f\u53ef\u641c\u7d22\u6570\u636e\u5e93\uff0c"
         "\u5305\u542b600+\u4efdFDA\u5668\u68b0\u548c\u653e\u5c04\u5065\u5eb7\u4e2d\u5fc3\uff08CDRH\uff09\u53d1\u5e03\u7684\u6307\u5357\u6587\u4ef6\u3002"
@@ -3106,7 +2971,7 @@ def build_chinese():
         "\u6307\u5357\u6587\u4ef6\u6570\u636e\u5e93\u4ece\u5b98\u65b9CDRH\u6307\u5357\u9875\u9762\u9884\u52a0\u8f7d\uff0c"
         "\u786e\u4fdd\u5feb\u901f\u641c\u7d22\u548c\u79bb\u7ebf\u5c31\u7eea\u6027\u80fd\u3002")
 
-    pdf.sub("35.1 \u641c\u7d22\u548c\u7b5b\u9009")
+    pdf.sub("34.1 \u641c\u7d22\u548c\u7b5b\u9009")
     pdf.bul("\u5173\u952e\u8bcd\u641c\u7d22 -- \u5728\u6587\u6863\u6807\u9898\u4e2d\u8fdb\u884c\u5168\u6587\u641c\u7d22\uff0c\u8f93\u5165\u5373\u641c")
     pdf.bul("\u4e3b\u9898\u7b5b\u9009 -- 40+\u4e2a\u7c7b\u522b\uff0c\u5305\u62ec\u751f\u7269\u76f8\u5bb9\u6027\u3001\u8f6f\u4ef6\u3001IVD\u3001"
             "\u6807\u7b7e\u3001\u4e0a\u5e02\u540e\u76d1\u7763\u3001\u8d28\u91cf\u4f53\u7cfb\u3001\u653e\u5c04\u3001\u65e0\u83cc\u7b49")
@@ -3114,14 +2979,14 @@ def build_chinese():
     pdf.bul("\u5e74\u4efd\u8303\u56f4 -- \u53ef\u8c03\u8282\u7684\u8d77\u59cb/\u7ed3\u675f\u5e74\u4efd\uff0c\u6309\u53d1\u5e03\u65e5\u671f\u7f29\u5c0f\u7ed3\u679c\u8303\u56f4")
     pdf.bul("\u53ef\u6392\u5e8f\u5217 -- \u70b9\u51fb\u4efb\u610f\u5217\u6807\u9898\uff08\u6807\u9898\u3001\u4e3b\u9898\u3001\u72b6\u6001\u3001\u65e5\u671f\uff09\u8fdb\u884c\u5347\u5e8f\u6216\u964d\u5e8f\u6392\u5217")
 
-    pdf.sub("35.2 \u7ed3\u679c\u548cPDF\u8bbf\u95ee")
+    pdf.sub("34.2 \u7ed3\u679c\u548cPDF\u8bbf\u95ee")
     pdf.txt(
         "\u641c\u7d22\u7ed3\u679c\u4ee5\u5206\u9875\u8868\u683c\u663e\u793a\uff08\u6bcf\u987520\u6761\uff09\uff0c"
         "\u5305\u542b\u6807\u9898\u3001\u4e3b\u9898\u3001\u72b6\u6001\u548c\u65e5\u671f\u3002"
         "\u6bcf\u884c\u5305\u542b\u6307\u5411FDA.gov\u4e0a\u5b8c\u6574\u6307\u5357\u6587\u4ef6\u7684\u76f4\u63a5PDF\u4e0b\u8f7d\u94fe\u63a5\u3002"
         "\u7ed3\u679c\u968f\u7b5b\u9009\u6761\u4ef6\u53d8\u5316\u5373\u65f6\u66f4\u65b0\u3002")
 
-    pdf.sub("35.3 \u4e0eControl Tower\u7684\u96c6\u6210")
+    pdf.sub("34.3 \u4e0eControl Tower\u7684\u96c6\u6210")
     pdf.txt(
         "\u6307\u5357\u6587\u4ef6\u9009\u9879\u5361\u5bf9\u6240\u6709\u56db\u4e2a\u89d2\u8272\uff08PMP\u3001\u6280\u672f\u3001\u4e1a\u52a1\u3001\u8d22\u52a1\uff09\u5747\u53ef\u7528\u3002"
         "\u4ee5iframe\u5f62\u5f0f\u4ece\u540c\u4e00\u90e8\u7f72\u6e90\u52a0\u8f7d\uff0c\u4e0eControl Tower\u6697\u8272\u4e3b\u9898\u8bbe\u8ba1\u5339\u914d\u3002"
@@ -3130,7 +2995,7 @@ def build_chinese():
 
     # 36 \u5173\u952e\u672f\u8bed\u8868
     pdf.add_page()
-    pdf.sec(36, "\u5173\u952e\u672f\u8bed\u8868")
+    pdf.sec(35, "\u5173\u952e\u672f\u8bed\u8868")
     pdf.ln(2)
     terms = [
         ("M+N", "\u6708\u4efd\u6807\u8bb0\u3002M+0 = \u9879\u76ee\u542f\u52a8\uff082026\u5e743\u6708\uff09\u3002M+6 = \u542f\u52a8\u540e6\u4e2a\u6708\u3002\u8d2f\u7a7f\u6240\u6709\u8ba1\u5212\u4f7f\u7528\u3002"),

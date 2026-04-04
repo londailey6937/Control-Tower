@@ -34,9 +34,6 @@ import {
   TARGET_INVESTORS,
   IR_ACTIVITIES,
   INVESTOR_BRIDGE,
-  SHAREHOLDERS,
-  EQUITY_EVENTS,
-  VESTING_SCHEDULES,
 } from "./data.ts";
 import { t, localizedText, getLang, setLang, applyLanguage } from "./i18n.ts";
 import {
@@ -66,9 +63,6 @@ import type {
   MBPriority,
   InvestorContactStatus,
   IRActivityStatus,
-  ShareClass,
-  EquityEventStatus,
-  VestingStatus,
 } from "./types.ts";
 import { storeDocument, getDocument } from "./docstore.ts";
 import { toggleHelp } from "./help.ts";
@@ -125,9 +119,6 @@ function saveAllState(): void {
       budgetCategories: BUDGET_CATEGORIES,
       teamMembers: TEAM_MEMBERS,
       suppliers: SUPPLIERS,
-      shareholders: SHAREHOLDERS,
-      equityEvents: EQUITY_EVENTS,
-      vestingSchedules: VESTING_SCHEDULES,
       targetInvestors: TARGET_INVESTORS,
       irActivities: IR_ACTIVITIES,
     };
@@ -171,9 +162,6 @@ function loadAllState(): void {
     replaceArray(BUDGET_CATEGORIES, s.budgetCategories);
     replaceArray(TEAM_MEMBERS, s.teamMembers);
     replaceArray(SUPPLIERS, s.suppliers);
-    replaceArray(SHAREHOLDERS, s.shareholders);
-    replaceArray(EQUITY_EVENTS, s.equityEvents);
-    replaceArray(VESTING_SCHEDULES, s.vestingSchedules);
     replaceArray(TARGET_INVESTORS, s.targetInvestors);
     replaceArray(IR_ACTIVITIES, s.irActivities);
 
@@ -386,39 +374,6 @@ function setupEventDelegation(): void {
         break;
       case "cycleIRActivityStatus":
         window._cycleIRActivityStatus(a.iraid!);
-        break;
-      case "openAddShareholderForm":
-        window._openAddShareholderForm();
-        break;
-      case "addShareholder":
-        window._addShareholder();
-        break;
-      case "deleteShareholder":
-        window._deleteShareholder(a.shareholderid!);
-        break;
-      case "openAddEquityEventForm":
-        window._openAddEquityEventForm();
-        break;
-      case "addEquityEvent":
-        window._addEquityEvent();
-        break;
-      case "deleteEquityEvent":
-        window._deleteEquityEvent(a.eqeventid!);
-        break;
-      case "cycleEquityEventStatus":
-        window._cycleEquityEventStatus(a.eqeventid!);
-        break;
-      case "openAddVestingForm":
-        window._openAddVestingForm();
-        break;
-      case "addVesting":
-        window._addVesting();
-        break;
-      case "deleteVesting":
-        window._deleteVesting(a.vestingid!);
-        break;
-      case "cycleVestingStatus":
-        window._cycleVestingStatus(a.vestingid!);
         break;
       case "openAddTeamMemberForm":
         window._openAddTeamMemberForm();
@@ -653,7 +608,6 @@ const TAB_TO_GROUP: Record<string, string> = {
   budget: "finance",
   "cash-runway": "finance",
   "us-investment": "finance",
-  "cap-table": "finance",
   resources: "operations",
   suppliers: "operations",
 };
@@ -820,7 +774,6 @@ function renderAll(): void {
     ["Suppliers", renderSuppliers],
     ["AuditTrail", renderAuditTrail],
     ["UsInvestment", renderUsInvestment],
-    ["CapTable", renderCapTable],
     ["DocLibrary", renderDocLibrary],
     ["QaSheet", renderQaSheet],
     ["FdaComms", renderFdaComms],
@@ -2502,7 +2455,6 @@ const ROLE_TABS: Record<string, Set<string>> = {
     "budget",
     "cash-runway",
     "us-investment",
-    "cap-table",
     "resources",
     "suppliers",
     "qa-sheet",
@@ -2531,7 +2483,6 @@ const ROLE_TABS: Record<string, Set<string>> = {
     "budget",
     "cash-runway",
     "us-investment",
-    "cap-table",
     "actions",
     "qa-sheet",
     "predicate-finder",
@@ -2543,7 +2494,6 @@ const ROLE_TABS: Record<string, Set<string>> = {
     "timeline",
     "gates",
     "us-investment",
-    "cap-table",
     "qa-sheet",
     "predicate-finder",
     "guidance-docs",
@@ -3674,427 +3624,6 @@ window._cycleIRActivityStatus = function (activityId: string): void {
   );
   saveAllState();
   renderUsInvestment();
-};
-
-// ══════════════════════════════════════════════════
-// CAP TABLE MANAGEMENT
-// ══════════════════════════════════════════════════
-
-function fmtShareClass(sc: ShareClass): string {
-  const key: Record<ShareClass, string> = {
-    common: "capTableCommon",
-    "preferred-seed": "capTablePreferredSeed",
-    "preferred-a": "capTablePreferredA",
-    safe: "capTableSafe",
-    options: "capTableOptions",
-  };
-  return t(key[sc] as any);
-}
-
-function renderCapTable(): void {
-  const canEdit = ["pmp", "business"].includes(ACTIVE_ROLE);
-
-  // ── Metrics ───────────────────────────────
-  const totalShares = SHAREHOLDERS.reduce((s, sh) => s + sh.shares, 0);
-  const founderShares = SHAREHOLDERS.filter((sh) =>
-    sh.role.toLowerCase().includes("founder"),
-  ).reduce((s, sh) => s + sh.shares, 0);
-  const founderPct = totalShares > 0 ? (founderShares / totalShares) * 100 : 0;
-
-  const latestPriced = EQUITY_EVENTS.filter(
-    (e) => e.pricePerShare > 0 && e.status === "issued",
-  ).sort((a, b) => b.date.localeCompare(a.date))[0];
-  const latestVal = latestPriced
-    ? fmtInvestAmount(latestPriced.pricePerShare * totalShares)
-    : "—";
-
-  const metrics = document.getElementById("capTableMetrics");
-  if (metrics) {
-    metrics.innerHTML = `
-      <div class="cash-card">
-        <div class="cash-card-label">${t("capTableShareholders")}</div>
-        <div class="cash-card-value">${SHAREHOLDERS.length}</div>
-      </div>
-      <div class="cash-card">
-        <div class="cash-card-label">${t("capTableTotalShares")}</div>
-        <div class="cash-card-value">${totalShares.toLocaleString()}</div>
-      </div>
-      <div class="cash-card">
-        <div class="cash-card-label">${t("capTableFounderOwnership")}</div>
-        <div class="cash-card-value">${founderPct.toFixed(1)}%</div>
-      </div>
-      <div class="cash-card">
-        <div class="cash-card-label">${t("capTableLatestValuation")}</div>
-        <div class="cash-card-value" style="font-size:0.9rem">${latestVal}</div>
-      </div>
-    `;
-  }
-
-  // ── Shareholders Table ────────────────────
-  const shBody = document.getElementById("capTableSharesBody");
-  if (shBody) {
-    shBody.innerHTML = SHAREHOLDERS.map((sh) => {
-      const pct =
-        totalShares > 0 ? ((sh.shares / totalShares) * 100).toFixed(1) : "0.0";
-      return `
-      <tr>
-        <td>${sh.name}</td>
-        <td>${sh.role}</td>
-        <td>${fmtShareClass(sh.shareClass)}</td>
-        <td>${sh.shares.toLocaleString()}</td>
-        <td>${pct}%</td>
-        <td>${sh.notes}</td>
-        <td>${canEdit ? `<button class="doc-remove-btn" data-action="deleteShareholder" data-shareholderid="${sh.id}" title="✕">✕</button>` : ""}</td>
-      </tr>`;
-    }).join("");
-  }
-
-  const addShBtn = document.getElementById("capTableAddShBtnWrap");
-  if (addShBtn) {
-    addShBtn.innerHTML = canEdit
-      ? `<button class="btn-add-funding" data-action="openAddShareholderForm">+ ${t("capTableAddShareholder")}</button>`
-      : "";
-  }
-
-  // ── Equity Events Table ───────────────────
-  const eqBody = document.getElementById("capTableEventsBody");
-  if (eqBody) {
-    const statusBadge = (s: EquityEventStatus, id: string) => {
-      const map: Record<EquityEventStatus, { cls: string; key: string }> = {
-        issued: { cls: "fr-committed", key: "capTableIssued" },
-        pending: { cls: "fr-pipeline", key: "capTablePending" },
-        converted: { cls: "fr-received", key: "capTableConverted" },
-      };
-      const m = map[s] || map.pending;
-      return `<span class="${m.cls} clickable-badge" data-action="cycleEquityEventStatus" data-eqeventid="${id}" title="${t("clickToChangeStatus")}">${t(m.key as any)}</span>`;
-    };
-    eqBody.innerHTML = EQUITY_EVENTS.map(
-      (ev) => `
-      <tr>
-        <td>${ev.date}</td>
-        <td>${ev.event}</td>
-        <td>${fmtShareClass(ev.shareClass)}</td>
-        <td>${ev.shares > 0 ? ev.shares.toLocaleString() : "—"}</td>
-        <td>${ev.pricePerShare > 0 ? "$" + ev.pricePerShare.toFixed(2) : "—"}</td>
-        <td>${ev.totalValue > 0 ? fmtInvestAmount(ev.totalValue) : "—"}</td>
-        <td>${statusBadge(ev.status, ev.id)}</td>
-        <td>${ev.notes}</td>
-        <td>${canEdit ? `<button class="doc-remove-btn" data-action="deleteEquityEvent" data-eqeventid="${ev.id}" title="✕">✕</button>` : ""}</td>
-      </tr>`,
-    ).join("");
-  }
-
-  const addEqBtn = document.getElementById("capTableAddEqBtnWrap");
-  if (addEqBtn) {
-    addEqBtn.innerHTML = canEdit
-      ? `<button class="btn-add-funding" data-action="openAddEquityEventForm">+ ${t("capTableAddEvent")}</button>`
-      : "";
-  }
-
-  // ── Vesting Schedules Table ───────────────
-  const vsBody = document.getElementById("capTableVestingBody");
-  if (vsBody) {
-    const vstBadge = (s: VestingStatus, id: string) => {
-      const map: Record<VestingStatus, { cls: string; key: string }> = {
-        vesting: { cls: "std-in-progress", key: "capTableVesting" },
-        "fully-vested": { cls: "std-complete", key: "capTableFullyVested" },
-        cancelled: { cls: "std-not-started", key: "capTableCancelled" },
-      };
-      const m = map[s] || map.vesting;
-      return `<span class="${m.cls} clickable-badge" data-action="cycleVestingStatus" data-vestingid="${id}" title="${t("clickToChangeStatus")}">${t(m.key as any)}</span>`;
-    };
-    vsBody.innerHTML = VESTING_SCHEDULES.map(
-      (vs) => `
-      <tr>
-        <td>${vs.holder}</td>
-        <td>${vs.shares.toLocaleString()}</td>
-        <td>${vs.startDate}</td>
-        <td>${vs.cliffMonths} ${t("capTableMonths")}</td>
-        <td>${vs.totalMonths} ${t("capTableMonths")}</td>
-        <td>${vs.vestedShares.toLocaleString()}</td>
-        <td>${vstBadge(vs.status, vs.id)}</td>
-        <td>${vs.notes}</td>
-        <td>${canEdit ? `<button class="doc-remove-btn" data-action="deleteVesting" data-vestingid="${vs.id}" title="✕">✕</button>` : ""}</td>
-      </tr>`,
-    ).join("");
-  }
-
-  const addVsBtn = document.getElementById("capTableAddVsBtnWrap");
-  if (addVsBtn) {
-    addVsBtn.innerHTML = canEdit
-      ? `<button class="btn-add-funding" data-action="openAddVestingForm">+ ${t("capTableAddVesting")}</button>`
-      : "";
-  }
-
-  // ── Dilution Waterfall (visual bar chart) ─
-  const dilutionEl = document.getElementById("capTableDilution");
-  if (dilutionEl) {
-    const groups: { label: string; shares: number; cls: string }[] = [];
-    const byClass: Record<string, number> = {};
-    for (const sh of SHAREHOLDERS) {
-      byClass[sh.shareClass] = (byClass[sh.shareClass] || 0) + sh.shares;
-    }
-    const clsConfig: Record<string, { key: string; cls: string }> = {
-      common: { key: "capTableCommon", cls: "dil-common" },
-      "preferred-seed": {
-        key: "capTablePreferredSeed",
-        cls: "dil-preferred-seed",
-      },
-      "preferred-a": { key: "capTablePreferredA", cls: "dil-preferred-a" },
-      safe: { key: "capTableSafe", cls: "dil-safe" },
-      options: { key: "capTableOptions", cls: "dil-options" },
-    };
-    for (const [cls, shares] of Object.entries(byClass)) {
-      const cfg = clsConfig[cls] || { key: cls, cls: "dil-common" };
-      groups.push({ label: t(cfg.key as any), shares, cls: cfg.cls });
-    }
-    const total = groups.reduce((s, g) => s + g.shares, 0);
-    dilutionEl.innerHTML = `
-      <div class="dilution-bar">
-        ${groups
-          .map((g) => {
-            const pct = total > 0 ? (g.shares / total) * 100 : 0;
-            return `<div class="dilution-segment ${g.cls}" style="width:${pct}%" title="${g.label}: ${g.shares.toLocaleString()} (${pct.toFixed(1)}%)"></div>`;
-          })
-          .join("")}
-      </div>
-      <div class="dilution-legend">
-        ${groups
-          .map((g) => {
-            const pct =
-              total > 0 ? ((g.shares / total) * 100).toFixed(1) : "0.0";
-            return `<span class="dilution-legend-item"><span class="dilution-swatch ${g.cls}"></span>${g.label} ${pct}%</span>`;
-          })
-          .join("")}
-      </div>
-    `;
-  }
-}
-
-// ── Shareholder CRUD ────────────────────────
-window._openAddShareholderForm = function (): void {
-  const form = document.getElementById("shareholderAddForm");
-  if (!form) return;
-  form.innerHTML = `
-    <h4>${t("capTableAddShareholder")}</h4>
-    <div class="funding-form-row">
-      <input type="text" id="shFormName" placeholder="${t("capTableShareholder")}" />
-      <input type="text" id="shFormRole" placeholder="${t("capTableRole")}" />
-      <select id="shFormClass">
-        <option value="common">${t("capTableCommon")}</option>
-        <option value="preferred-seed">${t("capTablePreferredSeed")}</option>
-        <option value="preferred-a">${t("capTablePreferredA")}</option>
-        <option value="safe">${t("capTableSafe")}</option>
-        <option value="options">${t("capTableOptions")}</option>
-      </select>
-      <input type="number" id="shFormShares" placeholder="${t("capTableShares")}" min="1" />
-      <input type="text" id="shFormNotes" placeholder="${t("capTableNotes")}" />
-      <button class="btn-add-funding" data-action="addShareholder">${t("capTableFormAdd")}</button>
-      <button class="btn-secondary" data-action="clearForm" data-formid="shareholderAddForm">${t("capTableFormCancel")}</button>
-    </div>
-  `;
-};
-
-window._addShareholder = function (): void {
-  if (!["pmp", "business"].includes(ACTIVE_ROLE)) return;
-  const nameEl = document.getElementById("shFormName") as HTMLInputElement;
-  const roleEl = document.getElementById("shFormRole") as HTMLInputElement;
-  const classEl = document.getElementById("shFormClass") as HTMLSelectElement;
-  const sharesEl = document.getElementById("shFormShares") as HTMLInputElement;
-  const notesEl = document.getElementById("shFormNotes") as HTMLInputElement;
-  const name = nameEl?.value?.trim();
-  if (!name) return;
-  const shares = parseInt(sharesEl?.value || "0", 10) || 0;
-  const id = "SH-" + String(SHAREHOLDERS.length + 1).padStart(3, "0");
-  SHAREHOLDERS.push({
-    id,
-    name,
-    role: roleEl?.value?.trim() || "Investor",
-    shareClass: (classEl?.value || "common") as ShareClass,
-    shares,
-    notes: notesEl?.value?.trim() || "",
-  });
-  logAudit("shareholder-add", id, "add", "", name, "");
-  const form = document.getElementById("shareholderAddForm");
-  if (form) form.innerHTML = "";
-  saveAllState();
-  renderCapTable();
-};
-
-window._deleteShareholder = function (shareholderId: string): void {
-  if (!["pmp", "business"].includes(ACTIVE_ROLE)) return;
-  if (!confirm(t("capTableDeleteConfirm"))) return;
-  const idx = SHAREHOLDERS.findIndex((s) => s.id === shareholderId);
-  if (idx < 0) return;
-  const sh = SHAREHOLDERS[idx];
-  SHAREHOLDERS.splice(idx, 1);
-  logAudit("shareholder-delete", shareholderId, "delete", sh.name, "", "");
-  saveAllState();
-  renderCapTable();
-};
-
-// ── Equity Event CRUD ───────────────────────
-window._openAddEquityEventForm = function (): void {
-  const form = document.getElementById("eqEventAddForm");
-  if (!form) return;
-  form.innerHTML = `
-    <h4>${t("capTableAddEvent")}</h4>
-    <div class="funding-form-row">
-      <input type="date" id="eqFormDate" />
-      <input type="text" id="eqFormEvent" placeholder="${t("capTableEvent")}" style="flex:2" />
-      <select id="eqFormClass">
-        <option value="common">${t("capTableCommon")}</option>
-        <option value="preferred-seed">${t("capTablePreferredSeed")}</option>
-        <option value="preferred-a">${t("capTablePreferredA")}</option>
-        <option value="safe">${t("capTableSafe")}</option>
-        <option value="options">${t("capTableOptions")}</option>
-      </select>
-      <input type="number" id="eqFormShares" placeholder="${t("capTableShares")}" min="0" />
-      <input type="number" id="eqFormPPS" placeholder="${t("capTableEventPPS")}" min="0" step="0.01" />
-      <input type="number" id="eqFormTotal" placeholder="${t("capTableEventTotal")}" min="0" />
-      <input type="text" id="eqFormNotes" placeholder="${t("capTableNotes")}" />
-      <button class="btn-add-funding" data-action="addEquityEvent">${t("capTableFormAdd")}</button>
-      <button class="btn-secondary" data-action="clearForm" data-formid="eqEventAddForm">${t("capTableFormCancel")}</button>
-    </div>
-  `;
-  const dateInput = document.getElementById("eqFormDate") as HTMLInputElement;
-  if (dateInput) dateInput.value = new Date().toISOString().slice(0, 10);
-};
-
-window._addEquityEvent = function (): void {
-  if (!["pmp", "business"].includes(ACTIVE_ROLE)) return;
-  const dateEl = document.getElementById("eqFormDate") as HTMLInputElement;
-  const eventEl = document.getElementById("eqFormEvent") as HTMLInputElement;
-  const classEl = document.getElementById("eqFormClass") as HTMLSelectElement;
-  const sharesEl = document.getElementById("eqFormShares") as HTMLInputElement;
-  const ppsEl = document.getElementById("eqFormPPS") as HTMLInputElement;
-  const totalEl = document.getElementById("eqFormTotal") as HTMLInputElement;
-  const notesEl = document.getElementById("eqFormNotes") as HTMLInputElement;
-  const event = eventEl?.value?.trim();
-  if (!event) return;
-  const id = "EQ-" + String(EQUITY_EVENTS.length + 1).padStart(3, "0");
-  EQUITY_EVENTS.push({
-    id,
-    date: dateEl?.value || new Date().toISOString().slice(0, 10),
-    event,
-    shareClass: (classEl?.value || "common") as ShareClass,
-    shares: parseInt(sharesEl?.value || "0", 10) || 0,
-    pricePerShare: parseFloat(ppsEl?.value || "0") || 0,
-    totalValue: parseInt(totalEl?.value || "0", 10) || 0,
-    status: "pending",
-    notes: notesEl?.value?.trim() || "",
-  });
-  logAudit("equity-event-add", id, "add", "", event, "");
-  const form = document.getElementById("eqEventAddForm");
-  if (form) form.innerHTML = "";
-  saveAllState();
-  renderCapTable();
-};
-
-window._deleteEquityEvent = function (eventId: string): void {
-  if (!["pmp", "business"].includes(ACTIVE_ROLE)) return;
-  if (!confirm(t("capTableDeleteEventConfirm"))) return;
-  const idx = EQUITY_EVENTS.findIndex((e) => e.id === eventId);
-  if (idx < 0) return;
-  const ev = EQUITY_EVENTS[idx];
-  EQUITY_EVENTS.splice(idx, 1);
-  logAudit("equity-event-delete", eventId, "delete", ev.event, "", "");
-  saveAllState();
-  renderCapTable();
-};
-
-window._cycleEquityEventStatus = function (eventId: string): void {
-  const ev = EQUITY_EVENTS.find((e) => e.id === eventId);
-  if (!ev) return;
-  if (!["pmp", "business"].includes(ACTIVE_ROLE)) return;
-  const cycle: Record<EquityEventStatus, EquityEventStatus> = {
-    pending: "issued",
-    issued: "converted",
-    converted: "pending",
-  };
-  const old = ev.status;
-  ev.status = cycle[ev.status];
-  logAudit("equity-event-status", eventId, "status", old, ev.status, ev.event);
-  saveAllState();
-  renderCapTable();
-};
-
-// ── Vesting CRUD ────────────────────────────
-window._openAddVestingForm = function (): void {
-  const form = document.getElementById("vestingAddForm");
-  if (!form) return;
-  form.innerHTML = `
-    <h4>${t("capTableAddVesting")}</h4>
-    <div class="funding-form-row">
-      <input type="text" id="vsFormHolder" placeholder="${t("capTableVestHolder")}" />
-      <input type="number" id="vsFormShares" placeholder="${t("capTableShares")}" min="1" />
-      <input type="date" id="vsFormStart" />
-      <input type="number" id="vsFormCliff" placeholder="${t("capTableVestCliff")} (${t("capTableMonths")})" min="0" value="12" />
-      <input type="number" id="vsFormTerm" placeholder="${t("capTableVestTerm")} (${t("capTableMonths")})" min="1" value="48" />
-      <input type="text" id="vsFormNotes" placeholder="${t("capTableNotes")}" />
-      <button class="btn-add-funding" data-action="addVesting">${t("capTableFormAdd")}</button>
-      <button class="btn-secondary" data-action="clearForm" data-formid="vestingAddForm">${t("capTableFormCancel")}</button>
-    </div>
-  `;
-  const dateInput = document.getElementById("vsFormStart") as HTMLInputElement;
-  if (dateInput) dateInput.value = new Date().toISOString().slice(0, 10);
-};
-
-window._addVesting = function (): void {
-  if (!["pmp", "business"].includes(ACTIVE_ROLE)) return;
-  const holderEl = document.getElementById("vsFormHolder") as HTMLInputElement;
-  const sharesEl = document.getElementById("vsFormShares") as HTMLInputElement;
-  const startEl = document.getElementById("vsFormStart") as HTMLInputElement;
-  const cliffEl = document.getElementById("vsFormCliff") as HTMLInputElement;
-  const termEl = document.getElementById("vsFormTerm") as HTMLInputElement;
-  const notesEl = document.getElementById("vsFormNotes") as HTMLInputElement;
-  const holder = holderEl?.value?.trim();
-  if (!holder) return;
-  const id = "VS-" + String(VESTING_SCHEDULES.length + 1).padStart(3, "0");
-  VESTING_SCHEDULES.push({
-    id,
-    holder,
-    shares: parseInt(sharesEl?.value || "0", 10) || 0,
-    startDate: startEl?.value || new Date().toISOString().slice(0, 10),
-    cliffMonths: parseInt(cliffEl?.value || "12", 10),
-    totalMonths: parseInt(termEl?.value || "48", 10),
-    vestedShares: 0,
-    status: "vesting",
-    notes: notesEl?.value?.trim() || "",
-  });
-  logAudit("vesting-add", id, "add", "", holder, "");
-  const form = document.getElementById("vestingAddForm");
-  if (form) form.innerHTML = "";
-  saveAllState();
-  renderCapTable();
-};
-
-window._deleteVesting = function (vestingId: string): void {
-  if (!["pmp", "business"].includes(ACTIVE_ROLE)) return;
-  if (!confirm(t("capTableDeleteVestingConfirm"))) return;
-  const idx = VESTING_SCHEDULES.findIndex((v) => v.id === vestingId);
-  if (idx < 0) return;
-  const vs = VESTING_SCHEDULES[idx];
-  VESTING_SCHEDULES.splice(idx, 1);
-  logAudit("vesting-delete", vestingId, "delete", vs.holder, "", "");
-  saveAllState();
-  renderCapTable();
-};
-
-window._cycleVestingStatus = function (vestingId: string): void {
-  const vs = VESTING_SCHEDULES.find((v) => v.id === vestingId);
-  if (!vs) return;
-  if (!["pmp", "business"].includes(ACTIVE_ROLE)) return;
-  const cycle: Record<VestingStatus, VestingStatus> = {
-    vesting: "fully-vested",
-    "fully-vested": "cancelled",
-    cancelled: "vesting",
-  };
-  const old = vs.status;
-  vs.status = cycle[vs.status];
-  logAudit("vesting-status", vestingId, "status", old, vs.status, vs.holder);
-  saveAllState();
-  renderCapTable();
 };
 
 // ══════════════════════════════════════════════════

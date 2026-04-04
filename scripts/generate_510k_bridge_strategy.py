@@ -168,9 +168,9 @@ def build():
     pdf.sub("3.1 Control Tower PM Dashboard")
     pdf.txt(
         "A Vite + TypeScript SaaS application with Supabase backend providing:\n\n"
-        "  16 tabs covering dual-track milestones, gate system, risk dashboard, regulatory "
+        "  15 tabs covering dual-track milestones, gate system, risk dashboard, regulatory "
         "tracker, audit trail, document control, actions (DHF/DMR/CAPA), timeline, budget, "
-        "cash/runway, US investment, cap table, resources, suppliers, message board, FDA comms\n\n"
+        "cash/runway, US investment, resources, suppliers, message board, FDA comms\n\n"
         "  Multi-tenant with row-level security (Supabase RLS)\n"
         "  Trilingual EN/CN/KO interface with one-click toggle\n"
         "  Role-based access: PMP, Technology, Business, Accounting\n"
@@ -268,7 +268,7 @@ def build():
         "  Control Tower Starter -- $500/mo (read-only dashboard per project)\n"
         "  Control Tower Growth -- $1,000/mo (full dashboard, 2 projects, message board)\n"
         "  Control Tower Scale -- $2,000/mo (multi-project, Predicate Finder embedded, "
-        "cap table, FDA comms)\n"
+        "FDA comms)\n"
         "  QMS-Lite Starter -- $200/mo (doc control, CAPA, training records)\n"
         "  QMS-Lite Pro -- $500/mo (full suite incl. supplier qual, complaint handling)\n"
         "  Entity Setup Tracker -- $200/mo SaaS or $1K-$5K one-time setup")

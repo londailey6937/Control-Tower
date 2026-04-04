@@ -47,10 +47,10 @@ const GUIDE: HelpSection[] = [
     num: 2,
     title: { en: "Dashboard Overview", cn: "仪表板概览", ko: "대시보드 개요" },
     content: {
-      en: `<p>The dashboard consists of a header bar with role/tier selectors, a horizontal tab navigation bar with 18 functional tabs, and a main content area. Each tab focuses on a specific aspect of the 510(k) project lifecycle.</p>
+      en: `<p>The dashboard consists of a header bar with role/tier selectors, a horizontal tab navigation bar with 17 functional tabs, and a main content area. Each tab focuses on a specific aspect of the 510(k) project lifecycle.</p>
 <h4>Header Bar</h4>
 <ul><li>Project name and subtitle (bilingual EN/CN)</li><li>Role selector: Switch between PMP, Technology, Business, and Accounting views</li><li>Tier indicator: Shows your current subscription tier (Starter/Growth/Scale)</li><li>Language toggle: Switch between English and Chinese interface</li></ul>
-<h4>The 18 Tabs</h4>
+<h4>The 17 Tabs</h4>
 <table class="help-table"><thead><tr><th>Tab</th><th>Description</th></tr></thead><tbody>
 <tr><td><strong>Dual-Track</strong></td><td>Technical and regulatory milestone tracking</td></tr>
 <tr><td><strong>Gate System</strong></td><td>Phase-gate reviews with criteria checklists</td></tr>
@@ -63,7 +63,6 @@ const GUIDE: HelpSection[] = [
 <tr><td><strong>Budget</strong></td><td>Budget categories with planned vs. actual tracking</td></tr>
 <tr><td><strong>Cash / Runway</strong></td><td>Cash position, burn rate, and runway forecast</td></tr>
 <tr><td><strong>US Investment</strong></td><td>Investor pipeline and IR activity tracking</td></tr>
-<tr><td><strong>Cap Table</strong></td><td>Shareholder registry, equity events, vesting</td></tr>
 <tr><td><strong>Resources</strong></td><td>Team allocation and utilization monitoring</td></tr>
 <tr><td><strong>Suppliers</strong></td><td>Supplier qualification and lead-time tracking</td></tr>
 <tr><td><strong>Message Board</strong></td><td>Threaded discussions with decisions and actions</td></tr>
@@ -72,10 +71,10 @@ const GUIDE: HelpSection[] = [
 <tr><td><strong>FDA Guidance Docs</strong></td><td>Searchable database of FDA guidance documents by topic, status, and date</td></tr>
 </tbody></table>
 <div class="help-warn">⚠️ Some tabs may be restricted based on your role or subscription tier.</div>`,
-      cn: `<p>仪表板由带有角色/层级选择器的标题栏、带有18个功能标签页的水平导航栏和主内容区域组成。每个标签页专注于510(k)项目生命周期的特定方面。</p>
+      cn: `<p>仪表板由带有角色/层级选择器的标题栏、带有17个功能标签页的水平导航栏和主内容区域组成。每个标签页专注于510(k)项目生命周期的特定方面。</p>
 <h4>标题栏</h4>
 <ul><li>项目名称和副标题（中英双语）</li><li>角色选择器：在PMP、技术、商务和财务视图之间切换</li><li>层级指示器：显示当前订阅层级（入门/成长/规模）</li><li>语言切换：在中英文界面之间切换</li></ul>
-<h4>18个标签页</h4>
+<h4>17个标签页</h4>
 <table class="help-table"><thead><tr><th>标签页</th><th>说明</th></tr></thead><tbody>
 <tr><td><strong>双轨制</strong></td><td>技术和法规里程碑跟踪</td></tr>
 <tr><td><strong>门控系统</strong></td><td>带标准清单的阶段门控评审</td></tr>
@@ -88,7 +87,6 @@ const GUIDE: HelpSection[] = [
 <tr><td><strong>预算</strong></td><td>按类别的计划与实际预算跟踪</td></tr>
 <tr><td><strong>现金/跑道</strong></td><td>现金状况、燃烧率和跑道预测</td></tr>
 <tr><td><strong>美国投资</strong></td><td>投资者管道和IR活动跟踪</td></tr>
-<tr><td><strong>股权表</strong></td><td>股东登记、股权事件、归属计划</td></tr>
 <tr><td><strong>资源</strong></td><td>团队分配和利用率监控</td></tr>
 <tr><td><strong>供应商</strong></td><td>供应商资质审核和交期跟踪</td></tr>
 <tr><td><strong>消息板</strong></td><td>带决策和行动跟踪的线程讨论</td></tr>
@@ -97,10 +95,10 @@ const GUIDE: HelpSection[] = [
 <tr><td><strong>FDA指南文件</strong></td><td>按主题、状态和日期搜索的FDA指南文件数据库</td></tr>
 </tbody></table>
 <div class="help-warn">⚠️ 部分标签页可能因您的角色或订阅层级而受限。</div>`,
-      ko: `<p>대시보드는 역할/등급 선택기가 있는 헤더 바, 18개의 기능 탭이 있는 수평 탭 내비게이션 바, 그리고 메인 콘텐츠 영역으로 구성됩니다. 각 탭은 510(k) 프로젝트 수명주기의 특정 측면에 중점을 둡니다.</p>
+      ko: `<p>대시보드는 역할/등급 선택기가 있는 헤더 바, 17개의 기능 탭이 있는 수평 탭 내비게이션 바, 그리고 메인 콘텐츠 영역으로 구성됩니다. 각 탭은 510(k) 프로젝트 수명주기의 특정 측면에 중점을 둡니다.</p>
 <h4>헤더 바</h4>
 <ul><li>프로젝트 이름 및 부제목 (다국어 EN/CN/KO)</li><li>역할 선택기: PMP, 기술, 비즈니스, 회계 뷰 간 전환</li><li>등급 표시기: 현재 구독 등급 표시 (Starter/Growth/Scale)</li><li>언어 전환: 영어, 중국어, 한국어 인터페이스 간 전환</li></ul>
-<h4>18개 탭</h4>
+<h4>17개 탭</h4>
 <table class="help-table"><thead><tr><th>탭</th><th>설명</th></tr></thead><tbody>
 <tr><td><strong>듀얼 트랙</strong></td><td>기술 및 규제 마일스톤 추적</td></tr>
 <tr><td><strong>게이트 시스템</strong></td><td>기준 체크리스트를 포함한 단계별 게이트 심사</td></tr>
@@ -113,7 +111,6 @@ const GUIDE: HelpSection[] = [
 <tr><td><strong>예산</strong></td><td>계획 대비 실제 예산 범주별 추적</td></tr>
 <tr><td><strong>현금/런웨이</strong></td><td>현금 보유 현황, 소진율, 런웨이 예측</td></tr>
 <tr><td><strong>미국 투자</strong></td><td>투자자 파이프라인 및 IR 활동 추적</td></tr>
-<tr><td><strong>지분 현황표</strong></td><td>주주 등록, 지분 이벤트, 베스팅</td></tr>
 <tr><td><strong>리소스</strong></td><td>팀 배정 및 활용도 모니터링</td></tr>
 <tr><td><strong>공급업체</strong></td><td>공급업체 자격 심사 및 리드타임 추적</td></tr>
 <tr><td><strong>게시판</strong></td><td>의사결정 및 조치 추적이 포함된 스레드 토론</td></tr>
@@ -137,15 +134,15 @@ const GUIDE: HelpSection[] = [
 <table class="help-table"><thead><tr><th>Role</th><th>Access</th></tr></thead><tbody>
 <tr><td><strong>PMP (Project Manager)</strong></td><td>Full access to all tabs. Can edit milestones, gates, risks, budgets, documents, and team. Only role that can see FDA Communications.</td></tr>
 <tr><td><strong>Technology</strong></td><td>Can view and update technical milestones, risks, and documents. Can participate in Message Board. Cannot access financial tabs.</td></tr>
-<tr><td><strong>Business</strong></td><td>Access to business milestones, budget, investment, and cap table. Can participate in Message Board.</td></tr>
-<tr><td><strong>Accounting</strong></td><td>Read-only access to Budget, Cash/Runway, and Cap Table. Limited editing capabilities.</td></tr>
+<tr><td><strong>Business</strong></td><td>Access to business milestones, budget, and investment. Can participate in Message Board.</td></tr>
+<tr><td><strong>Accounting</strong></td><td>Read-only access to Budget, Cash/Runway, and US Investment. Limited editing capabilities.</td></tr>
 </tbody></table>
 <h4>Subscription Tiers</h4>
 <p>Tab access is server-controlled via Supabase RLS. The tier determines which tabs are available:</p>
 <table class="help-table"><thead><tr><th>Tier</th><th>Price</th><th>Seats</th><th>Tabs</th></tr></thead><tbody>
 <tr><td><strong>Starter</strong></td><td>$500/mo</td><td>2</td><td>Dual-Track, Gates, Timeline, Budget</td></tr>
-<tr><td><strong>Growth</strong></td><td>$1,000/mo</td><td>5</td><td>All except Cap Table, FDA Comms, US Investment</td></tr>
-<tr><td><strong>Scale</strong></td><td>$2,000/mo</td><td>10</td><td>All 16 tabs including FDA Comms and Cap Table</td></tr>
+<tr><td><strong>Growth</strong></td><td>$1,000/mo</td><td>5</td><td>All except FDA Comms, US Investment</td></tr>
+<tr><td><strong>Scale</strong></td><td>$2,000/mo</td><td>10</td><td>All 17 tabs including FDA Comms</td></tr>
 </tbody></table>
 <div class="help-tip">💡 Your tier is managed server-side and cannot be changed from the dashboard UI.</div>`,
       cn: `<h4>用户角色</h4>
@@ -153,15 +150,15 @@ const GUIDE: HelpSection[] = [
 <table class="help-table"><thead><tr><th>角色</th><th>访问权限</th></tr></thead><tbody>
 <tr><td><strong>PMP（项目经理）</strong></td><td>对所有标签页的完全访问。可以编辑里程碑、门控、风险、预算、文档和团队。唯一能看到FDA通讯的角色。</td></tr>
 <tr><td><strong>技术</strong></td><td>可以查看和更新技术里程碑、风险和文档。可以参与消息板。无法访问财务标签页。</td></tr>
-<tr><td><strong>商务</strong></td><td>可以访问商务里程碑、预算、投资和股权表。可以参与消息板。</td></tr>
-<tr><td><strong>财务</strong></td><td>对预算、现金/跑道和股权表的只读访问。有限的编辑能力。</td></tr>
+<tr><td><strong>商务</strong></td><td>可以访问商务里程碑、预算和投资。可以参与消息板。</td></tr>
+<tr><td><strong>财务</strong></td><td>对预算、现金/跑道和美国投资的只读访问。有限的编辑能力。</td></tr>
 </tbody></table>
 <h4>订阅层级</h4>
 <p>标签页访问通过Supabase RLS进行服务器端控制。层级决定可用的标签页：</p>
 <table class="help-table"><thead><tr><th>层级</th><th>价格</th><th>席位</th><th>标签页</th></tr></thead><tbody>
 <tr><td><strong>入门</strong></td><td>$500/月</td><td>2</td><td>双轨制、门控、时间线、预算</td></tr>
-<tr><td><strong>成长</strong></td><td>$1,000/月</td><td>5</td><td>除股权表、FDA通讯、美国投资外全部</td></tr>
-<tr><td><strong>规模</strong></td><td>$2,000/月</td><td>10</td><td>全部16个标签页，包括FDA通讯和股权表</td></tr>
+<tr><td><strong>成长</strong></td><td>$1,000/月</td><td>5</td><td>除FDA通讯、美国投资外全部</td></tr>
+<tr><td><strong>规模</strong></td><td>$2,000/月</td><td>10</td><td>全部17个标签页，包括FDA通讯</td></tr>
 </tbody></table>
 <div class="help-tip">💡 您的层级由服务器端管理，无法从仪表板UI更改。</div>`,
       ko: `<h4>사용자 역할</h4>
@@ -169,15 +166,15 @@ const GUIDE: HelpSection[] = [
 <table class="help-table"><thead><tr><th>역할</th><th>접근 권한</th></tr></thead><tbody>
 <tr><td><strong>PMP (프로젝트 매니저)</strong></td><td>모든 탭에 대한 전체 접근. 마일스톤, 게이트, 위험, 예산, 문서, 팀을 편집할 수 있습니다. FDA 커뮤니케이션을 볼 수 있는 유일한 역할입니다.</td></tr>
 <tr><td><strong>기술</strong></td><td>기술 마일스톤, 위험, 문서를 조회 및 업데이트할 수 있습니다. 게시판 참여 가능. 재무 탭 접근 불가.</td></tr>
-<tr><td><strong>비즈니스</strong></td><td>비즈니스 마일스톤, 예산, 투자, 지분 현황표에 접근할 수 있습니다. 게시판 참여 가능.</td></tr>
-<tr><td><strong>회계</strong></td><td>예산, 현금/런웨이, 지분 현황표에 대한 읽기 전용 접근. 제한된 편집 기능.</td></tr>
+<tr><td><strong>비즈니스</strong></td><td>비즈니스 마일스톤, 예산, 투자에 접근할 수 있습니다. 게시판 참여 가능.</td></tr>
+<tr><td><strong>회계</strong></td><td>예산, 현금/런웨이, 미국 투자에 대한 읽기 전용 접근. 제한된 편집 기능.</td></tr>
 </tbody></table>
 <h4>구독 등급</h4>
 <p>탭 접근은 Supabase RLS를 통해 서버에서 제어됩니다. 등급에 따라 사용 가능한 탭이 결정됩니다:</p>
 <table class="help-table"><thead><tr><th>등급</th><th>가격</th><th>사용자 수</th><th>탭</th></tr></thead><tbody>
 <tr><td><strong>Starter</strong></td><td>$500/월</td><td>2</td><td>듀얼 트랙, 게이트, 타임라인, 예산</td></tr>
-<tr><td><strong>Growth</strong></td><td>$1,000/월</td><td>5</td><td>지분 현황표, FDA 커뮤니케이션, 미국 투자 제외 전체</td></tr>
-<tr><td><strong>Scale</strong></td><td>$2,000/월</td><td>10</td><td>FDA 커뮤니케이션 및 지분 현황표를 포함한 전체 16개 탭</td></tr>
+<tr><td><strong>Growth</strong></td><td>$1,000/월</td><td>5</td><td>FDA 커뮤니케이션, 미국 투자 제외 전체</td></tr>
+<tr><td><strong>Scale</strong></td><td>$2,000/월</td><td>10</td><td>FDA 커뮤니케이션을 포함한 전체 17개 탭</td></tr>
 </tbody></table>
 <div class="help-tip">💡 구독 등급은 서버에서 관리되며 대시보드 UI에서 변경할 수 없습니다.</div>`,
     },
@@ -542,33 +539,6 @@ const GUIDE: HelpSection[] = [
   },
   {
     num: 15,
-    title: { en: "Cap Table", cn: "股权表", ko: "지분 현황표" },
-    content: {
-      en: `<p>The Cap Table tracks equity ownership, equity events, and vesting schedules.</p>
-<h4>Shareholders</h4>
-<ul><li>Name, share class (Common, Preferred A/B/C, Options, Warrants)</li><li>Share count and ownership percentage</li><li>Board seat, vesting status, and notes</li></ul>
-<h4>Equity Events</h4>
-<ul><li>Track funding rounds, stock splits, option grants, conversions</li><li>Each event records shares issued, price per share, and total raised</li></ul>
-<h4>Vesting Schedules</h4>
-<ul><li>Standard 4-year vest with 1-year cliff, or custom schedules</li><li>Track cliff date, total shares, vested shares, and next vest date</li></ul>`,
-      cn: `<p>股权表跟踪股权所有权、股权事件和归属计划。</p>
-<h4>股东</h4>
-<ul><li>姓名、股份类别（普通、优先A/B/C、期权、认股权证）</li><li>股份数量和所有权百分比</li><li>董事会席位、归属状态和备注</li></ul>
-<h4>股权事件</h4>
-<ul><li>跟踪融资轮次、股票分割、期权授予、转换</li><li>每个事件记录发行的股份、每股价格和总融资额</li></ul>
-<h4>归属计划</h4>
-<ul><li>标准4年归属，1年悬崖期，或自定义计划</li><li>跟踪悬崖日期、总股份、已归属股份和下次归属日期</li></ul>`,
-      ko: `<p>지분 현황표는 지분 소유권, 지분 이벤트 및 베스팅 일정을 추적합니다.</p>
-<h4>주주</h4>
-<ul><li>이름, 주식 클래스 (보통주, 우선주 A/B/C, 옵션, 워런트)</li><li>주식 수 및 소유권 백분율</li><li>이사회 석, 베스팅 상태 및 메모</li></ul>
-<h4>지분 이벤트</h4>
-<ul><li>펀딩 라운드, 주식 분할, 옵션 부여, 전환 추적</li><li>각 이벤트는 발행 주식 수, 주당 가격, 총 조달 금액을 기록</li></ul>
-<h4>베스팅 일정</h4>
-<ul><li>1년 클리프가 포함된 4년 표준 베스팅, 또는 맞춤형 일정</li><li>클리프 날짜, 총 주식, 베스팅된 주식, 다음 베스팅 날짜 추적</li></ul>`,
-    },
-  },
-  {
-    num: 16,
     title: { en: "Resources", cn: "资源", ko: "리소스" },
     content: {
       en: `<p>The Resources tab displays team members with their role, allocation across workstreams, and utilization percentage.</p>
@@ -592,7 +562,7 @@ const GUIDE: HelpSection[] = [
     },
   },
   {
-    num: 17,
+    num: 16,
     title: { en: "Suppliers", cn: "供应商", ko: "공급업체" },
     content: {
       en: `<p>The Suppliers tab tracks supplier qualification status, lead times, purchase order status, and contract manufacturing milestones. This supports 21 CFR 820 supplier controls.</p>
@@ -607,7 +577,7 @@ const GUIDE: HelpSection[] = [
     },
   },
   {
-    num: 18,
+    num: 17,
     title: { en: "Message Board", cn: "消息板", ko: "게시판" },
     content: {
       en: `<p>The Message Board is a purpose-driven messaging system for cross-functional communication. It supports threaded discussions with lifecycle management, decisions tracking, and action item creation.</p>
@@ -649,7 +619,7 @@ const GUIDE: HelpSection[] = [
     },
   },
   {
-    num: 19,
+    num: 18,
     title: {
       en: "FDA Communications Center",
       cn: "FDA通讯中心",
@@ -710,7 +680,7 @@ const GUIDE: HelpSection[] = [
     },
   },
   {
-    num: 20,
+    num: 19,
     title: {
       en: "Setup Wizard & Templates",
       cn: "设置向导与模板",
@@ -747,7 +717,7 @@ const GUIDE: HelpSection[] = [
     },
   },
   {
-    num: 21,
+    num: 20,
     title: {
       en: "Keyboard Shortcuts & Tips",
       cn: "快捷操作与技巧",
@@ -790,7 +760,7 @@ const GUIDE: HelpSection[] = [
     },
   },
   {
-    num: 22,
+    num: 21,
     title: { en: "Troubleshooting", cn: "故障排除", ko: "문제 해결" },
     content: {
       en: `<h4>Dashboard won't load</h4>
@@ -832,7 +802,7 @@ const GUIDE: HelpSection[] = [
     },
   },
   {
-    num: 23,
+    num: 22,
     title: {
       en: "510(k) Predicate Finder",
       cn: "510(k) Predicate Finder",
@@ -866,7 +836,7 @@ const GUIDE: HelpSection[] = [
     },
   },
   {
-    num: 24,
+    num: 23,
     title: {
       en: "Glossary of FDA & Regulatory Terms",
       cn: "FDA与法规术语表",

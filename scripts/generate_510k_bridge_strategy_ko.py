@@ -177,9 +177,9 @@ def build():
     pdf.sub("3.1 Control Tower PM 대시보드")
     pdf.txt(
         "Vite + TypeScript 기반 SaaS 애플리케이션, Supabase 백엔드:\n\n"
-        "  16개 탭: 이중 트랙 마일스톤, 게이트 시스템, 위험 대시보드, "
+        "  15개 탭: 이중 트랙 마일스톤, 게이트 시스템, 위험 대시보드, "
         "규제 추적기, 감사 추적, 문서 제어, 조치 항목(DHF/DMR/CAPA), "
-        "타임라인, 예산, 현금/런웨이, 미국 투자, 주주명부, 리소스, "
+        "타임라인, 예산, 현금/런웨이, 미국 투자, 리소스, "
         "공급업체, 메시지 보드, FDA 통신\n\n"
         "  Supabase RLS 멀티테넌트 아키텍처\n"
         "  3개 국어 EN/CN/KO 인터페이스, 원클릭 전환\n"
@@ -279,7 +279,7 @@ def build():
         "  Control Tower Starter -- $500/월 (프로젝트당 읽기 전용 대시보드)\n"
         "  Control Tower Growth -- $1,000/월 (전체 대시보드, 2 프로젝트, 메시지 보드)\n"
         "  Control Tower Scale -- $2,000/월 (멀티 프로젝트, Predicate Finder 임베드, "
-        "주주명부, FDA 통신)\n"
+        "FDA 통신)\n"
         "  QMS-Lite Starter -- $200/월 (문서 제어, CAPA, 교육 기록)\n"
         "  QMS-Lite Pro -- $500/월 (전체 제품군 포함 공급업체 자격, 불만 처리)\n"
         "  법인 설립 추적기 -- $200/월 SaaS 또는 $1K-$5K 일회성 설립")

@@ -171,7 +171,6 @@ def build_english():
     pdf.checkbox("IP assigned to US entity")
     pdf.checkbox("Roles defined: CEO, CTO (PhD), PM/Operations")
     pdf.sub_label("Create:")
-    pdf.checkbox("Cap table")
     pdf.checkbox("Advisor agreements")
 
     # Step 2
