@@ -114,10 +114,11 @@ def build_english():
     pdf.add_page()
     pdf.sec(1, "Ideal Customer Profile (ICP)")
     pdf.txt(
-        "Our ideal customer is a Chinese medical device company preparing to enter the "
-        "US market through the FDA 510(k) pathway. Key characteristics:")
+        "Our primary customer is a Chinese medical device company preparing to enter the "
+        "US market through the FDA 510(k) pathway. Korean medical device companies are a "
+        "strong secondary market. Key characteristics:")
     pdf.bul("Company size: 50-500 employees, $10M-$100M revenue")
-    pdf.bul("Has an existing NMPA-approved product they want to bring to the US")
+    pdf.bul("Has an existing NMPA/MFDS-approved product they want to bring to the US")
     pdf.bul("Budget: $50K-$500K allocated for US market entry")
     pdf.bul("Decision maker: VP Regulatory, CEO, or Head of International Business")
     pdf.bul("Pain: Unfamiliar with FDA process, no US regulatory team, language barrier")
@@ -125,9 +126,12 @@ def build_english():
 
     pdf.sub("1.1 Secondary Personas")
     pdf.txt(
+        "  Korean Medical Device Company -- Similar profile to Chinese ICP. "
+        "Has MFDS (formerly KFDA) approved products, seeking US expansion. "
+        "Platform supports full Korean language interface.\n\n"
         "  US Regulatory Consultant -- Uses Predicate Finder for client work, upgrades "
         "to Control Tower for project management across multiple clients.\n\n"
-        "  Chinese Entrepreneur (EB-1/E-2) -- Building a US medical device startup. "
+        "  Chinese/Korean Entrepreneur (EB-1/E-2) -- Building a US medical device startup. "
         "Needs everything: entity formation, FDA strategy, PM tooling, investor relations.")
 
     # 2. Product Positioning
@@ -136,16 +140,16 @@ def build_english():
 
     pdf.sub("2.1 Elevator Pitch (30 seconds)")
     pdf.txt(
-        "'510k Bridge is the only bilingual platform that combines AI-powered "
+        "'510k Bridge is the only trilingual platform that combines AI-powered "
         "predicate device research, a 17-tab project management dashboard, lightweight QMS, "
         "and FDA communications automation -- purpose-built "
-        "for Chinese medical device companies pursuing 510(k) clearance. Our Predicate "
+        "for Chinese and Korean medical device companies pursuing 510(k) clearance. Our Predicate "
         "Finder tool is included free with all service tiers.'")
 
     pdf.sub("2.2 Value Proposition")
     pdf.txt(
         "  For the CEO: 'See your entire 510(k) program in one dashboard -- milestones, "
-        "gates, risks, budget, and investor relations -- in Chinese or English.'\n\n"
+        "gates, risks, budget, and investor relations -- in Chinese, Korean, or English.'\n\n"
         "  For the VP Regulatory: 'Find the right predicate device in minutes, not days. "
         "Auto-generate your SE argument draft and trace the predicate chain.'\n\n"
         "  For the CFO: 'Track burn rate, runway, and investor pipeline alongside the "
@@ -153,13 +157,13 @@ def build_english():
 
     pdf.sub("2.3 Competitive Differentiators")
     pdf.txt(
-        "  1. Bilingual (EN/CN) -- Only platform with full Chinese language support\n"
+        "  1. Trilingual (EN/CN/KO) -- Only platform with full Chinese and Korean language support\n"
         "  2. Predicate Finder -- AI-powered predicate search + SE argument tool (included)\n"
         "  3. End-to-end -- From predicate research to clearance management in one platform\n"
         "  4. QMS-Lite -- Lightweight quality system for startups, not enterprise-grade overkill\n"
         "  5. FDA Comms Center -- Q-Sub generator, RTA self-check, MDUFA tracking built in\n"
         "  6. Entity Setup -- Delaware C-Corp, state registration, EIN, FDA establishment\n"
-        "  7. China market expertise -- WeChat, Shanghai office, accelerator partnerships\n"
+        "  7. Asia market expertise -- WeChat, KakaoTalk, Shanghai office, accelerator partnerships\n"
         "  8. PMP authority model -- FDA-grade decision traceability in the dashboard")
 
     # 3. Product Suite & Pricing
@@ -222,9 +226,9 @@ def build_english():
     pdf.sub("4.1 Lead Generation")
     pdf.txt(
         "  Inbound: Predicate Finder email gate -> nurture sequence -> demo request\n"
-        "  Outbound: WeChat content -> accelerator introductions -> direct outreach\n"
+        "  Outbound: WeChat/KakaoTalk content -> accelerator introductions -> direct outreach\n"
         "  Referral: Immigration attorneys, CROs, testing labs\n"
-        "  Events: Mandarin webinars, trade shows (CBIA, AdvaMed), biotech park visits")
+        "  Events: Mandarin/Korean webinars, trade shows (CBIA, AdvaMed, KIMES), biotech park visits")
 
     pdf.sub("4.2 Qualification (BANT)")
     pdf.txt(
@@ -242,7 +246,7 @@ def build_english():
         "     'This tool is included with every service tier.'\n\n"
         "  2. Switch to Control Tower demo (ct.510kbridge.com)\n"
         "     -- Show dual-track milestones in Chinese\n"
-        "     -- Toggle to English to demonstrate bilingual\n"
+        "     -- Toggle to Korean, then English to demonstrate trilingual\n"
         "     -- Open Gate System, show PMP decision flow\n"
         "     -- Show FDA Comms tab (Q-Sub letter, RTA 17-item checklist, SE flowchart)\n"
         "     -- Show Cash/Runway with investor pipeline\n"
@@ -268,7 +272,7 @@ def build_english():
            "Excel can't generate an SE argument, trace a predicate chain, or give your "
            "investors a live dashboard view. This is purpose-built for 510(k).")
     pdf.kv("'We need to talk to our team'",
-           "Absolutely. Can I send you a demo video in Chinese so your team can see it? "
+           "Absolutely. Can I send you a demo video in Chinese or Korean so your team can see it? "
            "I'll also share the Predicate Finder link -- it's free, no commitment.")
     pdf.kv("'We're not ready yet'",
            "The best time to plan your 510(k) is 12-18 months before submission. "
@@ -283,16 +287,16 @@ def build_english():
 
     pdf.sub("6.1 Lead Magnets (Free)")
     pdf.bul("510(k) Predicate Finder -- AI-powered SaaS tool (included with services)")
-    pdf.bul("FDA 510(k) Pathway Guide PDF -- Branded EN + CN")
-    pdf.bul("Investment & Fundraising Guide PDF -- EN + CN")
+    pdf.bul("FDA 510(k) Pathway Guide PDF -- Branded EN + CN + KO")
+    pdf.bul("Investment & Fundraising Guide PDF -- EN + CN + KO")
     pdf.bul("Stanford PMP Course -- Free professional development")
-    pdf.bul("Mandarin Webinar Replays -- Gated content")
+    pdf.bul("Mandarin/Korean Webinar Replays -- Gated content")
 
     pdf.sub("6.2 Sales Collateral")
     pdf.bul("This Sales Playbook (EN + CN)")
-    pdf.bul("510(k) Bridge Service Fact Sheet (EN + CN)")
+    pdf.bul("510(k) Bridge Service Fact Sheet (EN + CN + KO)")
     pdf.bul("Control Tower User Guide (EN + CN)")
-    pdf.bul("PMP User Guide (EN + CN)")
+    pdf.bul("PMP User Guide (EN + CN + KO)")
     pdf.bul("Demo dashboard: ct.510kbridge.com")
 
     pdf.sub("6.3 Demo Links")
