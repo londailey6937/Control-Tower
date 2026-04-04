@@ -96,40 +96,46 @@ def build():
     pdf.set_text_color(*GRAY)
     pdf.cell(0, 7, "510k Bridge", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 7, "510k Bridge, Inc.", align="C", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 7, "Version 2.0 | March 2026", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "Version 3.0 | April 2026", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(20)
     pdf.set_font("Helvetica", "", 10)
     pdf.set_text_color(*TEXT)
     pdf.multi_cell(0, 5.5, _s(
         "This document outlines a five-year strategy for 510k Bridge to become "
-        "the leading SaaS platform and professional services partner for Chinese medical "
-        "device companies pursuing FDA 510(k) clearance in the United States."
+        "the leading SaaS platform and professional services partner for Chinese and "
+        "Korean medical device companies pursuing FDA 510(k) clearance in the United States."
     ), align="C")
 
     # ── 1. Executive Summary ──
     pdf.add_page()
     pdf.sec(1, "Executive Summary")
     pdf.txt(
-        "510k Bridge operates two complementary SaaS products and a professional "
-        "services practice targeting Chinese medical device companies entering the US market "
-        "through the FDA 510(k) pathway.\n\n"
+        "510k Bridge operates five complementary SaaS products and a professional "
+        "services practice targeting Chinese and Korean medical device companies entering "
+        "the US market through the FDA 510(k) pathway.\n\n"
         "Core Products:\n"
         "  1. Control Tower -- Project management dashboard for 510(k) programs\n"
         "  2. 510(k) Predicate Finder -- FDA database search, predicate chain tracing, "
-        "and substantial equivalence argument generation\n\n"
-        "The combined product suite covers the full lifecycle from regulatory strategy "
-        "(Predicate Finder) through execution management (Control Tower). Professional "
-        "services layer on top for clients who need hands-on regulatory and project "
-        "management support.")
+        "and substantial equivalence argument generation\n"
+        "  3. FDA Guidance Documents -- Searchable library of 600+ CDRH guidance documents\n"
+        "  4. QMS-Lite for Startups -- Lightweight quality management system aligned to "
+        "21 CFR 820 / ISO 13485\n"
+        "  5. Cross-Border Entity Setup Tracker -- US market entry checklist dashboard\n\n"
+        "The combined product suite covers the full lifecycle from regulatory research "
+        "(Guidance Documents), predicate strategy (Predicate Finder), quality management "
+        "(QMS-Lite), execution management (Control Tower), and US entity formation "
+        "(Entity Setup Tracker). Professional services layer on top for clients who "
+        "need hands-on regulatory and project management support.")
 
     # ── 2. Market Opportunity ──
     pdf.add_page()
     pdf.sec(2, "Market Opportunity")
     pdf.txt(
         "China's medical device industry is the world's second largest ($80B+ in 2025) "
-        "and growing 15-20% annually. Some 300+ Chinese device companies attempt US market "
-        "entry each year, with most targeting the 510(k) pathway as the fastest route to "
-        "FDA clearance.\n\n"
+        "and growing 15-20% annually. South Korea's device market exceeds $7B with strong "
+        "growth in exports. Some 300+ Chinese and 100+ Korean device companies attempt US "
+        "market entry each year, with most targeting the 510(k) pathway as the fastest "
+        "route to FDA clearance.\n\n"
         "Key challenges these companies face:\n"
         "  1. Unknown US regulatory process -- 510(k) differs significantly from NMPA\n"
         "  2. Predicate device selection -- incorrect predicate is the #1 cause of FDA rejection\n"
@@ -150,7 +156,7 @@ def build():
         "  Qualio            -- Cloud QMS. $20K/yr. No PM dashboard, no Chinese market focus.\n"
         "  Regulatory consultants -- $300-500/hr. Fragmented, no tooling.\n"
         "  Immigration/corporate attorneys -- $5-15K per entity setup. Email-based, no dashboard.\n\n"
-        "None of these competitors offer a bilingual (EN/CN) platform combining PM dashboard, "
+        "None of these competitors offer a trilingual (EN/CN/KO) platform combining PM dashboard, "
         "predicate research, QMS, entity setup tracking, and SE argument generation. "
         "Full QMS systems cost $30K-$100K/yr and take months to implement -- startups need "
         "just enough QMS to pass FDA audit, which is the QMS-Lite opportunity.")
@@ -166,7 +172,7 @@ def build():
         "tracker, audit trail, document control, actions (DHF/DMR/CAPA), timeline, budget, "
         "cash/runway, US investment, cap table, resources, suppliers, message board, FDA comms\n\n"
         "  Multi-tenant with row-level security (Supabase RLS)\n"
-        "  Bilingual EN/CN interface with one-click toggle\n"
+        "  Trilingual EN/CN/KO interface with one-click toggle\n"
         "  Role-based access: PMP, Technology, Business, Accounting\n"
         "  7 pre-built category templates for common device types\n"
         "  Setup Wizard for guided project configuration")
@@ -181,7 +187,7 @@ def build():
         "  Predicate Chain -- Trace the predicate lineage backward up to 5 levels\n"
         "  Device Comparison -- Side-by-side comparison of up to 4 devices\n"
         "  SE Argument Generator -- Auto-generates substantial equivalence draft\n"
-        "  Bilingual EN/CN -- Full interface translation\n\n"
+        "  Trilingual EN/CN/KO -- Full interface translation\n\n"
         "Freemium Model:\n"
         "  Free Tier -- 5 searches/day, 1 chain trace/day, 2-device comparison\n"
         "  Pro Tier (email gate) -- Unlimited search, full chain, 4-device compare, "
@@ -227,13 +233,29 @@ def build():
         "presence (US parent needing a China subsidiary), creating referral "
         "partnerships with China company formation agents.")
 
-    pdf.sub("3.5 Lead Magnets & Content")
+    pdf.sub("3.5 FDA Guidance Documents Library")
     pdf.txt(
-        "  Stanford PMP Course -- Free professional development giveaway\n"
-        "  FDA 510(k) Pathway Guide -- Branded PDF (EN + CN)\n"
+        "A searchable single-page application providing instant access to 600+ CDRH "
+        "(Center for Devices and Radiological Health) guidance documents.\n\n"
+        "Features:\n"
+        "  Full-text search across all guidance document titles and descriptions\n"
+        "  Filter by final, draft, and withdrawn status\n"
+        "  Direct links to FDA source documents\n"
+        "  Trilingual EN/CN/KO interface\n"
+        "  Embedded in 510kbridge.com as a free resource\n\n"
+        "Strategic Value: Positions 510k Bridge as the go-to regulatory reference "
+        "platform. Every visitor browsing guidance documents is a potential lead for "
+        "Predicate Finder Pro, Control Tower, and professional services. The library "
+        "drives organic SEO traffic for high-intent regulatory keywords.")
+
+    pdf.sub("3.6 Lead Magnets & Content")
+    pdf.txt(
+        "  Stanford PMP Course -- Free professional development giveaway (EN + CN + KO)\n"
+        "  FDA 510(k) Pathway Guide -- Branded PDF (EN + CN + KO)\n"
         "  US Market Entry Checklist -- LLC formation, FDA registration, labeling, QSR\n"
-        "  Mandarin Webinars -- Live Control Tower demos, gated replays\n"
-        "  WeChat Official Account -- Content distribution for Chinese market")
+        "  Mandarin and Korean Webinars -- Live Control Tower demos, gated replays\n"
+        "  WeChat Official Account -- Content distribution for Chinese market\n"
+        "  KakaoTalk / Naver -- Content distribution for Korean market")
 
     # ── 4. Revenue Model ──
     pdf.add_page()
@@ -309,22 +331,25 @@ def build():
         "  Stage 5 -- Professional services engagement for hands-on clients\n\n"
         "Conversion targets: Free -> Pro: 5% | Pro -> CT Trial: 15% | Trial -> Paid: 30%")
 
-    pdf.sub("5.2 China Market Channels")
+    pdf.sub("5.2 China & Korea Market Channels")
     pdf.txt(
-        "  WeChat Official Account -- Primary content distribution\n"
+        "  WeChat Official Account -- Primary content distribution (China)\n"
         "  Chinese medical device accelerators (Shenzhen, Suzhou, Hangzhou biotech parks)\n"
+        "  Korean medical device clusters (Wonju, Daegu, Pangyo)\n"
         "  US immigration attorneys (EB-1/E-2 visa clients needing FDA pathway)\n"
         "  CROs and testing labs (UL, TUV, Intertek) -- referral partnerships\n"
-        "  Trade associations: CBIA, AdvaMed, RAPS -- speaking engagements\n"
-        "  LinkedIn + bilingual blog content\n"
-        "  Mandarin webinars with gated replays")
+        "  Trade associations: CBIA, AdvaMed, RAPS, KMDIA -- speaking engagements\n"
+        "  LinkedIn + trilingual blog content\n"
+        "  Mandarin and Korean webinars with gated replays\n"
+        "  KakaoTalk / Naver Blog -- Content distribution for Korean market")
 
     pdf.sub("5.3 SEO & Digital")
     pdf.txt(
         "  Long-tail EN: 'FDA 510(k) process for Chinese company'\n"
         "  Long-tail CN: 'FDA 510(k) shenqing liucheng' (application process)\n"
-        "  Domain: 510kbridge.com + .cn\n"
-        "  Bilingual landing page with live Control Tower demo embed")
+        "  Long-tail KO: 'FDA 510(k) sinchung jeolcha' (application process)\n"
+        "  Domain: 510kbridge.com + .cn + .kr\n"
+        "  Trilingual landing page with live Control Tower demo embed")
 
     # ── 6. Technology Roadmap ──
     pdf.add_page()
@@ -333,6 +358,8 @@ def build():
     pdf.sub("6.1 Year 1 (2026)")
     pdf.txt(
         "  Q1 -- Control Tower v1.1: DMR tracker, FDA Comms tab, message board\n"
+        "  Q1 -- FDA Guidance Documents library (600+ CDRH docs, trilingual)\n"
+        "  Q1 -- Korean language support across all products\n"
         "  Q2 -- Predicate Finder launch with freemium gating\n"
         "  Q2 -- 510k Bridge website launch (510kbridge.com)\n"
         "  Q3 -- Multi-tenant Control Tower (Supabase RLS per client)\n"
@@ -375,7 +402,7 @@ def build():
     pdf.txt(
         "  Founder / CEO -- Business development, product vision, regulatory strategy,\n"
         "    software development, frontend/backend maintenance\n"
-        "  Sales / BD (China) -- WeChat, accelerator relationships")
+        "  Sales / BD (China & Korea) -- WeChat, KakaoTalk, accelerator relationships")
 
     pdf.sub("7.3 Hiring Plan (Years 2-5)")
     pdf.txt(
@@ -416,8 +443,8 @@ def build():
     pdf.add_page()
     pdf.sec(9, "Risk Factors")
     pdf.txt(
-        "  1. Market adoption -- Chinese companies may prefer local consultants\n"
-        "     Mitigation: Bilingual platform, WeChat presence, China-based BD\n\n"
+        "  1. Market adoption -- Chinese and Korean companies may prefer local consultants\n"
+        "     Mitigation: Trilingual platform, WeChat/KakaoTalk presence, in-market BD\n\n"
         "  2. FDA regulatory changes -- New submission requirements\n"
         "     Mitigation: Modular architecture, rapid template updates\n\n"
         "  3. Competition -- Greenlight Guru or Qualio add Chinese support\n"

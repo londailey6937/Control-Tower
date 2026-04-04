@@ -4784,11 +4784,25 @@ function renderDocLibTable(): void {
 
   // Check for overdue reviews
   const today = new Date().toISOString().split("T")[0];
+  const todayMs = new Date(today).getTime();
 
   tbody.innerHTML = sorted
     .map((d) => {
       const overdue =
         d.nextReview && d.nextReview <= today && d.status !== "obsolete";
+      let overdueBadge = "";
+      if (overdue) {
+        const daysOver = Math.floor(
+          (todayMs - new Date(d.nextReview!).getTime()) / 86400000,
+        );
+        const severity =
+          daysOver > 60
+            ? "overdue-critical"
+            : daysOver > 14
+              ? "overdue-danger"
+              : "overdue-warning";
+        overdueBadge = `<span class="doc-overdue-badge ${severity}" title="${t("docLibOverdue")} — ${daysOver}d">⚠ ${daysOver}d</span>`;
+      }
       return `
     <tr data-category="${d.cat}" class="${overdue ? "doc-overdue-row" : ""}">
       <td><span class="doc-cat-badge doc-cat-${d.cat}">${catLabel(d.cat)}</span></td>
@@ -4803,7 +4817,7 @@ function renderDocLibTable(): void {
       <td class="doc-sourceref-cell" title="${d.sourceRef || ""}">${d.sourceRef ? `<span class="doc-sourceref-badge">🔗 ${d.sourceRef}</span>` : "—"}</td>
       <td>
         <button class="doc-status-btn ${docStatusClass(d.status)}" data-action="cycleDocStatus" data-did="${d.id}" title="${ACTIVE_ROLE === "pmp" ? t("clickToChangeStatus") : ""}">${docStatusLabel(d.status)}</button>
-        ${overdue ? `<span class="doc-overdue-badge" title="${t("docLibOverdue")}">⚠</span>` : ""}
+        ${overdueBadge}
       </td>
       <td>${ACTIVE_ROLE === "pmp" ? `<button class="doc-remove-btn" data-action="deleteDocLibItem" data-did="${d.id}" title="${t("docLibRemove")}">✕</button>` : ""}</td>
     </tr>`;
@@ -4868,7 +4882,10 @@ function renderDocLibrary(): void {
       )
       .join("");
 
-    filters.addEventListener("click", (e) => {
+    // Replace element to remove stale listeners, then attach fresh one
+    const fresh = filters.cloneNode(true) as HTMLElement;
+    filters.parentNode!.replaceChild(fresh, filters);
+    fresh.addEventListener("click", (e) => {
       const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(
         "[data-docfilter]",
       );
@@ -4880,10 +4897,10 @@ function renderDocLibrary(): void {
       } else {
         docActiveFilter = clicked;
       }
-      filters
+      fresh
         .querySelectorAll(".filter-btn")
         .forEach((b) => b.classList.remove("active"));
-      const activeBtn = filters.querySelector(
+      const activeBtn = fresh.querySelector(
         `[data-docfilter="${docActiveFilter}"]`,
       );
       if (activeBtn) activeBtn.classList.add("active");
@@ -6856,23 +6873,27 @@ function renderQaSheet(): void {
   const exportBtn = document.getElementById("qaExportBtn");
   if (exportBtn) exportBtn.onclick = exportQaThread;
 
-  // Wire collapse/expand
-  body.addEventListener("click", (e) => {
-    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(
-      "[data-qatoggle]",
-    );
-    if (!btn) return;
-    const id = Number(btn.dataset.qatoggle);
-    if (qaCollapsed.has(id)) qaCollapsed.delete(id);
-    else qaCollapsed.add(id);
-    const wrap = document.getElementById(`qa-wrap-${id}`);
-    if (wrap) wrap.classList.toggle("collapsed");
-    btn.textContent = qaCollapsed.has(id) ? t("qaExpand") : t("qaCollapse");
-  });
+  // Wire collapse/expand — guard against duplicate listeners
+  if (!body.dataset.qaWired) {
+    body.dataset.qaWired = "1";
+    body.addEventListener("click", (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(
+        "[data-qatoggle]",
+      );
+      if (!btn) return;
+      const id = Number(btn.dataset.qatoggle);
+      if (qaCollapsed.has(id)) qaCollapsed.delete(id);
+      else qaCollapsed.add(id);
+      const wrap = document.getElementById(`qa-wrap-${id}`);
+      if (wrap) wrap.classList.toggle("collapsed");
+      btn.textContent = qaCollapsed.has(id) ? t("qaExpand") : t("qaCollapse");
+    });
+  }
 
-  // Wire role picker
+  // Wire role picker — guard against duplicate listeners
   const toolbar = document.getElementById("qaToolbar");
-  if (toolbar) {
+  if (toolbar && !toolbar.dataset.qaWired) {
+    toolbar.dataset.qaWired = "1";
     toolbar.addEventListener("click", (e) => {
       const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(
         "[data-qarole]",
@@ -6888,9 +6909,10 @@ function renderQaSheet(): void {
     });
   }
 
-  // Wire view switcher
+  // Wire view switcher — guard against duplicate listeners
   const views = document.getElementById("mbViews");
-  if (views) {
+  if (views && !views.dataset.qaWired) {
+    views.dataset.qaWired = "1";
     views.addEventListener("click", (e) => {
       const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(
         "[data-mbview]",
