@@ -47,10 +47,10 @@ const GUIDE: HelpSection[] = [
     num: 2,
     title: { en: "Dashboard Overview", cn: "仪表板概览", ko: "대시보드 개요" },
     content: {
-      en: `<p>The dashboard consists of a header bar with role/tier selectors, a horizontal tab navigation bar with 16 functional tabs, and a main content area. Each tab focuses on a specific aspect of the 510(k) project lifecycle.</p>
+      en: `<p>The dashboard consists of a header bar with role/tier selectors, a horizontal tab navigation bar with 18 functional tabs, and a main content area. Each tab focuses on a specific aspect of the 510(k) project lifecycle.</p>
 <h4>Header Bar</h4>
 <ul><li>Project name and subtitle (bilingual EN/CN)</li><li>Role selector: Switch between PMP, Technology, Business, and Accounting views</li><li>Tier indicator: Shows your current subscription tier (Starter/Growth/Scale)</li><li>Language toggle: Switch between English and Chinese interface</li></ul>
-<h4>The 16 Tabs</h4>
+<h4>The 18 Tabs</h4>
 <table class="help-table"><thead><tr><th>Tab</th><th>Description</th></tr></thead><tbody>
 <tr><td><strong>Dual-Track</strong></td><td>Technical and regulatory milestone tracking</td></tr>
 <tr><td><strong>Gate System</strong></td><td>Phase-gate reviews with criteria checklists</td></tr>
@@ -68,12 +68,14 @@ const GUIDE: HelpSection[] = [
 <tr><td><strong>Suppliers</strong></td><td>Supplier qualification and lead-time tracking</td></tr>
 <tr><td><strong>Message Board</strong></td><td>Threaded discussions with decisions and actions</td></tr>
 <tr><td><strong>FDA Comms</strong></td><td>Q-Sub generator, RTA checklist, regulatory timelines (PMP only)</td></tr>
+<tr><td><strong>Predicate Finder</strong></td><td>Search and identify predicate devices for 510(k) substantial equivalence</td></tr>
+<tr><td><strong>FDA Guidance Docs</strong></td><td>Searchable database of FDA guidance documents by topic, status, and date</td></tr>
 </tbody></table>
 <div class="help-warn">⚠️ Some tabs may be restricted based on your role or subscription tier.</div>`,
-      cn: `<p>仪表板由带有角色/层级选择器的标题栏、带有16个功能标签页的水平导航栏和主内容区域组成。每个标签页专注于510(k)项目生命周期的特定方面。</p>
+      cn: `<p>仪表板由带有角色/层级选择器的标题栏、带有18个功能标签页的水平导航栏和主内容区域组成。每个标签页专注于510(k)项目生命周期的特定方面。</p>
 <h4>标题栏</h4>
 <ul><li>项目名称和副标题（中英双语）</li><li>角色选择器：在PMP、技术、商务和财务视图之间切换</li><li>层级指示器：显示当前订阅层级（入门/成长/规模）</li><li>语言切换：在中英文界面之间切换</li></ul>
-<h4>16个标签页</h4>
+<h4>18个标签页</h4>
 <table class="help-table"><thead><tr><th>标签页</th><th>说明</th></tr></thead><tbody>
 <tr><td><strong>双轨制</strong></td><td>技术和法规里程碑跟踪</td></tr>
 <tr><td><strong>门控系统</strong></td><td>带标准清单的阶段门控评审</td></tr>
@@ -91,12 +93,14 @@ const GUIDE: HelpSection[] = [
 <tr><td><strong>供应商</strong></td><td>供应商资质审核和交期跟踪</td></tr>
 <tr><td><strong>消息板</strong></td><td>带决策和行动跟踪的线程讨论</td></tr>
 <tr><td><strong>FDA通讯</strong></td><td>Q-Sub生成器、RTA清单、法规时间线（仅PMP）</td></tr>
+<tr><td><strong>前置器械查找</strong></td><td>搜索和识别510(k)实质等效的前置器械</td></tr>
+<tr><td><strong>FDA指南文件</strong></td><td>按主题、状态和日期搜索的FDA指南文件数据库</td></tr>
 </tbody></table>
 <div class="help-warn">⚠️ 部分标签页可能因您的角色或订阅层级而受限。</div>`,
-      ko: `<p>대시보드는 역할/등급 선택기가 있는 헤더 바, 16개의 기능 탭이 있는 수평 탭 내비게이션 바, 그리고 메인 콘텐츠 영역으로 구성됩니다. 각 탭은 510(k) 프로젝트 수명주기의 특정 측면에 중점을 둡니다.</p>
+      ko: `<p>대시보드는 역할/등급 선택기가 있는 헤더 바, 18개의 기능 탭이 있는 수평 탭 내비게이션 바, 그리고 메인 콘텐츠 영역으로 구성됩니다. 각 탭은 510(k) 프로젝트 수명주기의 특정 측면에 중점을 둡니다.</p>
 <h4>헤더 바</h4>
 <ul><li>프로젝트 이름 및 부제목 (다국어 EN/CN/KO)</li><li>역할 선택기: PMP, 기술, 비즈니스, 회계 뷰 간 전환</li><li>등급 표시기: 현재 구독 등급 표시 (Starter/Growth/Scale)</li><li>언어 전환: 영어, 중국어, 한국어 인터페이스 간 전환</li></ul>
-<h4>16개 탭</h4>
+<h4>18개 탭</h4>
 <table class="help-table"><thead><tr><th>탭</th><th>설명</th></tr></thead><tbody>
 <tr><td><strong>듀얼 트랙</strong></td><td>기술 및 규제 마일스톤 추적</td></tr>
 <tr><td><strong>게이트 시스템</strong></td><td>기준 체크리스트를 포함한 단계별 게이트 심사</td></tr>
@@ -114,6 +118,8 @@ const GUIDE: HelpSection[] = [
 <tr><td><strong>공급업체</strong></td><td>공급업체 자격 심사 및 리드타임 추적</td></tr>
 <tr><td><strong>게시판</strong></td><td>의사결정 및 조치 추적이 포함된 스레드 토론</td></tr>
 <tr><td><strong>FDA 커뮤니케이션</strong></td><td>Q-Sub 생성기, RTA 체크리스트, 규제 타임라인 (PMP 전용)</td></tr>
+<tr><td><strong>선행기기 검색</strong></td><td>510(k) 실질적 동등성을 위한 선행기기 검색 및 식별</td></tr>
+<tr><td><strong>FDA 지침 문서</strong></td><td>주제, 상태, 날짜별로 검색 가능한 FDA 지침 문서 데이터베이스</td></tr>
 </tbody></table>
 <div class="help-warn">⚠️ 일부 탭은 역할 또는 구독 등급에 따라 제한될 수 있습니다.</div>`,
     },
@@ -909,6 +915,188 @@ const GUIDE: HelpSection[] = [
 <tr><td><strong>eSTAR</strong></td><td>510(k) 신청을 위한 FDA의 표준화된 전자 제출 형식.</td></tr>
 <tr><td><strong>openFDA</strong></td><td>510(k) 허가, 이상사례 및 리콜에 대한 검색 가능한 접근을 제공하는 FDA의 공개 API.</td></tr>
 </tbody></table>`,
+    },
+  },
+  {
+    num: 25,
+    title: {
+      en: "FDA Guidance Document Search",
+      cn: "FDA指南文件搜索",
+      ko: "FDA 지침 문서 검색",
+    },
+    content: {
+      en: `<p>The <strong>FDA Guidance Document Search</strong> tab provides a searchable database of FDA guidance documents relevant to medical device development. This is a free-access tool available to all roles and subscription tiers.</p>
+<h4>Key Features</h4>
+<ul>
+<li><strong>Full-Text Search:</strong> Search across document titles, topics, and descriptions to find relevant FDA guidance</li>
+<li><strong>Topic Filtering:</strong> Filter documents by regulatory topic area (e.g., biocompatibility, software, labeling, clinical data)</li>
+<li><strong>Status Filtering:</strong> View documents by status — Final, Draft, or Withdrawn</li>
+<li><strong>Date Sorting:</strong> Sort by issue date to find the most current guidance available</li>
+<li><strong>Direct PDF Access:</strong> Click through to the official FDA page or download the PDF directly</li>
+<li><strong>Open for Comment:</strong> Identify draft guidance documents that are currently open for public comment</li>
+<li><strong>Docket Numbers:</strong> View FDA docket numbers for referencing in regulatory submissions</li>
+</ul>
+<h4>How to Use</h4>
+<ol>
+<li>Navigate to the <strong>FDA Guidance Docs</strong> tab in the Regulatory group</li>
+<li>Use the search bar to enter keywords related to your device type or regulatory question</li>
+<li>Apply topic and status filters to narrow results</li>
+<li>Click a document title to view the full guidance on the FDA website</li>
+<li>Use the PDF link to download for offline reference</li>
+</ol>
+<h4>Integration with Other Tabs</h4>
+<p>Use guidance documents found here to inform your <strong>Regulatory Tracker</strong> standards compliance, strengthen <strong>Pre-Sub Questions</strong> on the Message Board, and support <strong>FDA Comms</strong> cover letter preparation.</p>
+<div class="help-tip">💡 This tab is available on all tiers (including free/demo mode) as a lead-magnet tool. No login required.</div>`,
+      cn: `<p><strong>FDA指南文件搜索</strong>标签页提供了与医疗器械开发相关的FDA指南文件可搜索数据库。这是所有角色和订阅层级均可免费使用的工具。</p>
+<h4>主要功能</h4>
+<ul>
+<li><strong>全文搜索：</strong>跨文档标题、主题和描述搜索，查找相关FDA指南</li>
+<li><strong>主题筛选：</strong>按监管主题领域筛选文档（如生物相容性、软件、标签、临床数据）</li>
+<li><strong>状态筛选：</strong>按状态查看文档——最终版、草案或已撤回</li>
+<li><strong>日期排序：</strong>按发布日期排序，查找最新可用指南</li>
+<li><strong>直接PDF访问：</strong>点击进入FDA官方页面或直接下载PDF</li>
+<li><strong>公开征求意见：</strong>识别当前公开征求公众意见的草案指南文件</li>
+<li><strong>案卷编号：</strong>查看FDA案卷编号，用于监管提交中的引用</li>
+</ul>
+<h4>使用方法</h4>
+<ol>
+<li>导航到法规组中的<strong>FDA指南文件</strong>标签页</li>
+<li>在搜索栏中输入与您的器械类型或法规问题相关的关键词</li>
+<li>应用主题和状态筛选器缩小结果范围</li>
+<li>点击文档标题在FDA网站上查看完整指南</li>
+<li>使用PDF链接下载供离线参考</li>
+</ol>
+<h4>与其他标签页的集成</h4>
+<p>使用此处找到的指南文件来为您的<strong>法规跟踪</strong>标准合规提供信息，加强消息板上的<strong>Pre-Sub问题</strong>，并支持<strong>FDA通讯</strong>的封面信准备。</p>
+<div class="help-tip">💡 此标签页在所有层级（包括免费/演示模式）均可用，作为引流工具。无需登录。</div>`,
+      ko: `<p><strong>FDA 지침 문서 검색</strong> 탭은 의료기기 개발과 관련된 FDA 지침 문서의 검색 가능한 데이터베이스를 제공합니다. 모든 역할과 구독 등급에서 무료로 사용할 수 있는 도구입니다.</p>
+<h4>주요 기능</h4>
+<ul>
+<li><strong>전문 검색:</strong> 문서 제목, 주제 및 설명 전체에서 관련 FDA 지침을 검색</li>
+<li><strong>주제 필터링:</strong> 규제 주제 영역별 문서 필터링 (예: 생체적합성, 소프트웨어, 라벨링, 임상 데이터)</li>
+<li><strong>상태 필터링:</strong> 상태별 문서 조회 — 최종, 초안 또는 철회</li>
+<li><strong>날짜 정렬:</strong> 발행일 기준 정렬로 최신 지침 확인</li>
+<li><strong>직접 PDF 접근:</strong> FDA 공식 페이지로 이동하거나 PDF 직접 다운로드</li>
+<li><strong>의견 수렴 중:</strong> 현재 공개 의견 수렴 중인 초안 지침 문서 식별</li>
+<li><strong>문서 번호:</strong> 규제 제출에서 참조용 FDA 문서 번호 확인</li>
+</ul>
+<h4>사용 방법</h4>
+<ol>
+<li>규제 그룹의 <strong>FDA 지침 문서</strong> 탭으로 이동</li>
+<li>검색창에 기기 유형이나 규제 질문 관련 키워드 입력</li>
+<li>주제 및 상태 필터를 적용하여 결과 범위 축소</li>
+<li>문서 제목을 클릭하여 FDA 웹사이트에서 전체 지침 확인</li>
+<li>PDF 링크를 사용하여 오프라인 참조용으로 다운로드</li>
+</ol>
+<h4>다른 탭과의 연동</h4>
+<p>여기서 찾은 지침 문서를 사용하여 <strong>규제 추적기</strong> 표준 준수에 대한 정보를 제공하고, 게시판의 <strong>Pre-Sub 질문</strong>을 강화하며, <strong>FDA 커뮤니케이션</strong> 커버 레터 준비를 지원하세요.</p>
+<div class="help-tip">💡 이 탭은 모든 등급(무료/데모 모드 포함)에서 리드 마그넷 도구로 사용 가능합니다. 로그인 불필요.</div>`,
+    },
+  },
+  {
+    num: 26,
+    title: {
+      en: "QMS-Lite for Startups",
+      cn: "初创企业精简版QMS",
+      ko: "스타트업을 위한 QMS-Lite",
+    },
+    content: {
+      en: `<p><strong>QMS-Lite</strong> is not a single tab — it's a cross-cutting capability built into Control Tower that provides startups with essential Quality Management System (QMS) functionality without the cost or complexity of enterprise platforms like Greenlight Guru or MasterControl.</p>
+<h4>What Is QMS-Lite?</h4>
+<p>FDA requires medical device companies to maintain a Quality System under 21 CFR 820. Traditional QMS platforms cost $50K–$200K/year and take months to deploy. Control Tower's QMS-Lite integrates the most critical QMS elements directly into your project workflow:</p>
+<h4>QMS Components Across Control Tower</h4>
+<table class="help-table"><thead><tr><th>QMS Requirement</th><th>CFR Reference</th><th>Control Tower Tab</th></tr></thead><tbody>
+<tr><td>Design History File (DHF)</td><td>21 CFR 820.30</td><td><strong>Actions</strong> → DHF Tracker</td></tr>
+<tr><td>Device Master Record (DMR)</td><td>21 CFR 820.181</td><td><strong>Actions</strong> → DMR Tracker</td></tr>
+<tr><td>Corrective &amp; Preventive Actions</td><td>21 CFR 820.90</td><td><strong>Actions</strong> → CAPA Log</td></tr>
+<tr><td>Document Controls</td><td>21 CFR 820.40</td><td><strong>Document Control</strong></td></tr>
+<tr><td>Risk Management</td><td>ISO 14971</td><td><strong>Risk Dashboard</strong></td></tr>
+<tr><td>Supplier Controls</td><td>21 CFR 820.50</td><td><strong>Suppliers</strong></td></tr>
+<tr><td>Design Reviews (Gate Reviews)</td><td>21 CFR 820.30(e)</td><td><strong>Gate System</strong></td></tr>
+<tr><td>Audit Trail / Records</td><td>21 CFR Part 11</td><td><strong>Audit Trail</strong></td></tr>
+<tr><td>Personnel &amp; Training</td><td>21 CFR 820.25</td><td><strong>Resources</strong></td></tr>
+</tbody></table>
+<h4>Why QMS-Lite Matters for Startups</h4>
+<ul>
+<li><strong>Day-1 Compliance:</strong> QMS evidence recording starts immediately — no separate system setup needed</li>
+<li><strong>Integrated Workflow:</strong> Quality records are created as part of normal project management, not duplicated in a separate QMS</li>
+<li><strong>Audit-Ready:</strong> 21 CFR Part 11-compliant audit trail captures every document status change, CAPA action, and gate decision</li>
+<li><strong>Cost Savings:</strong> Eliminates the need for a standalone QMS until your company scales beyond 510(k) into PMA or multi-product portfolios</li>
+<li><strong>FDA Aligned:</strong> DHF and DMR trackers mirror FDA's expected documentation structure, reducing RTA rejections</li>
+</ul>
+<h4>Recommended Workflow</h4>
+<ol>
+<li>Use the <strong>Setup Wizard</strong> to select your device template — QMS documents are auto-populated</li>
+<li>Track design controls through <strong>Dual-Track Milestones</strong> and <strong>Gate System</strong></li>
+<li>Manage risks in the <strong>Risk Dashboard</strong> — link CAPAs when issues arise</li>
+<li>Use <strong>Document Control</strong> to manage all quality documents with version control</li>
+<li>Review the <strong>Audit Trail</strong> before any FDA interaction — it's your compliance evidence</li>
+</ol>
+<div class="help-tip">💡 QMS-Lite covers the essential elements needed for a first 510(k) submission. As your company grows, you can transition to a full QMS platform while retaining Control Tower for project management.</div>`,
+      cn: `<p><strong>精简版QMS</strong>不是单独的标签页——它是内置于Control Tower中的跨功能能力，为初创企业提供基本的质量管理体系(QMS)功能，无需企业级平台（如Greenlight Guru或MasterControl）的高成本和复杂性。</p>
+<h4>什么是精简版QMS？</h4>
+<p>FDA要求医疗器械公司根据21 CFR 820维护质量体系。传统QMS平台每年费用$50K–$200K，部署需要数月。Control Tower的精简版QMS将最关键的QMS要素直接集成到您的项目工作流程中：</p>
+<h4>Control Tower中的QMS组件</h4>
+<table class="help-table"><thead><tr><th>QMS要求</th><th>CFR参考</th><th>Control Tower标签页</th></tr></thead><tbody>
+<tr><td>设计历史文件(DHF)</td><td>21 CFR 820.30</td><td><strong>行动项</strong> → DHF跟踪器</td></tr>
+<tr><td>设备主记录(DMR)</td><td>21 CFR 820.181</td><td><strong>行动项</strong> → DMR跟踪器</td></tr>
+<tr><td>纠正与预防措施</td><td>21 CFR 820.90</td><td><strong>行动项</strong> → CAPA日志</td></tr>
+<tr><td>文档控制</td><td>21 CFR 820.40</td><td><strong>文档控制</strong></td></tr>
+<tr><td>风险管理</td><td>ISO 14971</td><td><strong>风险看板</strong></td></tr>
+<tr><td>供应商控制</td><td>21 CFR 820.50</td><td><strong>供应商</strong></td></tr>
+<tr><td>设计评审（门控评审）</td><td>21 CFR 820.30(e)</td><td><strong>门控系统</strong></td></tr>
+<tr><td>审计追踪/记录</td><td>21 CFR Part 11</td><td><strong>审计追踪</strong></td></tr>
+<tr><td>人员与培训</td><td>21 CFR 820.25</td><td><strong>资源</strong></td></tr>
+</tbody></table>
+<h4>精简版QMS对初创企业的重要性</h4>
+<ul>
+<li><strong>第一天合规：</strong>QMS证据记录立即开始——无需单独设置系统</li>
+<li><strong>集成工作流：</strong>质量记录作为正常项目管理的一部分创建，无需在单独的QMS中重复</li>
+<li><strong>审计就绪：</strong>21 CFR Part 11合规的审计追踪捕获每个文档状态更改、CAPA操作和门控决策</li>
+<li><strong>成本节省：</strong>在您的公司扩展到PMA或多产品组合之前，无需独立的QMS</li>
+<li><strong>FDA对齐：</strong>DHF和DMR跟踪器反映FDA预期的文档结构，减少RTA拒绝</li>
+</ul>
+<h4>推荐工作流</h4>
+<ol>
+<li>使用<strong>设置向导</strong>选择您的器械模板——QMS文档自动填充</li>
+<li>通过<strong>双轨制里程碑</strong>和<strong>门控系统</strong>跟踪设计控制</li>
+<li>在<strong>风险看板</strong>中管理风险——出现问题时链接CAPA</li>
+<li>使用<strong>文档控制</strong>管理所有质量文档及版本控制</li>
+<li>在任何FDA互动前审查<strong>审计追踪</strong>——这是您的合规证据</li>
+</ol>
+<div class="help-tip">💡 精简版QMS涵盖首次510(k)提交所需的基本要素。随着公司成长，您可以过渡到完整的QMS平台，同时保留Control Tower用于项目管理。</div>`,
+      ko: `<p><strong>QMS-Lite</strong>는 별도의 탭이 아닙니다 — Control Tower에 내장된 크로스-커팅 기능으로, 스타트업에게 Greenlight Guru나 MasterControl 같은 엔터프라이즈 플랫폼의 비용이나 복잡성 없이 필수 품질 관리 시스템(QMS) 기능을 제공합니다.</p>
+<h4>QMS-Lite란?</h4>
+<p>FDA는 의료기기 회사가 21 CFR 820에 따른 품질 시스템을 유지하도록 요구합니다. 기존 QMS 플랫폼은 연간 $50K–$200K의 비용이 들며 배포에 수개월이 걸립니다. Control Tower의 QMS-Lite는 가장 중요한 QMS 요소를 프로젝트 워크플로에 직접 통합합니다:</p>
+<h4>Control Tower의 QMS 구성요소</h4>
+<table class="help-table"><thead><tr><th>QMS 요구사항</th><th>CFR 참조</th><th>Control Tower 탭</th></tr></thead><tbody>
+<tr><td>설계 이력 파일 (DHF)</td><td>21 CFR 820.30</td><td><strong>조치 항목</strong> → DHF 추적기</td></tr>
+<tr><td>장치 마스터 레코드 (DMR)</td><td>21 CFR 820.181</td><td><strong>조치 항목</strong> → DMR 추적기</td></tr>
+<tr><td>시정 및 예방 조치</td><td>21 CFR 820.90</td><td><strong>조치 항목</strong> → CAPA 로그</td></tr>
+<tr><td>문서 관리</td><td>21 CFR 820.40</td><td><strong>문서 관리</strong></td></tr>
+<tr><td>위험 관리</td><td>ISO 14971</td><td><strong>위험 대시보드</strong></td></tr>
+<tr><td>공급업체 관리</td><td>21 CFR 820.50</td><td><strong>공급업체</strong></td></tr>
+<tr><td>설계 심사 (게이트 심사)</td><td>21 CFR 820.30(e)</td><td><strong>게이트 시스템</strong></td></tr>
+<tr><td>감사 추적/기록</td><td>21 CFR Part 11</td><td><strong>감사 추적</strong></td></tr>
+<tr><td>인력 및 교육</td><td>21 CFR 820.25</td><td><strong>리소스</strong></td></tr>
+</tbody></table>
+<h4>스타트업에 QMS-Lite가 중요한 이유</h4>
+<ul>
+<li><strong>첫날부터 준수:</strong> QMS 증거 기록이 즉시 시작 — 별도 시스템 설정 불필요</li>
+<li><strong>통합 워크플로:</strong> 품질 기록이 일반 프로젝트 관리의 일부로 생성되며 별도 QMS에 중복 입력 불필요</li>
+<li><strong>감사 대비:</strong> 21 CFR Part 11 준수 감사 추적이 모든 문서 상태 변경, CAPA 조치 및 게이트 결정을 기록</li>
+<li><strong>비용 절감:</strong> 회사가 PMA 또는 다중 제품 포트폴리오로 확장하기 전까지 독립형 QMS 불필요</li>
+<li><strong>FDA 정렬:</strong> DHF 및 DMR 추적기가 FDA 예상 문서 구조를 반영하여 RTA 거부 감소</li>
+</ul>
+<h4>권장 워크플로</h4>
+<ol>
+<li><strong>설정 마법사</strong>를 사용하여 기기 템플릿 선택 — QMS 문서 자동 입력</li>
+<li><strong>듀얼 트랙 마일스톤</strong>과 <strong>게이트 시스템</strong>으로 설계 관리 추적</li>
+<li><strong>위험 대시보드</strong>에서 위험 관리 — 문제 발생 시 CAPA 연결</li>
+<li><strong>문서 관리</strong>를 사용하여 버전 관리와 함께 모든 품질 문서 관리</li>
+<li>FDA와의 모든 상호작용 전에 <strong>감사 추적</strong> 검토 — 이것이 준수 증거입니다</li>
+</ol>
+<div class="help-tip">💡 QMS-Lite는 첫 510(k) 제출에 필요한 필수 요소를 포함합니다. 회사가 성장하면 프로젝트 관리를 위해 Control Tower를 유지하면서 전체 QMS 플랫폼으로 전환할 수 있습니다.</div>`,
     },
   },
 ];
