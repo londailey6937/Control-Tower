@@ -98,7 +98,7 @@ def build_english():
     pdf.ln(6)
     pdf.set_font("Helvetica", "I", 11)
     pdf.set_text_color(*GRAY)
-    pdf.cell(0, 7, "Version 1.0 | March 2026", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, "Version 2.0 | April 2026", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 7, "510k Bridge, Inc.", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(20)
     pdf.set_font("Helvetica", "", 10)
@@ -137,7 +137,7 @@ def build_english():
     pdf.sub("2.1 Elevator Pitch (30 seconds)")
     pdf.txt(
         "'510k Bridge is the only bilingual platform that combines AI-powered "
-        "predicate device research, a 16-tab project management dashboard, lightweight QMS, "
+        "predicate device research, a 17-tab project management dashboard, lightweight QMS, "
         "and FDA communications automation -- purpose-built "
         "for Chinese medical device companies pursuing 510(k) clearance. Our Predicate "
         "Finder tool is included free with all service tiers.'")
@@ -240,7 +240,7 @@ def build_english():
         "     -- Show predicate chain tracing (their eyes light up here)\n"
         "     -- Generate SE argument draft\n"
         "     'This tool is included with every service tier.'\n\n"
-        "  2. Switch to Control Tower demo (control-tower-bmx.pages.dev)\n"
+        "  2. Switch to Control Tower demo (ct.510kbridge.com)\n"
         "     -- Show dual-track milestones in Chinese\n"
         "     -- Toggle to English to demonstrate bilingual\n"
         "     -- Open Gate System, show PMP decision flow\n"
@@ -293,11 +293,11 @@ def build_english():
     pdf.bul("510(k) Bridge Service Fact Sheet (EN + CN)")
     pdf.bul("Control Tower User Guide (EN + CN)")
     pdf.bul("PMP User Guide (EN + CN)")
-    pdf.bul("Demo dashboard: control-tower-bmx.pages.dev")
+    pdf.bul("Demo dashboard: ct.510kbridge.com")
 
     pdf.sub("6.3 Demo Links")
-    pdf.kv("Predicate Finder", "predicate-finder.pages.dev (included with services)")
-    pdf.kv("Control Tower Demo", "control-tower-bmx.pages.dev (read-only demo)")
+    pdf.kv("Predicate Finder", "510kbridge.com/predicate-finder (included with services)")
+    pdf.kv("Control Tower Demo", "ct.510kbridge.com (read-only demo)")
     pdf.kv("510k Bridge Website", "510kbridge.com (bilingual landing page)")
 
     # 7. Metrics & Targets
@@ -426,7 +426,7 @@ def build_chinese():
     pdf.sub("2.1 \u7535\u68af\u6f14\u8bf4 (30\u79d2)")
     pdf.txt(
         "'510k Bridge\u662f\u552f\u4e00\u5c06AI\u9a71\u52a8\u7684\u5148\u5bfc\u5668\u68b0\u7814\u7a76\u3001"
-        "16\u6807\u7b7ePM\u4eea\u8868\u677f\u3001\u8f7b\u91cf\u7ea7QMS\u548cFDA\u901a\u4fe1\u81ea\u52a8\u5316"
+        "17\u6807\u7b7ePM\u4eea\u8868\u677f\u3001\u8f7b\u91cf\u7ea7QMS\u548cFDA\u901a\u4fe1\u81ea\u52a8\u5316"
         "\u7ed3\u5408\u7684\u53cc\u8bed\u5e73\u53f0\uff0c\u4e13\u4e3a\u4e2d\u56fd\u533b\u7597\u5668\u68b0"
         "\u4f01\u4e1a\u8ffd\u6c42510(k)\u6279\u51c6\u800c\u6253\u9020\u3002'")
 
@@ -445,7 +445,7 @@ def build_chinese():
     pdf.bul("QMS-Lite -- \u4e13\u4e3a\u521d\u521b\u4f01\u4e1a\u8bbe\u8ba1\u7684\u8f7b\u91cf\u7ea7\u8d28\u91cf\u7ba1\u7406\u7cfb\u7edf")
     pdf.bul("FDA\u901a\u4fe1\u4e2d\u5fc3 -- Q-Sub\u3001RTA 17\u9879\u81ea\u68c0\u3001SE\u51b3\u7b56\u6d41\u7a0b")
     pdf.bul("\u8de8\u5883\u5b9e\u4f53\u8bbe\u7acb -- Delaware\u516c\u53f8\u3001\u94f6\u884c\u5f00\u6237\u3001\u7f8e\u56fd\u4ee3\u7406\u4eba")
-    pdf.bul("16\u6807\u7b7e\u4eea\u8868\u677f -- \u53cc\u8f68\u3001\u95e8\u7981\u3001\u98ce\u9669\u3001\u9884\u7b97\u3001\u6295\u8d44\u8005")
+    pdf.bul("17\u6807\u7b7e\u4eea\u8868\u677f -- \u53cc\u8f68\u3001\u95e8\u7981\u3001\u98ce\u9669\u3001\u9884\u7b97\u3001\u6295\u8d44\u8005")
     pdf.bul("\u4e0a\u6d77\u529e\u4e8b\u5904 -- \u672c\u5730\u652f\u6301\u548c\u5546\u52a1\u62d3\u5c55")
     pdf.bul("PMP\u8ba4\u8bc1\u9879\u76ee\u7ecf\u7406 -- \u4e0d\u662f\u5355\u7eaf\u7684\u8f6f\u4ef6")
 
@@ -464,7 +464,7 @@ def build_chinese():
     pdf.txt(
         "  Starter ($500/\u6708) -- 1\u4e2a\u9879\u76ee\uff0c\u53ea\u8bfb\u4eea\u8868\u677f\n"
         "  Growth ($1,000/\u6708) -- 2\u4e2a\u9879\u76ee\uff0c\u5b8c\u6574\u4eea\u8868\u677f\uff0c\u6d88\u606f\u677f\n"
-        "  Scale ($2,000/\u6708) -- \u65e0\u9650\u9879\u76ee\uff0c\u5d4c\u5165Predicate Finder\uff0c\u80a1\u6743\u8868\uff0cFDA\u901a\u4fe1")
+        "  Scale ($2,000/\u6708) -- \u65e0\u9650\u9879\u76ee\uff0c\u5d4c\u5165Predicate Finder\uff0cFDA\u901a\u4fe1")
 
     pdf.sub("3.3 QMS-Lite \u521d\u521b\u7248")
     pdf.txt(
