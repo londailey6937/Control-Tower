@@ -1311,10 +1311,50 @@ function renderRisks(): void {
 // ── TIMELINE ──────────────────────────────────
 function renderTimeline(): void {
   const container = document.getElementById("timelineVisual")!;
-  container.innerHTML = TIMELINE_EVENTS.map(
-    (ev) => `
+  const lang = getLang();
+  const isCN = lang === "cn";
+  const isKO = lang === "ko";
+
+  // Compute MDUFA day for mini clock badge
+  const totalDur =
+    Number(TIMELINE_EVENTS[TIMELINE_EVENTS.length - 1]?.month) || 12;
+  const submissionMonth = Math.round(totalDur * 0.8);
+  const pMonth = PROJECT.currentMonth;
+  const mdufaStarted = pMonth >= submissionMonth;
+  const mdufaDay = mdufaStarted
+    ? Math.min(100, Math.round((pMonth - submissionMonth) * 30))
+    : 0;
+  const mdufaColor = !mdufaStarted
+    ? "#475569"
+    : mdufaDay >= 90
+      ? "#ef4444"
+      : mdufaDay >= 60
+        ? "#f59e0b"
+        : "#22c55e";
+
+  container.innerHTML = TIMELINE_EVENTS.map((ev) => {
+    // Show mini MDUFA clock badge at the submission milestone month
+    const isSubmissionMonth = ev.month === submissionMonth;
+    const mdufaBadge = isSubmissionMonth
+      ? `<span class="tl-mdufa-badge" style="border-color: ${mdufaColor}; color: ${mdufaColor};" title="${
+          isKO
+            ? "MDUFA 90일 심사 클록"
+            : isCN
+              ? "MDUFA 90天审查时钟"
+              : "MDUFA 90-Day Review Clock"
+        }">⏱️ ${
+          mdufaStarted
+            ? `${isKO ? `${mdufaDay}일` : isCN ? `第${mdufaDay}天` : `Day ${mdufaDay}`} / 90`
+            : isKO
+              ? "제출 전"
+              : isCN
+                ? "提交前"
+                : "Pre-Sub"
+        }</span>`
+      : "";
+    return `
       <div class="timeline-event impact-${ev.impact}">
-        <span class="tl-month-badge">M+${ev.month}</span>
+        <span class="tl-month-badge">M+${ev.month}</span>${mdufaBadge}
         <div class="tl-columns">
           <div class="tl-col tl-tech">
             <h4>${t("tlTechnical")}</h4>
@@ -1326,8 +1366,8 @@ function renderTimeline(): void {
           </div>
         </div>
       </div>
-    `,
-  ).join("");
+    `;
+  }).join("");
 }
 
 // ── REGULATORY STANDARDS TABLE ────────────────
@@ -5524,6 +5564,120 @@ function renderFdaComms(): void {
     },
   ];
 
+  // ── MDUFA 90-Day Clock computation ──
+  const submissionMonth = Math.round(totalDur * 0.8);
+  const monthsPostSubmission = Math.max(0, pMonth - submissionMonth);
+  const mdufaDay = Math.min(100, Math.round(monthsPostSubmission * 30)); // ~30 days per month
+  const mdufaStarted = pMonth >= submissionMonth;
+  const mdufaPaused = false; // future: track AI request pause
+  const mdufaPauseDays = 0;
+
+  // Determine MDUFA status label
+  const mdufaStatus = !mdufaStarted
+    ? isKO
+      ? "제출 전"
+      : isCN
+        ? "提交前"
+        : "Pre-Submission"
+    : mdufaPaused
+      ? isKO
+        ? `클록 일시정지 (${mdufaPauseDays}일)`
+        : isCN
+          ? `时钟暂停 (${mdufaPauseDays}天)`
+          : `Clock Paused (${mdufaPauseDays} days)`
+      : mdufaDay >= 90
+        ? isKO
+          ? "결정 대기"
+          : isCN
+            ? "等待决定"
+            : "Decision Pending"
+        : mdufaDay >= 60
+          ? isKO
+            ? "실질 심사 중"
+            : isCN
+              ? "实质性审查中"
+              : "Under Substantive Review"
+          : mdufaDay >= 15
+            ? isKO
+              ? "RTA 통과"
+              : isCN
+                ? "RTA已通过"
+                : "RTA Cleared"
+            : mdufaDay >= 1
+              ? isKO
+                ? "RTA 심사 중"
+                : isCN
+                  ? "RTA筛查中"
+                  : "RTA Screening"
+              : isKO
+                ? "제출됨"
+                : isCN
+                  ? "已提交"
+                  : "Submitted";
+
+  // SVG radial clock for MDUFA 90-day review
+  const clockRadius = 70;
+  const clockCircumference = 2 * Math.PI * clockRadius;
+  const clockProgress = mdufaStarted ? Math.min(mdufaDay / 90, 1) : 0;
+  const clockDashOffset = clockCircumference * (1 - clockProgress);
+  const clockColor = !mdufaStarted
+    ? "#475569"
+    : mdufaPaused
+      ? "#f59e0b"
+      : mdufaDay >= 90
+        ? "#ef4444"
+        : mdufaDay >= 60
+          ? "#f59e0b"
+          : "#22c55e";
+
+  // Milestone markers on radial clock (Day 15, 60, 90 at proportional angles)
+  const clockMarkers = [
+    { day: 15, label: "RTA" },
+    { day: 60, label: isKO ? "심사" : isCN ? "审查" : "Review" },
+    { day: 90, label: isKO ? "결정" : isCN ? "决定" : "Decision" },
+  ];
+  const markersSvg = clockMarkers
+    .map((mk) => {
+      const angle = (mk.day / 90) * 360 - 90; // start from top (-90°)
+      const rad = (angle * Math.PI) / 180;
+      const mx = 85 + (clockRadius + 14) * Math.cos(rad);
+      const my = 85 + (clockRadius + 14) * Math.sin(rad);
+      const dotX = 85 + clockRadius * Math.cos(rad);
+      const dotY = 85 + clockRadius * Math.sin(rad);
+      const isPast = mdufaStarted && mdufaDay >= mk.day;
+      return `<circle cx="${dotX}" cy="${dotY}" r="4" fill="${isPast ? "#22c55e" : "#475569"}" />
+      <text x="${mx}" y="${my}" text-anchor="middle" dominant-baseline="central" fill="var(--dim)" font-size="9" font-weight="600">${mk.label}</text>`;
+    })
+    .join("");
+
+  const mdufaClockSvg = `
+    <div class="mdufa-clock-container">
+      <svg class="mdufa-clock-svg" viewBox="0 0 170 170" width="170" height="170">
+        <!-- Background circle -->
+        <circle cx="85" cy="85" r="${clockRadius}" fill="none" stroke="var(--border)" stroke-width="10" />
+        <!-- Progress arc -->
+        <circle cx="85" cy="85" r="${clockRadius}" fill="none" stroke="${clockColor}" stroke-width="10"
+          stroke-dasharray="${clockCircumference}" stroke-dashoffset="${clockDashOffset}"
+          stroke-linecap="round" transform="rotate(-90 85 85)"
+          style="transition: stroke-dashoffset 0.8s ease, stroke 0.4s ease;" />
+        <!-- Milestone markers -->
+        ${markersSvg}
+        <!-- Center text -->
+        <text x="85" y="${mdufaStarted ? 76 : 85}" text-anchor="middle" dominant-baseline="central"
+          fill="${clockColor}" font-size="${mdufaStarted ? 28 : 14}" font-weight="700" font-family="var(--font)">
+          ${mdufaStarted ? mdufaDay : isKO ? "대기" : isCN ? "待定" : "—"}
+        </text>
+        ${
+          mdufaStarted
+            ? `<text x="85" y="100" text-anchor="middle" dominant-baseline="central"
+          fill="var(--dim)" font-size="11" font-family="var(--font)">/ 90 ${isKO ? "일" : isCN ? "天" : "days"}</text>`
+            : ""
+        }
+      </svg>
+      ${mdufaPaused ? '<div class="mdufa-clock-pause">⏸️</div>' : ""}
+      <div class="mdufa-clock-status" style="color: ${clockColor}">${mdufaStatus}</div>
+    </div>`;
+
   // 510(k) MDUFA review timeline milestones
   const mdufaMilestones = [
     {
@@ -6126,17 +6280,20 @@ function renderFdaComms(): void {
       </div>
     </div>
 
-    <!-- 510(k) MDUFA Review Timeline -->
+    <!-- 510(k) MDUFA 90-Day Review Clock -->
     <div class="fda-card fda-card-wide">
-      <h3>⏱️ ${isKO ? "510(k) MDUFA 심사 타임라인" : isCN ? "510(k) MDUFA审查时间线" : "510(k) MDUFA Review Timeline"}</h3>
+      <h3>⏱️ ${isKO ? "MDUFA 90일 심사 클록" : isCN ? "MDUFA 90天审查时钟" : "MDUFA 90-Day Review Clock"}</h3>
       <p class="fda-card-hint">${
         isKO
-          ? "MDUFA V 심사 목표: 표준 510(k)의 경우 90일. AI 서한 시 180일 추가."
+          ? "FDA의 법정 심사 카운트다운 — 프로젝트 타임라인 내에 중첩. AI 서한 시 클록 일시정지."
           : isCN
-            ? "MDUFA V审查目标：标准510(k)为90天。AI通知增加180天。"
-            : "MDUFA V review goals: 90 calendar days for standard 510(k). AI letter adds 180 days."
+            ? "FDA法定审查倒计时——嵌套在项目时间线内。AI通知暂停时钟。"
+            : "FDA's statutory review countdown — nested inside your project Timeline. AI letter pauses the clock."
       }</p>
-      <div class="fda-timeline">
+      <div class="mdufa-clock-row">
+        ${mdufaClockSvg}
+        <div class="mdufa-clock-timeline">
+          <div class="fda-timeline">
         ${mdufaMilestones
           .map(
             (m) => `<div class="fda-tl-item fda-tl-${m.status}">
@@ -6149,6 +6306,8 @@ function renderFdaComms(): void {
         </div>`,
           )
           .join("")}
+          </div>
+        </div>
       </div>
     </div>
 
