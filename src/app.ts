@@ -1332,9 +1332,17 @@ function renderTimeline(): void {
         ? "#f59e0b"
         : "#22c55e";
 
+  // Find the timeline event closest to the computed submission month
+  const badgeMonth = TIMELINE_EVENTS.reduce((closest, ev) =>
+    Math.abs(ev.month - submissionMonth) < Math.abs(closest - submissionMonth)
+      ? ev.month
+      : closest,
+    TIMELINE_EVENTS[0]?.month ?? 0,
+  );
+
   container.innerHTML = TIMELINE_EVENTS.map((ev) => {
-    // Show mini MDUFA clock badge at the submission milestone month
-    const isSubmissionMonth = ev.month === submissionMonth;
+    // Show mini MDUFA clock badge at the nearest event to submission month
+    const isSubmissionMonth = ev.month === badgeMonth;
     const mdufaBadge = isSubmissionMonth
       ? `<span class="tl-mdufa-badge" style="border-color: ${mdufaColor}; color: ${mdufaColor};" title="${
           isKO
