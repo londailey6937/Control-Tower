@@ -59,14 +59,14 @@ const GUIDE: HelpSection[] = [
 <tr><td><strong>Audit Trail</strong></td><td>Timestamped log of all dashboard changes</td></tr>
 <tr><td><strong>Document Control</strong></td><td>ISO 13485-aligned document lifecycle management</td></tr>
 <tr><td><strong>Actions</strong></td><td>Task board, DHF Tracker, DMR Tracker, CAPA Log</td></tr>
-<tr><td><strong>Timeline</strong></td><td>Full project lifecycle from concept through post-market — the MDUFA 90-day review clock (in FDA Comms) nests inside this timeline</td></tr>
+<tr><td><strong>Timeline</strong></td><td>Full project lifecycle from concept through post-market — a mini MDUFA day-badge appears at the submission milestone linking to the full clock in FDA Comms</td></tr>
 <tr><td><strong>Budget</strong></td><td>Budget categories with planned vs. actual tracking</td></tr>
 <tr><td><strong>Cash / Runway</strong></td><td>Cash position, burn rate, and runway forecast</td></tr>
 <tr><td><strong>US Investment</strong></td><td>Investor pipeline and IR activity tracking</td></tr>
 <tr><td><strong>Resources</strong></td><td>Team allocation and utilization monitoring</td></tr>
 <tr><td><strong>Suppliers</strong></td><td>Supplier qualification and lead-time tracking</td></tr>
 <tr><td><strong>Message Board</strong></td><td>Threaded discussions with decisions and actions</td></tr>
-<tr><td><strong>FDA Comms</strong></td><td>Q-Sub generator, RTA checklist, MDUFA 90-day review clock, SE flowchart (PMP only)</td></tr>
+<tr><td><strong>FDA Comms</strong></td><td>Q-Sub generator, RTA checklist, MDUFA 90-day radial clock gauge, SE flowchart (PMP only)</td></tr>
 <tr><td><strong>Predicate Finder</strong></td><td>Search and identify predicate devices for 510(k) substantial equivalence</td></tr>
 <tr><td><strong>FDA Guidance Docs</strong></td><td>Searchable database of FDA guidance documents by topic, status, and date</td></tr>
 </tbody></table>
@@ -83,14 +83,14 @@ const GUIDE: HelpSection[] = [
 <tr><td><strong>审计追踪</strong></td><td>所有仪表板更改的时间戳日志</td></tr>
 <tr><td><strong>文档控制</strong></td><td>ISO 13485对齐的文档生命周期管理</td></tr>
 <tr><td><strong>行动项</strong></td><td>任务板、DHF跟踪器、DMR跟踪器、CAPA日志</td></tr>
-<tr><td><strong>时间线</strong></td><td>从概念到上市后的完整项目生命周期 — MDUFA 90天审查时钟（在FDA通讯中）嵌套在此时间线内</td></tr>
+<tr><td><strong>时间线</strong></td><td>从概念到上市后的完整项目生命周期 — 提交里程碑处显示MDUFA迷你日期徽章，链接到FDA通讯中的完整时钟</td></tr>
 <tr><td><strong>预算</strong></td><td>按类别的计划与实际预算跟踪</td></tr>
 <tr><td><strong>现金/跑道</strong></td><td>现金状况、燃烧率和跑道预测</td></tr>
 <tr><td><strong>美国投资</strong></td><td>投资者管道和IR活动跟踪</td></tr>
 <tr><td><strong>资源</strong></td><td>团队分配和利用率监控</td></tr>
 <tr><td><strong>供应商</strong></td><td>供应商资质审核和交期跟踪</td></tr>
 <tr><td><strong>消息板</strong></td><td>带决策和行动跟踪的线程讨论</td></tr>
-<tr><td><strong>FDA通讯</strong></td><td>Q-Sub生成器、RTA清单、MDUFA 90天审查时钟、SE流程图（仅PMP）</td></tr>
+<tr><td><strong>FDA通讯</strong></td><td>Q-Sub生成器、RTA清单、MDUFA 90天径向时钟仪表、SE流程图（仅PMP）</td></tr>
 <tr><td><strong>前置器械查找</strong></td><td>搜索和识别510(k)实质等效的前置器械</td></tr>
 <tr><td><strong>FDA指南文件</strong></td><td>按主题、状态和日期搜索的FDA指南文件数据库</td></tr>
 </tbody></table>
@@ -107,14 +107,14 @@ const GUIDE: HelpSection[] = [
 <tr><td><strong>감사 추적</strong></td><td>모든 대시보드 변경의 타임스탬프 로그</td></tr>
 <tr><td><strong>문서 관리</strong></td><td>ISO 13485 기반 문서 수명주기 관리</td></tr>
 <tr><td><strong>조치 항목</strong></td><td>작업 보드, DHF 추적기, DMR 추적기, CAPA 로그</td></tr>
-<tr><td><strong>타임라인</strong></td><td>개념부터 시판 후까지 전체 프로젝트 수명주기 — MDUFA 90일 심사 클록(FDA 커뮤니케이션에서)이 이 타임라인 내에 중첩됨</td></tr>
+<tr><td><strong>타임라인</strong></td><td>개념부터 시판 후까지 전체 프로젝트 수명주기 — 제출 마일스톤에 MDUFA 미니 일수 배지가 표시되며 FDA 커뮤니케이션의 전체 클록으로 연결</td></tr>
 <tr><td><strong>예산</strong></td><td>계획 대비 실제 예산 범주별 추적</td></tr>
 <tr><td><strong>현금/런웨이</strong></td><td>현금 보유 현황, 소진율, 런웨이 예측</td></tr>
 <tr><td><strong>미국 투자</strong></td><td>투자자 파이프라인 및 IR 활동 추적</td></tr>
 <tr><td><strong>리소스</strong></td><td>팀 배정 및 활용도 모니터링</td></tr>
 <tr><td><strong>공급업체</strong></td><td>공급업체 자격 심사 및 리드타임 추적</td></tr>
 <tr><td><strong>게시판</strong></td><td>의사결정 및 조치 추적이 포함된 스레드 토론</td></tr>
-<tr><td><strong>FDA 커뮤니케이션</strong></td><td>Q-Sub 생성기, RTA 체크리스트, MDUFA 90일 심사 클록, SE 플로우차트 (PMP 전용)</td></tr>
+<tr><td><strong>FDA 커뮤니케이션</strong></td><td>Q-Sub 생성기, RTA 체크리스트, MDUFA 90일 방사형 클록 게이지, SE 플로우차트 (PMP 전용)</td></tr>
 <tr><td><strong>선행기기 검색</strong></td><td>510(k) 실질적 동등성을 위한 선행기기 검색 및 식별</td></tr>
 <tr><td><strong>FDA 지침 문서</strong></td><td>주제, 상태, 날짜별로 검색 가능한 FDA 지침 문서 데이터베이스</td></tr>
 </tbody></table>
@@ -454,9 +454,11 @@ const GUIDE: HelpSection[] = [
       en: `<p>The Timeline provides a month-by-month view of your full project lifecycle — from concept through post-market. Each entry shows technical and business activities with an impact indicator (positive/neutral/negative). Timeline events are auto-generated during wizard setup and can be edited.</p>
 <p><strong>Timeline vs. MDUFA Clock:</strong> This tab tracks your entire project (months or years of work). When you submit your 510(k), FDA’s 90-day MDUFA review clock starts — that countdown is tracked in the <strong>FDA Comms</strong> tab and nests inside this broader project timeline. The two work together: Timeline is the macro view of your whole program; the MDUFA clock in FDA Comms is the micro view of FDA’s statutory review window.</p>`,
       cn: `<p>时间线提供您完整项目生命周期的按月视图——从概念到上市后。每个条目显示技术和业务活动，并带有影响指标（正面/中性/负面）。时间线事件在向导设置期间自动生成，可以编辑。</p>
-<p><strong>时间线 vs. MDUFA时钟：</strong>此标签页跟踪您的整个项目（数月或数年的工作）。当您提交510(k)时，FDA的90天MDUFA审查时钟启动——该倒计时在<strong>FDA通讯</strong>标签页中跟踪，并嵌套在此更广泛的项目时间线内。两者协同工作：时间线是整个项目的宏观视图；FDA通讯中的MDUFA时钟是FDA法定审查窗口的微观视图。</p>`,
+<p><strong>时间线 vs. MDUFA时钟：</strong>此标签页跟踪您的整个项目（数月或数年的工作）。当您提交510(k)时，FDA的90天MDUFA审查时钟启动——该倒计时在<strong>FDA通讯</strong>标签页中跟踪，并嵌套在此更广泛的项目时间线内。两者协同工作：时间线是整个项目的宏观视图；FDA通讯中的MDUFA时钟是FDA法定审查窗口的微观视图。</p>
+<p><strong>MDUFA迷你徽章：</strong>在提交里程碑行，彩色药丸徽章显示<em>⏱️ 第X天 / 90</em>，显示您在FDA审查周期中的位置。徽章颜色：绿色（正常，&lt;60天）、琥珀色（注意，60–89天）或红色（已达/超过90天目标）。无需离开时间线标签页即可一目了然地查看MDUFA状态。</p>`,
       ko: `<p>타임라인은 개념부터 시판 후까지 전체 프로젝트 수명주기의 월별 뷰를 제공합니다. 각 항목은 영향 지표(긍정적/중립/부정적)와 함께 기술 및 비즈니스 활동을 표시합니다. 타임라인 이벤트는 마법사 설정 중에 자동 생성되며 편집할 수 있습니다.</p>
-<p><strong>타임라인 vs. MDUFA 클록:</strong> 이 탭은 전체 프로젝트(수개월 또는 수년의 작업)를 추적합니다. 510(k)를 제출하면 FDA의 90일 MDUFA 심사 클록이 시작됩니다 — 해당 카운트다운은 <strong>FDA 커뮤니케이션</strong> 탭에서 추적되며 이 더 넓은 프로젝트 타임라인 안에 중첩됩니다. 두 가지가 함께 작동합니다: 타임라인은 전체 프로그램의 매크로 뷰이고, FDA 커뮤니케이션의 MDUFA 클록은 FDA 법정 심사 기간의 마이크로 뷰입니다.</p>`,
+<p><strong>타임라인 vs. MDUFA 클록:</strong> 이 탭은 전체 프로젝트(수개월 또는 수년의 작업)를 추적합니다. 510(k)를 제출하면 FDA의 90일 MDUFA 심사 클록이 시작됩니다 — 해당 카운트다운은 <strong>FDA 커뮤니케이션</strong> 탭에서 추적되며 이 더 넓은 프로젝트 타임라인 안에 중첩됩니다. 두 가지가 함께 작동합니다: 타임라인은 전체 프로그램의 매크로 뷰이고, FDA 커뮤니케이션의 MDUFA 클록은 FDA 법정 심사 기간의 마이크로 뷰입니다.</p>
+<p><strong>MDUFA 미니 배지:</strong> 제출 마일스톤 행에 색상 코드 알약 배지가 <em>⏱️ X일 / 90</em>을 표시하여 FDA 심사 주기에서 현재 위치를 보여줍니다. 배지 색상: 녹색(정상, &lt;60일), 주황색(주의, 60–89일), 빨간색(90일 목표 도달/초과). 타임라인 탭을 떠나지 않고도 MDUFA 상태를 한눈에 확인할 수 있습니다.</p>`,
     },
   },
   {
@@ -660,7 +662,9 @@ const GUIDE: HelpSection[] = [
 <h4>文档同步警报</h4>
 <p>当文档控制中已批准或生效的文档未同步到服务器时，会出现琥珀色警报横幅。点击"前往文档控制"导航并同步。</p>
 <h4>MDUFA 90天审查时钟</h4>
-<p>FDA的法定审查倒计时，嵌套在您更广泛的项目时间线内。跟踪关键里程碑：提交收到（第0天）、K编号分配（第7天）、RTA筛选决定（第15天）、实质性审查（第60天）和MDUFA决定目标（第90天）。如果FDA发出补充信息（AI）请求，时钟自动暂停——暂停持续时间单独跟踪，直到您回复后时钟恢复。这是FDA审查窗口的微观视图；时间线标签页提供您整个项目的宏观视图。</p>
+<p>FDA的法定审查倒计时，以<strong>径向仪表</strong>形式显示，带有颜色编码弧线：绿色（0–59天）、琥珀色（60–89天）、红色（90+天）。仪表中心显示第X天 / 90，表盘上标注第15、60和90天的里程碑。里程碑时间线（第0天提交 → 第7天K编号 → 第15天RTA → 第60天审查 → 第90天决定）在仪表旁边显示。</p>
+<p>如果FDA发出补充信息（AI）请求，时钟自动暂停——脉冲暂停指示器覆盖在仪表上，暂停持续时间单独跟踪，直到您回复后时钟恢复。</p>
+<p>时间线标签页还在提交里程碑行显示<strong>迷你日期徽章</strong>，无需离开项目级视图即可一目了然地查看MDUFA进度。</p>
 <h4>SE决策流程</h4>
 <p>FDA实质等效判定的可视化决策流程：前置器械识别、预期用途比较、技术特征分析和安全性/有效性评估。</p>`,
       ko: `<p>FDA 커뮤니케이션 탭은 PMP 전용이며 FDA 규제 상호작용을 위한 도구를 제공합니다.</p>
@@ -677,7 +681,9 @@ const GUIDE: HelpSection[] = [
 <h4>문서 동기화 알림</h4>
 <p>문서 관리에서 승인 또는 발효된 문서가 서버에 동기화되지 않은 경우 황색 알림 배너가 표시됩니다. "문서 관리로 이동"을 클릭하여 이동 후 동기화합니다.</p>
 <h4>MDUFA 90일 심사 클록</h4>
-<p>프로젝트 타임라인 내에 중첩된 FDA의 법정 심사 카운트다운입니다. 주요 마일스톤을 추적합니다: 제출 접수(0일차), K번호 할당(7일차), RTA 스크리닝 결정(15일차), 실질 심사(60일차), MDUFA 결정 목표(90일차). FDA가 추가 정보(AI) 요청을 발행하면 클록이 자동으로 일시정지됩니다 — 응답하고 클록이 다시 시작될 때까지 일시정지 기간이 별도로 추적됩니다. 이것은 FDA 심사 기간의 마이크로 뷰이며, 타임라인 탭은 전체 프로젝트의 매크로 뷰를 제공합니다.</p>
+<p>FDA의 법정 심사 카운트다운이 색상 코드 아크가 있는 <strong>방사형 게이지</strong>로 표시됩니다: 녹색(0–59일), 주황색(60–89일), 빨간색(90+일). 게이지 중앙에 X일 / 90이 표시되고 다이얼에 15, 60, 90일차 마일스톤 마커가 있습니다. 마일스톤 타임라인(0일차 제출 → 7일차 K번호 → 15일차 RTA → 60일차 심사 → 90일차 결정)이 게이지 옆에 표시됩니다.</p>
+<p>FDA가 추가 정보(AI) 요청을 발행하면 클록이 자동으로 일시정지됩니다 — 펄싱 일시정지 표시기가 게이지 위에 겹쳐지고, 응답하고 클록이 다시 시작될 때까지 일시정지 기간이 별도로 추적됩니다.</p>
+<p>타임라인 탭에서도 제출 마일스톤 행에 <strong>미니 일수 배지</strong>가 표시되어 프로젝트 수준 뷰에서 MDUFA 진행 상황을 한눈에 확인할 수 있습니다.</p>
 <h4>SE 결정 흐름도</h4>
 <p>FDA의 실질적 동등성 판정을 위한 시각적 결정 흐름: 선행기기 식별, 사용 목적 비교, 기술적 특성 분석, 안전성/유효성 평가.</p>`,
     },
